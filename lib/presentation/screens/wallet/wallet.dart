@@ -28,6 +28,9 @@ class NoWalletSetUpWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: CustomWalletAppBarWithChild(
+        containerOneHeight: 200.h,
+        containerTwoHeight: 900.h,
+        containerTwoMargin: 150.h,
         child1: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -118,6 +121,9 @@ class WalletSetup extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: CustomWalletAppBarWithChild(
+        containerOneHeight: 200.h,
+        containerTwoHeight: 900.h,
+        containerTwoMargin: 150.h,
         child1: Column(
           children: const [
             CircleAvatar(
@@ -348,9 +354,15 @@ class WalletNamelist {
 class CustomWalletAppBarWithChild extends StatelessWidget {
   final Widget child1;
   final Widget child2;
+  final double containerOneHeight;
+  final double containerTwoHeight;
+  final double containerTwoMargin;
   const CustomWalletAppBarWithChild({
     required this.child1,
     required this.child2,
+    required this.containerOneHeight,
+    required this.containerTwoHeight,
+    required this.containerTwoMargin,
     Key? key,
   }) : super(key: key);
 
@@ -361,7 +373,8 @@ class CustomWalletAppBarWithChild extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 22.0),
-          height: 200.h,
+          height: containerOneHeight,
+          // height: 200.h,
           // height: 165.74.h,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -371,10 +384,12 @@ class CustomWalletAppBarWithChild extends StatelessWidget {
           child: child1,
         ),
         Container(
-          margin: EdgeInsets.only(top: 150.h),
+          margin: EdgeInsets.only(top: containerTwoMargin),
+          // margin: EdgeInsets.only(top: 150.h),
           // margin: EdgeInsets.only(top: 130.h),
           //TODO: MIght change the height depeneing on the size of the screen
-          height: 900.h,
+          // height: 900.h,
+          height: containerTwoHeight,
           width: double.infinity,
           decoration: BoxDecoration(
             // color: Colors.red,
