@@ -57,4 +57,13 @@ class AppText {
         fontFamily: 'Avenir LTStd',
         color: color);
   }
+
+  //TextSTyle for seelected text in bottom bar
+  static TextStyle bottomBarText(BuildContext context, Color color) {
+    return Theme.of(context).textTheme.labelSmall!.copyWith(
+        fontSize: 8.sp,
+        fontWeight: FontWeight.w400,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
 }
