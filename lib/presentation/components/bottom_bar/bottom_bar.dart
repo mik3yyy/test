@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal_succesful_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int pageIndex = 0;
   List<Widget> pageList = <Widget>[
     const HomePage(),
-    const WalletScreen(),
+    const WithdrawalSuccessfulScreen(),
     Container(),
     Container(),
   ];

@@ -18,6 +18,15 @@ class AppText {
         color: color);
   }
 
+  static TextStyle header3(BuildContext context, Color color, double size) {
+    return Theme.of(context).textTheme.headline1!.copyWith(
+          fontSize: size,
+          fontWeight: FontWeight.w900,
+          fontFamily: 'Avenir LTStd',
+          color: color,
+        );
+  }
+
   static TextStyle body1(BuildContext context, Color color) {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
         fontSize: 25.0.sp,
@@ -40,6 +49,15 @@ class AppText {
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);
+  }
+
+  static TextStyle buttonText(BuildContext context, Color color) {
+    return Theme.of(context).textTheme.bodyText2!.copyWith(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Avenir LTStd',
+          color: color,
+        );
   }
 
   static TextStyle label(BuildContext context, Color color) {
