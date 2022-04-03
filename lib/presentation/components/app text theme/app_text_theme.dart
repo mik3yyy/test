@@ -12,8 +12,8 @@ class AppText {
 
   static TextStyle header2(BuildContext context, Color color) {
     return Theme.of(context).textTheme.headline1!.copyWith(
-        fontSize: 17.5.sp,
-        fontWeight: FontWeight.w600,
+        fontSize: 18.5.sp,
+        fontWeight: FontWeight.w500,
         fontFamily: 'Avenir LTStd',
         color: color);
   }
@@ -30,6 +30,14 @@ class AppText {
   static TextStyle body1(BuildContext context, Color color) {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
         fontSize: 25.0.sp,
+        fontWeight: FontWeight.w400,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
+
+  static TextStyle body4(BuildContext context, Color color) {
+    return Theme.of(context).textTheme.bodyLarge!.copyWith(
+        fontSize: 18.0.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);

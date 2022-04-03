@@ -7,13 +7,13 @@ class CustomButton extends StatelessWidget {
   final Color bgColor;
   final Color? borderColor;
   final Color textColor;
-  final double buttonHeight;
+  final double buttonWidth;
   final void Function()? onPressed;
   const CustomButton({
     required this.buttonText,
     required this.bgColor,
     required this.textColor,
-    required this.buttonHeight,
+    required this.buttonWidth,
     this.onPressed,
     this.borderColor,
     Key? key,
@@ -23,8 +23,8 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0.0, 11.0, 0.0, 11.0),
-      height: buttonHeight,
-      width: double.infinity,
+      height: 98.h,
+      width: buttonWidth,
       child: TextButton(
         style: TextButton.styleFrom(
           backgroundColor: bgColor,
