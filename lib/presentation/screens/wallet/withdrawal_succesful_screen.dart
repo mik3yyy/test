@@ -26,13 +26,13 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.only(top: 10.h),
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Icon(
                           Icons.chevron_left,
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                         ),
                         Space(4.h),
                         Text(
@@ -49,10 +49,10 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 3.0),
+                        padding: EdgeInsets.only(top: 3.h),
                         child: Icon(
                           Icons.notifications,
-                          color: Colors.white,
+                          color: AppColors.whiteColor,
                           size: 18.sp,
                         ),
                       ),
@@ -99,11 +99,11 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
                 Image.asset(AppImage.image4),
                 Space(32.h),
                 CustomButton(
-                  buttonHeight: 98.h,
+                  buttonWidth: double.infinity,
                   buttonText: 'Home',
                   bgColor: AppColors.appColor,
                   borderColor: AppColors.appColor,
-                  textColor: Colors.white,
+                  textColor: AppColors.whiteColor,
                   onPressed: () {},
                 )
               ],
