@@ -7,8 +7,8 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
-import 'wallet list model/wallet_model.dart';
 import 'wallet_appbar.dart';
+import 'wallet_list_model/wallet_model.dart';
 
 class WalletSetup extends StatelessWidget {
   const WalletSetup({Key? key}) : super(key: key);

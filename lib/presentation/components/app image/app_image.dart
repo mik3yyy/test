@@ -16,4 +16,11 @@ class AppImage {
   static const bottomIcon2 = "images/Union-2.png";
   static const bottomIcon3 = "images/union-3.png";
   static const bottomIcon4 = "images/union-4.png";
+  static const addFunds = "images/add-funds.png";
+  static const invest = "images/start-investing.png";
+  static const transfer = "images/transfer.png";
+  static const withdraw = "images/withdraw.png";
+  static const alpha = "images/security.png";
+  static const beta = "images/beta-icon.png";
+  static const delta = "images/delta.png";
 }

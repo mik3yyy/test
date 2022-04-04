@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
 class CustomButton extends StatelessWidget {
   final String buttonText;
@@ -23,13 +24,13 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0.0, 11.0, 0.0, 11.0),
-      height: 98.h,
+      height: 85.h,
       width: buttonWidth,
       child: TextButton(
         style: TextButton.styleFrom(
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(5.r),
             side: BorderSide(
               color: borderColor!,
               width: 0,
@@ -40,7 +41,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             buttonText,
-            style: AppText.buttonText(context, Colors.white),
+            style: AppText.header1(context, Colors.white, 20.sp),
           ),
         ),
       ),

@@ -4,8 +4,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal_succesful_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -18,7 +17,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int pageIndex = 0;
   List<Widget> pageList = <Widget>[
     const HomePage(),
-    const WithdrawalSuccessfulScreen(),
+    const WalletView(),
     Container(),
     Container(),
   ];
@@ -36,13 +35,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
             topRight: Radius.circular(40..r),
             topLeft: Radius.circular(40.r),
           ),
-          // boxShadow: [
-          //   // rgba(10, 9, 30, 0.09);
-          // BoxShadow(
-          //     color: Color.fromRGBO(10, 9, 30, 0.09),
-          //     spreadRadius: 0,
-          //     blurRadius: 20),
-          // ],
         ),
         // height: 72.h,
         child: BottomNavigationBar(
@@ -80,11 +72,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
             BottomNavigationBarItem(
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Image.asset(AppImage.bottomIcon2),
+                child: Image.asset(
+                  AppImage.bottomIcon2,
+                ),
               ),
               activeIcon: Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Image.asset(AppImage.bottomIcon2),
+                child: Image.asset(
+                  AppImage.bottomIcon2,
+                  color: AppColors.appColor,
+                ),
               ),
               label: 'Wallets',
             ),
@@ -95,18 +92,27 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
               activeIcon: Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Image.asset(AppImage.bottomIcon3),
+                child: Image.asset(
+                  AppImage.bottomIcon3,
+                  color: AppColors.appColor,
+                ),
               ),
               label: 'Portfolio',
             ),
             BottomNavigationBarItem(
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Image.asset(AppImage.bottomIcon4),
+                child: Image.asset(
+                  AppImage.bottomIcon4,
+                  color: Colors.grey,
+                ),
               ),
               activeIcon: Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
-                child: Image.asset(AppImage.bottomIcon4),
+                child: Image.asset(
+                  AppImage.bottomIcon4,
+                  color: AppColors.appColor,
+                ),
               ),
               label: 'More',
             ),

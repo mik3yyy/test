@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppText {
-  static TextStyle header1(BuildContext context, Color color) {
+  static TextStyle header1(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.headline1!.copyWith(
-        fontSize: 17.5.sp,
-        fontWeight: FontWeight.w400,
+        fontSize: size,
+        fontWeight: FontWeight.w800,
         fontFamily: 'Avenir LTStd',
         color: color);
   }
 
-  static TextStyle header2(BuildContext context, Color color) {
+  static TextStyle header2(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.headline1!.copyWith(
-        fontSize: 18.5.sp,
-        fontWeight: FontWeight.w500,
+        fontSize: size,
+        fontWeight: FontWeight.w600,
         fontFamily: 'Avenir LTStd',
         color: color);
   }
@@ -43,9 +43,9 @@ class AppText {
         color: color);
   }
 
-  static TextStyle body2(BuildContext context, Color color) {
+  static TextStyle body2(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.bodyText1!.copyWith(
-        fontSize: 14.5.sp,
+        fontSize: size,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);
@@ -70,7 +70,7 @@ class AppText {
 
   static TextStyle label(BuildContext context, Color color) {
     return Theme.of(context).textTheme.labelSmall!.copyWith(
-        fontSize: 12.5.sp,
+        fontSize: 19.5.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);
@@ -87,7 +87,7 @@ class AppText {
   //TextSTyle for seelected text in bottom bar
   static TextStyle bottomBarText(BuildContext context, Color color) {
     return Theme.of(context).textTheme.labelSmall!.copyWith(
-        fontSize: 8.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);
