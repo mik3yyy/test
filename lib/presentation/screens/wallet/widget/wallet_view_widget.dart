@@ -29,7 +29,7 @@ class WalletViewWidget extends StatelessWidget {
           bottom: 0,
           child: Container(
               decoration: BoxDecoration(
-                color: AppColors.bottomSheet,
+                color: AppColors.whiteColor,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
               ),
               // height: 540,
