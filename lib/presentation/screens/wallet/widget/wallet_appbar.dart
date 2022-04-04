@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
 class CustomWalletAppBarWithChild extends StatelessWidget {
   final Widget child1;
@@ -27,9 +28,8 @@ class CustomWalletAppBarWithChild extends StatelessWidget {
           // height: 200.h,
           // height: 165.74.h,
           width: double.infinity,
-          decoration: BoxDecoration(
-            color: const Color(0xFF2E426F),
-            borderRadius: BorderRadius.circular(25.r),
+          decoration: const BoxDecoration(
+            color: Color(0xFF2E426F),
           ),
           child: child1,
         ),
@@ -43,8 +43,8 @@ class CustomWalletAppBarWithChild extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             // color: Colors.red,
-            color: const Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.circular(25.r),
+            color: AppColors.bottomSheet,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
           ),
           child: child2,
         ),
