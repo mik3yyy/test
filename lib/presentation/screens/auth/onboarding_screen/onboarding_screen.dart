@@ -82,37 +82,38 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: imgList.asMap().entries.map(
-                    (entry) {
-                      return GestureDetector(
-                        onTap: () => _controller.animateToPage(entry.key),
-                        child: Container(
-                          width: 12.w,
-                          height: 12.h,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 4.0),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.appColor),
-                              color: (Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.transparent
-                                      : AppColors.appColor)
-                                  .withOpacity(
-                                      _current == entry.key ? 0.9 : 0.1)),
-                          // .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                        ),
-                      );
-                    },
-                  ).toList(),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: imgList.asMap().entries.map(
+                      (entry) {
+                        return GestureDetector(
+                          onTap: () => _controller.animateToPage(entry.key),
+                          child: Container(
+                            width: 12.w,
+                            height: 12.h,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.appColor),
+                                color: (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.transparent
+                                        : AppColors.appColor)
+                                    .withOpacity(
+                                        _current == entry.key ? 0.9 : 0.1)),
+                            // .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
                 ),
-                _current == 1 || _current == 0 ? Space(145.h) : Space(80.w),
+                _current == 1 || _current == 0 ? Space(150.h) : Space(56.w),
                 _current == 2
                     ? GestureDetector(
-                        onTap: () =>
-                            context.navigate(const CreateAccountScreen()),
+                        onTap: () => context.navigate(CreateAccountScreen()),
                         child: Text(
                           "Continue",
                           style: AppText.label(context, AppColors.appColor),
