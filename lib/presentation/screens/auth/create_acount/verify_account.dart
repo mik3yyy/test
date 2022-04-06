@@ -19,20 +19,23 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class VerifyAccountScreen extends HookConsumerWidget {
   final String emailAdress;
   VerifyAccountScreen({Key? key, required this.emailAdress}) : super(key: key);
-  var toggleStateProvider = StateProvider<bool>((ref) {
+  //change from var to final
+  final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(verifyAccountProvider);
-    final formKey = GlobalKey<FormState>();
+
     final emailController = useTextEditingController(text: emailAdress);
     final verifyController = useTextEditingController();
     var toggleState = ref.watch(toggleStateProvider);
     ref.listen<RequestState>(verifyAccountProvider, (T, value) {
       if (value is Success) {
-        context.navigate(CreatePasswordScreen());
+        context.navigate(const CreatePasswordScreen());
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Account Verified",
@@ -71,45 +74,42 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     textAlign: TextAlign.center,
                   ),
                   Space(120.h),
-                  Form(
-                    key: formKey,
-                    child: PinCodeTextField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'otp is required';
-                        }
-                        if (value.length < 4) {
-                          return null;
-                        }
-
-                        // validator has to return something :)
+                  PinCodeTextField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'otp is required';
+                      }
+                      if (value.length < 4) {
                         return null;
-                      },
-                      pinTheme: PinTheme(
-                        inactiveColor: AppColors.hintColor,
-                        inactiveFillColor: AppColors.hintColor,
-                        activeColor: AppColors.greenColor,
-                        shape: PinCodeFieldShape.underline,
-                        selectedColor: AppColors.greenColor,
-                        activeFillColor: AppColors.greenColor,
-                      ),
-                      controller: verifyController,
-                      cursorColor: AppColors.greenColor,
-                      hintCharacter: "*",
-                      autoDismissKeyboard: true,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      appContext: context,
-                      length: 4,
-                      onCompleted: (value) {
-                        ref.read(toggleStateProvider.notifier).state =
-                            toggleState == false ? true : false;
-                        toggleState = true;
-                      },
-                      onChanged: (String value) {},
+                      }
+
+                      // validator has to return something :)
+                      return null;
+                    },
+                    pinTheme: PinTheme(
+                      inactiveColor: AppColors.hintColor,
+                      inactiveFillColor: AppColors.hintColor,
+                      activeColor: AppColors.greenColor,
+                      shape: PinCodeFieldShape.underline,
+                      selectedColor: AppColors.greenColor,
+                      activeFillColor: AppColors.greenColor,
                     ),
+                    controller: verifyController,
+                    cursorColor: AppColors.greenColor,
+                    hintCharacter: "*",
+                    autoDismissKeyboard: true,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    appContext: context,
+                    length: 4,
+                    onCompleted: (value) {
+                      ref.read(toggleStateProvider.notifier).state =
+                          toggleState == false ? true : false;
+                      toggleState = true;
+                    },
+                    onChanged: (String value) {},
                   ),
                   Space(80.h),
                   Text.rich(
