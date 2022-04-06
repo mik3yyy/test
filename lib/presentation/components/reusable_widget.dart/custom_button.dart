@@ -24,13 +24,13 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0.0, 11.0, 0.0, 11.0),
-      height: 85.h,
+      height: 80.h,
       width: buttonWidth,
       child: TextButton(
         style: TextButton.styleFrom(
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.r),
+            borderRadius: BorderRadius.circular(6.r),
             side: BorderSide(
               color: borderColor!,
               width: 0,

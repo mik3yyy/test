@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/auth_service.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/i_auth_manager.dart';
 
@@ -13,17 +14,21 @@ class AuthManager extends IAuthManager {
 
   AuthManager(this._userService);
 
-  // @override
-  // Future<AuthRes> register(RegisterReq register) async {
-  //   final reg = await _userService.register(register);
-  //   // return reg;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final isSaved = await prefs.setString(Constants.token, reg.data.token);
-  //   if (isSaved) {
-  //     return reg;
-  //   }
-  //   throw Exception(
-  //       'An Error has occured while signing you in. Please contact support');
-  // }
+  // create account
+  @override
+  Future<bool> createAccount(
+      {required String firstName,
+      required String lastName,
+      required emailPhone}) async {
+    final res =
+        await _userService.createAccount(firstName, lastName, emailPhone);
+    return res;
+  }
 
+  // verify account
+  @override
+  Future<bool> verifyAccount(verify) async {
+    final res = await _userService.verifyAccount(verify);
+    return res;
+  }
 }

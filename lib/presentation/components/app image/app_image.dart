@@ -3,6 +3,7 @@ class AppImage {
   static const checkingLogo = "images/checking-logo.png";
   static const fingerprint1 = "images/fingerprint-1.png";
   static const fingerprint2 = "images/fingerprint-2.png";
+  static const fingerprint3 = "images/fingerprint-3.png";
   static const successSafepay = "images/successful-safepay.png";
   static const insufficient = "images/insufficient-funds-logo.png";
   static const safePayIcon = "images/safepay-icon.png";
