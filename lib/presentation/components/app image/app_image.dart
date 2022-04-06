@@ -24,4 +24,7 @@ class AppImage {
   static const alpha = "images/security.png";
   static const beta = "images/beta-icon.png";
   static const delta = "images/delta.png";
+  static const faq1 = "images/faq_img1.png";
+  static const faq2 = "images/faq_img2.png";
+  static const faq3 = "images/faq_img3.png";
 }

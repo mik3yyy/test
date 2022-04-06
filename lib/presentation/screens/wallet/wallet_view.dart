@@ -54,13 +54,13 @@ class _WalletViewState extends State<WalletView> {
                       ),
                     ],
                   ),
-                  const Spacer(),
+                  // const Spacer(),
                   Icon(
                     Icons.notifications,
                     color: Colors.white,
                     size: 20.sp,
                   ),
-                  Space(10.w),
+                  // Space(10.w),
                   const CircleAvatar(
                     radius: 18.0,
                     backgroundImage: AssetImage(
