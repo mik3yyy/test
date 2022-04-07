@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/bottom_bar/bottom_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'presentation/route/navigator.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue),
         // theme: theme,
         // home: const HomePage(),
+        // home: const BottomNavBar(),
         home:
             //  const BottomNavBar(),
 

@@ -92,4 +92,13 @@ class AppText {
         fontFamily: 'Avenir LTStd',
         color: color);
   }
+
+  //TextSTyle for contact name text
+  static TextStyle contactNameStyle(BuildContext context, Color color) {
+    return Theme.of(context).textTheme.labelSmall!.copyWith(
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w900,
+        fontFamily: 'Roboto',
+        color: color);
+  }
 }
