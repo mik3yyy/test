@@ -27,4 +27,12 @@ class AppImage {
   static const faq1 = "images/faq_img1.png";
   static const faq2 = "images/faq_img2.png";
   static const faq3 = "images/faq_img3.png";
+  static const refferalIcon = "images/refferal_icon.png";
+  static const shareIcon = "images/share_icon.png";
+  static const phoneContactImg1 = "images/phone_contact_img_1.png";
+  static const phoneContactImg2 = "images/phone_contact_img_2.png";
+  static const phoneContactImg3 = "images/phone_contact_img_3.png";
+  static const phoneContactImg4 = "images/phone_contact_img_4.png";
+  static const phoneContactImg5 = "images/phone_contact_img_5.png";
+  static const phoneContactImg6 = "images/phone_contact_img_6.png";
 }
