@@ -30,11 +30,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue),
         // theme: theme,
         // home: const HomePage(),
-        home: const NotificationScreen(),
-        // home:
-        //     //  const BottomNavBar(),
+        // home: const NotificationScreen(),
+        home:
+            //  const BottomNavBar(),
 
-        //     const SplashScreen(),
+            const SplashScreen(),
         builder: (context, widget) {
           //add this line
           ScreenUtil.setContext(context);
