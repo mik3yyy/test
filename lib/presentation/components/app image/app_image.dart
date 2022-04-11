@@ -35,4 +35,12 @@ class AppImage {
   static const phoneContactImg4 = "images/phone_contact_img_4.png";
   static const phoneContactImg5 = "images/phone_contact_img_5.png";
   static const phoneContactImg6 = "images/phone_contact_img_6.png";
+
+  ///
+  ///
+  ///
+  static const home = "images/home.svg";
+  static const wallet = "images/wallet.svg";
+  static const portfolio = "images/portfolio.svg";
+  static const more = "images/more.svg";
 }

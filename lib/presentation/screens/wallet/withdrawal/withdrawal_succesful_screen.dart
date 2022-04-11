@@ -9,7 +9,15 @@ import '../../../components/reusable_widget.dart/custom_button.dart';
 import '../widget/wallet_view_widget.dart';
 
 class WithdrawalSuccessfulScreen extends StatelessWidget {
-  const WithdrawalSuccessfulScreen({Key? key}) : super(key: key);
+  final BuildContext menuScreenContext;
+  final Function onScreenHideButtonPressed;
+  final bool hideStatus;
+  const WithdrawalSuccessfulScreen(
+      {Key? key,
+      required this.menuScreenContext,
+      required this.onScreenHideButtonPressed,
+      required this.hideStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +25,12 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
         body: WalletViewWidget(
       appBar: Row(
         children: [
-          const Icon(
-            Icons.chevron_left,
-            color: Colors.white,
+          InkWell(
+            onTap: (() => Navigator.pop(context)),
+            child: const Icon(
+              Icons.arrow_back_ios_outlined,
+              color: Colors.white,
+            ),
           ),
           Space(4.h),
           Column(
@@ -57,8 +68,17 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.r)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -96,6 +116,7 @@ class WithdrawalSuccessfulScreen extends StatelessWidget {
               textColor: Colors.white,
               onPressed: () {},
             ),
+            Space(35.h),
           ],
         ),
       ),
