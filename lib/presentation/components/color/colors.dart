@@ -3,7 +3,7 @@ part of values;
 class AppColors {
   static const Color appColor = Color(0xFF072777);
   static const Color darkAppColor = Color(0xFF0000FF);
-  static Color bottomSheet = const Color(0xFF072777).withOpacity(0.3);
+  static Color bottomSheet = const Color(0xFFE2E7F3);
   static const Color hintColor = Color(0xFF828282);
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color borderColor = Color(0xFFEAEAEA);

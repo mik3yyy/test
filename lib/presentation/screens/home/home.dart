@@ -9,7 +9,15 @@ import '../wallet/widget/wallet_list_model/wallet_categories.dart';
 import '../wallet/widget/wallet_list_model/wallet_option_list.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final BuildContext menuScreenContext;
+  final Function onScreenHideButtonPressed;
+  final bool hideStatus;
+  const HomePage(
+      {Key? key,
+      required this.menuScreenContext,
+      required this.onScreenHideButtonPressed,
+      required this.hideStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +65,12 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        child: Padding(
-            padding: EdgeInsets.only(
-                left: 10.w, right: 10.w, top: 45.h, bottom: 20.h),
-            child: const WalletCategory()),
+        child: SizedBox(
+          height: 600.h,
+          child: Padding(
+              padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 30.h),
+              child: const WalletCategory()),
+        ),
       ),
     );
   }

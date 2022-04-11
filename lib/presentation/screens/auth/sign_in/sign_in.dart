@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/cr
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/verify_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class SigninScreen extends StatelessWidget {
@@ -52,7 +53,7 @@ class SigninScreen extends StatelessWidget {
                   controller: controller,
                   validator: (value) {},
                   obscureText: false,
-                  suffixIcon: Icon(Icons.visibility),
+                  suffixIcon: const Icon(Icons.visibility),
                 ),
                 Space(32.h),
 
@@ -78,7 +79,11 @@ class SigninScreen extends StatelessWidget {
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,
                       onPressed: () {
-                        context.navigate(const HomePage());
+                        context.navigate(
+                          MainScreen(
+                            menuScreenContext: context,
+                          ),
+                        );
                       },
                     ),
                     Container(
