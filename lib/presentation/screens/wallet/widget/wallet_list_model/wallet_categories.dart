@@ -17,9 +17,11 @@ class WalletCategory extends StatelessWidget {
       ),
       height: 450.h,
       child: ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
+        physics: const NeverScrollableScrollPhysics(),
+
+        // const AlwaysScrollableScrollPhysics(
+        //   parent: BouncingScrollPhysics(),
+
         itemCount: walletCategories.length,
         itemBuilder: (context, index) {
           final category = walletCategories[index];
@@ -30,11 +32,11 @@ class WalletCategory extends StatelessWidget {
                 width: 150.w,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(width: 2.w, color: Colors.white)),
+                    border: Border.all(width: 2.w, color: Colors.grey[200]!)),
                 child: Column(
                   children: [
                     Space(40.h),
-                    Container(
+                    SizedBox(
                       height: 45.h,
                       width: 45.h,
                       // color: Colors.red,
@@ -51,7 +53,7 @@ class WalletCategory extends StatelessWidget {
                 ),
               ),
               Space(15.h),
-              Container(
+              SizedBox(
                 width: 200.w,
                 child: Text(
                   category.description,

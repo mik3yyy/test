@@ -31,7 +31,7 @@ class TextFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        textAlign: textAlign!,
+        // textAlign: textAlign!,
         controller: controller,
         cursorColor: Colors.blue,
         autovalidateMode: autovalidateMode,
