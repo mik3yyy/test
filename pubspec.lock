@@ -293,6 +293,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
+main
   flutter_switch:
     dependency: "direct main"
     description:
@@ -300,6 +301,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.2"
+ main
   flutter_svg:
     dependency: "direct main"
     description:
@@ -307,6 +309,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+main
   flutter_test:
     dependency: "direct dev"
     description: flutter
