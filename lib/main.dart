@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/bottom_bar/bottom_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
 import 'presentation/route/navigator.dart';
+import 'presentation/screens/notification/notification_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,11 +30,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue),
         // theme: theme,
         // home: const HomePage(),
-        // home: const BottomNavBar(),
-        home:
-            //  const BottomNavBar(),
+        home: const NotificationScreen(),
+        // home:
+        //     //  const BottomNavBar(),
 
-            const SplashScreen(),
+        //     const SplashScreen(),
         builder: (context, widget) {
           //add this line
           ScreenUtil.setContext(context);

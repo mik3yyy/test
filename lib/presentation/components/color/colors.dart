@@ -21,5 +21,10 @@ class AppColors {
   static const Color referFriendBorderColor2 = Color.fromRGBO(7, 39, 119, 0.2);
   static const Color referFriendBorderColor3 = Color.fromRGBO(7, 39, 119, 0.5);
   static const Color referFriendTextColor = Color.fromRGBO(7, 39, 119, 0.3);
+  static const Color notificationColor = Color.fromRGBO(130, 130, 130, 0.2);
   static const Color referFriendTextColor2 = Color(0xFFD9E4FF);
+  static const Color errorColor = Color(0xFFFF0000);
+  static const Color declineColor = Color(0xFFFE4B20);
+  static const Color notificationDividerColor =
+      Color.fromRGBO(216, 216, 216, 0.8);
 }

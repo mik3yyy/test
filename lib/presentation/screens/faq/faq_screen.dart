@@ -54,40 +54,40 @@ class FaqScreen extends StatelessWidget {
             ),
             Space(18.h),
             SizedBox(
-                height: 46.h,
-                child: TextFormField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    hintText: 'Search FAQ',
-                    fillColor: AppColors.whiteColor,
-                    hintStyle: AppText.body3(
-                      context,
-                      AppColors.whiteColor,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromRGBO(216, 216, 216, 0.8),
-                        width: 1.w,
-                      ),
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromRGBO(216, 216, 216, 0.8),
-                        width: 1.w,
-                      ),
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
+              height: 46.h,
+              child: TextFormField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: 'Search FAQ',
+                  fillColor: AppColors.whiteColor,
+                  hintStyle: AppText.body3(
+                    context,
+                    AppColors.whiteColor,
                   ),
-                )
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color.fromRGBO(216, 216, 216, 0.8),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color.fromRGBO(216, 216, 216, 0.8),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                ),
+              ),
 
-                // TextFormInput(
-                //   obscureText: false,
-                //   controller: controller,
-                //   textAlign: TextAlign.start,
-                //   validator: (String? value) {},
-                // ),
-                )
+              // TextFormInput(
+              //   obscureText: false,
+              //   controller: controller,
+              //   textAlign: TextAlign.start,
+              //   validator: (String? value) {},
+              // ),
+            )
           ],
         ),
       ),
