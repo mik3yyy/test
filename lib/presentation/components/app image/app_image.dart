@@ -36,8 +36,10 @@ class AppImage {
   static const phoneContactImg5 = "images/phone_contact_img_5.png";
   static const phoneContactImg6 = "images/phone_contact_img_6.png";
 
-  ///
-  ///
+  static const notificationSettingIcon = "images/notification_setting_icon.png";
+  static const failedNotificationIcon = "images/failed_notification_icon.png";
+  static const successNotificationIcon = "images/success_notificatin_icon.png";
+
   ///
   static const home = "images/home.svg";
   static const wallet = "images/wallet.svg";
