@@ -49,11 +49,20 @@ dependencies:
   url_launcher: ^6.0.20
   loader_overlay: ^2.0.5
   flutter_spinkit: ^5.1.0
+
+  pinput: ^2.2.7
+  language_picker: ^0.4.1
+ 
+  
+
   dotted_border: ^2.0.0+2
   flutter_switch: ^0.3.2
 
+
 dev_dependencies:
   build_runner: null
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

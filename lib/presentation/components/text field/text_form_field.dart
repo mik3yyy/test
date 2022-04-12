@@ -15,12 +15,14 @@ class TextFormInput extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.textAlign,
+      this.enabled,
       this.keyboardType})
       : super(key: key);
 
   final String? labelText;
   final bool obscureText;
   final Widget? suffixIcon;
+  final bool? enabled;
   final Widget? prefixIcon;
   final TextAlign? textAlign;
   final TextInputType? keyboardType;
@@ -31,7 +33,11 @@ class TextFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        // textAlign: textAlign!,
+
+        enabled: enabled,
+        textAlign: textAlign!,
+
+
         controller: controller,
         cursorColor: Colors.blue,
         autovalidateMode: autovalidateMode,

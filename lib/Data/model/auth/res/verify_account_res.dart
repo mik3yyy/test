@@ -1,30 +1,49 @@
 // To parse this JSON data, do
 //
-//     final verifyAccount = verifyAccountFromJson(jsonString);
+//     final verifyRes = verifyResFromJson(jsonString);
 
 import 'dart:convert';
 
-VerifyAccount verifyAccountFromJson(String str) =>
-    VerifyAccount.fromJson(json.decode(str));
+VerifyRes verifyResFromJson(String str) => VerifyRes.fromJson(json.decode(str));
 
-String verifyAccountToJson(VerifyAccount data) => json.encode(data.toJson());
+String verifyResToJson(VerifyRes data) => json.encode(data.toJson());
 
-class VerifyAccount {
-  VerifyAccount({
-    this.verificationCode,
-    this.emailPhone,
+class VerifyRes {
+  VerifyRes({
+    this.message,
+    this.status,
+    this.data,
   });
 
-  String? verificationCode;
-  String? emailPhone;
+  String? message;
+  String? status;
+  Data? data;
 
-  factory VerifyAccount.fromJson(Map<String, dynamic> json) => VerifyAccount(
-        verificationCode: json["verification_code"],
-        emailPhone: json["email_phone"],
+  factory VerifyRes.fromJson(Map<String, dynamic> json) => VerifyRes(
+        message: json["message"],
+        status: json["status"],
+        data: Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "verification_code": verificationCode,
-        "email_phone": emailPhone,
+        "message": message,
+        "status": status,
+        "data": data!.toJson(),
+      };
+}
+
+class Data {
+  Data({
+    this.pseudoToken,
+  });
+
+  String? pseudoToken;
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        pseudoToken: json["pseudo_token"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "pseudo_token": pseudoToken,
       };
 }

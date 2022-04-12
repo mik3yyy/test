@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
 import '../../app text theme/app_text_theme.dart';
 import '../src/app_snackbar.dart';
@@ -9,7 +10,7 @@ class AppSnackBar {
       {required String message}) {
     showFlash(
       context: context,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 7),
 
       // persistent: false,
       builder: (context, controller) {
@@ -17,8 +18,8 @@ class AppSnackBar {
           controller: controller,
           margin: EdgeInsets.all(15.h),
           borderRadius: BorderRadius.circular(6.r),
-          backgroundColor: Colors.greenAccent,
-          behavior: FlashBehavior.floating,
+          backgroundColor: AppColors.appColor,
+          behavior: FlashBehavior.fixed,
           position: FlashPosition.top,
           child: FlashBar(
             // title: Text('Title'),
@@ -40,7 +41,7 @@ class AppSnackBar {
       {required String message}) {
     showFlash(
       context: context,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 7),
 
       // persistent: false,
       builder: (context, controller) {
@@ -49,7 +50,7 @@ class AppSnackBar {
           margin: EdgeInsets.all(15.h),
           borderRadius: BorderRadius.circular(6.r),
           backgroundColor: Colors.redAccent,
-          behavior: FlashBehavior.floating,
+          behavior: FlashBehavior.fixed,
           position: FlashPosition.top,
           child: FlashBar(
             // title: Text('Title'),
@@ -71,7 +72,7 @@ class AppSnackBar {
       {required String message}) {
     showFlash(
       context: context,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 7),
 
       // persistent: false,
       builder: (context, controller) {
@@ -79,8 +80,8 @@ class AppSnackBar {
           controller: controller,
           borderRadius: BorderRadius.circular(6.r),
           margin: EdgeInsets.all(15.h),
-          backgroundColor: Colors.blueAccent,
-          behavior: FlashBehavior.floating,
+          backgroundColor: AppColors.appColor,
+          behavior: FlashBehavior.fixed,
           position: FlashPosition.top,
           child: FlashBar(
             // title: Text('Title'),

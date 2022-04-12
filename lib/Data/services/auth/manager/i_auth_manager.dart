@@ -1,9 +1,27 @@
-import '../../../model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+
+import '../../../model/auth/res/signin_res.dart';
 
 abstract class IAuthManager {
   Future<bool> createAccount(
       {required String firstName,
       required String lastName,
       required emailPhone});
-  Future<bool> verifyAccount(VerifyAccount verify);
+  Future<VerifyRes> verifyAccount(VerifyAccount verify);
+  Future<bool> resendOtp({required String emailPhone});
+  Future<CreatePassword> createPassword(
+    String password,
+    String confirmPassword,
+  );
+  Future<CurrencyRes> getCurrency();
+  Future<CountryRes> getCountry();
+  Future<bool> setCurrency(String currency, String language, String country);
+  Future<SigninRes> signIn(
+    String emailPhone,
+    String password,
+  );
 }

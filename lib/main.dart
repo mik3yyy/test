@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/currency.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
+
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/transaction_pin.dart';
+
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
+
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/message_screen.dart';
+
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/notification/notification_screen.dart';
 import 'presentation/route/navigator.dart';
@@ -31,8 +38,20 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: const Color(0xFFFFFFFF),
             primarySwatch: Colors.blue),
-        // home: const SplashScreen(),
-        home: const MessageScreen(),
+
+
+        // theme: theme,
+        // home: const HomePage(),
+        
+            // CurrencyScreen(),
+            // const CurrencyScreen(),
+            //  const BottomNavBar(),
+
+            
+
+        home: const SplashScreen(),
+
+
         builder: (context, widget) {
           //add this line
           ScreenUtil.setContext(context);
