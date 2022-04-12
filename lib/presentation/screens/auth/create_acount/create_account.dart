@@ -126,12 +126,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                               .hasMatch(value)) {
                             return 'Please input a valid email address';
                           }
-                          // if (!value.startsWith('0')) {
-                          //   return 'Phone Number must start with 0';
-                          // }
-                          // if (value.length != 11) {
-                          //   return 'Please Enter a valid phone number';
-                          // }
+
                           return null;
                         },
                         obscureText: false),

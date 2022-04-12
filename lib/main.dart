@@ -4,8 +4,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
+
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/transaction_pin.dart';
+
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
+
 import 'presentation/route/navigator.dart';
+import 'presentation/screens/notification/notification_screen.dart';
+import 'presentation/route/navigator.dart';
+import 'presentation/screens/auth/splash_screen/splash_screen.dart';
+import 'presentation/screens/home/widgets/main_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,14 +36,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: const Color(0xFFFFFFFF),
             primarySwatch: Colors.blue),
+
         // theme: theme,
         // home: const HomePage(),
-        home:
+        
             // CurrencyScreen(),
             // const CurrencyScreen(),
             //  const BottomNavBar(),
 
-            const SplashScreen(),
+            
+
+        home: const SplashScreen(),
+
         builder: (context, widget) {
           //add this line
           ScreenUtil.setContext(context);

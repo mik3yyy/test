@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -20,7 +21,11 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class SigninScreen extends HookConsumerWidget {
   SigninScreen({Key? key}) : super(key: key);
 
+
   final formKey = GlobalKey<FormState>();
+
+               
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,6 +78,7 @@ class SigninScreen extends HookConsumerWidget {
                     ),
                     Space(180.h),
 
+
                     //email
                     TextFormInput(
                         textAlign: TextAlign.center,
@@ -90,6 +96,25 @@ class SigninScreen extends HookConsumerWidget {
                       validator: (value) {},
                       obscureText: false,
                       suffixIcon: Icon(Icons.visibility),
+
+                Space(160.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      buttonWidth: 280.w,
+                      buttonText: 'Sign In',
+                      bgColor: AppColors.appColor,
+                      borderColor: AppColors.appColor,
+                      textColor: Colors.white,
+                      onPressed: () {
+                        context.navigate(
+                          MainScreen(
+                            menuScreenContext: context,
+                          ),
+                        );
+                      },
+
                     ),
                     Space(32.h),
 

@@ -10,10 +10,19 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class FaqScreen extends StatelessWidget {
-  const FaqScreen({Key? key}) : super(key: key);
+  final BuildContext menuScreenContext;
+  final Function onScreenHideButtonPressed;
+  final bool hideStatus;
+  const FaqScreen(
+      {Key? key,
+      required this.menuScreenContext,
+      required this.onScreenHideButtonPressed,
+      required this.hideStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
     return WalletViewWidget(
       appBar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
@@ -51,33 +60,40 @@ class FaqScreen extends StatelessWidget {
             ),
             Space(18.h),
             SizedBox(
-                height: 46.h,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    fillColor: AppColors.whiteColor,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromRGBO(216, 216, 216, 0.8),
-                        width: 1.w,
-                      ),
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromRGBO(216, 216, 216, 0.8),
-                        width: 1.w,
-                      ),
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
+              height: 46.h,
+              child: TextFormField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: 'Search FAQ',
+                  fillColor: AppColors.whiteColor,
+                  hintStyle: AppText.body3(
+                    context,
+                    AppColors.whiteColor,
                   ),
-                )
-                // TextFormField(
-                //   decoration: fieldInputDecoration(
-                //     fillColor: AppColors.whiteColor,
-                //     hintText: 'Search FAQ',
-                //   ),
-                // ),
-                )
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color.fromRGBO(216, 216, 216, 0.8),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color.fromRGBO(216, 216, 216, 0.8),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                ),
+              ),
+
+              // TextFormInput(
+              //   obscureText: false,
+              //   controller: controller,
+              //   textAlign: TextAlign.start,
+              //   validator: (String? value) {},
+              // ),
+            )
           ],
         ),
       ),
@@ -86,10 +102,13 @@ class FaqScreen extends StatelessWidget {
             EdgeInsets.only(left: 25.w, right: 25.w, top: 20.w, bottom: 20.w),
         child: Column(
           children: [
-            const FaqTabButton(
-              icon: AppImage.faq1,
-              text: 'Getting Started',
-              bgColor: AppColors.appColor,
+            GestureDetector(
+              // onTap: () => context.navigate(const AddFaqQuestion()),
+              child: const FaqTabButton(
+                icon: AppImage.faq1,
+                text: 'Getting Started',
+                bgColor: AppColors.appColor,
+              ),
             ),
             Space(11.h),
             const FaqTabButton(
