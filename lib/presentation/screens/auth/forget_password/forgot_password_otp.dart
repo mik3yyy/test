@@ -17,11 +17,13 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
-import '../vm/resend_otp_vm.dart';
+import 'reset_password.dart';
 
-class VerifyAccountScreen extends HookConsumerWidget {
-  final String emailAdress;
-  VerifyAccountScreen({Key? key, required this.emailAdress}) : super(key: key);
+class ForgetPasswordOTPScreen extends HookConsumerWidget {
+  // final String emailAdress;
+  ForgetPasswordOTPScreen({
+    Key? key,
+  }) : super(key: key);
   final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
@@ -32,7 +34,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(verifyAccountProvider);
 
-    final emailController = useTextEditingController(text: emailAdress);
+    final emailController = useTextEditingController();
     final verifyController = useTextEditingController();
     var toggleState = ref.watch(toggleStateProvider);
     ref.listen<RequestState>(verifyAccountProvider, (T, value) {
@@ -44,20 +46,6 @@ class VerifyAccountScreen extends HookConsumerWidget {
         );
       }
       if (value is Error) {
-        context.loaderOverlay.hide();
-        return AppSnackBar.showErrorSnackBar(context,
-            message: value.error.toString());
-      }
-    });
-    ref.listen<RequestState>(resendOtpProvider, (T, value) {
-      if (value is Success) {
-        return AppSnackBar.showSuccessSnackBar(
-          context,
-          message: "Please Check Your Mail or SMS for Verification Code",
-        );
-      }
-      if (value is Error) {
-        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -80,7 +68,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      "Verify Account!",
+                      "Forgot Password",
                       style:
                           AppText.header3(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,
@@ -94,12 +82,14 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     ),
                     Space(5.h),
                     Text(
-                      emailAdress,
+                      "+234 703 *** **61",
                       style:
                           AppText.header2(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,
                     ),
                     Space(120.h),
+
+                    //pincode field
                     PinCodeTextField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
@@ -147,11 +137,8 @@ class VerifyAccountScreen extends HookConsumerWidget {
                                   AppText.body4(context, AppColors.hintColor)),
                           WidgetSpan(
                             child: InkWell(
-                              onTap: () {
-                                ref
-                                    .read(resendOtpProvider.notifier)
-                                    .resendOtp(emailAdress);
-                              },
+                              onTap: () {},
+                              // context.navigate(VerifyAccountScreen()),
                               child: Text(
                                 ' Resend Code',
                                 style:
@@ -164,7 +151,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     ),
                     Space(160.h),
                     CustomButton(
-                      buttonWidth: 244.w,
+                      buttonWidth: double.infinity,
                       buttonText: vm is Loading ? "Verifying..." : "Proceed",
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
@@ -179,57 +166,12 @@ class VerifyAccountScreen extends HookConsumerWidget {
                                 ref
                                     .read(verifyAccountProvider.notifier)
                                     .verifyAccount(verifyAccount);
+
+                                // to be removed
+                                context.navigate(ResetPasswordScreen());
                               }
-                              context.loaderOverlay.show();
                             },
                     ),
-                    Space(20.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'By clicking Proceed, you agree to our ',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () {},
-                              // context.navigate(VerifyAccountScreen()),
-                              child: Text(
-                                'Privacy Policy',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Space(10.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'and our ',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () {},
-                              // =>
-                              // context.navigate(VerifyAccountScreen()),
-                              child: Text(
-                                'Terms and Conditions',
-                                style: AppText.body4(
-                                  context,
-                                  AppColors.appColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
               ),

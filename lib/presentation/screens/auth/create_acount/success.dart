@@ -37,7 +37,7 @@ class SuccessScreen extends StatelessWidget {
               borderColor: AppColors.appColor,
               textColor: Colors.white,
               onPressed: () {
-                context.navigate(const SigninScreen());
+                context.navigate(SigninScreen());
               },
             ),
           ],

@@ -6,9 +6,15 @@ class AppColors {
   static Color bottomSheet = const Color(0xFFE2E7F3);
   static const Color hintColor = Color(0xFF828282);
   static const Color whiteColor = Color(0xFFFFFFFF);
+
+  static const Color textColor = Color(0xFF333333);
+  static const Color greenColor = Color(0xFF00D20C);
+
+  
+
   static const Color borderColor = Color(0xFFEAEAEA);
 
-  static const Color greenColor = Color(0xFF00D20C);
+  
 
   static const Color inActiveColor = Color(0xFFD2D4D9);
   static const Color faqHintTextColor = Color(0xFF979797);
@@ -27,4 +33,5 @@ class AppColors {
   static const Color declineColor = Color(0xFFFE4B20);
   static const Color notificationDividerColor =
       Color.fromRGBO(216, 216, 216, 0.8);
+
 }
