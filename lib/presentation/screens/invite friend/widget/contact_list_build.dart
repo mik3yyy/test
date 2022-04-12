@@ -52,41 +52,56 @@ final List<Contacts> _contacts = [
 ];
 
 class _ContactListBuildState extends State<ContactListBuild> {
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100.h,
-      child: Column(
-        children: [
-          ListView.builder(
-              itemCount: _contacts.length,
-              itemBuilder: (BuildContext context, int index) {
-                final item = _contacts[index];
-                return Column(
+      height: 500.h,
+      child: Scrollbar(
+        //TODO: To reduce the height of the scroll bar
+        isAlwaysShown: true,
+        controller: _scrollController,
+        child: ListView.separated(
+          controller: _scrollController,
+          itemCount: _contacts.length,
+          itemBuilder: (BuildContext context, int index) {
+            final item = _contacts[index];
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Image.asset(item.imgUrl),
-                            Space(4.w),
-                            Text(
-                              item.name,
-                              style: AppText.contactNameStyle(
-                                context,
-                                AppColors.appColor,
-                              ),
-                            ),
-                          ],
+                        Image.asset(item.imgUrl),
+                        Space(4.w),
+                        Text(
+                          item.name,
+                          style: AppText.contactNameStyle(
+                            context,
+                            AppColors.appColor,
+                          ),
                         ),
-                        item.icon,
                       ],
                     ),
+                    item.icon,
                   ],
-                );
-              }),
-        ],
+                ),
+              ],
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Padding(
+              padding: EdgeInsets.only(right: 12.0),
+              child: Divider(
+                color: AppColors.notificationDividerColor,
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

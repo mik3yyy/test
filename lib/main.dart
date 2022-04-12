@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/message_screen.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/notification/notification_screen.dart';
 import 'presentation/route/navigator.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: const Color(0xFFFFFFFF),
             primarySwatch: Colors.blue),
-        home: const SplashScreen(),
+        // home: const SplashScreen(),
+        home: const MessageScreen(),
         builder: (context, widget) {
           //add this line
           ScreenUtil.setContext(context);

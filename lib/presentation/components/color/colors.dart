@@ -20,6 +20,7 @@ class AppColors {
   static const Color referFriendBorderColor = Color(0xFFFF7800);
   static const Color referFriendBorderColor2 = Color.fromRGBO(7, 39, 119, 0.2);
   static const Color referFriendBorderColor3 = Color.fromRGBO(7, 39, 119, 0.5);
+  static const Color referFriendBorderColor4 = Color.fromRGBO(7, 39, 119, 0.1);
   static const Color referFriendTextColor = Color.fromRGBO(7, 39, 119, 0.3);
   static const Color notificationColor = Color.fromRGBO(130, 130, 130, 0.2);
   static const Color referFriendTextColor2 = Color(0xFFD9E4FF);
