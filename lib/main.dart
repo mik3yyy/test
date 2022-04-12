@@ -39,18 +39,14 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: const Color(0xFFFFFFFF),
             primarySwatch: Colors.blue),
 
-
         // theme: theme,
         // home: const HomePage(),
-        
-            // CurrencyScreen(),
-            // const CurrencyScreen(),
-            //  const BottomNavBar(),
 
-            
+        // CurrencyScreen(),
+        // const CurrencyScreen(),
+        //  const BottomNavBar(),
 
         home: const SplashScreen(),
-
 
         builder: (context, widget) {
           //add this line
