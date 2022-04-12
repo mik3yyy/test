@@ -19,7 +19,6 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
 class CreateAccountScreen extends HookConsumerWidget {
   CreateAccountScreen({Key? key}) : super(key: key);
-  //change from var to final
   final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
@@ -32,7 +31,7 @@ class CreateAccountScreen extends HookConsumerWidget {
     final fistNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
-    var toggleState = ref.watch(toggleStateProvider);
+    var toggleState = ref.watch(toggleStateProvider.state);
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success) {
         context.navigate(VerifyAccountScreen(
@@ -155,15 +154,14 @@ class CreateAccountScreen extends HookConsumerWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.r),
                         ),
-                        value: toggleState,
+                        value: toggleState.state,
                         onChanged: (value) {
-                          ref.read(toggleStateProvider.notifier).state =
-                              toggleState == false ? true : false;
+                          toggleState.state = value!;
                         }),
                     Space(60.h),
                     CustomButton(
                       buttonWidth: 244.w,
-                      buttonText: vm is Loading ? "Loading" : "Sign Up",
+                      buttonText: vm is Loading ? "Sending OTP..." : "Sign Up",
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,
@@ -171,14 +169,20 @@ class CreateAccountScreen extends HookConsumerWidget {
                           ? null
                           : () {
                               if (formKey.currentState!.validate()) {
-                                ref
-                                    .read(createAccountProvider.notifier)
-                                    .createAccount(
-                                      fistNameController.text,
-                                      fistNameController.text,
-                                      emailPhoneController.text,
-                                    );
-                                context.loaderOverlay.show();
+                                if (toggleState.state == false) {
+                                  return AppSnackBar.showInfoSnackBar(context,
+                                      message:
+                                          "Select the checkbox to continue");
+                                } else {
+                                  ref
+                                      .read(createAccountProvider.notifier)
+                                      .createAccount(
+                                        fistNameController.text,
+                                        fistNameController.text,
+                                        emailPhoneController.text,
+                                      );
+                                  context.loaderOverlay.show();
+                                }
                               }
                             },
                     ),
@@ -191,8 +195,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                                   AppText.body4(context, AppColors.hintColor)),
                           WidgetSpan(
                             child: InkWell(
-                              onTap: () =>
-                                  context.navigate(const SigninScreen()),
+                              onTap: () => context.navigate(SigninScreen()),
                               child: Text(
                                 ' Sign In',
                                 style:

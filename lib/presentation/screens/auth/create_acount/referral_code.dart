@@ -42,6 +42,7 @@ class ReferralCodeScreen extends StatelessWidget {
 
                 // referral code
                 TextFormInput(
+                  textAlign: TextAlign.start,
                   labelText: 'Enter referral code',
                   controller: controller,
                   validator: (value) {},
