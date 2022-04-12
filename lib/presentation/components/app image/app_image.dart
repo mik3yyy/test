@@ -43,4 +43,5 @@ class AppImage {
   static const wallet = "images/wallet.svg";
   static const portfolio = "images/portfolio.svg";
   static const more = "images/more.svg";
+  static const messageMenuIcon = "images/message_menu_icon.png";
 }

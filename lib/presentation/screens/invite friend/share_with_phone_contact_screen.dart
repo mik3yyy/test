@@ -15,7 +15,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = TextEditingController();
-    bool newValue = false;
+    // bool newValue = false;
     return WalletViewWidget(
       appBar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
@@ -105,7 +105,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -130,7 +130,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -155,7 +155,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -180,7 +180,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -205,7 +205,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -230,7 +230,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -255,7 +255,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
@@ -280,7 +280,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.check_box_outline_blank_outlined),
+                const Icon(Icons.check_box_outline_blank_outlined),
               ],
             ),
             const Divider(
