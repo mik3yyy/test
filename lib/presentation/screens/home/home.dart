@@ -25,44 +25,46 @@ class HomePage extends StatelessWidget {
       body: WalletViewWidget(
         appBar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '\$2,400.00',
-                        style: AppText.header1(context, Colors.white, 25.sp),
-                      ),
-                      Space(10.h),
-                      Text(
-                        'Available Balance',
-                        style: AppText.body2(context, Colors.white, 16.sp),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Icon(
-                    Icons.notifications,
-                    color: Colors.white,
-                    size: 20.sp,
-                  ),
-                  Space(10.w),
-                  const CircleAvatar(
-                    radius: 18.0,
-                    backgroundImage: AssetImage(
-                      AppImage.image1,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '\$2,400.00',
+                          style: AppText.header1(context, Colors.white, 25.sp),
+                        ),
+                        Space(10.h),
+                        Text(
+                          'Available Balance',
+                          style: AppText.body2(context, Colors.white, 16.sp),
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-              Space(30.h),
-              const WalletOptionList()
-            ],
+                    const Spacer(),
+                    Icon(
+                      Icons.notifications,
+                      color: Colors.white,
+                      size: 20.sp,
+                    ),
+                    Space(10.w),
+                    const CircleAvatar(
+                      radius: 18.0,
+                      backgroundImage: AssetImage(
+                        AppImage.image1,
+                      ),
+                    )
+                  ],
+                ),
+                Space(30.h),
+                const WalletOptionList()
+              ],
+            ),
           ),
         ),
         child: SizedBox(

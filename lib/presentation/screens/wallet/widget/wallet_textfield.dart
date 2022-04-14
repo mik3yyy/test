@@ -11,6 +11,7 @@ class WalletTextField extends StatelessWidget {
       this.autovalidateMode,
       this.validator,
       this.labelText,
+      this.keyboardType,
       required this.obscureText,
       this.suffixIcon,
       this.prefixIcon,
@@ -25,6 +26,7 @@ class WalletTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Color color;
   final Widget? prefixIcon;
+  final TextInputType? keyboardType;
   final TextEditingController? controller;
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?)? validator;
@@ -39,6 +41,7 @@ class WalletTextField extends StatelessWidget {
         cursorColor: AppColors.appColor,
         autovalidateMode: autovalidateMode,
         obscureText: obscureText,
+        keyboardType: keyboardType,
         // maxLines: maxLines,
         // minLines: minLines,
         // expands: expands!,

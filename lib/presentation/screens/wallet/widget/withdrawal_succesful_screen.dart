@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
-import '../widget/wallet_view_widget.dart';
+import 'wallet_view_widget.dart';
 
 class WithdrawalSuccessfulScreen extends StatelessWidget {
   final BuildContext menuScreenContext;
