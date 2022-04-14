@@ -27,29 +27,32 @@ class WalletCategory extends StatelessWidget {
           final category = walletCategories[index];
           return Row(
             children: [
-              Container(
-                height: 150.h,
-                width: 150.w,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(width: 2.w, color: Colors.grey[200]!)),
-                child: Column(
-                  children: [
-                    Space(40.h),
-                    SizedBox(
-                      height: 45.h,
-                      width: 45.h,
-                      // color: Colors.red,
-                      child: Image(
-                          fit: BoxFit.contain,
-                          image: AssetImage(category.image)),
-                    ),
-                    Space(12.h),
-                    Text(
-                      category.name,
-                      style: AppText.body2(context, AppColors.appColor, 20.sp),
-                    )
-                  ],
+              InkWell(
+                child: Container(
+                  height: 150.h,
+                  width: 150.w,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(width: 2.w, color: Colors.grey[200]!)),
+                  child: Column(
+                    children: [
+                      Space(40.h),
+                      SizedBox(
+                        height: 45.h,
+                        width: 45.h,
+                        // color: Colors.red,
+                        child: Image(
+                            fit: BoxFit.contain,
+                            image: AssetImage(category.image)),
+                      ),
+                      Space(12.h),
+                      Text(
+                        category.name,
+                        style:
+                            AppText.body2(context, AppColors.appColor, 20.sp),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Space(15.h),

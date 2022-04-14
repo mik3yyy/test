@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_succesful_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/withdrawal_succesful_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final BuildContext menuScreenContext;
