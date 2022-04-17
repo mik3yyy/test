@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/withdrawal_succesful_screen.dart';
 
@@ -48,16 +49,19 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
-      WithdrawalSuccessfulScreen(
-        menuScreenContext: widget.menuScreenContext,
-        hideStatus: _hideNavBar,
-        onScreenHideButtonPressed: () {
-          setState(() {
-            _hideNavBar = !_hideNavBar;
-          });
-        },
-      ),
-      FaqScreen(
+      const Placeholder(),
+      // WithdrawalSuccessfulScreen(
+      //   menuScreenContext: widget.menuScreenContext,
+      //   hideStatus: _hideNavBar,
+      //   onScreenHideButtonPressed: () {
+      //     setState(() {
+      //       _hideNavBar = !_hideNavBar;
+      //     });
+      //   },
+      // ),
+
+      //! change to FAQ screen
+      SafePayScreen(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,
         onScreenHideButtonPressed: () {

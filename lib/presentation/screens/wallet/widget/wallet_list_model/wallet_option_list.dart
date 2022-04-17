@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_list_model/wallet_options.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/invest/invest.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transfer.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -21,13 +22,22 @@ class WalletOptionList extends StatelessWidget {
           children: [
             Column(
               children: [
-                Container(
-                  height: 70.h,
-                  width: 70.w,
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 2.w, color: AppColors.bottomSheet)),
-                  child: const Image(image: AssetImage(AppImage.transfer)),
+                InkWell(
+                  onTap: () {
+                    pushNewScreen(
+                      context, screen: const Transfer(),
+                      withNavBar: true, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
+                  child: Container(
+                    height: 70.h,
+                    width: 70.w,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2.w, color: AppColors.bottomSheet)),
+                    child: const Image(image: AssetImage(AppImage.transfer)),
+                  ),
                 ),
                 Space(10.h),
                 Text(
@@ -49,20 +59,29 @@ class WalletOptionList extends StatelessWidget {
                 ),
                 Space(10.h),
                 Text(
-                  'Add wallet',
+                  'Add Funds',
                   style: AppText.body2(context, Colors.white, 16.sp),
                 )
               ],
             ),
             Column(
               children: [
-                Container(
-                  height: 70.h,
-                  width: 70.w,
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 2.w, color: AppColors.bottomSheet)),
-                  child: const Image(image: AssetImage(AppImage.invest)),
+                InkWell(
+                  onTap: () {
+                    pushNewScreen(
+                      context, screen: const InvestScreen(),
+                      withNavBar: true, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
+                  child: Container(
+                    height: 70.h,
+                    width: 70.w,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2.w, color: AppColors.bottomSheet)),
+                    child: const Image(image: AssetImage(AppImage.invest)),
+                  ),
                 ),
                 Space(10.h),
                 Text(

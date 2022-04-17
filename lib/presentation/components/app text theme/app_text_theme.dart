@@ -13,7 +13,7 @@ class AppText {
   static TextStyle header2(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.headline1!.copyWith(
         fontSize: size,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
         fontFamily: 'Avenir LTStd',
         color: color);
   }
@@ -46,6 +46,16 @@ class AppText {
   static TextStyle body2(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.bodyText1!.copyWith(
         fontSize: size,
+        fontWeight: FontWeight.w400,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
+
+  static TextStyle debitCard(
+      BuildContext context, Color color, double size, double spacing) {
+    return Theme.of(context).textTheme.bodyText1!.copyWith(
+        fontSize: size,
+        letterSpacing: spacing,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);

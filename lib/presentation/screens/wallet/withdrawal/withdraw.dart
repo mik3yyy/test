@@ -585,7 +585,7 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                   Center(
                     child: Text(
                       'For security reasons, please enter your password',
-                      style: AppText.body2(context, AppColors.appColor, 16.sp),
+                      style: AppText.body2(context, AppColors.appColor, 18.sp),
                     ),
                   ),
                   Space(5.h),
