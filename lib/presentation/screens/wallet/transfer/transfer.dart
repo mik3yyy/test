@@ -6,17 +6,17 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_i
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../components/app text theme/app_text_theme.dart';
-import 'widget/wallet_view_widget.dart';
+import '../../../components/app text theme/app_text_theme.dart';
+import '../widget/wallet_view_widget.dart';
 
-class WalletTab extends StatefulWidget {
-  const WalletTab({Key? key}) : super(key: key);
+class Transfer extends StatefulWidget {
+  const Transfer({Key? key}) : super(key: key);
 
   @override
-  State<WalletTab> createState() => _WalletTabState();
+  State<Transfer> createState() => _TransferState();
 }
 
-class _WalletTabState extends State<WalletTab>
+class _TransferState extends State<Transfer>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {

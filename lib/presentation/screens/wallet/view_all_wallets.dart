@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_tab.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transfer.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';
@@ -65,7 +65,7 @@ class ViewAllWallet extends StatelessWidget {
                   onTap: () {
                     pushNewScreen(
                       context,
-                      screen: const WalletTab(),
+                      screen: const Transfer(),
                       withNavBar: true, // OPTIONAL VALUE. True by default.
                       pageTransitionAnimation: PageTransitionAnimation.fade,
                     );
