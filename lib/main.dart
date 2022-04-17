@@ -46,9 +46,10 @@ class MyApp extends StatelessWidget {
         // const CurrencyScreen(),
         //  const BottomNavBar(),
 
-        home: MainScreen(menuScreenContext: context),
+        home:
+            // MainScreen(menuScreenContext: context),
 
-        // SplashScreen(),
+            const SplashScreen(),
 
         builder: (context, widget) {
           //add this line
