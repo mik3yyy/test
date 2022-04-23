@@ -44,4 +44,11 @@ class AppImage {
   static const portfolio = "images/portfolio.svg";
   static const more = "images/more.svg";
   static const messageMenuIcon = "images/message_menu_icon.png";
+  static const debitCard = "images/debitCard.svg";
+  static const message = "images/messages.svg";
+  static const notification = "images/notification.svg";
+  static const profile = "images/profile.svg";
+  static const referFriend = "images/refer_friend.svg";
+  static const safePay = "images/safe_pay.svg";
+  static const investIcon = "images/invest_icon.svg";
 }
