@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/success_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
@@ -42,7 +44,9 @@ class VerifyScreen extends HookConsumerWidget {
                   borderColor: Colors.white,
                   textColor: Colors.white,
                   onPressed: () {
-                    Navigator.pop(context);
+                    pushNewScreen(context,
+                        screen: const VerificationSuccess(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade);
                   },
                   buttonWidth: MediaQuery.of(context).size.width),
             ],

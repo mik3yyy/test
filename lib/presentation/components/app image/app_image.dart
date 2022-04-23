@@ -66,4 +66,5 @@ class AppImage {
   static const resetPin = "images/reset_pin.svg";
   static const setTransactionPin = "images/set_transaction_pin.svg";
   static const transactionPin = "images/transaction_pin.svg";
+  static const confetti = "images/confetti.svg";
 }
