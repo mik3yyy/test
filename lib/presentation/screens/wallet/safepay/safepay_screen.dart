@@ -8,7 +8,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/fund_wallet.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/view_all_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -16,15 +15,9 @@ import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class SafePayScreen extends StatefulHookConsumerWidget {
-  final BuildContext menuScreenContext;
-  final Function onScreenHideButtonPressed;
-  final bool hideStatus;
-  const SafePayScreen(
-      {Key? key,
-      required this.menuScreenContext,
-      required this.onScreenHideButtonPressed,
-      required this.hideStatus})
-      : super(key: key);
+  const SafePayScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SafePayScreenState();
@@ -38,7 +31,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
     return Scaffold(
       body: WalletViewWidget(
         appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
           child: Column(
             children: [
               Row(

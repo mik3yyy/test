@@ -9,7 +9,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';

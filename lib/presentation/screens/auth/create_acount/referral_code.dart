@@ -45,7 +45,9 @@ class ReferralCodeScreen extends StatelessWidget {
                   textAlign: TextAlign.start,
                   labelText: 'Enter referral code',
                   controller: controller,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                 ),
 
@@ -91,7 +93,7 @@ class ReferralCodeScreen extends StatelessWidget {
                           // onTap: () =>
                           // context.navigate(const VerifyAccountScreen()),
                           child: Text(
-                            ' Terms',
+                            ' Termss',
                             style: AppText.body4(context, AppColors.appColor),
                           ),
                         ),

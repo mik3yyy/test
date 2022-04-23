@@ -122,7 +122,7 @@ class _ToastState extends State<Toast> {
       return showFlash<T>(
         context: context,
         builder: (context, controller) {
-          final child;
+          final Widget child;
           if (message is WidgetBuilder) {
             child = message(context);
           } else if (message is Widget) {
@@ -290,15 +290,13 @@ extension FlashBarShortcuts on BuildContext {
           final $actionColor = actionColor ??
               flashTheme.actionColor ??
               (isThemeDark
-                  ? theme.colorScheme.primaryVariant
+                  ? theme.colorScheme.primaryContainer
                   : theme.colorScheme.secondary);
 
           final inverseTheme = theme.copyWith(
             colorScheme: ColorScheme(
               primary: colorScheme.onPrimary,
-              primaryVariant: colorScheme.onPrimary,
               secondary: $actionColor,
-              secondaryVariant: colorScheme.onSecondary,
               surface: colorScheme.onSurface,
               background: $backgroundColor,
               error: colorScheme.onError,
@@ -718,7 +716,7 @@ class FlashTheme extends InheritedWidget {
   final FlashBlockDialogThemeData? flashBlockDialogTheme;
 
   /// Applies the given theme to [child].
-  FlashTheme({
+  const FlashTheme({
     Key? key,
     required Widget child,
     this.flashBarTheme,

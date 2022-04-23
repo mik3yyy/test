@@ -31,7 +31,7 @@ class CurrencyScreen extends HookConsumerWidget {
     final languageController = TextEditingController();
     ref.listen<RequestState>(setCurrencyProvider, (T, value) {
       if (value is Success) {
-        context.navigate(ReferralCodeScreen());
+        context.navigate(const ReferralCodeScreen());
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Registration completed successfully!",

@@ -9,8 +9,6 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -76,7 +74,9 @@ class SigninScreen extends HookConsumerWidget {
                       textAlign: TextAlign.center,
                       labelText: 'Email or Phone Number',
                       controller: emailPhoneController,
-                      validator: (value) {},
+                      validator: (value) {
+                        return null;
+                      },
                       obscureText: false),
                   Space(32.h),
 
@@ -85,9 +85,11 @@ class SigninScreen extends HookConsumerWidget {
                     textAlign: TextAlign.center,
                     labelText: 'Password',
                     controller: passwordController,
-                    validator: (value) {},
+                    validator: (value) {
+                      return null;
+                    },
                     obscureText: false,
-                    suffixIcon: Icon(Icons.visibility),
+                    suffixIcon: const Icon(Icons.visibility),
                   ),
                   Space(32.h),
                   Row(

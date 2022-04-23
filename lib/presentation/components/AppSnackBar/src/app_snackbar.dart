@@ -243,7 +243,9 @@ class FlashController<T> {
         'Cannot dispose a $runtimeType twice.');
     dismissInternal();
 
-    for (OverlayEntry entry in _overlayEntries) entry.remove();
+    for (OverlayEntry entry in _overlayEntries) {
+      entry.remove();
+    }
     _overlayEntries.clear();
     _controller.dispose();
     _transitionCompleter.complete(_result);
@@ -286,14 +288,15 @@ class Flash<T> extends StatefulWidget {
     this.barrierDismissible = true,
     this.useSafeArea = true,
   })  : assert(() {
-          if (alignment == null)
+          if (alignment == null) {
             return behavior != null && position != null;
-          else
+          } else {
             return behavior == null && position == null;
+          }
         }()),
         super(key: key);
 
-  Flash.bar({
+  const Flash.bar({
     Key? key,
     required this.controller,
     required this.child,
@@ -324,7 +327,7 @@ class Flash<T> extends StatefulWidget {
         assert(position != null),
         super(key: key);
 
-  Flash.dialog({
+  const Flash.dialog({
     Key? key,
     required this.controller,
     required this.child,
@@ -671,7 +674,7 @@ class _FlashState<T> extends State<Flash<T>> {
                 final blur = (widget.barrierBlur ?? 0.0) * value;
                 final color = widget.barrierColor ?? Colors.transparent;
                 Widget child = Container(
-                  constraints: BoxConstraints.expand(),
+                  constraints: const BoxConstraints.expand(),
                   color: color.withOpacity(color.opacity * value),
                 );
                 // https://github.com/flutter/flutter/issues/77258
@@ -937,7 +940,7 @@ enum HorizontalDismissDirection {
 enum _FlingGestureKind { none, forward, reverse }
 
 class FlashBar extends StatefulWidget {
-  FlashBar({
+  const FlashBar({
     Key? key,
     this.padding = const EdgeInsets.all(16.0),
     this.title,
@@ -1016,7 +1019,7 @@ class _FlashBarState extends State<FlashBar>
   final double _initialOpacity = 1.0;
   final double _finalOpacity = 0.4;
 
-  final Duration _pulseAnimationDuration = Duration(seconds: 1);
+  final Duration _pulseAnimationDuration = const Duration(seconds: 1);
 
   late bool _isTitlePresent;
   late bool _isActionsPresent;

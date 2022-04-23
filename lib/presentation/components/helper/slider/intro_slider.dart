@@ -114,7 +114,7 @@ class IntroSlider extends StatefulWidget {
   final scrollbarBehavior? verticalScrollbarBehavior;
 
   // Constructor
-  IntroSlider({
+  const IntroSlider({
     // Slides
     this.slides,
     this.backgroundColorAllSlides,
@@ -447,7 +447,7 @@ class IntroSliderState extends State<IntroSlider>
     }
 
     renderPrevBtn = widget.renderPrevBtn ??
-        Text(
+        const Text(
           "PREV",
           style: TextStyle(color: Colors.white),
         );
@@ -458,21 +458,21 @@ class IntroSliderState extends State<IntroSlider>
     // Done button
     onDonePress = widget.onDonePress ?? () {};
     renderDoneBtn = widget.renderDoneBtn ??
-        Text(
+        const Text(
           "DONE",
           style: TextStyle(color: Colors.white),
         );
-    doneButtonStyle = widget.doneButtonStyle ?? ButtonStyle();
+    doneButtonStyle = widget.doneButtonStyle ?? const ButtonStyle();
     showDoneBtn = widget.showDoneBtn ?? true;
 
     // Next button
     onNextPress = widget.onSkipPress ?? () {};
     renderNextBtn = widget.renderNextBtn ??
-        Text(
+        const Text(
           "SKIP",
           style: TextStyle(color: Colors.white),
         );
-    nextButtonStyle = widget.nextButtonStyle ?? ButtonStyle();
+    nextButtonStyle = widget.nextButtonStyle ?? const ButtonStyle();
   }
 
   void goToTab(int index) {
@@ -501,7 +501,7 @@ class IntroSliderState extends State<IntroSlider>
   Widget build(BuildContext context) {
     // Full screen view
     if (widget.hideStatusBar == true) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     }
 
     return Scaffold(
@@ -582,7 +582,7 @@ class IntroSliderState extends State<IntroSlider>
       bottom: 50.0,
       left: 10.0,
       right: 10.0,
-      child: Container(
+      child: SizedBox(
         // color: Colors.blue,
         height: 200,
         child: Column(
@@ -637,7 +637,7 @@ class IntroSliderState extends State<IntroSlider>
             ),
 
             // Next, Done button
-            Container(
+            SizedBox(
               // alignment: Alignment.center,
               width: MediaQuery.of(context).size.width / 4,
               height: 40,
@@ -820,7 +820,7 @@ class IntroSliderState extends State<IntroSlider>
                 ),
               ),
             )
-          : BoxDecoration(
+          : const BoxDecoration(
               // gradient: LinearGradient(
               //   colors: backgroundColor != null
               //       ? [backgroundColor, backgroundColor]

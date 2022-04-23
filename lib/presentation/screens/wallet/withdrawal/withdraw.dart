@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/animated_toggle.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -93,7 +92,7 @@ class _WithdrawState extends ConsumerState<Withdraw> {
     return Scaffold(
       body: WalletViewWidget(
         appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
           child: Column(
             children: [
               Row(
@@ -619,15 +618,6 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                             transfered: "€ 400.00",
                             details: 'Dollar wallet to Euro wallet',
                             received: '£ 300.00');
-                        // pushNewScreen(
-                        //   context,
-                        //   screen: const ViewAllWallet(),
-                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
-                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
-                        // );
-                        // context.navigate(AvailableBalance()
-
-                        // );
                       },
                       buttonWidth: MediaQuery.of(context).size.width),
                   Space(7.h),

@@ -168,7 +168,7 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
                                     .verifyAccount(verifyAccount);
 
                                 // to be removed
-                                context.navigate(ResetPasswordScreen());
+                                context.navigate(const ResetPasswordScreen());
                               }
                             },
                     ),
