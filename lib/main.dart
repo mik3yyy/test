@@ -16,6 +16,8 @@ import 'presentation/screens/notification/notification_screen.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'presentation/screens/home/widgets/main_screen.dart';
+import 'presentation/screens/prop/chat_setting_screen.dart';
+import 'presentation/screens/prop/contact_list_prop_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -46,10 +48,9 @@ class MyApp extends StatelessWidget {
         // const CurrencyScreen(),
         //  const BottomNavBar(),
 
-        home:
-            // MainScreen(menuScreenContext: context),
 
-            const SplashScreen(),
+        home: MainScreen(menuScreenContext: context),
+
 
         builder: (context, widget) {
           //add this line

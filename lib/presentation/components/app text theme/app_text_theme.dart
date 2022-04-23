@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppText {
   static TextStyle header1(BuildContext context, Color color, double size) {
@@ -111,4 +112,22 @@ class AppText {
         fontFamily: 'Roboto',
         color: color);
   }
+
+  //TextSTyle for contact name text
+  static TextStyle body5(BuildContext context, Color color, double size) {
+    return GoogleFonts.roboto(
+        textStyle: TextStyle(
+      color: color,
+      fontSize: size,
+      fontWeight: FontWeight.bold,
+    ));
+  }
+  // //TextSTyle for contact name text
+  // static TextStyle body5(BuildContext context, Color color) {
+  //   return Theme.of(context).textTheme.labelSmall!.copyWith(
+  //       fontSize: 14.sp,
+  //       fontWeight: FontWeight.w900,
+  //       fontFamily: 'Roboto',
+  //       color: color);
+  // }
 }
