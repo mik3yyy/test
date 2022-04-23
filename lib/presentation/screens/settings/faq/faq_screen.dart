@@ -4,21 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/faq/widget/faq_accordion.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/faq/widget/faq_tab_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
+import 'widget/faq_accordion.dart';
+import 'widget/faq_tab_button.dart';
+
 class FaqScreen extends StatelessWidget {
-  final BuildContext menuScreenContext;
-  final Function onScreenHideButtonPressed;
-  final bool hideStatus;
-  const FaqScreen(
-      {Key? key,
-      required this.menuScreenContext,
-      required this.onScreenHideButtonPressed,
-      required this.hideStatus})
-      : super(key: key);
+  const FaqScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +26,12 @@ class FaqScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.chevron_left,
-                  color: AppColors.whiteColor,
-                  size: 25.sp,
+                InkWell(
+                  onTap: (() => Navigator.pop(context)),
+                  child: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: Colors.white,
+                  ),
                 ),
                 Column(
                   children: [

@@ -16,13 +16,9 @@ class NotificationScreen extends StatelessWidget {
       body: WalletViewWidget(
         appBar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [],
-              ),
-            ],
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [],
           ),
         ),
         child: Padding(
@@ -30,19 +26,20 @@ class NotificationScreen extends StatelessWidget {
               EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w, bottom: 20.w),
           child: Column(
             children: [
+              Space(25.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.chevron_left,
-                    color: AppColors.appColor,
+                  InkWell(
+                    onTap: (() => Navigator.pop(context)),
+                    child: const Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: AppColors.appColor,
+                    ),
                   ),
                   Text(
                     'Notifications',
-                    style: AppText.body3(
-                      context,
-                      AppColors.appColor,
-                    ),
+                    style: AppText.body2(context, AppColors.appColor, 20.sp),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -52,7 +49,7 @@ class NotificationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Space(14.h),
+              Space(35.h),
               TextFormField(
                 // controller: controller,
                 decoration: InputDecoration(
@@ -79,7 +76,7 @@ class NotificationScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Space(23.h),
+              Space(15.h),
               const NotificationTabBar(),
             ],
           ),

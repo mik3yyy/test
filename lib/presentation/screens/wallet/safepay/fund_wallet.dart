@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/withdrawal_succesful_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
-import '../../../components/dialogs/wallet_dialog.dart';
 import '../../home/widgets/bottomNav/persistent-tab-view.dart';
 import '../widget/wallet_view_widget.dart';
 

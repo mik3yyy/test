@@ -5,7 +5,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forgot_password_otp.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -51,7 +50,9 @@ class ResetPasswordScreen extends StatelessWidget {
                   textAlign: TextAlign.start,
                   labelText: 'New Password',
                   controller: controller,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                   suffixIcon: const Icon(Icons.visibility_off),
                 ),
@@ -62,7 +63,9 @@ class ResetPasswordScreen extends StatelessWidget {
                   textAlign: TextAlign.start,
                   labelText: 'Confirm Password',
                   controller: controller,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                   suffixIcon: const Icon(Icons.visibility_off),
                 ),

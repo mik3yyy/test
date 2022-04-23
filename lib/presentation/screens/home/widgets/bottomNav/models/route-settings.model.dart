@@ -41,7 +41,7 @@ class RouteAndNavigatorSettings {
       onUnknownRoute: onUnknownRoute ?? this.onUnknownRoute,
       initialRoute: initialRoute ?? this.initialRoute,
       navigatorObservers: navigatorObservers ?? this.navigatorObservers,
-      navigatorKey: navigatorKey ?? this.navigatorKey,
+      navigatorKey: navigatorKey ?? navigatorKey,
     );
   }
 }

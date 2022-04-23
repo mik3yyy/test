@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/settings_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/withdrawal_succesful_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final BuildContext menuScreenContext;
@@ -50,18 +48,9 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
       const Placeholder(),
-      // WithdrawalSuccessfulScreen(
-      //   menuScreenContext: widget.menuScreenContext,
-      //   hideStatus: _hideNavBar,
-      //   onScreenHideButtonPressed: () {
-      //     setState(() {
-      //       _hideNavBar = !_hideNavBar;
-      //     });
-      //   },
-      // ),
 
       //! change to FAQ screen
-      SafePayScreen(
+      SettingScreen(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,
         onScreenHideButtonPressed: () {
@@ -70,15 +59,6 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       )
-      // MainScreen(
-      //   menuScreenContext: widget.menuScreenContext,
-      //   hideStatus: _hideNavBar,
-      //   onScreenHideButtonPressed: () {
-      //     setState(() {
-      //       _hideNavBar = !_hideNavBar;
-      //     });
-      //   },
-      // ),
     ];
   }
 
@@ -141,10 +121,10 @@ class _MainScreenState extends State<MainScreen> {
           color: AppColors.appColor,
         ),
         inactiveIcon: SvgPicture.asset(
-          AppImage.more,
+          AppImage.settings,
           color: Colors.grey.shade300,
         ),
-        title: ("more"),
+        title: ("settings"),
         activeColorPrimary: AppColors.appColor,
         inactiveColorPrimary: Colors.grey,
         // routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -161,17 +141,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Navigation Bar Demo')),
-      // drawer: Drawer(
-      //   child: Center(
-      //     child: Column(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: <Widget>[
-      //         const Text('This is the Drawer'),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: PersistentTabView(
         context,
         controller: _controller,
@@ -199,7 +168,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 50.0,
               color: Colors.white,
               child: ElevatedButton(
-                child: Text("Close"),
+                child: const Text("Close"),
                 onPressed: () {
                   Navigator.pop(context);
                 },

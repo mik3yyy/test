@@ -30,7 +30,7 @@ class _TransferState extends State<Transfer>
     return Scaffold(
       body: WalletViewWidget(
         appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
           child: Column(
             children: [
               Row(

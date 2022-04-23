@@ -87,12 +87,19 @@ class Country {
 }
 
 enum Continent {
+  // ignore: constant_identifier_names
   ASIA,
+  // ignore: constant_identifier_names
   EUROPE,
+  // ignore: constant_identifier_names
   AFRICA,
+  // ignore: constant_identifier_names
   OCEANIA,
+  // ignore: constant_identifier_names
   NORTH_AMERICA,
+  // ignore: constant_identifier_names
   ANTARCTICA,
+  // ignore: constant_identifier_names
   SOUTH_AMERICA
 }
 
@@ -114,7 +121,7 @@ class EnumValues<T> {
 
   Map<T, String> get reverse {
     if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
+      reverseMap = map.map((k, v) => MapEntry(v, k));
     }
     return reverseMap;
   }

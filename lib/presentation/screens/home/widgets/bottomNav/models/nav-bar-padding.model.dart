@@ -9,16 +9,16 @@ class NavBarPadding {
   const NavBarPadding.only({this.top, this.bottom, this.right, this.left});
 
   const NavBarPadding.symmetric({double? horizontal, double? vertical})
-      : this.top = vertical,
-        this.bottom = vertical,
-        this.right = horizontal,
-        this.left = horizontal;
+      : top = vertical,
+        bottom = vertical,
+        right = horizontal,
+        left = horizontal;
 
   const NavBarPadding.all(double? value)
-      : this.top = value,
-        this.bottom = value,
-        this.right = value,
-        this.left = value;
+      : top = value,
+        bottom = value,
+        right = value,
+        left = value;
 
   const NavBarPadding.fromLTRB(this.top, this.bottom, this.right, this.left);
 }

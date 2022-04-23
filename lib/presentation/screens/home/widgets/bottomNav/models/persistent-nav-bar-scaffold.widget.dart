@@ -351,8 +351,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
   }
 
   void _focusActiveTab() {
-    if (widget.screenTransitionAnimation!.animateTabTransition)
+    if (widget.screenTransitionAnimation!.animateTabTransition) {
       _newPageAnimation();
+    }
     if (tabFocusNodes.length != widget.tabCount) {
       if (tabFocusNodes.length > widget.tabCount!) {
         discardedNodes.addAll(tabFocusNodes.sublist(widget.tabCount!));
@@ -369,8 +370,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView>
       }
     }
     FocusScope.of(context).setFirstFocus(tabFocusNodes[widget.currentTabIndex]);
-    if (widget.screenTransitionAnimation!.animateTabTransition)
+    if (widget.screenTransitionAnimation!.animateTabTransition) {
       _lastPageAnimation();
+    }
   }
 
   _lastPageAnimation() {

@@ -50,7 +50,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   labelText: 'Email Address or Phone Number',
                   controller: controller,
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   obscureText: false,
                 ),
 
