@@ -21,11 +21,18 @@ class ShareToFriendsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.chevron_left,
-                  color: AppColors.whiteColor,
-                  size: 25.sp,
+                InkWell(
+                  onTap: (() => Navigator.pop(context)),
+                  child: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: Colors.white,
+                  ),
                 ),
+                // Icon(
+                //   Icons.chevron_left,
+                //   color: AppColors.whiteColor,
+                //   size: 25.sp,
+                // ),
                 Text(
                   'Share to',
                   style: AppText.buttonText(
@@ -44,41 +51,45 @@ class ShareToFriendsScreen extends StatelessWidget {
           ],
         ),
       ),
-      child: Padding(
+      child: Container(
+        height: 550.h,
         padding:
             EdgeInsets.only(left: 25.w, right: 25.w, top: 40.w, bottom: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Select how to share',
-              style: AppText.body3(
-                context,
-                AppColors.appColor,
+        child: SizedBox(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select how to share',
+                style: AppText.body3(
+                  context,
+                  AppColors.appColor,
+                ),
               ),
-            ),
-            Space(6.h),
-            Container(
-              height: 300.h,
-              padding: const EdgeInsets.fromLTRB(14.0, 10.0, 14.0, 10.0),
-              decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                  border: Border.all(
-                    color: AppColors.borderColor,
-                    width: 1.w,
-                  ),
-                  borderRadius: BorderRadius.circular(5.r)),
-              child: const ShareOptionDetails(),
-            ),
-            Space(76.h),
-            CustomButton(
-              borderColor: AppColors.appColor,
-              buttonText: 'Continue',
-              bgColor: AppColors.appColor,
-              textColor: AppColors.whiteColor,
-              buttonWidth: MediaQuery.of(context).size.width,
-            ),
-          ],
+              Space(6.h),
+              Container(
+                height: 300.h,
+                padding: const EdgeInsets.fromLTRB(14.0, 10.0, 14.0, 10.0),
+                decoration: BoxDecoration(
+                    color: AppColors.whiteColor,
+                    border: Border.all(
+                      color: AppColors.borderColor,
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(5.r)),
+                child: const ShareOptionDetails(),
+              ),
+              Space(40.h),
+              // Space(76.h),
+              CustomButton(
+                borderColor: AppColors.appColor,
+                buttonText: 'Continue',
+                bgColor: AppColors.appColor,
+                textColor: AppColors.whiteColor,
+                buttonWidth: MediaQuery.of(context).size.width,
+              ),
+            ],
+          ),
         ),
       ),
     );
