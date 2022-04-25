@@ -25,152 +25,295 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // endDrawer: const NavigationDrawer(),
-        body: Builder(builder: (context) {
-      return WalletViewWidget(
-        appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-          child: SingleChildScrollView(
+    return GenericWidget(
+      appbar: Padding(
+        padding: EdgeInsets.only(
+          left: 20.w,
+          right: 20.w,
+        ),
+        child: Column(
+          children: [
+            Space(20.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Hi Dave',
+                      style: AppText.header1(context, Colors.white, 25.sp),
+                    ),
+                    Space(10.h),
+                    Text(
+                      'Thanks for signing up with us',
+                      style: AppText.body2(context, Colors.white, 20.sp),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: 30.sp,
+                ),
+                Space(10.w),
+                const CircleAvatar(
+                  radius: 18.0,
+                  backgroundImage: AssetImage(
+                    AppImage.image1,
+                  ),
+                )
+              ],
+            ),
+            Space(30.h),
+            Container(
+              height: 150.h,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.r),
+                color: AppColors.bottomSheet,
+              ),
+              child: Column(
+                children: [
+                  Space(12.h),
+                  Text(
+                    'Available Balance',
+                    style: AppText.body2(
+                        context, AppColors.appColor.withOpacity(0.3), 20.sp),
+                  ),
+                  Space(20.h),
+                  Text(
+                    '\$ 200.00',
+                    style: AppText.header1(context, AppColors.appColor, 40.sp),
+                  ),
+                  Space(15.h),
+                  Text(
+                    'Acc No: 23456789',
+                    style: AppText.body2(context, AppColors.appColor, 20.sp),
+                  ),
+                ],
+              ),
+            )
+            // Space(30.h),
+            // const WalletOptionList()
+          ],
+        ),
+      ),
+      child: SizedBox(
+        height: 500,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.h),
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Hi Dave',
-                          style: AppText.header1(context, Colors.white, 25.sp),
-                        ),
-                        Space(10.h),
-                        Text(
-                          'Thanks for signing up with us',
-                          style: AppText.body2(context, Colors.white, 20.sp),
-                        ),
-                      ],
+                    MenuCards(
+                      title: 'Transfer',
+                      image: AppImage.transfer,
+                      onPressed: () {
+                        pushNewScreen(
+                          context, screen: const Transfer(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
                     ),
                     const Spacer(),
-                    Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 30.sp,
-                    ),
-                    Space(10.w),
-                    const CircleAvatar(
-                      radius: 18.0,
-                      backgroundImage: AssetImage(
-                        AppImage.image1,
-                      ),
+                    MenuCards(
+                      title: 'Add funds',
+                      image: AppImage.addFunds,
+                      onPressed: () {},
                     )
                   ],
                 ),
                 Space(30.h),
-                Container(
-                  height: 150.h,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.r),
-                    color: AppColors.bottomSheet,
-                  ),
-                  child: Column(
-                    children: [
-                      Space(12.h),
-                      Text(
-                        'Available Balance',
-                        style: AppText.body2(context,
-                            AppColors.appColor.withOpacity(0.3), 20.sp),
-                      ),
-                      Space(20.h),
-                      Text(
-                        '\$ 200.00',
-                        style:
-                            AppText.header1(context, AppColors.appColor, 40.sp),
-                      ),
-                      Space(15.h),
-                      Text(
-                        'Acc No: 23456789',
-                        style:
-                            AppText.body2(context, AppColors.appColor, 20.sp),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    MenuCards(
+                      title: 'Start investing',
+                      image: AppImage.startInvestin,
+                      onPressed: () {
+                        pushNewScreen(
+                          context, screen: const InvestScreen(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
+                    ),
+                    const Spacer(),
+                    MenuCards(
+                      title: 'Withdraw',
+                      image: AppImage.withdraw,
+                      onPressed: () {
+                        pushNewScreen(
+                          context,
+                          screen: const Withdraw(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
+                    )
+                  ],
                 )
-                // Space(30.h),
-                // const WalletOptionList()
               ],
             ),
           ),
         ),
-        child: SizedBox(
-          height: 550.h,
-          child: Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.h),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      MenuCards(
-                        title: 'Transfer',
-                        image: AppImage.transfer,
-                        onPressed: () {
-                          pushNewScreen(
-                            context, screen: const Transfer(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade,
-                          );
-                        },
-                      ),
-                      const Spacer(),
-                      MenuCards(
-                        title: 'Add funds',
-                        image: AppImage.addFunds,
-                        onPressed: () {},
-                      )
-                    ],
-                  ),
-                  Space(30.h),
-                  Row(
-                    children: [
-                      MenuCards(
-                        title: 'Start investing',
-                        image: AppImage.startInvestin,
-                        onPressed: () {
-                          pushNewScreen(
-                            context, screen: const InvestScreen(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade,
-                          );
-                        },
-                      ),
-                      const Spacer(),
-                      MenuCards(
-                        title: 'Withdraw',
-                        image: AppImage.withdraw,
-                        onPressed: () {
-                          pushNewScreen(
-                            context,
-                            screen: const Withdraw(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade,
-                          );
-                        },
-                      )
-                    ],
-                  )
-                ],
-              )),
-        ),
-      );
-    }));
+      ),
+    );
+
+    // Scaffold(
+    //     resizeToAvoidBottomInset: false,
+    //     // endDrawer: const NavigationDrawer(),
+    //     body: Builder(builder: (context) {
+    //       return WalletViewWidget(
+    //         appBar: Padding(
+    //           padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+    //           child: Column(
+    //             children: [
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.start,
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     children: [
+    //                       Text(
+    //                         'Hi Dave',
+    //                         style:
+    //                             AppText.header1(context, Colors.white, 25.sp),
+    //                       ),
+    //                       Space(10.h),
+    //                       Text(
+    //                         'Thanks for signing up with us',
+    //                         style: AppText.body2(context, Colors.white, 20.sp),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                   const Spacer(),
+    //                   Icon(
+    //                     Icons.notifications,
+    //                     color: Colors.white,
+    //                     size: 30.sp,
+    //                   ),
+    //                   Space(10.w),
+    //                   const CircleAvatar(
+    //                     radius: 18.0,
+    //                     backgroundImage: AssetImage(
+    //                       AppImage.image1,
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //               Space(30.h),
+    //               Container(
+    //                 height: 150.h,
+    //                 width: MediaQuery.of(context).size.width,
+    //                 decoration: BoxDecoration(
+    //                   borderRadius: BorderRadius.circular(15.r),
+    //                   color: AppColors.bottomSheet,
+    //                 ),
+    //                 child: Column(
+    //                   children: [
+    //                     Space(12.h),
+    //                     Text(
+    //                       'Available Balance',
+    //                       style: AppText.body2(context,
+    //                           AppColors.appColor.withOpacity(0.3), 20.sp),
+    //                     ),
+    //                     Space(20.h),
+    //                     Text(
+    //                       '\$ 200.00',
+    //                       style: AppText.header1(
+    //                           context, AppColors.appColor, 40.sp),
+    //                     ),
+    //                     Space(15.h),
+    //                     Text(
+    //                       'Acc No: 23456789',
+    //                       style:
+    //                           AppText.body2(context, AppColors.appColor, 20.sp),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               )
+    //               // Space(30.h),
+    //               // const WalletOptionList()
+    //             ],
+    //           ),
+    //         ),
+    //         child: SizedBox(
+    //           height: 550.h,
+    //           child: Padding(
+    //               padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.h),
+    //               child: Column(
+    //                 children: [
+    //                   Row(
+    //                     children: [
+    //                       MenuCards(
+    //                         title: 'Transfer',
+    //                         image: AppImage.transfer,
+    //                         onPressed: () {
+    //                           pushNewScreen(
+    //                             context, screen: const Transfer(),
+    //                             withNavBar:
+    //                                 true, // OPTIONAL VALUE. True by default.
+    //                             pageTransitionAnimation:
+    //                                 PageTransitionAnimation.fade,
+    //                           );
+    //                         },
+    //                       ),
+    //                       const Spacer(),
+    //                       MenuCards(
+    //                         title: 'Add funds',
+    //                         image: AppImage.addFunds,
+    //                         onPressed: () {},
+    //                       )
+    //                     ],
+    //                   ),
+    //                   Space(30.h),
+    //                   Row(
+    //                     children: [
+    //                       MenuCards(
+    //                         title: 'Start investing',
+    //                         image: AppImage.startInvestin,
+    //                         onPressed: () {
+    //                           pushNewScreen(
+    //                             context, screen: const InvestScreen(),
+    //                             withNavBar:
+    //                                 true, // OPTIONAL VALUE. True by default.
+    //                             pageTransitionAnimation:
+    //                                 PageTransitionAnimation.fade,
+    //                           );
+    //                         },
+    //                       ),
+    //                       const Spacer(),
+    //                       MenuCards(
+    //                         title: 'Withdraw',
+    //                         image: AppImage.withdraw,
+    //                         onPressed: () {
+    //                           pushNewScreen(
+    //                             context,
+    //                             screen: const Withdraw(),
+    //                             withNavBar:
+    //                                 true, // OPTIONAL VALUE. True by default.
+    //                             pageTransitionAnimation:
+    //                                 PageTransitionAnimation.fade,
+    //                           );
+    //                         },
+    //                       )
+    //                     ],
+    //                   )
+    //                 ],
+    //               ),
+    //               ),
+    //         ),
+    //       );
+    //     })
+
+    //     );
   }
 }
 

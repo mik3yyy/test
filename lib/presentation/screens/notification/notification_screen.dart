@@ -15,18 +15,17 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [],
-          ),
+    return GenericWidget(
+      appbar: Padding(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w),
+        child: Column(
+          children: [Space(70.h)],
         ),
-        child: Padding(
-          padding:
-              EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w, bottom: 20.w),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 15.h),
+        child: SizedBox(
+          height: 850.h,
           child: Column(
             children: [
               Space(25.h),

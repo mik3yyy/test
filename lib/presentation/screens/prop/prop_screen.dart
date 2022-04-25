@@ -16,24 +16,17 @@ class PropScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
+      body: GenericWidget(
+        appbar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [],
-              ),
-            ],
+            children: [],
           ),
         ),
         child: Container(
           height: 850.h,
-          padding:
-              EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w, bottom: 39.w),
+          padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,43 +42,28 @@ class PropScreen extends StatelessWidget {
                   ),
                   Text(
                     'Messages',
-                    style: AppText.body3(
-                      context,
-                      AppColors.appColor,
-                    ),
+                    style: AppText.header2(context, AppColors.appColor, 19.sp),
                   ),
                   const Space(0),
                 ],
               ),
-              // Text(
-              //   "Messages",
-              //   style: AppText.body3(
-              //     context,
-              //     AppColors.appColor,
-              //   ),
-              // ),
-              Column(
-                children: [
-                  Image.asset(AppImage.noMessage),
-                  Space(17.h),
-                  Text(
-                    "No Messages",
-                    style: AppText.body3(
-                      context,
-                      AppColors.appColor,
-                    ),
-                  ),
-                  Space(8.h),
-                  Text(
-                    "Connect with friends, transfer money on Kayndrexsphere!",
-                    style: AppText.body3(
-                      context,
-                      AppColors.referFriendBorderColor2,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              Space(220.h),
+              Image.asset(AppImage.noMessage),
+              Space(17.h),
+              Text(
+                "No Messages",
+                style: AppText.header2(context, AppColors.appColor, 19.sp),
               ),
+              Space(8.h),
+              Text(
+                "Connect with friends, transfer money on Kayndrexsphere!",
+                style: AppText.body3(
+                  context,
+                  AppColors.referFriendBorderColor2,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Space(220.h),
               CustomButton(
                 borderColor: AppColors.appColor,
                 buttonText: "Start Messaging",

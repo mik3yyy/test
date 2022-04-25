@@ -23,137 +23,134 @@ class MyProfile extends StatefulHookConsumerWidget {
 class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-          child: Column(
-            children: [
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: Colors.white,
-                    ),
+    return GenericWidget(
+      appbar: Padding(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+        child: Column(
+          children: [
+            Space(20.h),
+            Row(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: (() => Navigator.pop(context)),
+                  child: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: Colors.white,
                   ),
-                  Space(15.w),
-                ],
-              ),
-              CircleAvatar(
-                radius: 50.0.r,
-                backgroundImage: const AssetImage(
-                  AppImage.image1,
                 ),
+                Space(15.w),
+              ],
+            ),
+            CircleAvatar(
+              radius: 50.0.r,
+              backgroundImage: const AssetImage(
+                AppImage.image1,
               ),
-              Space(20.h),
-              Text(
-                'Dave Willow',
-                style: AppText.body2(context, Colors.white, 25.sp),
-              ),
-              // const WalletOptionList()
-            ],
-          ),
+            ),
+            Space(20.h),
+            Text(
+              'Dave Willow',
+              style: AppText.body2(context, Colors.white, 25.sp),
+            ),
+            // const WalletOptionList()
+          ],
         ),
-        child: SizedBox(
-          height: 630.h,
-          child: Padding(
-            padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Personal information',
-                    subTitle: 'See and edit your personal information',
-                    image: AppImage.profile,
-                    onPressed: () {
-                      pushNewScreen(context,
-                          screen: const PersonalInfo(),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.fade);
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                  Space(30.h),
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Upload ID',
-                    subTitle: 'Verify yourself by providing an ID',
-                    image: AppImage.upload,
-                    onPressed: () {
-                      pushNewScreen(context,
-                          screen: UploadID(),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.fade);
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                  Space(30.h),
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Transaction information',
-                    subTitle: 'Edit your saved bank /card details Security',
-                    image: AppImage.transactionInfo,
-                    onPressed: () {},
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                  Space(30.h),
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Security',
-                    subTitle: 'Change your passwords at any time',
-                    image: AppImage.security,
-                    onPressed: () {
-                      pushNewScreen(
-                        context,
-                        screen: const SecurityScreen(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                  Space(30.h),
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Deactivate account',
-                    subTitle: 'You can deactivate your account',
-                    image: AppImage.deactivate,
-                    onPressed: () {
-                      pushNewScreen(
-                        context,
-                        screen: const SafePayScreen(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                ],
-              ),
+      ),
+      child: SizedBox(
+        height: 630.h,
+        child: Padding(
+          padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ProfileCard(
+                  color: Colors.black,
+                  title: 'Personal information',
+                  subTitle: 'See and edit your personal information',
+                  image: AppImage.profile,
+                  onPressed: () {
+                    pushNewScreen(context,
+                        screen: const PersonalInfo(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade);
+                  },
+                ),
+                Space(10.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                ProfileCard(
+                  color: Colors.black,
+                  title: 'Upload ID',
+                  subTitle: 'Verify yourself by providing an ID',
+                  image: AppImage.upload,
+                  onPressed: () {
+                    pushNewScreen(context,
+                        screen: UploadID(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade);
+                  },
+                ),
+                Space(10.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                ProfileCard(
+                  color: Colors.black,
+                  title: 'Transaction information',
+                  subTitle: 'Edit your saved bank /card details Security',
+                  image: AppImage.transactionInfo,
+                  onPressed: () {},
+                ),
+                Space(10.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                ProfileCard(
+                  color: Colors.black,
+                  title: 'Security',
+                  subTitle: 'Change your passwords at any time',
+                  image: AppImage.security,
+                  onPressed: () {
+                    pushNewScreen(
+                      context,
+                      screen: const SecurityScreen(),
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
+                ),
+                Space(10.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                ProfileCard(
+                  color: Colors.black,
+                  title: 'Deactivate account',
+                  subTitle: 'You can deactivate your account',
+                  image: AppImage.deactivate,
+                  onPressed: () {
+                    pushNewScreen(
+                      context,
+                      screen: const SafePayScreen(),
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
+                ),
+                Space(10.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+              ],
             ),
           ),
         ),

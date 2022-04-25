@@ -129,7 +129,7 @@ class FriendsTab extends HookConsumerWidget {
               style: AppText.header3(context, AppColors.appColor, 20.sp),
             ),
           ),
-          Space(20.h),
+          Space(80.h),
         ],
       ),
     );

@@ -15,11 +15,12 @@ class InviteFriendScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WalletViewWidget(
-      appBar: Padding(
+    return GenericWidget(
+      appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
         child: Column(
           children: [
+            Space(20.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -55,12 +56,12 @@ class InviteFriendScreen extends StatelessWidget {
           left: 25.w,
           right: 25.w,
         ),
-        height: 650.h,
+        height: 720.h,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Space(30.h),
+            Space(50.h),
             Image.asset(
               AppImage.inviteFriendImg,
               fit: BoxFit.cover,
@@ -73,10 +74,11 @@ class InviteFriendScreen extends StatelessWidget {
             //   // height: 500.h,
             //   // width: 500.w,
             // ),
-            Space(33.h),
+            Space(40.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Space(20.h),
                 Text(
                   'Referral code',
                   style: AppText.header2(context, AppColors.appColor, 20.sp),
