@@ -33,10 +33,17 @@ class NotificationSettingScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.chevron_left,
-                    color: AppColors.appColor,
+                  InkWell(
+                    onTap: (() => Navigator.pop(context)),
+                    child: const Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: AppColors.appColor,
+                    ),
                   ),
+                  // const Icon(
+                  //   Icons.chevron_left,
+                  //   color: AppColors.appColor,
+                  // ),
                   Text(
                     'Notifications',
                     style: AppText.body3(

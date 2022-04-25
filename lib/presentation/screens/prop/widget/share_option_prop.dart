@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ShareOptionProp extends StatefulWidget {
   const ShareOptionProp({
@@ -25,7 +24,7 @@ class _ShareOptionPropState extends State<ShareOptionProp> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 56.h,
+      // height: 56.h,
       child: ListView.separated(
         itemCount: _shareDetails.length,
         itemBuilder: (BuildContext context, int index) {
@@ -39,7 +38,8 @@ class _ShareOptionPropState extends State<ShareOptionProp> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
+                  padding: const EdgeInsets.only(top: 0.0, bottom: 14.0),
+                  // padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),
                   decoration: BoxDecoration(
                       // color: AppColors.whiteColor,
                       border: Border.all(

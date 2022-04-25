@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
@@ -45,7 +46,13 @@ class Navigation extends StatelessWidget {
               color: Colors.black,
               title: 'My Prop',
               image: AppImage.prop,
-              onPressed: () {},
+              onPressed: () {
+                pushNewScreen(
+                  context,
+                  screen: const PropScreen(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                );
+              },
             ),
             Space(10.h),
             const Divider(
