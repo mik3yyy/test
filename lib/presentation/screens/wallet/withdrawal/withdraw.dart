@@ -89,548 +89,544 @@ class _WithdrawState extends ConsumerState<Withdraw> {
 
     final selected = useState('');
 
-    return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-          child: Column(
-            children: [
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: Colors.white,
-                    ),
+    return GenericWidget(
+      appbar: Padding(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+        child: Column(
+          children: [
+            Space(20.h),
+            Row(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: (() => Navigator.pop(context)),
+                  child: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: Colors.white,
                   ),
-                  Space(15.w),
+                ),
+                Space(15.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '\$ 2,400.00',
+                      style: AppText.header1(context, Colors.white, 25.sp),
+                    ),
+                    Space(10.h),
+                    Text(
+                      'Available Balance',
+                      style: AppText.body2(context, Colors.white, 16.sp),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: 20.sp,
+                ),
+                Space(10.w),
+                const CircleAvatar(
+                  radius: 18.0,
+                  backgroundImage: AssetImage(
+                    AppImage.image1,
+                  ),
+                )
+              ],
+            ),
+            Space(40.h),
+            Text(
+              'Withdraw Money',
+              style: AppText.body2(context, Colors.white, 25.sp),
+            ),
+            Space(20.h),
+            // const WalletOptionList()
+          ],
+        ),
+      ),
+      child: SizedBox(
+        height: 700.h,
+        child: Padding(
+          padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 20.h),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Space(30.h),
+
+                Text(
+                  'Enter an amount',
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                ),
+                Space(5.h),
+                const WalletTextField(
+                  keyboardType: TextInputType.number,
+                  labelText: 'Click to type',
+                  obscureText: false,
+                  color: Colors.white,
+                ),
+                Space(25.h),
+                Text(
+                  'Select a transfer method',
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                ),
+
+                ///
+                ///
+                ///select transfer method
+                ///
+                ///
+                ///
+                Space(5.h),
+
+                SelectFormField(
+                  type: SelectFormFieldType.dropdown, // or can be dialog
+                  // initialValue: selectedItem,
+
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                  decoration: InputDecoration(
+                    hintText: 'click to choose transfer method',
+                    hintStyle: AppText.body2(context, Colors.grey[400]!, 19.sp),
+                    // floatingLabelBehavior: FloatingLabelBehavior.never,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.appColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: AppColors.appColor, width: 1),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.arrow_drop_down_outlined,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  items: _transfer,
+                  onChanged: (val) {
+                    selected.value = val;
+                  },
+                  onSaved: (val) => print(val),
+                ),
+                if (selected.value == 'Swift code/BIC') ...[
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        '\$ 2,400.00',
-                        style: AppText.header1(context, Colors.white, 25.sp),
-                      ),
-                      Space(10.h),
-                      Text(
-                        'Available Balance',
-                        style: AppText.body2(context, Colors.white, 16.sp),
+                      Space(25.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ToggleSelection(
+                            textColor: selection.state == 'IBAN'
+                                ? AppColors.appColor
+                                : Colors.grey[400]!,
+                            borderColor: selection.state == 'IBAN'
+                                ? AppColors.appColor
+                                : Colors.grey[200]!,
+                            color: selection.state == 'IBAN'
+                                ? Colors.grey[200]!
+                                : Colors.grey[100]!,
+                            name: 'IBAN',
+                            onPressed: () {
+                              selection.state = 'IBAN';
+                              print(selection.state);
+                            },
+                          ),
+                          ToggleSelection(
+                            textColor: selection.state == 'SEPA'
+                                ? AppColors.appColor
+                                : Colors.grey[400]!,
+                            borderColor: selection.state == 'SEPA'
+                                ? AppColors.appColor
+                                : Colors.grey[200]!,
+                            color: selection.state == 'SEPA'
+                                ? Colors.grey[200]!
+                                : Colors.grey[100]!,
+                            name: 'SEPA',
+                            onPressed: () {
+                              selection.state = 'SEPA';
+                              print(selection.state);
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  Icon(
-                    Icons.notifications,
-                    color: Colors.white,
-                    size: 20.sp,
-                  ),
-                  Space(10.w),
-                  const CircleAvatar(
-                    radius: 18.0,
-                    backgroundImage: AssetImage(
-                      AppImage.image1,
+                ],
+
+                ///
+                ///
+                ///select wallet to withdraw from
+                ///
+                ///
+                ///
+
+                Space(25.h),
+                Text(
+                  'Select a wallet to withdraw from',
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                ),
+                Space(5.h),
+                SelectFormField(
+                  type: SelectFormFieldType.dropdown, // or can be dialog
+                  // initialValue: selectedItem,
+
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                  decoration: InputDecoration(
+                    hintText: 'Click to choose wallet',
+                    hintStyle: AppText.body2(context, Colors.grey[400]!, 19.sp),
+                    // floatingLabelBehavior: FloatingLabelBehavior.never,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.appColor),
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: AppColors.appColor, width: 1),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.arrow_drop_down_outlined,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  items: _wallet,
+                  onChanged: (val) => print(val),
+                  onSaved: (val) => print(val),
+                ),
+                Space(25.h),
+
+                ///
+                ///
+                ///
+                /// Safe Transfer Selection
+                ///
+                ///
+                ///
+                if (selected.value == 'Safe transfer') ...[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Kayndrexsphere account number of recipient',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: 'Click to type',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                    ],
+                  )
+
+                  ///
+                  ///
+                  ///
+                  /// ABA number Selection
+                  ///
+                  ///
+                  ///
+                ] else if (selected.value == 'ABA number') ...[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter ABA amount',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: 'Click to type',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter account name',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.name,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter account number',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter country you are sending to',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.name,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter Swift code',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                    ],
+                  )
+                ]
+
+                ///
+                ///
+                ///
+                /// Swift code/BIC Selection
+                ///
+                ///
+                ///
+                else if (selected.value == 'Swift code/BIC') ...[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      selection.state == 'IBAN'
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Enter IBAN number',
+                                  style: AppText.body2(
+                                      context, AppColors.appColor, 19.sp),
+                                ),
+                                Space(5.h),
+                                const WalletTextField(
+                                  keyboardType: TextInputType.number,
+                                  labelText: 'Click to type',
+                                  obscureText: false,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Enter SEPA number',
+                                  style: AppText.body2(
+                                      context, AppColors.appColor, 19.sp),
+                                ),
+                                Space(5.h),
+                                const WalletTextField(
+                                  keyboardType: TextInputType.number,
+                                  labelText: 'Click to type',
+                                  obscureText: false,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                      Space(25.h),
+                      Text(
+                        'Enter account name',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.name,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter account number',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter country you are sending to',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.name,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                      Text(
+                        'Enter Swift code',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                    ],
+                  )
+                ]
+
+                ///
+                ///
+                /// NUBAN Selection
+                ///
+                ///
+                else if (selected.value == 'NUBAN') ...[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter NUBAN number',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.number,
+                        labelText: 'Click to type',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(10.h),
+                      Text(
+                        'GTBank John Doe',
+                        style:
+                            AppText.body2(context, Colors.greenAccent, 17.sp),
+                      ),
+                      Space(20.h),
+                      Text(
+                        'Enter account name',
+                        style:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                      ),
+                      Space(5.h),
+                      const WalletTextField(
+                        keyboardType: TextInputType.name,
+                        labelText: '',
+                        obscureText: false,
+                        color: Colors.white,
+                      ),
+                      Space(25.h),
+                    ],
                   )
                 ],
-              ),
-              Space(40.h),
-              Text(
-                'Withdraw Money',
-                style: AppText.body2(context, Colors.white, 25.sp),
-              ),
-              // const WalletOptionList()
-            ],
-          ),
-        ),
-        child: SizedBox(
-          height: 700.h,
-          child: Padding(
-            padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 20.h),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Space(30.h),
 
-                  Text(
-                    'Enter an amount',
-                    style: AppText.body2(context, AppColors.appColor, 19.sp),
+                Center(
+                  child: Text(
+                    'Enter password',
+                    style: AppText.header3(context, AppColors.appColor, 20.sp),
                   ),
-                  Space(5.h),
-                  const WalletTextField(
-                    keyboardType: TextInputType.number,
-                    labelText: 'Click to type',
-                    obscureText: false,
-                    color: Colors.white,
+                ),
+                Space(5.h),
+                Center(
+                  child: Text(
+                    'For security reasons, please enter your password',
+                    style: AppText.body2(context, AppColors.appColor, 18.sp),
                   ),
-                  Space(25.h),
-                  Text(
-                    'Select a transfer method',
-                    style: AppText.body2(context, AppColors.appColor, 19.sp),
-                  ),
-
-                  ///
-                  ///
-                  ///select transfer method
-                  ///
-                  ///
-                  ///
-                  Space(5.h),
-
-                  SelectFormField(
-                    type: SelectFormFieldType.dropdown, // or can be dialog
-                    // initialValue: selectedItem,
-
-                    style: AppText.body2(context, AppColors.appColor, 19.sp),
-                    decoration: InputDecoration(
-                      hintText: 'click to choose transfer method',
-                      hintStyle:
-                          AppText.body2(context, Colors.grey[400]!, 19.sp),
-                      // floatingLabelBehavior: FloatingLabelBehavior.never,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.appColor),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: AppColors.appColor, width: 1),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      suffixIcon: const Icon(
-                        Icons.arrow_drop_down_outlined,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    items: _transfer,
-                    onChanged: (val) {
-                      selected.value = val;
+                ),
+                Space(5.h),
+                WalletTextField(
+                  labelText: '',
+                  obscureText: true,
+                  color: Colors.white,
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      togglePassword.state = !togglePassword.state;
                     },
-                    onSaved: (val) => print(val),
-                  ),
-                  if (selected.value == 'Swift code/BIC') ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Space(25.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ToggleSelection(
-                              textColor: selection.state == 'IBAN'
-                                  ? AppColors.appColor
-                                  : Colors.grey[400]!,
-                              borderColor: selection.state == 'IBAN'
-                                  ? AppColors.appColor
-                                  : Colors.grey[200]!,
-                              color: selection.state == 'IBAN'
-                                  ? Colors.grey[200]!
-                                  : Colors.grey[100]!,
-                              name: 'IBAN',
-                              onPressed: () {
-                                selection.state = 'IBAN';
-                                print(selection.state);
-                              },
-                            ),
-                            ToggleSelection(
-                              textColor: selection.state == 'SEPA'
-                                  ? AppColors.appColor
-                                  : Colors.grey[400]!,
-                              borderColor: selection.state == 'SEPA'
-                                  ? AppColors.appColor
-                                  : Colors.grey[200]!,
-                              color: selection.state == 'SEPA'
-                                  ? Colors.grey[200]!
-                                  : Colors.grey[100]!,
-                              name: 'SEPA',
-                              onPressed: () {
-                                selection.state = 'SEPA';
-                                print(selection.state);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-
-                  ///
-                  ///
-                  ///select wallet to withdraw from
-                  ///
-                  ///
-                  ///
-
-                  Space(25.h),
-                  Text(
-                    'Select a wallet to withdraw from',
-                    style: AppText.body2(context, AppColors.appColor, 19.sp),
-                  ),
-                  Space(5.h),
-                  SelectFormField(
-                    type: SelectFormFieldType.dropdown, // or can be dialog
-                    // initialValue: selectedItem,
-
-                    style: AppText.body2(context, AppColors.appColor, 19.sp),
-                    decoration: InputDecoration(
-                      hintText: 'Click to choose wallet',
-                      hintStyle:
-                          AppText.body2(context, Colors.grey[400]!, 19.sp),
-                      // floatingLabelBehavior: FloatingLabelBehavior.never,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.appColor),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: AppColors.appColor, width: 1),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.blue, width: 2),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      suffixIcon: const Icon(
-                        Icons.arrow_drop_down_outlined,
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    items: _wallet,
-                    onChanged: (val) => print(val),
-                    onSaved: (val) => print(val),
-                  ),
-                  Space(25.h),
-
-                  ///
-                  ///
-                  ///
-                  /// Safe Transfer Selection
-                  ///
-                  ///
-                  ///
-                  if (selected.value == 'Safe transfer') ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Enter Kayndrexsphere account number of recipient',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: 'Click to type',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                      ],
-                    )
-
-                    ///
-                    ///
-                    ///
-                    /// ABA number Selection
-                    ///
-                    ///
-                    ///
-                  ] else if (selected.value == 'ABA number') ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Enter ABA amount',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: 'Click to type',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter account name',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.name,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter account number',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter country you are sending to',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.name,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter Swift code',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                      ],
-                    )
-                  ]
-
-                  ///
-                  ///
-                  ///
-                  /// Swift code/BIC Selection
-                  ///
-                  ///
-                  ///
-                  else if (selected.value == 'Swift code/BIC') ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        selection.state == 'IBAN'
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Enter IBAN number',
-                                    style: AppText.body2(
-                                        context, AppColors.appColor, 19.sp),
-                                  ),
-                                  Space(5.h),
-                                  const WalletTextField(
-                                    keyboardType: TextInputType.number,
-                                    labelText: 'Click to type',
-                                    obscureText: false,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Enter SEPA number',
-                                    style: AppText.body2(
-                                        context, AppColors.appColor, 19.sp),
-                                  ),
-                                  Space(5.h),
-                                  const WalletTextField(
-                                    keyboardType: TextInputType.number,
-                                    labelText: 'Click to type',
-                                    obscureText: false,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                        Space(25.h),
-                        Text(
-                          'Enter account name',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.name,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter account number',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter country you are sending to',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.name,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                        Text(
-                          'Enter Swift code',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                      ],
-                    )
-                  ]
-
-                  ///
-                  ///
-                  /// NUBAN Selection
-                  ///
-                  ///
-                  else if (selected.value == 'NUBAN') ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Enter NUBAN number',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.number,
-                          labelText: 'Click to type',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(10.h),
-                        Text(
-                          'GTBank John Doe',
-                          style:
-                              AppText.body2(context, Colors.greenAccent, 17.sp),
-                        ),
-                        Space(20.h),
-                        Text(
-                          'Enter account name',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 19.sp),
-                        ),
-                        Space(5.h),
-                        const WalletTextField(
-                          keyboardType: TextInputType.name,
-                          labelText: '',
-                          obscureText: false,
-                          color: Colors.white,
-                        ),
-                        Space(25.h),
-                      ],
-                    )
-                  ],
-
-                  Center(
-                    child: Text(
-                      'Enter password',
-                      style:
-                          AppText.header3(context, AppColors.appColor, 20.sp),
-                    ),
-                  ),
-                  Space(5.h),
-                  Center(
-                    child: Text(
-                      'For security reasons, please enter your password',
-                      style: AppText.body2(context, AppColors.appColor, 18.sp),
-                    ),
-                  ),
-                  Space(5.h),
-                  WalletTextField(
-                    labelText: '',
-                    obscureText: true,
-                    color: Colors.white,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        togglePassword.state = !togglePassword.state;
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 0.h),
-                        child: Icon(
-                          togglePassword.state
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: AppColors.appColor,
-                        ),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 0.h),
+                      child: Icon(
+                        togglePassword.state
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: AppColors.appColor,
                       ),
                     ),
                   ),
-                  Space(10.h),
-                  CustomButton(
-                      buttonText: 'Withdraw to Bank',
-                      bgColor: AppColors.appColor,
-                      borderColor: AppColors.appColor,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        WalletDialog.transactionDialog(context,
-                            transfered: "€ 400.00",
-                            details: 'Dollar wallet to Euro wallet',
-                            received: '£ 300.00');
-                      },
-                      buttonWidth: MediaQuery.of(context).size.width),
-                  Space(7.h),
-                  Center(
-                    child: Text(
-                      'Cancel',
-                      style:
-                          AppText.header3(context, AppColors.appColor, 20.sp),
-                    ),
+                ),
+                Space(10.h),
+                CustomButton(
+                    buttonText: 'Withdraw to Bank',
+                    bgColor: AppColors.appColor,
+                    borderColor: AppColors.appColor,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      WalletDialog.transactionDialog(context,
+                          transfered: "€ 400.00",
+                          details: 'Dollar wallet to Euro wallet',
+                          received: '£ 300.00');
+                    },
+                    buttonWidth: MediaQuery.of(context).size.width),
+                Space(7.h),
+                Center(
+                  child: Text(
+                    'Cancel',
+                    style: AppText.header3(context, AppColors.appColor, 20.sp),
                   ),
-                  Space(100.h),
-                ],
-              ),
+                ),
+                Space(170.h),
+              ],
             ),
           ),
         ),

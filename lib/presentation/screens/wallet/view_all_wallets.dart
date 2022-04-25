@@ -13,96 +13,65 @@ class ViewAllWallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 40.0,
-                      backgroundImage: AssetImage(
-                        AppImage.image1,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-        child: SizedBox(
-          height: 700.h,
-          child: Padding(
-            padding: EdgeInsets.only(left: 35.w, right: 35.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GenericWidget(
+      appbar: Padding(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w),
+        child: Column(
+          children: [
+            Space(20.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Space(30.h),
-                Text(
-                  'View available wallets',
-                  style: AppText.body2(context, AppColors.appColor, 25.sp),
-                ),
-                Space(30.h),
                 InkWell(
-                  onTap: () {
-                    pushNewScreen(
-                      context,
-                      screen: const Transfer(),
-                      withNavBar: true, // OPTIONAL VALUE. True by default.
-                      pageTransitionAnimation: PageTransitionAnimation.fade,
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7.r),
-                      color: AppColors.whiteColor,
-                      border: Border.all(
-                          width: 2.w,
-                          color: AppColors.appColor.withOpacity(0.2)),
-                      // color: AppColors.appColor.withOpacity(0.2),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Dollar Account',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 20.sp),
-                        ),
-                        Space(10.h),
-                        Text(
-                          '\$  200.00',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 25.sp),
-                        ),
-                      ],
-                    ),
+                  onTap: (() => Navigator.pop(context)),
+                  child: const Icon(
+                    Icons.arrow_back_ios_outlined,
+                    color: Colors.white,
                   ),
                 ),
-                Space(20.h),
-                Container(
-                  padding: const EdgeInsets.all(20),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Center(
+                  child: CircleAvatar(
+                    radius: 40.0,
+                    backgroundImage: AssetImage(
+                      AppImage.image1,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+      child: SizedBox(
+        height: 700.h,
+        child: Padding(
+          padding: EdgeInsets.only(left: 35.w, right: 35.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Space(30.h),
+              Text(
+                'View available wallets',
+                style: AppText.body2(context, AppColors.appColor, 25.sp),
+              ),
+              Space(30.h),
+              InkWell(
+                onTap: () {
+                  pushNewScreen(
+                    context,
+                    screen: const Transfer(),
+                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.fade,
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(7.r),
@@ -116,21 +85,48 @@ class ViewAllWallet extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Pound Sterling Account',
+                        'Dollar Account',
                         style:
                             AppText.body2(context, AppColors.appColor, 20.sp),
                       ),
                       Space(10.h),
                       Text(
-                        '\$  300.00',
+                        '\$  200.00',
                         style:
                             AppText.body2(context, AppColors.appColor, 25.sp),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Space(20.h),
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7.r),
+                  color: AppColors.whiteColor,
+                  border: Border.all(
+                      width: 2.w, color: AppColors.appColor.withOpacity(0.2)),
+                  // color: AppColors.appColor.withOpacity(0.2),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Pound Sterling Account',
+                      style: AppText.body2(context, AppColors.appColor, 20.sp),
+                    ),
+                    Space(10.h),
+                    Text(
+                      '\$  300.00',
+                      style: AppText.body2(context, AppColors.appColor, 25.sp),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

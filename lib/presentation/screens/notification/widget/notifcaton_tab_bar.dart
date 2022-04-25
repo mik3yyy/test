@@ -86,6 +86,7 @@ class _NotificationTabBarState extends State<NotificationTabBar>
                 // color: Colors.grey,
                 child: TabBarView(
                   controller: _tabController,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     AllNotificationTabBarView(),
                     RequestNotificationTabBarView(),

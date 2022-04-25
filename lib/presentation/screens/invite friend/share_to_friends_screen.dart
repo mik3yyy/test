@@ -13,11 +13,12 @@ class ShareToFriendsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WalletViewWidget(
-      appBar: Padding(
+    return GenericWidget(
+      appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
         child: Column(
           children: [
+            Space(20.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -48,17 +49,18 @@ class ShareToFriendsScreen extends StatelessWidget {
               hinText: 'Search friend',
               prefixIcon: Icon(Icons.search),
             ),
+            Space(40.h)
           ],
         ),
       ),
       child: Container(
-        height: 550.h,
-        padding:
-            EdgeInsets.only(left: 25.w, right: 25.w, top: 40.w, bottom: 20.w),
+        height: 800.h,
+        padding: EdgeInsets.only(left: 25.w, right: 25.w, bottom: 20.w),
         child: SizedBox(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Space(80.h),
               Text(
                 'Select how to share',
                 style: AppText.body3(
@@ -66,7 +68,7 @@ class ShareToFriendsScreen extends StatelessWidget {
                   AppColors.appColor,
                 ),
               ),
-              Space(6.h),
+              Space(10.h),
               Container(
                 height: 300.h,
                 padding: const EdgeInsets.fromLTRB(14.0, 10.0, 14.0, 10.0),
@@ -79,7 +81,7 @@ class ShareToFriendsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.r)),
                 child: const ShareOptionDetails(),
               ),
-              Space(40.h),
+              Space(70.h),
               // Space(76.h),
               CustomButton(
                 borderColor: AppColors.appColor,

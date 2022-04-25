@@ -27,12 +27,12 @@ class _TransferState extends State<Transfer>
   late TabController _tabController;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
+    return GenericWidget(
+        appbar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
           child: Column(
             children: [
+              Space(20.h),
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -75,81 +75,211 @@ class _TransferState extends State<Transfer>
                   )
                 ],
               ),
-              Space(30.h),
+              Space(50.h),
               // const WalletOptionList()
             ],
           ),
         ),
         child: SizedBox(
-          height: 700.h,
+          height: 750.h,
           child: Padding(
             padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 15.h),
-            child: Column(
-              children: [
-                Container(
-                    padding: EdgeInsets.only(left: 0.w, right: 0.w),
-                    height: 50.h,
-                    width: MediaQuery.of(context).size.width,
-                    // color: Colors.black,
-                    child: TabBar(
-                      isScrollable: false,
-                      controller: _tabController,
-                      // unselectedLabelColor: Colors.white,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                      padding: EdgeInsets.only(left: 0.w, right: 0.w),
+                      height: 50.h,
+                      width: MediaQuery.of(context).size.width,
+                      // color: Colors.black,
+                      child: TabBar(
+                        isScrollable: false,
+                        controller: _tabController,
+                        // unselectedLabelColor: Colors.white,
 
-                      labelColor: AppColors.appColor,
-                      labelStyle:
-                          AppText.body2(context, AppColors.appColor, 19.sp),
-                      unselectedLabelStyle:
-                          AppText.body2(context, Colors.black45, 19.sp),
-                      unselectedLabelColor: Colors.black26,
-                      labelPadding: EdgeInsets.zero,
-                      indicatorPadding: EdgeInsets.zero,
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 7), // changes position of shadow
+                        labelColor: AppColors.appColor,
+                        labelStyle:
+                            AppText.body2(context, AppColors.appColor, 19.sp),
+                        unselectedLabelStyle:
+                            AppText.body2(context, Colors.black45, 19.sp),
+                        unselectedLabelColor: Colors.black26,
+                        labelPadding: EdgeInsets.zero,
+                        indicatorPadding: EdgeInsets.zero,
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.r),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(
+                                  0, 7), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        tabs: const [
+                          Tab(
+                            text: 'Account Info',
+                            //     child: Text(
+                            //   'Account Info',
+                            //   style:
+                            //       AppText.body2(context, AppColors.appColor, 19.sp),
+                            // )
+                          ),
+                          Tab(
+                            text: 'Make Transfer',
+                            //     child: Text(
+                            //   'Make Transfer',
+                            //   style:
+                            //       AppText.body2(context, AppColors.appColor, 19.sp),
+                            // )
                           ),
                         ],
+                      )),
+                  SizedBox(height: 30.h),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 583.h,
+                        // color: Colors.grey,
+                        child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: _tabController,
+                            children: const [AccounInfoTab(), MakeTransfer()]),
                       ),
-                      tabs: const [
-                        Tab(
-                          text: 'Account Info',
-                          //     child: Text(
-                          //   'Account Info',
-                          //   style:
-                          //       AppText.body2(context, AppColors.appColor, 19.sp),
-                          // )
-                        ),
-                        Tab(
-                          text: 'Make Transfer',
-                          //     child: Text(
-                          //   'Make Transfer',
-                          //   style:
-                          //       AppText.body2(context, AppColors.appColor, 19.sp),
-                          // )
-                        ),
-                      ],
-                    )),
-                SizedBox(height: 30.h),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 573.h,
-                  // color: Colors.grey,
-                  child: TabBarView(
-                      controller: _tabController,
-                      children: const [AccounInfoTab(), MakeTransfer()]),
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
+
+    // Scaffold(
+    //   body: WalletViewWidget(
+    //     appBar: Padding(
+    //       padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+    //       child: Column(
+    //         children: [
+    //           Row(
+    //             // crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               InkWell(
+    //                 onTap: (() => Navigator.pop(context)),
+    //                 child: const Icon(
+    //                   Icons.arrow_back_ios_outlined,
+    //                   color: Colors.white,
+    //                 ),
+    //               ),
+    //               Space(15.w),
+    //               Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 children: [
+    //                   Text(
+    //                     '\$ 2,400.00',
+    //                     style: AppText.header1(context, Colors.white, 25.sp),
+    //                   ),
+    //                   Space(10.h),
+    //                   Text(
+    //                     'Available Balance',
+    //                     style: AppText.body2(context, Colors.white, 16.sp),
+    //                   ),
+    //                 ],
+    //               ),
+    //               const Spacer(),
+    //               Icon(
+    //                 Icons.notifications,
+    //                 color: Colors.white,
+    //                 size: 20.sp,
+    //               ),
+    //               Space(10.w),
+    //               const CircleAvatar(
+    //                 radius: 18.0,
+    //                 backgroundImage: AssetImage(
+    //                   AppImage.image1,
+    //                 ),
+    //               )
+    //             ],
+    //           ),
+    //           Space(30.h),
+    //           // const WalletOptionList()
+    //         ],
+    //       ),
+    //     ),
+    //     child: SizedBox(
+    //       height: 700.h,
+    //       child: Padding(
+    //         padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 15.h),
+    //         child: Column(
+    //           children: [
+    //             Container(
+    //                 padding: EdgeInsets.only(left: 0.w, right: 0.w),
+    //                 height: 50.h,
+    //                 width: MediaQuery.of(context).size.width,
+    //                 // color: Colors.black,
+    //                 child: TabBar(
+    //                   isScrollable: false,
+    //                   controller: _tabController,
+    //                   // unselectedLabelColor: Colors.white,
+
+    //                   labelColor: AppColors.appColor,
+    //                   labelStyle:
+    //                       AppText.body2(context, AppColors.appColor, 19.sp),
+    //                   unselectedLabelStyle:
+    //                       AppText.body2(context, Colors.black45, 19.sp),
+    //                   unselectedLabelColor: Colors.black26,
+    //                   labelPadding: EdgeInsets.zero,
+    //                   indicatorPadding: EdgeInsets.zero,
+    //                   indicator: BoxDecoration(
+    //                     borderRadius: BorderRadius.circular(25.r),
+    //                     color: Colors.white,
+    //                     boxShadow: [
+    //                       BoxShadow(
+    //                         color: Colors.grey.withOpacity(0.4),
+    //                         spreadRadius: 2,
+    //                         blurRadius: 5,
+    //                         offset: const Offset(
+    //                             0, 7), // changes position of shadow
+    //                       ),
+    //                     ],
+    //                   ),
+    //                   tabs: const [
+    //                     Tab(
+    //                       text: 'Account Info',
+    //                       //     child: Text(
+    //                       //   'Account Info',
+    //                       //   style:
+    //                       //       AppText.body2(context, AppColors.appColor, 19.sp),
+    //                       // )
+    //                     ),
+    //                     Tab(
+    //                       text: 'Make Transfer',
+    //                       //     child: Text(
+    //                       //   'Make Transfer',
+    //                       //   style:
+    //                       //       AppText.body2(context, AppColors.appColor, 19.sp),
+    //                       // )
+    //                     ),
+    //                   ],
+    //                 )),
+    //             SizedBox(height: 30.h),
+    //             SizedBox(
+    //               width: MediaQuery.of(context).size.width,
+    //               height: 573.h,
+    //               // color: Colors.grey,
+    //               child: TabBarView(
+    //                   controller: _tabController,
+    //                   children: const [AccounInfoTab(), MakeTransfer()]),
+    //             )
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

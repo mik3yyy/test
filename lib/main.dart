@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/message_screen.dart';
+import 'package:kayndrexsphere_mobile/sample.dart';
 
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/notification/notification_screen.dart';
@@ -48,7 +49,10 @@ class MyApp extends StatelessWidget {
         // const CurrencyScreen(),
         //  const BottomNavBar(),
 
-        home: MainScreen(menuScreenContext: context),
+        home:
+            // Sample(),
+
+            MainScreen(menuScreenContext: context),
 
         // const SplashScreen(),
 

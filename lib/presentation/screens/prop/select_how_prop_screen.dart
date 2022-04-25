@@ -14,8 +14,8 @@ class SelectHowPropScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WalletViewWidget(
-        appBar: Padding(
+      body: GenericWidget(
+        appbar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Column(
             children: [
@@ -46,20 +46,17 @@ class SelectHowPropScreen extends StatelessWidget {
                   ),
                   Text(
                     'Messages',
-                    style: AppText.body3(
-                      context,
-                      AppColors.appColor,
-                    ),
+                    style: AppText.header2(context, AppColors.appColor, 19.sp),
                   ),
                   const Space(0),
                 ],
               ),
-              Space(100.h),
+              Space(150.h),
               Container(
                 //TODO: To fix issue with item scrolling, they have to be fixed inside the container
                 height: 300.h,
                 // height: 100.h,
-                padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 10.0),
+                padding: const EdgeInsets.fromLTRB(14.0, 40.0, 14.0, 10.0),
                 // padding: const EdgeInsets.fromLTRB(14.0, 10.0, 14.0, 10.0),
                 decoration: BoxDecoration(
                   // color: Colors.red,

@@ -18,11 +18,12 @@ class FaqScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = TextEditingController();
-    return WalletViewWidget(
-      appBar: Padding(
+    return GenericWidget(
+      appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
         child: Column(
           children: [
+            Space(20.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,175 +91,182 @@ class FaqScreen extends StatelessWidget {
               //   textAlign: TextAlign.start,
               //   validator: (String? value) {},
               // ),
-            )
+            ),
+            Space(120.h),
           ],
         ),
       ),
       child: Padding(
-        padding:
-            EdgeInsets.only(left: 25.w, right: 25.w, top: 20.w, bottom: 20.w),
-        child: Column(
-          children: [
-            GestureDetector(
-              // onTap: () => context.navigate(const AddFaqQuestion()),
-              child: const FaqTabButton(
-                icon: AppImage.faq1,
-                text: 'Getting Started',
-                bgColor: AppColors.appColor,
+        padding: EdgeInsets.only(
+          left: 25.w,
+          right: 25.w,
+          top: 20.h,
+        ),
+        child: SizedBox(
+          height: 630.h,
+          child: Column(
+            children: [
+              GestureDetector(
+                // onTap: () => context.navigate(const AddFaqQuestion()),
+                child: const FaqTabButton(
+                  icon: AppImage.faq1,
+                  text: 'Getting Started',
+                  bgColor: AppColors.appColor,
+                ),
               ),
-            ),
-            Space(11.h),
-            const FaqTabButton(
-              icon: AppImage.faq2,
-              text: 'Knowledge Base',
-              bgColor: AppColors.inActiveColor,
-            ),
-            Space(11.h),
-            const FaqTabButton(
-              icon: AppImage.faq3,
-              text: 'Kayndrexsphere forum',
-              bgColor: AppColors.inActiveColor,
-            ),
-            Space(43.h),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'Learn about kayndrexsphere',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              Space(11.h),
+              const FaqTabButton(
+                icon: AppImage.faq2,
+                text: 'Knowledge Base',
+                bgColor: AppColors.inActiveColor,
+              ),
+              Space(11.h),
+              const FaqTabButton(
+                icon: AppImage.faq3,
+                text: 'Kayndrexsphere forum',
+                bgColor: AppColors.inActiveColor,
+              ),
+              Space(43.h),
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'Learn about kayndrexsphere',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'Investment options in kayndrexsphere',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'Investment options in kayndrexsphere',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'Is kayndrexsphere trustworthy?',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'Is kayndrexsphere trustworthy?',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'What is the alpha investment?',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'What is the alpha investment?',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'How do I earn more kayndrex?',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'How do I earn more kayndrex?',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-            FaqAccodrionExpandable(
-              headerTitle: 'Recover lost account',
-              child: Column(
-                children: [
-                  Space(5.h),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
-                    style: AppText.body2(
-                      context,
-                      const Color.fromRGBO(7, 39, 119, 0.7),
-                      18.sp,
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+              FaqAccodrionExpandable(
+                headerTitle: 'Recover lost account',
+                child: Column(
+                  children: [
+                    Space(5.h),
+                    Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa porta dignissim in sagittis varius lacinia.',
+                      style: AppText.body2(
+                        context,
+                        const Color.fromRGBO(7, 39, 119, 0.7),
+                        18.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: Color.fromRGBO(7, 39, 119, 0.2),
-              thickness: 1.5,
-              height: 20,
-              // indent: 5.0,
-            ),
-          ],
+              const Divider(
+                color: Color.fromRGBO(7, 39, 119, 0.2),
+                thickness: 1.5,
+                height: 20,
+                // indent: 5.0,
+              ),
+            ],
+          ),
         ),
       ),
     );
