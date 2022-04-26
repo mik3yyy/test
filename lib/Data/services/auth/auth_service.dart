@@ -200,4 +200,100 @@ class UserService {
       }
     }
   }
+
+  // forget password
+  Future<bool> forgotPassword(String emailPhone) async {
+    const url = '/auth/forgot-password/send-code';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: {"email_phone": emailPhone});
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        print(e.error);
+        throw e.error;
+      }
+    }
+  }
+
+  // reset password
+  Future<SigninRes> resetPassword(String emailPhone, String otpCode,
+      String password, String confirmPassword) async {
+    const url = '/auth/forgot-password/reset-password';
+    try {
+      final response = await _read(dioProvider).post(url, data: {
+        "email_phone": emailPhone,
+        "code": otpCode,
+        "password": password,
+        "confirm_password": confirmPassword
+      });
+
+      final result = SigninRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        print(e.error);
+        throw e.error;
+      }
+    }
+  }
+
+  // set transaction pin
+  Future<bool> transactionPin(
+      String transactionPin, String confirmTransactionPin) async {
+    const url = '/auth/transaction-pin/set-pin';
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(Constants.token);
+      final response = await _read(dioProvider).post(url,
+          data: {
+            "pin": transactionPin,
+            "confirm_pin": confirmTransactionPin,
+          },
+          options: Options(headers: {"Authentication": "Bearer $token"}));
+
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        print(e.error);
+        throw e.error;
+      }
+    }
+  }
+
+  // referral code
+  Future<bool> referralCode(String refCode) async {
+    const url = '/auth/handle-referral';
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(Constants.pseudoToken);
+      final response = await _read(dioProvider).post(url,
+          data: {
+            "ref_code": refCode,
+          },
+          options:
+              Options(headers: {"Pseudo-Authentication": "Bearer $token"}));
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        print(e.error);
+        throw e.error;
+      }
+    }
+  }
 }

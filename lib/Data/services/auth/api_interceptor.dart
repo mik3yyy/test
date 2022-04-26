@@ -11,14 +11,13 @@ class ApiInterceptor extends Interceptor {
     // print(token);
     options.headers.addAll({"Authorization": "Bearer $token"});
 
-    // if (options.headers.containsKey('requireToken')) {
-    //   options.headers.addAll({"Authorization": "Bearer $token"});
-    //   // remove the auxilliary header
-    //   options.headers.remove('requireToken');
-    // }
-    // else {
-    //   options.headers.remove('requireToken');
-    // }
+    if (options.headers.containsKey('requireToken')) {
+      options.headers.addAll({"Authorization": "Bearer $token"});
+      // remove the auxilliary header
+      options.headers.remove('requireToken');
+    } else {
+      options.headers.remove('requireToken');
+    }
 
     print("Headers:");
     options.headers.forEach((k, v) => print('$k: $v'));

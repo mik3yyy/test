@@ -53,7 +53,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
       if (value is Success) {
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Please Check Your Mail or SMS for Verification Code",
+          message: "Check Your Mail or SMS for Verification Code",
         );
       }
       if (value is Error) {
@@ -138,29 +138,23 @@ class VerifyAccountScreen extends HookConsumerWidget {
                       onChanged: (String value) {},
                     ),
                     Space(80.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'Didn’t receive the code?',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () {
-                                ref
-                                    .read(resendOtpProvider.notifier)
-                                    .resendOtp(emailAdress);
-                              },
-                              child: Text(
-                                ' Resend Code',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Didn’t receive the code?',
+                            style: AppText.body4(context, AppColors.hintColor)),
+                        InkWell(
+                          onTap: () {
+                            ref
+                                .read(resendOtpProvider.notifier)
+                                .resendOtp(emailAdress);
+                          },
+                          child: Text(
+                            ' Resend Code',
+                            style: AppText.body4(context, AppColors.appColor),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Space(160.h),
                     CustomButton(
@@ -179,57 +173,49 @@ class VerifyAccountScreen extends HookConsumerWidget {
                                 ref
                                     .read(verifyAccountProvider.notifier)
                                     .verifyAccount(verifyAccount);
+                                context.loaderOverlay.show();
                               }
-                              context.loaderOverlay.show();
                             },
                     ),
                     Space(20.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'By clicking Proceed, you agree to our ',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () {},
-                              // context.navigate(VerifyAccountScreen()),
-                              child: Text(
-                                'Privacy Policy',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('By clicking Proceed, you agree to our ',
+                            style: AppText.body4(context, AppColors.hintColor)),
+                        InkWell(
+                          onTap: () {},
+                          // context.navigate(VerifyAccountScreen()),
+                          child: Text(
+                            'Privacy Policy',
+                            style: AppText.body4(
+                              context,
+                              AppColors.appColor,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Space(10.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'and our ',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () {},
-                              // =>
-                              // context.navigate(VerifyAccountScreen()),
-                              child: Text(
-                                'Terms and Conditions',
-                                style: AppText.body4(
-                                  context,
-                                  AppColors.appColor,
-                                ),
-                              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'and our ',
+                          style: AppText.body4(context, AppColors.hintColor),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Text(
+                            'Terms and Conditions',
+                            style: AppText.body4(
+                              context,
+                              AppColors.appColor,
                             ),
                           ),
-                        ],
-                      ),
-                    )
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -95,4 +95,36 @@ class AuthManager extends IAuthManager {
     throw Exception(
         "An Error has occured while signing you in. Please contact support");
   }
+
+  // forget password
+  @override
+  Future<bool> forgotPassword(String emailPhone) async {
+    final res = await _userService.forgotPassword(emailPhone);
+    return res;
+  }
+
+  // reset password
+  @override
+  Future<SigninRes> resetPassword(String emailPhone, String otpCode,
+      String password, String confirmPassword) async {
+    final res = await _userService.resetPassword(
+        emailPhone, otpCode, password, confirmPassword);
+    return res;
+  }
+
+  // transaction pin
+  @override
+  Future<bool> transactionPin(
+      String transactionPin, String confirmTransactionPin) async {
+    final res = await _userService.transactionPin(
+        transactionPin, confirmTransactionPin);
+    return res;
+  }
+
+  // ref code
+  @override
+  Future<bool> referralCode(String refCode) async {
+    final res = await _userService.referralCode(refCode);
+    return res;
+  }
 }

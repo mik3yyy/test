@@ -24,4 +24,10 @@ abstract class IAuthManager {
     String emailPhone,
     String password,
   );
+  Future<bool> forgotPassword(String emailPhone);
+  Future<SigninRes> resetPassword(String emailPhone, String otpCode,
+      String password, String confirmPassword);
+  Future<bool> transactionPin(
+      String transactionPin, String confirmTransactionPin);
+  Future<bool> referralCode(String refCode);
 }

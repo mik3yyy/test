@@ -18,10 +18,15 @@ import '../../../../Data/controller/controller/generic_state_notifier.dart';
 class CreatePasswordScreen extends HookConsumerWidget {
   CreatePasswordScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
+  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+  final passwordConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(createPasswordProvider);
+    final togglePassword = ref.watch(passwordToggleStateProvider.state);
+    final toggleConfirmPassword =
+        ref.watch(passwordConfirmToggleStateProvider.state);
 
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
@@ -49,11 +54,11 @@ class CreatePasswordScreen extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
-              child: Form(
-                key: formKey,
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
                 child: Column(
                   children: [
                     Text(
@@ -80,7 +85,6 @@ class CreatePasswordScreen extends HookConsumerWidget {
 
                     // password
                     TextFormInput(
-                      textAlign: TextAlign.start,
                       labelText: 'Password',
                       controller: passwordController,
                       validator: (String? value) {
@@ -92,14 +96,26 @@ class CreatePasswordScreen extends HookConsumerWidget {
                         }
                         return null;
                       },
-                      obscureText: false,
-                      suffixIcon: const Icon(Icons.visibility_off),
+                      obscureText: togglePassword.state,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          togglePassword.state = !togglePassword.state;
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 0.h),
+                          child: Icon(
+                            togglePassword.state
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.appColor,
+                          ),
+                        ),
+                      ),
                     ),
                     Space(32.h),
 
                     // confirm password
                     TextFormInput(
-                      textAlign: TextAlign.start,
                       labelText: 'Confirm Password',
                       controller: confirmPasswordController,
                       validator: (String? value) {
@@ -113,8 +129,22 @@ class CreatePasswordScreen extends HookConsumerWidget {
                         // validator has to return something :)
                         return null;
                       },
-                      obscureText: false,
-                      suffixIcon: const Icon(Icons.visibility_off),
+                      obscureText: toggleConfirmPassword.state,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          toggleConfirmPassword.state =
+                              !toggleConfirmPassword.state;
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 0.h),
+                          child: Icon(
+                            togglePassword.state
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.appColor,
+                          ),
+                        ),
+                      ),
                     ),
                     Space(190.h),
                     CustomButton(
@@ -131,42 +161,31 @@ class CreatePasswordScreen extends HookConsumerWidget {
                                     .read(createPasswordProvider.notifier)
                                     .createPassword(passwordController.text,
                                         confirmPasswordController.text);
+                                context.loaderOverlay.show();
                               }
-                              // context.loaderOverlay.show();
                             },
                     ),
                     Space(30.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          WidgetSpan(
-                            child: InkWell(
-                              // onTap: () =>
-                              // context.navigate(const VerifyAccountScreen()),
-                              child: Text(
-                                'Privacy Policy ',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          child: Text(
+                            'Privacy Policy ',
+                            style: AppText.body4(context, AppColors.appColor),
                           ),
-                          TextSpan(
-                              text: ' | ',
-                              style:
-                                  AppText.body4(context, AppColors.appColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              // onTap: () =>
-                              // context.navigate(const VerifyAccountScreen()),
-                              child: Text(
-                                ' Terms',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
+                        ),
+                        Text(
+                          ' | ',
+                          style: AppText.body4(context, AppColors.appColor),
+                        ),
+                        InkWell(
+                          child: Text(
+                            ' Terms',
+                            style: AppText.body4(context, AppColors.appColor),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

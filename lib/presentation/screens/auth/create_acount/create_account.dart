@@ -39,7 +39,7 @@ class CreateAccountScreen extends HookConsumerWidget {
         ));
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Please Check Your Mail or SMS for Verification Code",
+          message: "Check Your Mail or SMS for Verification Code",
         );
       }
       if (value is Error) {
@@ -85,7 +85,6 @@ class CreateAccountScreen extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
-                        textAlign: TextAlign.start,
                         controller: fistNameController,
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -98,7 +97,6 @@ class CreateAccountScreen extends HookConsumerWidget {
 
                     //last name
                     TextFormInput(
-                        textAlign: TextAlign.start,
                         keyboardType: TextInputType.name,
                         labelText: 'Last Name',
                         controller: lastNameController,
@@ -114,7 +112,6 @@ class CreateAccountScreen extends HookConsumerWidget {
                     // email address or phone number
                     TextFormInput(
                         // keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.start,
                         labelText: 'Email address or Phone Number',
                         controller: emailPhoneController,
                         validator: (value) {
@@ -143,6 +140,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                       textAlign: TextAlign.center,
                     ),
                     Checkbox(
+                        activeColor: AppColors.appColor,
                         checkColor: AppColors.whiteColor,
                         side:
                             BorderSide(width: 0.8.w, color: AppColors.appColor),
@@ -176,31 +174,26 @@ class CreateAccountScreen extends HookConsumerWidget {
                                         fistNameController.text,
                                         emailPhoneController.text,
                                       );
-                                  context.loaderOverlay.show();
                                 }
+                                context.loaderOverlay.show();
                               }
                             },
                     ),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: 'Already have an account? ',
-                              style:
-                                  AppText.body4(context, AppColors.hintColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              onTap: () => context.navigate(SigninScreen()),
-                              child: Text(
-                                ' Sign In',
-                                style:
-                                    AppText.body4(context, AppColors.hintColor),
-                              ),
-                            ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Already have an account? ',
+                            style: AppText.body4(context, AppColors.hintColor)),
+                        InkWell(
+                          onTap: () => context.navigate(SigninScreen()),
+                          child: Text(
+                            ' Sign In',
+                            style: AppText.body4(context, AppColors.hintColor),
                           ),
-                        ],
-                      ),
-                    )
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

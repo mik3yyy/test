@@ -53,11 +53,11 @@ class CurrencyScreen extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
-              child: Form(
-                key: formKey,
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
                 child: Column(
                   children: [
                     Text(
@@ -76,9 +76,12 @@ class CurrencyScreen extends HookConsumerWidget {
                       },
                       child: TextFormInput(
                         enabled: false,
-                        textAlign: TextAlign.center,
                         labelText: 'Country',
                         controller: countryController,
+                        suffixIcon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.textColor,
+                        ),
                         validator: (value) {
                           if (countryController.text.isEmpty &&
                               value!.isEmpty) {
@@ -98,9 +101,12 @@ class CurrencyScreen extends HookConsumerWidget {
                       },
                       child: TextFormInput(
                         enabled: false,
-                        textAlign: TextAlign.center,
                         labelText: 'Currency',
                         controller: currencyController,
+                        suffixIcon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.textColor,
+                        ),
                         validator: (value) {
                           if (currencyController.text.isEmpty &&
                               value!.isEmpty) {
@@ -120,9 +126,12 @@ class CurrencyScreen extends HookConsumerWidget {
                       },
                       child: TextFormInput(
                         enabled: false,
-                        textAlign: TextAlign.center,
                         labelText: 'Language',
                         controller: languageController,
+                        suffixIcon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.textColor,
+                        ),
                         validator: (value) {
                           if (languageController.text.isEmpty &&
                               value!.isEmpty) {
@@ -156,37 +165,26 @@ class CurrencyScreen extends HookConsumerWidget {
                             },
                     ),
                     Space(30.h),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          WidgetSpan(
-                            child: InkWell(
-                              // onTap: () =>
-                              // context.navigate(const VerifyAccountScreen()),
-                              child: Text(
-                                'Privacy Policy ',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          child: Text(
+                            'Privacy Policy ',
+                            style: AppText.body4(context, AppColors.appColor),
                           ),
-                          TextSpan(
-                              text: ' | ',
-                              style:
-                                  AppText.body4(context, AppColors.appColor)),
-                          WidgetSpan(
-                            child: InkWell(
-                              // onTap: () =>
-                              // context.navigate(const VerifyAccountScreen()),
-                              child: Text(
-                                ' Terms',
-                                style:
-                                    AppText.body4(context, AppColors.appColor),
-                              ),
-                            ),
+                        ),
+                        Text(
+                          ' | ',
+                          style: AppText.body4(context, AppColors.appColor),
+                        ),
+                        InkWell(
+                          child: Text(
+                            ' Terms',
+                            style: AppText.body4(context, AppColors.appColor),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

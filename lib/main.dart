@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/currency.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 
@@ -49,10 +50,11 @@ class MyApp extends StatelessWidget {
         // const CurrencyScreen(),
         //  const BottomNavBar(),
 
-        home:
-            // Sample(),
 
-            MainScreen(menuScreenContext: context),
+        home: ReferralCodeScreen(),
+        // TransactionPinScreen(),
+        // MainScreen(menuScreenContext: context),
+
 
         // const SplashScreen(),
 

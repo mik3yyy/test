@@ -165,10 +165,13 @@ class ImageWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(),
-                Text(
-                  "Skip",
-                  style: AppText.body3(context, AppColors.appColor),
-                  textAlign: TextAlign.center,
+                InkWell(
+                  onTap: () => context.navigate(CreateAccountScreen()),
+                  child: Text(
+                    "Skip",
+                    style: AppText.body3(context, AppColors.appColor),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
