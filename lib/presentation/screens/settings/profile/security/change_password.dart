@@ -40,177 +40,180 @@ class ChangePassword extends HookConsumerWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 40.h,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.appColor.withOpacity(0.1),
-              child: Padding(
-                padding: EdgeInsets.only(right: 240.w),
-                child: Center(
-                  child: Text(
-                    'Change password',
-                    style: AppText.body2(context, Colors.black54, 20.sp),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 40.h,
+                width: MediaQuery.of(context).size.width,
+                color: AppColors.appColor.withOpacity(0.1),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 240.w),
+                  child: Center(
+                    child: Text(
+                      'Change password',
+                      style: AppText.body2(context, Colors.black54, 20.sp),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-              child: Column(
-                children: [
-                  EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'Old password',
-                    keyboardType: TextInputType.text,
-                    // textAlign: TextAlign.start,
-                    controller: fistNameController,
-                    obscureText: togglePassword.state,
-                    validator: (value) => validatePassword(value),
-                    suffixIcon: SizedBox(
-                      width: 55.w,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              togglePassword.state = !togglePassword.state;
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 0.h),
-                              child: Icon(
-                                togglePassword.state
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: Colors.grey.shade300,
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+                child: Column(
+                  children: [
+                    EditForm(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      labelText: 'Old password',
+                      keyboardType: TextInputType.text,
+                      // textAlign: TextAlign.start,
+                      controller: fistNameController,
+                      obscureText: togglePassword.state,
+                      validator: (value) => validatePassword(value),
+                      suffixIcon: SizedBox(
+                        width: 55.w,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                togglePassword.state = !togglePassword.state;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 0.h),
+                                child: Icon(
+                                  togglePassword.state
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: Colors.grey.shade300,
+                                ),
                               ),
                             ),
-                          ),
-                          Space(10.w),
-                          SvgPicture.asset(
-                            AppImage.successPin,
-                            height: 20.h,
-                            width: 20.w,
-                          )
-                        ],
+                            Space(10.w),
+                            SvgPicture.asset(
+                              AppImage.successPin,
+                              height: 20.h,
+                              width: 20.w,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Space(30.h),
-                  EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'New password',
-                    keyboardType: TextInputType.text,
-                    // textAlign: TextAlign.start,
-                    controller: fistNameController,
-                    obscureText: togglePassword.state,
-                    validator: (value) => validatePassword(value),
-                    suffixIcon: SizedBox(
-                      width: 55.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          togglePassword.state = !togglePassword.state;
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 0.h),
-                          child: Icon(
-                            togglePassword.state
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color: Colors.grey.shade300,
+                    Space(30.h),
+                    EditForm(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      labelText: 'New password',
+                      keyboardType: TextInputType.text,
+                      // textAlign: TextAlign.start,
+                      controller: fistNameController,
+                      obscureText: togglePassword.state,
+                      validator: (value) => validatePassword(value),
+                      suffixIcon: SizedBox(
+                        width: 55.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            togglePassword.state = !togglePassword.state;
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 0.h),
+                            child: Icon(
+                              togglePassword.state
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              color: Colors.grey.shade300,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Space(30.h),
-                  EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'Re-enter new password',
-                    keyboardType: TextInputType.text,
-                    // textAlign: TextAlign.start,
-                    controller: fistNameController,
-                    obscureText: togglePassword.state,
-                    validator: (value) {
-                      // if (value == null || value.isEmpty) {
-                      //   return 'Please enter valid password.';
-                      // }
-                      validatePassword(value);
+                    Space(30.h),
+                    EditForm(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      labelText: 'Re-enter new password',
+                      keyboardType: TextInputType.text,
+                      // textAlign: TextAlign.start,
+                      controller: fistNameController,
+                      obscureText: togglePassword.state,
+                      validator: (value) {
+                        // if (value == null || value.isEmpty) {
+                        //   return 'Please enter valid password.';
+                        // }
+                        validatePassword(value);
 
-                      if (value != fistNameController.text) {
-                        return 'Confirm password does not match.';
-                      }
-                      return null;
-                    },
-                    suffixIcon: SizedBox(
-                      width: 55.w,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              togglePassword.state = !togglePassword.state;
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 0.h),
-                              child: Icon(
-                                togglePassword.state
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: Colors.grey.shade300,
+                        if (value != fistNameController.text) {
+                          return 'Confirm password does not match.';
+                        }
+                        return null;
+                      },
+                      suffixIcon: SizedBox(
+                        width: 55.w,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                togglePassword.state = !togglePassword.state;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 0.h),
+                                child: Icon(
+                                  togglePassword.state
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: Colors.grey.shade300,
+                                ),
                               ),
                             ),
-                          ),
-                          Space(10.w),
-                          SvgPicture.asset(
-                            AppImage.successPin,
-                            height: 20.h,
-                            width: 20.w,
-                          )
-                        ],
+                            Space(10.w),
+                            SvgPicture.asset(
+                              AppImage.successPin,
+                              height: 20.h,
+                              width: 20.w,
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Space(100.h),
-                  Container(
-                    height: 60.h,
-                    width: MediaQuery.of(context).size.width,
-                    color: AppColors.appColor.withOpacity(0.05),
-                    child: Center(
-                      child: Text(
-                        'Unable to remember old password?',
-                        style: AppText.header2(context, Colors.black38, 20.sp),
+                    Space(100.h),
+                    Container(
+                      height: 60.h,
+                      width: MediaQuery.of(context).size.width,
+                      color: AppColors.appColor.withOpacity(0.05),
+                      child: Center(
+                        child: Text(
+                          'Unable to remember old password?',
+                          style:
+                              AppText.header2(context, Colors.black38, 20.sp),
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 60.h,
-                    width: MediaQuery.of(context).size.width,
-                    color: AppColors.appColor.withOpacity(0.2),
-                    child: Center(
-                      child: Text(
-                        'Reset',
-                        style:
-                            AppText.header2(context, AppColors.appColor, 20.sp),
+                    Container(
+                      height: 60.h,
+                      width: MediaQuery.of(context).size.width,
+                      color: AppColors.appColor.withOpacity(0.2),
+                      child: Center(
+                        child: Text(
+                          'Reset',
+                          style: AppText.header2(
+                              context, AppColors.appColor, 20.sp),
+                        ),
                       ),
                     ),
-                  ),
-                  Space(150.h),
-                  CustomButton(
-                      buttonText: 'Save',
-                      bgColor: AppColors.appColor,
-                      borderColor: AppColors.appColor,
-                      textColor: Colors.white,
-                      onPressed: () {
-                        // pushNewScreen(context,
-                        //     screen: const VerifyScreen(),
-                        //     pageTransitionAnimation:
-                        //         PageTransitionAnimation.fade);
-                      },
-                      buttonWidth: MediaQuery.of(context).size.width),
-                ],
-              ),
-            )
-          ],
+                    Space(150.h),
+                    CustomButton(
+                        buttonText: 'Save',
+                        bgColor: AppColors.appColor,
+                        borderColor: AppColors.appColor,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          // pushNewScreen(context,
+                          //     screen: const VerifyScreen(),
+                          //     pageTransitionAnimation:
+                          //         PageTransitionAnimation.fade);
+                        },
+                        buttonWidth: MediaQuery.of(context).size.width),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

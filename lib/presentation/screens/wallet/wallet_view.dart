@@ -38,7 +38,7 @@ class _WalletViewState extends State<WalletView> {
           children: [
             Space(20.h),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,13 +55,13 @@ class _WalletViewState extends State<WalletView> {
                     ),
                   ],
                 ),
-                // const Spacer(),
+                const Spacer(),
                 Icon(
                   Icons.notifications,
                   color: Colors.white,
-                  size: 20.sp,
+                  size: 30.sp,
                 ),
-                Space(0.w),
+                Space(10.w),
                 const CircleAvatar(
                   radius: 18.0,
                   backgroundImage: AssetImage(

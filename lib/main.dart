@@ -50,11 +50,10 @@ class MyApp extends StatelessWidget {
         // const CurrencyScreen(),
         //  const BottomNavBar(),
 
-
-        home: ReferralCodeScreen(),
-        // TransactionPinScreen(),
-        // MainScreen(menuScreenContext: context),
-
+        home:
+            // ReferralCodeScreen(),
+            // TransactionPinScreen(),
+            MainScreen(menuScreenContext: context),
 
         // const SplashScreen(),
 

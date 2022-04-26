@@ -17,9 +17,9 @@ import '../widgets/alert_dialog.dart';
 
 class TransactionPinScreen extends HookConsumerWidget {
   TransactionPinScreen({Key? key}) : super(key: key);
+  final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -153,11 +153,6 @@ class TransactionPinScreen extends HookConsumerWidget {
                                 context.loaderOverlay.show();
                               }
                             },
-                    ),
-                    Space(25.h),
-                    Text(
-                      'Skip',
-                      style: AppText.body4(context, AppColors.appColor),
                     ),
                   ],
                 ),

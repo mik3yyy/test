@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/set_currency_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
@@ -55,6 +56,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }
@@ -75,6 +77,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }
@@ -93,6 +96,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }
@@ -121,6 +125,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }
@@ -134,6 +139,7 @@ class UserService {
       final stringList = CurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
+      print(e.error);
       throw e.error;
     }
   }
@@ -146,6 +152,7 @@ class UserService {
       final stringList = CountryRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
+      print(e.error);
       throw e.error;
     }
   }
@@ -172,6 +179,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }
@@ -196,6 +204,7 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        print(e.error);
         throw e.error;
       }
     }

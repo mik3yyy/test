@@ -35,68 +35,70 @@ class ChangeTransactionPin extends StatelessWidget {
         elevation: 0,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 40.h,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.appColor.withOpacity(0.1),
-              child: Padding(
-                padding: EdgeInsets.only(right: 240.w),
-                child: Center(
-                  child: Text(
-                    'Transaction PIN',
-                    style: AppText.body2(context, Colors.black54, 20.sp),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 40.h,
+                width: MediaQuery.of(context).size.width,
+                color: AppColors.appColor.withOpacity(0.1),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 240.w),
+                  child: Center(
+                    child: Text(
+                      'Transaction PIN',
+                      style: AppText.body2(context, Colors.black54, 20.sp),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Space(20.h),
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-              child: Column(
-                children: [
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Set Transaction PIN',
-                    subTitle: 'Confirm all transactions using this PIN',
-                    image: AppImage.setTransactionPin,
-                    onPressed: () {
-                      pushNewScreen(
-                        context,
-                        screen: SetTransactionPin(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                  Space(20.h),
-                  ProfileCard(
-                    color: Colors.black,
-                    title: 'Reset Transaction PIN',
-                    subTitle: 'Reset or change your transaction PIN',
-                    image: AppImage.resetPin,
-                    onPressed: () {
-                      pushNewScreen(
-                        context,
-                        screen: ResetTransactionPin(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                  ),
-                  Space(10.h),
-                  const Divider(
-                    color: Colors.black,
-                    thickness: 0.4,
-                  ),
-                ],
-              ),
-            )
-          ],
+              Space(20.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+                child: Column(
+                  children: [
+                    ProfileCard(
+                      color: Colors.black,
+                      title: 'Set Transaction PIN',
+                      subTitle: 'Confirm all transactions using this PIN',
+                      image: AppImage.setTransactionPin,
+                      onPressed: () {
+                        pushNewScreen(
+                          context,
+                          screen: SetTransactionPin(),
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
+                    ),
+                    Space(10.h),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 0.4,
+                    ),
+                    Space(20.h),
+                    ProfileCard(
+                      color: Colors.black,
+                      title: 'Reset Transaction PIN',
+                      subTitle: 'Reset or change your transaction PIN',
+                      image: AppImage.resetPin,
+                      onPressed: () {
+                        pushNewScreen(
+                          context,
+                          screen: ResetTransactionPin(),
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
+                    ),
+                    Space(10.h),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 0.4,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

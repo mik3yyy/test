@@ -83,7 +83,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
 
                     Space(180.h),
 
-<<<<
                     // phone number or email
                     TextFormInput(
                       labelText: 'Email Address or Phone Number',
@@ -102,7 +101,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                       },
                       obscureText: false,
                     ),
-
 
                     Space(260.h),
                     CustomButton(

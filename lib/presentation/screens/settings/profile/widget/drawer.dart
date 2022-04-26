@@ -37,9 +37,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -55,9 +55,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -73,9 +73,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -91,9 +91,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -107,9 +107,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -123,9 +123,9 @@ class Navigation extends StatelessWidget {
               },
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(30.h),
             DrawerList(
@@ -135,9 +135,9 @@ class Navigation extends StatelessWidget {
               onPressed: () {},
             ),
             Space(10.h),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.4,
+            Divider(
+              thickness: 1,
+              height: 20.h,
             ),
             Space(100.h),
           ],
