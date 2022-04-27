@@ -20,6 +20,7 @@ class TransactionPinScreen extends HookConsumerWidget {
   final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
+  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -108,6 +109,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                       keyboardType: TextInputType.number,
                       labelText: 'Re-Enter Transaction PIN',
                       controller: confirmPinController,
+                      focusNode: fieldFocusNode,
                       validator: (String? value) {
                         if (value!.isEmpty) {
                           return 'Confirm transaction pin is required';
@@ -127,7 +129,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            togglePin.state
+                            toggleConfirmPin.state
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: AppColors.appColor,
@@ -146,6 +148,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                           ? null
                           : () async {
                               if (formKey.currentState!.validate()) {
+                                fieldFocusNode.unfocus();
                                 ref
                                     .read(transactionPinProvider.notifier)
                                     .transactionPin(pinController.text,

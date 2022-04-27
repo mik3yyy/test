@@ -15,6 +15,7 @@ class TextFormInput extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.enabled,
+      this.focusNode,
       this.keyboardType})
       : super(key: key);
 
@@ -28,6 +29,7 @@ class TextFormInput extends StatelessWidget {
   final TextEditingController controller;
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?) validator;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class TextFormInput extends StatelessWidget {
         enabled: enabled,
         controller: controller,
         cursorColor: Colors.blue,
+        focusNode: focusNode,
         autovalidateMode: autovalidateMode,
         obscureText: obscureText,
         textInputAction: TextInputAction.next,

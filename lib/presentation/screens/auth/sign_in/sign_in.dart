@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -11,6 +12,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/cr
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:local_auth/local_auth.dart';
@@ -27,6 +29,11 @@ class SigninScreen extends StatefulHookConsumerWidget {
 }
 
 class _SigninScreenState extends ConsumerState<SigninScreen> {
+  SigninRes? signinRes;
+  final formKey = GlobalKey<FormState>();
+  final fieldFocusNode = FocusNode();
+  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+
   final LocalAuthentication auth = LocalAuthentication();
   bool? _canCheckBiometrics;
   List<BiometricType>? _availableBiometrics;
@@ -98,7 +105,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
     setState(
         () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
-    context.navigate(TransactionPinScreen());
+
+    context.navigate(MainScreen(menuScreenContext: context));
   }
 
   @override
@@ -108,24 +116,21 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     _getAvailableBiometrics();
   }
 
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
-
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
 
     final emailPhoneController = TextEditingController();
     final passwordController = TextEditingController();
+    final togglePasswords = ref.watch(passwordToggleStateProvider.state);
+
     ref.listen<RequestState>(signInProvider, (T, value) {
-      if (value is Success) {
-        context.navigate(TransactionPinScreen());
-        return AppSnackBar.showSuccessSnackBar(
-          context,
-          message: "Login successful!",
-        );
+      if (value is Success<SigninRes>) {
+        if (value.value!.data!.user!.transactionPinAddedAt == null) {
+          context.navigate(TransactionPinScreen());
+        } else {
+          context.navigate(MainScreen(menuScreenContext: context));
+        }
       }
       if (value is Error) {
         context.loaderOverlay.hide();
@@ -155,7 +160,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       style:
                           AppText.header3(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,
-
                     ),
                     Space(12.h),
                     Text(
@@ -189,7 +193,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                       labelText: 'Password',
                       controller: passwordController,
-                      validator: (value) {
+                      focusNode: fieldFocusNode,
+                      validator: (String? value) {
                         if (value!.length < 8) {
                           return 'Password must at least be 8 characters';
                         }
@@ -198,20 +203,19 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         }
                         return null;
                       },
-                      obscureText: togglePassword.state,
+                      obscureText: togglePasswords.state,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          togglePassword.state = !togglePassword.state;
+                          togglePasswords.state = !togglePasswords.state;
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            togglePassword.state
+                            togglePasswords.state
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: AppColors.appColor,
                           ),
-
                         ),
                       ),
                     ),
@@ -243,8 +247,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           textColor: Colors.white,
                           onPressed: vm is Loading
                               ? null
-                              : () {
+                              : () async {
                                   if (formKey.currentState!.validate()) {
+                                    fieldFocusNode.unfocus();
                                     ref.read(signInProvider.notifier).signIn(
                                         emailPhoneController.text,
                                         passwordController.text);

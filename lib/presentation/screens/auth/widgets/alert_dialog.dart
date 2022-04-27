@@ -19,7 +19,7 @@ Future<dynamic> successAlart(
         content: Padding(
       padding: EdgeInsets.all(20.h),
       child: SizedBox(
-        height: 280.h,
+        height: 300.h,
         child: Column(
           children: [
             const Image(
@@ -33,7 +33,7 @@ Future<dynamic> successAlart(
             Space(20.h),
             Text(
               text,
-              style: AppText.body4(context, AppColors.appColor),
+              style: AppText.body2(context, AppColors.appColor, 16.sp),
             ),
             Space(5.h),
             Text(

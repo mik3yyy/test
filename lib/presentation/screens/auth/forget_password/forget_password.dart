@@ -20,6 +20,7 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class ForgotPasswordScreen extends HookConsumerWidget {
   ForgotPasswordScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
+  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -87,6 +88,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'Email Address or Phone Number',
                       controller: controller,
+                      focusNode: fieldFocusNode,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Email address or Phone Number is required";
@@ -116,6 +118,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                                   await SharedPreferences.getInstance();
                               pref.setString(Constants.email, controller.text);
                               if (formKey.currentState!.validate()) {
+                                fieldFocusNode.unfocus();
                                 ref
                                     .read(forgotPasswordProvider.notifier)
                                     .forgotPassword(controller.text);

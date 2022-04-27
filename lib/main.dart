@@ -53,9 +53,9 @@ class MyApp extends StatelessWidget {
         home:
             // ReferralCodeScreen(),
             // TransactionPinScreen(),
-            MainScreen(menuScreenContext: context),
+            // MainScreen(menuScreenContext: context),
 
-        // const SplashScreen(),
+            const SplashScreen(),
 
         builder: (context, widget) {
           //add this line

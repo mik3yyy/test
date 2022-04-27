@@ -18,6 +18,7 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class ReferralCodeScreen extends HookConsumerWidget {
   ReferralCodeScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
+  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,16 +78,15 @@ class ReferralCodeScreen extends HookConsumerWidget {
                     ),
                     Space(160.h),
 
-
                     // referral code
                     TextFormInput(
                       labelText: 'Enter referral code',
+                      focusNode: fieldFocusNode,
                       controller: controller,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Referral Code is required';
                         }
-
 
                         return null;
                       },
@@ -107,6 +107,7 @@ class ReferralCodeScreen extends HookConsumerWidget {
                               ? null
                               : () {
                                   if (formKey.currentState!.validate()) {
+                                    fieldFocusNode.unfocus();
                                     ref
                                         .read(refCodeProvider.notifier)
                                         .refCode(controller.text);
