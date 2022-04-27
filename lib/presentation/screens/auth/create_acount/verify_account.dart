@@ -178,25 +178,21 @@ class VerifyAccountScreen extends HookConsumerWidget {
                             },
                     ),
                     Space(20.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('By clicking Proceed, you agree to our ',
-                            style: AppText.body4(context, AppColors.hintColor)),
-                        InkWell(
-                          onTap: () {},
-                          // context.navigate(VerifyAccountScreen()),
-                          child: Text(
-                            'Privacy Policy',
-                            style: AppText.body4(
-                              context,
-                              AppColors.appColor,
-                            ),
-                          ),
+                    Text('By clicking Proceed, you agree to our ',
+                        style: AppText.body4(context, AppColors.hintColor)),
+                    Space(5.h),
+                    InkWell(
+                      onTap: () {},
+                      // context.navigate(VerifyAccountScreen()),
+                      child: Text(
+                        'Privacy Policy',
+                        style: AppText.body4(
+                          context,
+                          AppColors.appColor,
                         ),
-                      ],
+                      ),
                     ),
-                    Space(10.h),
+                    Space(5.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

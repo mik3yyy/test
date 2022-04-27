@@ -51,7 +51,7 @@ class _WalletViewState extends State<WalletView> {
                     Space(10.h),
                     Text(
                       'Lets you view your currency accounts',
-                      style: AppText.body2(context, Colors.white, 20.sp),
+                      style: AppText.body2(context, Colors.white, 18.sp),
                     ),
                   ],
                 ),

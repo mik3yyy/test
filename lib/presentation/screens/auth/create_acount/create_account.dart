@@ -24,6 +24,7 @@ class CreateAccountScreen extends HookConsumerWidget {
   });
 
   final formKey = GlobalKey<FormState>();
+  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,6 +115,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                         // keyboardType: TextInputType.emailAddress,
                         labelText: 'Email address or Phone Number',
                         controller: emailPhoneController,
+                        focusNode: fieldFocusNode,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email address or Phone Number is required";
@@ -162,6 +164,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                           ? null
                           : () {
                               if (formKey.currentState!.validate()) {
+                                fieldFocusNode.unfocus();
                                 if (toggleState.state == false) {
                                   return AppSnackBar.showInfoSnackBar(context,
                                       message:

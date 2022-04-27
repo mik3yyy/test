@@ -88,10 +88,11 @@ class User {
     this.countryName,
     this.currencyCode,
     this.language,
+    this.transactionPinAddedAt,
     this.verifiedAt,
     this.isBanned,
     this.profilePicture,
-    this.userTimezone,
+    this.timezone,
     this.createdAt,
     this.updatedAt,
   });
@@ -110,10 +111,11 @@ class User {
   String? countryName;
   String? currencyCode;
   String? language;
+  dynamic transactionPinAddedAt;
   DateTime? verifiedAt;
   int? isBanned;
   dynamic profilePicture;
-  dynamic userTimezone;
+  dynamic timezone;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -132,10 +134,11 @@ class User {
         countryName: json["country_name"],
         currencyCode: json["currency_code"],
         language: json["language"],
+        transactionPinAddedAt: json["transaction_pin_added_at"],
         verifiedAt: DateTime.parse(json["verified_at"]),
         isBanned: json["is_banned"],
         profilePicture: json["profile_picture"],
-        userTimezone: json["user_timezone"],
+        timezone: json["timezone"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
@@ -155,10 +158,11 @@ class User {
         "country_name": countryName,
         "currency_code": currencyCode,
         "language": language,
+        "transaction_pin_added_at": transactionPinAddedAt,
         "verified_at": verifiedAt!.toIso8601String(),
         "is_banned": isBanned,
         "profile_picture": profilePicture,
-        "user_timezone": userTimezone,
+        "timezone": timezone,
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
       };

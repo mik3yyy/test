@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
                     Space(10.h),
                     Text(
                       'Thanks for signing up with us',
-                      style: AppText.body2(context, Colors.white, 20.sp),
+                      style: AppText.body2(context, Colors.white, 18.sp),
                     ),
                   ],
                 ),
@@ -351,7 +351,7 @@ class MenuCards extends StatelessWidget {
             Space(25.h),
             Text(
               title,
-              style: AppText.header2(context, Colors.white, 25.sp),
+              style: AppText.header2(context, Colors.white, 22.sp),
             ),
           ],
         ),
