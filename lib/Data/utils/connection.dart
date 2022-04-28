@@ -1,21 +1,33 @@
 import 'dart:async';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity/connectivity.dart';
 
 class ConnectionUtils {
   static Future<bool> getActiveStatus() async {
-    var result = await InternetConnectionChecker().connectionStatus;
-    if (result == InternetConnectionStatus.disconnected) {
-      print(
-          'internet is disconnected ${InternetConnectionChecker().checkInterval}"');
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
       return false;
-    } else {
-      print('internet is connected');
-      print(
-          'internet is connected ${InternetConnectionChecker().checkInterval}"');
     }
-    return false;
+    return true;
   }
 }
+
+
+
+// class ConnectionUtils {
+//   static Future<bool> getActiveStatus() async {
+//     var result = await InternetConnectionChecker().connectionStatus;
+//     if (result == InternetConnectionStatus.disconnected) {
+//       print(
+//           'internet is disconnected ${InternetConnectionChecker().checkInterval}"');
+//       return false;
+//     } else {
+//       print('internet is connected');
+//       print(
+//           'internet is connected ${InternetConnectionChecker().checkInterval}"');
+//     }
+//     return false;
+//   }
+// }
 
 
 
