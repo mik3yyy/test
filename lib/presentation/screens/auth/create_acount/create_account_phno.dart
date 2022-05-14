@@ -3,7 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -14,14 +16,25 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_accoun
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../Data/constant/constant.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
-class CreateAccountScreen extends HookConsumerWidget {
-  CreateAccountScreen({Key? key}) : super(key: key);
+class CreatePhoneAccount extends HookConsumerWidget {
+  CreatePhoneAccount({Key? key}) : super(key: key);
   final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
+
+  void getPhoneNumber(String phoneNumber) async {
+    PhoneNumber number =
+        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
+
+    number = number;
+  }
+
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
 
   final formKey = GlobalKey<FormState>();
   final fieldFocusNode = FocusNode();
@@ -29,6 +42,7 @@ class CreateAccountScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(createAccountProvider);
+    String code = "+234";
     final fistNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
@@ -36,11 +50,11 @@ class CreateAccountScreen extends HookConsumerWidget {
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success) {
         context.navigate(VerifyAccountScreen(
-          emailAdress: emailPhoneController.text,
+          emailAdress: code + emailPhoneController.text,
         ));
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Check Your Mail or SMS for Verification Code",
+          message: "Check Your SMS for Verification Code",
         );
       }
       if (value is Error) {
@@ -69,8 +83,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                     Row(
                       children: [
                         InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: const Icon(Icons.arrow_back_ios_new)),
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(Icons.arrow_back_ios_new),
+                        ),
                         Space(92.w),
                         Text(
                           "Create Account!",
@@ -125,26 +140,36 @@ class CreateAccountScreen extends HookConsumerWidget {
                         obscureText: false),
                     Space(32.h),
 
-                    // email address
-                    TextFormInput(
-                        // keyboardType: TextInputType.emailAddress,
-                        labelText: 'Email',
-                        controller: emailPhoneController,
-                        focusNode: fieldFocusNode,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Email address is required";
-                          }
-                          if (!RegExp(
-                                  "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
-                              .hasMatch(value)) {
-                            return 'Please input a valid email address';
-                          }
+                    //phone number
+                    InternationalPhoneNumberInput(
+                      onInputChanged: (PhoneNumber number) {
+                        code = number.dialCode!;
 
-                          return null;
-                        },
-                        obscureText: false),
-
+                        print(code);
+                      },
+                      onInputValidated: (bool value) {},
+                      selectorConfig: const SelectorConfig(
+                        selectorType: PhoneInputSelectorType.DROPDOWN,
+                        leadingPadding: 0,
+                        trailingSpace: false,
+                        setSelectorButtonAsPrefixIcon: false,
+                      ),
+                      spaceBetweenSelectorAndTextField: 0,
+                      ignoreBlank: false,
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                      selectorTextStyle: const TextStyle(color: Colors.black),
+                      initialValue: number,
+                      textFieldController: emailPhoneController,
+                      formatInput: false,
+                      inputDecoration: const InputDecoration(
+                        hintText: "Phone number",
+                      ),
+                      focusNode: fieldFocusNode,
+                      keyboardType: const TextInputType.numberWithOptions(
+                          signed: true, decimal: true),
+                      inputBorder: InputBorder.none,
+                      onSaved: (PhoneNumber number) {},
+                    ),
                     Space(40.h),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -181,7 +206,6 @@ class CreateAccountScreen extends HookConsumerWidget {
                         ),
                       ],
                     ),
-
                     Space(60.h),
                     CustomButton(
                       buttonWidth: 244.w,
@@ -191,7 +215,11 @@ class CreateAccountScreen extends HookConsumerWidget {
                       textColor: Colors.white,
                       onPressed: vm is Loading
                           ? null
-                          : () {
+                          : () async {
+                              final pref =
+                                  await SharedPreferences.getInstance();
+                              pref.setString(Constants.countryCode, code);
+
                               if (formKey.currentState!.validate()) {
                                 fieldFocusNode.unfocus();
                                 if (toggleState.state == false) {
@@ -204,7 +232,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                                       .createAccount(
                                         fistNameController.text,
                                         fistNameController.text,
-                                        emailPhoneController.text,
+                                        code + emailPhoneController.text,
                                       );
                                 }
                                 context.loaderOverlay.show();

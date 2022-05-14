@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
@@ -179,11 +180,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           if (value!.isEmpty) {
                             return "Email address or Phone Number is required";
                           }
-                          if (!RegExp(
-                                  "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
-                              .hasMatch(value)) {
-                            return 'Please input a valid email address';
-                          }
 
                           return null;
                         },
@@ -282,9 +278,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Don’t have an account? ',
-                            style: AppText.body4(context, AppColors.appColor)),
+                            style: AppText.body4(context, AppColors.hintColor)),
                         InkWell(
-                          onTap: () => context.navigate(CreateAccountScreen()),
+                          onTap: () => context.navigate(const ChooseAccount()),
                           child: Text(
                             ' Sign up',
                             style: AppText.body4(context, AppColors.appColor),
