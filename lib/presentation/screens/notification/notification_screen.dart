@@ -22,6 +22,7 @@ class NotificationScreen extends StatelessWidget {
           children: [Space(70.h)],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: Padding(
         padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 15.h),
         child: SizedBox(

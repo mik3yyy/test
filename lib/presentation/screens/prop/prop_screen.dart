@@ -23,6 +23,7 @@ class PropScreen extends StatelessWidget {
             children: [],
           ),
         ),
+        bgColor: AppColors.whiteColor,
         child: Container(
           height: 850.h,
           padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w),

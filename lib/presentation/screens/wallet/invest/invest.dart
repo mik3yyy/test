@@ -75,6 +75,7 @@ class InvestScreen extends StatelessWidget {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 700.h,
         child: Column(

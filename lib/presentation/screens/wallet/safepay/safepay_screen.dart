@@ -24,10 +24,10 @@ class SafePayScreen extends StatefulHookConsumerWidget {
 }
 
 class _SafePayScreenState extends ConsumerState<SafePayScreen> {
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+  final toggleNumberProvider = StateProvider<bool>((ref) => true);
   @override
   Widget build(BuildContext context) {
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
+    final toggleNumbers = ref.watch(toggleNumberProvider.state);
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
@@ -81,6 +81,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 700.h,
         child: Padding(
@@ -116,7 +117,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                               Space(85.w),
                               InkWell(
                                 onTap: () {
-                                  togglePassword.state = !togglePassword.state;
+                                  toggleNumbers.state = !toggleNumbers.state;
                                 },
                                 child: Container(
                                   decoration: const BoxDecoration(
@@ -125,7 +126,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Icon(
-                                      togglePassword.state
+                                      toggleNumbers.state
                                           ? Icons.visibility_off
                                           : Icons.visibility,
                                       color: AppColors.appColor,
@@ -148,7 +149,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                             text: '1233  ',
                             style: AppText.debitCard(
                                 context, Colors.white, 20.sp, 5.w),
-                            children: togglePassword.state == true
+                            children: toggleNumbers.state == true
                                 ? <TextSpan>[
                                     TextSpan(
                                       text: '****  ',

@@ -33,4 +33,6 @@ class AppColors {
       Color.fromRGBO(216, 216, 216, 0.8);
 
   static const Color lightAppColor = Color(0xFF9BB8FF);
+
+  static const Color appBgColor = Color(0xfff8f9fb);
 }

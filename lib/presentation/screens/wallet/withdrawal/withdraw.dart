@@ -147,6 +147,7 @@ class _WithdrawState extends ConsumerState<Withdraw> {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 700.h,
         child: Padding(
