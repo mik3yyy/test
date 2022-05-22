@@ -53,6 +53,7 @@ class ShareToFriendsScreen extends StatelessWidget {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: Container(
         height: 800.h,
         padding: EdgeInsets.only(left: 25.w, right: 25.w, bottom: 20.w),

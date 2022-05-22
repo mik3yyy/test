@@ -34,6 +34,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
 
     final emailController = useTextEditingController(text: emailAdress);
     final verifyController = useTextEditingController();
+
     var toggleState = ref.watch(toggleStateProvider);
     ref.listen<RequestState>(verifyAccountProvider, (T, value) {
       if (value is Success) {

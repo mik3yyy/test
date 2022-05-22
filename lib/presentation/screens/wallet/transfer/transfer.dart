@@ -80,6 +80,7 @@ class _TransferState extends State<Transfer>
             ],
           ),
         ),
+        bgColor: AppColors.whiteColor,
         child: SizedBox(
           height: 750.h,
           child: Padding(

@@ -26,6 +26,7 @@ class SelectHowPropScreen extends StatelessWidget {
             ],
           ),
         ),
+        bgColor: AppColors.whiteColor,
         child: Container(
           height: 850.h,
           padding:

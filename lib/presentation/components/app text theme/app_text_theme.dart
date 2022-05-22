@@ -52,6 +52,14 @@ class AppText {
         color: color);
   }
 
+  static TextStyle body2Bold(BuildContext context, Color color, double size) {
+    return Theme.of(context).textTheme.bodyText1!.copyWith(
+        fontSize: size,
+        fontWeight: FontWeight.w800,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
+
   static TextStyle debitCard(
       BuildContext context, Color color, double size, double spacing) {
     return Theme.of(context).textTheme.bodyText1!.copyWith(
