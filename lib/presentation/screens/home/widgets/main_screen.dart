@@ -5,7 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/settings_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/create_wallet.dart';
 
 class MainScreen extends StatefulWidget {
   final BuildContext menuScreenContext;
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
-      WalletView(
+      CreateWallet(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,
         onScreenHideButtonPressed: () {

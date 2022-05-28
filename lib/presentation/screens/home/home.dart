@@ -362,8 +362,15 @@ class TransactionBuild extends StatelessWidget {
           Container(
             height: 60.h,
             width: 60.w,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Colors.orange),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Colors.orange.withOpacity(0.3)),
+            child: Center(
+              child: SvgPicture.asset(
+                AppImage.transferIcon,
+                height: 20.h,
+                width: 20.w,
+              ),
+            ),
           ),
           Space(10.w),
           Expanded(
