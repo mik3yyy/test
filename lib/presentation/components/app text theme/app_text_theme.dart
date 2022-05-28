@@ -60,6 +60,14 @@ class AppText {
         color: color);
   }
 
+  static TextStyle body2Medium(BuildContext context, Color color, double size) {
+    return Theme.of(context).textTheme.bodyMedium!.copyWith(
+        fontSize: size,
+        fontWeight: FontWeight.w700,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
+
   static TextStyle debitCard(
       BuildContext context, Color color, double size, double spacing) {
     return Theme.of(context).textTheme.bodyText1!.copyWith(
@@ -130,12 +138,4 @@ class AppText {
       fontWeight: FontWeight.bold,
     ));
   }
-  // //TextSTyle for contact name text
-  // static TextStyle body5(BuildContext context, Color color) {
-  //   return Theme.of(context).textTheme.labelSmall!.copyWith(
-  //       fontSize: 14.sp,
-  //       fontWeight: FontWeight.w900,
-  //       fontFamily: 'Roboto',
-  //       color: color);
-  // }
 }

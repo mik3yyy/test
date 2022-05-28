@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/available_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/aba%5BABA%5D/aba_withdraw.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/select_beneficiary.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/swift_code.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import '../../../components/app text theme/app_text_theme.dart';
+import '../withdrawal/Nuban/nuban.dart';
+import '../withdrawal/safe_pay_withdraw/select_beneficiary.dart';
+import '../withdrawal/swiftcode/swift_code.dart';
+import '../withdrawal/widget/withdrawal_method_widget.dart';
 
-import '../../home/widgets/bottomNav/persistent-tab-view.dart';
-import 'widget/withdrawal_method_widget.dart';
-
-class WithdrawalMethodScreen extends StatelessWidget {
-  const WithdrawalMethodScreen({Key? key}) : super(key: key);
+class SelectWalletToCreate extends StatelessWidget {
+  const SelectWalletToCreate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class WithdrawalMethodScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          'Withdrawal',
+          'Create Wallet',
           style: AppText.header2(context, Colors.black, 20.sp),
         ),
         leading: InkWell(
@@ -45,7 +45,7 @@ class WithdrawalMethodScreen extends StatelessWidget {
                 padding: EdgeInsets.only(right: 210.w),
                 child: Center(
                   child: Text(
-                    'Withdrawal methods',
+                    'Select wallet to create',
                     style: AppText.body2(context, Colors.black54, 20.sp),
                   ),
                 ),
@@ -57,17 +57,17 @@ class WithdrawalMethodScreen extends StatelessWidget {
               child: Column(
                 children: [
                   WithdrawMethod(
-                      method: "Safe Transfer",
+                      method: "Dollar wallet",
                       onPressed: () {
                         pushNewScreen(
-                          context, screen: const SelectBeneficiary(),
+                          context, screen: const AvailableWallet(),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation: PageTransitionAnimation.fade,
                         );
                       }),
                   Space(20.h),
                   WithdrawMethod(
-                      method: "ACH [ABA]",
+                      method: "Pound wallet",
                       onPressed: () {
                         pushNewScreen(
                           context, screen: const ABAWithdrawal(),
@@ -77,7 +77,7 @@ class WithdrawalMethodScreen extends StatelessWidget {
                       }),
                   Space(20.h),
                   WithdrawMethod(
-                      method: "NUBAN [Nigeria]",
+                      method: "Euro wallet",
                       onPressed: () {
                         pushNewScreen(
                           context, screen: const NubanWithdraw(),
@@ -87,7 +87,7 @@ class WithdrawalMethodScreen extends StatelessWidget {
                       }),
                   Space(20.h),
                   WithdrawMethod(
-                      method: "Swift Code [BIC]",
+                      method: "Naira wallet",
                       onPressed: () {
                         pushNewScreen(
                           context, screen: const SwiftCodeView(),
