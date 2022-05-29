@@ -7,7 +7,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/custom_paint/custom_paint_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/fund_wallet.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/view_virtual_card.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -30,13 +32,13 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
     final toggleNumbers = ref.watch(toggleNumberProvider.state);
     return GenericWidget(
       appbar: Padding(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
         child: Column(
           children: [
             Space(20.h),
             Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: (() => Navigator.pop(context)),
@@ -51,13 +53,13 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      '\$ 0',
+                      '\$ 200',
                       style: AppText.header1(context, Colors.white, 25.sp),
                     ),
                     Space(10.h),
                     Text(
-                      'Available Balance',
-                      style: AppText.body2(context, Colors.white, 16.sp),
+                      'Default wallet balance',
+                      style: AppText.body2(context, Colors.white, 20.sp),
                     ),
                   ],
                 ),
@@ -83,202 +85,295 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
       ),
       bgColor: AppColors.whiteColor,
       child: SizedBox(
-        height: 700.h,
-        child: Padding(
-          padding: EdgeInsets.only(left: 23.w, right: 23.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
+        height: 750.h,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Space(30.h),
+            const SafePayCard(),
+            Space(20.h),
+
+            Container(
+              padding: EdgeInsets.only(left: 35.w, right: 35.w),
+              child: Row(
                 children: [
-                  SvgPicture.asset(
-                    AppImage.debitCard,
-                    height: 230.h,
-                    width: 230.w,
+                  InkWell(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen: const ViewVirtualCard(),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.fade);
+                    },
+                    child: Text(
+                      'View',
+                      style: AppText.body2Medium(context, Colors.black, 20.sp),
+                    ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(left: 30.w, right: 30.w, bottom: 30.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
+                  const Spacer(),
+                  Text(
+                    'Remove ',
+                    style: AppText.body2Medium(context, Colors.black12, 20.sp),
+                  ),
+                ],
+              ),
+            ),
+
+            Space(30.h),
+
+            Container(
+              height: 60.h,
+              color: AppColors.appColor,
+              padding: EdgeInsets.only(left: 20.w, right: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'View Exchange rates',
+                    style: AppText.body2Medium(context, Colors.white, 20.sp),
+                  ),
+                  const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                ],
+              ),
+            ),
+            Space(30.h),
+            Padding(
+              padding: EdgeInsets.only(left: 20.w, right: 20.w),
+              child: Column(
+                children: [
+                  Container(
+                    height: 90.h,
+                    color: AppColors.appColor.withOpacity(0.1),
+                    child: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(right: 19.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                'Safe Pay',
-                                style:
-                                    AppText.body2(context, Colors.white, 20.sp),
-                              ),
-                              Space(85.w),
-                              InkWell(
-                                onTap: () {
-                                  toggleNumbers.state = !toggleNumbers.state;
-                                },
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: Icon(
-                                      toggleNumbers.state
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      color: AppColors.appColor,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          width: 20,
+                          color: AppColors.appColor.withOpacity(0.5),
                         ),
-                        Space(30.h),
-                        // Text(
-                        //   'dfdkfjdblkjfvbd;fjk;nbfnb;fnb;dogn',
-                        //   style: AppText.body2(context, Colors.white, 20.sp),
-                        // ),
-
-                        RichText(
-                          text: TextSpan(
-                            text: '1233  ',
-                            style: AppText.debitCard(
-                                context, Colors.white, 20.sp, 5.w),
-                            children: toggleNumbers.state == true
-                                ? <TextSpan>[
-                                    TextSpan(
-                                      text: '****  ',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                    TextSpan(
-                                      text: '****  ',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                    TextSpan(
-                                      text: '****',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                  ]
-                                : <TextSpan>[
-                                    TextSpan(
-                                      text: '2343  ',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                    TextSpan(
-                                      text: '4453  ',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                    TextSpan(
-                                      text: '3424',
-                                      style: AppText.debitCard(
-                                          context, Colors.white, 20.sp, 5.w),
-                                    ),
-                                  ],
-                          ),
+                        Space(20.w),
+                        Text(
+                          'Make use of your virtual cards for payment.\nClick on the card to make easy payment',
+                          style: AppText.body2Medium(
+                              context, Colors.black54, 17.sp),
                         ),
-                        Space(50.h),
+                      ],
+                    ),
+                  ),
+                  Space(30.h),
+                  SizedBox(
+                    height: 90.h,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Upgrade Free account',
+                              style: AppText.body2Bold(
+                                  context, Colors.black54, 22.sp),
+                            ),
+                            Space(10.h),
+                            Text(
+                              'Upgrade your account to add a\nnew virtual card',
+                              style: AppText.body2Medium(
+                                  context, Colors.black54, 16.sp),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        // Space(20.w),
                         Container(
-                          padding: EdgeInsets.only(left: 20.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '25\\34',
-                                style: AppText.header2(
-                                    context, Colors.white, 20.sp),
-                              ),
-                              Space(200.w),
-                              Text(
-                                '345',
-                                style: AppText.header2(
-                                    context, Colors.white, 20.sp),
-                              ),
-                            ],
+                          width: 120,
+                          height: 40.h,
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(30.r)),
+                          child: Center(
+                            child: Text(
+                              'UPGRADE',
+                              style: AppText.body2Bold(
+                                  context, Colors.white, 15.sp),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
-              Space(30.h),
-              //!!!!!
-              //!!!!!
-              //!!!!! change to successful when payment is successful
+            ),
 
-              //  const Image(
-              //     image: AssetImage(
-              //   AppImage.successSafepay,
-              // )),
-              //!!!!!
-              //!!!!!
-              //!!!!!
-              //!!!!!
-              //!!!!! change to insufficient when payment is insufficent
+            //!!!!!
+            //!!!!!
+            //!!!!! change to successful when payment is successful
 
-              //  const Image(
-              //     image: AssetImage(
-              //   AppImage.insufficient,
-              // )),
-              //!!!!!
-              //!!!!!
-              const Image(
-                  image: AssetImage(
-                AppImage.safePayIcon,
-              )),
-              Space(30.h),
-              Container(
-                margin: EdgeInsets.only(left: 20.w, right: 20.w),
-                child: Text(
-                  'You can fund your virtual card from any of your wallets',
-                  textAlign: TextAlign.center,
-                  style: AppText.header2(context, AppColors.appColor, 20.sp),
-                ),
-              ),
-              //!!!!!
-              //!!!!!
-              //!!!!! This is for scanning POS Machine
-              //!!!!!
-              //!!!!!
-              //  Container(
-              //   margin: EdgeInsets.only(left: 20.w, right: 20.w),
-              //   child: Text(
-              //     'Scan POS machine using NFC for quick pay',
-              //     textAlign: TextAlign.center,
-              //     style: AppText.header2(context, AppColors.appColor, 20.sp),
-              //   ),
-              // ),
-              Space(55.h),
-              CustomButton(
-                  buttonText: 'Fund card',
-                  bgColor: AppColors.appColor,
-                  borderColor: AppColors.appColor,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    pushNewScreen(
-                      context,
-                      screen: const FundVirtualCard(),
-                      withNavBar: true, // OPTIONAL VALUE. True by default.
-                      pageTransitionAnimation: PageTransitionAnimation.fade,
-                    );
-                    // context.navigate(AvailableBalance()
+            //  const Image(
+            //     image: AssetImage(
+            //   AppImage.successSafepay,
+            // )),
+            //!!!!!
+            //!!!!!
+            //!!!!!
+            //!!!!!
+            //!!!!! change to insufficient when payment is insufficent
 
-                    // );
-                  },
-                  buttonWidth: 320),
-            ],
-          ),
+            //  const Image(
+            //     image: AssetImage(
+            //   AppImage.insufficient,
+            // )),
+
+            //!!!!!
+            //!!!!!
+            //!!!!! This is for scanning POS Machine
+            //!!!!!
+            //!!!!!
+            //  Container(
+            //   margin: EdgeInsets.only(left: 20.w, right: 20.w),
+            //   child: Text(
+            //     'Scan POS machine using NFC for quick pay',
+            //     textAlign: TextAlign.center,
+            //     style: AppText.header2(context, AppColors.appColor, 20.sp),
+            //   ),
+            // ),
+            Space(55.h),
+            // CustomButton(
+            //     buttonText: 'Fund card',
+            //     bgColor: AppColors.appColor,
+            //     borderColor: AppColors.appColor,
+            //     textColor: Colors.white,
+            //     onPressed: () {
+            //       pushNewScreen(
+            //         context,
+            //         screen: const FundVirtualCard(),
+            //         withNavBar: true, // OPTIONAL VALUE. True by default.
+            //         pageTransitionAnimation: PageTransitionAnimation.fade,
+            //       );
+            //       // context.navigate(AvailableBalance()
+
+            //       // );
+            //     },
+            //     buttonWidth: 320),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class SafePayCard extends StatelessWidget {
+  const SafePayCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30.r),
+      child: Stack(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        children: [
+          Container(
+            height: 200,
+            width: 330,
+            color: Colors.indigo[50],
+          ),
+          Positioned(
+            left: -300,
+            right: 0,
+            bottom: 0,
+            child: SizedBox(
+              height: 120,
+              width: 120,
+              child: CustomPaint(
+                  foregroundPainter: CircleBlurPainter(
+                      circleWidth: 100,
+                      blurSigma: 30.0,
+                      color: const Color(0xff2790C3))),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: -300,
+            top: -100,
+            child: SizedBox(
+              height: 220,
+              width: 220,
+              child: CustomPaint(
+                  foregroundPainter: CircleBlurPainter(
+                      circleWidth: 100,
+                      blurSigma: 40.0,
+                      color: AppColors.appColor)),
+            ),
+          ),
+          Positioned(
+            left: 60,
+            right: 0,
+            top: 30,
+            child: Text(
+              'Virtual Card (Free Card)',
+              style: AppText.body2Medium(context, Colors.white, 22.sp),
+            ),
+          ),
+          Positioned(
+            left: 15,
+            right: 0,
+            top: 75,
+            child: Text(
+              'Janeth Doe',
+              style: AppText.body2Medium(context, Colors.white, 20.sp),
+            ),
+          ),
+          Positioned(
+            left: 15,
+            right: 0,
+            top: 100,
+            child: Text(
+              '2817-9403-1784-5372',
+              style: AppText.body2Bold(context, Colors.white, 25.sp),
+            ),
+          ),
+          Positioned(
+            left: 15,
+            right: 0,
+            bottom: 10,
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Exp. Date',
+                      style: AppText.body2Medium(context, Colors.white, 17.sp),
+                    ),
+                    Space(7.h),
+                    Text(
+                      '12-2022',
+                      style: AppText.body2Medium(context, Colors.white, 17.sp),
+                    ),
+                  ],
+                ),
+                const Space(187),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'CVV',
+                      style: AppText.body2Medium(context, Colors.white, 17.sp),
+                    ),
+                    Space(7.h),
+                    Text(
+                      '***',
+                      style: AppText.body2Medium(context, Colors.white, 17.sp),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
