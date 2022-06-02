@@ -35,6 +35,7 @@ class _SwiftCodeViewState extends ConsumerState<SwiftCodeView> {
     final fistNameController = useTextEditingController();
     final currencyController = useTextEditingController();
     final bankController = useTextEditingController();
+    final bankCodeController = useTextEditingController();
 
     final selection = ref.watch(toggleSelectionProvider.state);
     final amountController = useTextEditingController();
@@ -223,7 +224,10 @@ class _SwiftCodeViewState extends ConsumerState<SwiftCodeView> {
                       ],
                     ),
                     Space(20.h),
-                    SelectBank(bankController: bankController),
+                    SelectBank(
+                      bankController: bankController,
+                      bankCode: bankCodeController,
+                    ),
                     Space(20.h),
                     EditForm(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
