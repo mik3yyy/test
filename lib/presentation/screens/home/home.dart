@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/get_refresh_token.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -38,6 +39,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   ];
 
   String setValue = 'Dollar';
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(refreshControllerProvider.notifier).refreshToken();
+  }
 
   @override
   Widget build(BuildContext context) {

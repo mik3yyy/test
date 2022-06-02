@@ -1,20 +1,21 @@
 import 'package:dio/dio.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 class ApiInterceptor extends Interceptor {
   @override
   Future<dynamic> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(Constants.token);
-    // final token = StorageUtil.getString(Constants.token);
-    print(token);
+    final token = PreferenceManager.authToken;
 
-    if (options.headers.containsKey('requireToken')) {
-      options.headers.addAll({"Authorization": "Bearer $token"});
+    // final token = StorageUtil.getString(Constants.token);
+
+    print(options.headers);
+    if (options.headers.isEmpty) {
+      options.headers.addAll({"Authentication": "Bearer $token"});
       // remove the auxilliary header
-      options.headers.remove('requireToken');
+      // options.headers.remove({"Authentication": "Bearer $token"});
+    } else if (options.headers.isNotEmpty) {
+      options.headers.addAll({"Authentication": "Bearer $token"});
     } else {
       options.headers.remove('requireToken');
     }

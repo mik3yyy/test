@@ -21,6 +21,16 @@ String? validatePassword(String? value) {
   return null;
 }
 
+String? validateNubanAccountNumber(String? value) {
+  if (value!.length < 10) {
+    return 'Account Number must be 10 characters';
+  }
+  if (value.isEmpty) {
+    return 'Invalid Accoount Number';
+  }
+  return null;
+}
+
 String? validatePhoneNumber(String? value) {
   if (value!.isEmpty) {
     return 'Please add a phone number';

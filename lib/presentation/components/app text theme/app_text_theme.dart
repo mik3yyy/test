@@ -105,7 +105,7 @@ class AppText {
 
   static TextStyle snackbar(BuildContext context, Color color) {
     return Theme.of(context).textTheme.labelSmall!.copyWith(
-        fontSize: 14.5.sp,
+        fontSize: 17.5.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);

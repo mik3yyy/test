@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/widget/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -26,14 +32,19 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   final transactionPinStateProvider = StateProvider<bool>((ref) => true);
 
   final String amount = '750';
+
   @override
   Widget build(BuildContext context) {
+    final accountName = ref.watch(getBankDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final fistNameController = useTextEditingController();
+    final bankAccountController = useTextEditingController();
     final currencyController = useTextEditingController();
     final bankController = useTextEditingController();
+    final bankCodeController = useTextEditingController();
     final amountController = useTextEditingController();
+    final errorState = useState("");
 
     return Scaffold(
       appBar: AppBar(
@@ -163,26 +174,72 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                     //* Select bank
                     //*
                     //*
-                    SelectBank(bankController: bankController),
+                    SelectBank(
+                      bankController: bankController,
+                      bankCode: bankCodeController,
+                    ),
                     Space(20.h),
                     EditForm(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        labelText:
-                            'Enter NUBAN (Nigerian account no) of recipient',
-                        keyboardType: TextInputType.text,
-                        // textAlign: TextAlign.start,
-                        controller: fistNameController,
-                        obscureText: false,
-                        validator: (value) => validateState(value)),
-                    Space(10.h),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        'John Doe',
-                        style:
-                            AppText.body2(context, Colors.greenAccent, 18.sp),
-                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      labelText:
+                          'Enter NUBAN (Nigerian account no) of recipient',
+                      keyboardType: TextInputType.text,
+                      // textAlign: TextAlign.start,
+                      controller: bankAccountController,
+                      obscureText: false,
+                      validator: (value) => validateNubanAccountNumber(value),
+
+                      onChanged: (value) {
+                        errorState.value = value;
+                        if (value.length == 10) {
+                          var getBankAccountDetails = GetBankAccountDetails(
+                            bankCode: bankCodeController.text,
+                            accountNumber: bankAccountController.text,
+                          );
+                          ref
+                              .read(getBankDetailsProvider.notifier)
+                              .getDetails(getBankAccountDetails);
+                        } else {}
+                      },
                     ),
+                    Space(10.h),
+
+                    accountName.when(error: (error, stackTrace) {
+                      return Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          errorState.value.length < 10 ? "" : error.toString(),
+                          style: AppText.body2(context, Colors.red, 18.sp),
+                        ),
+                      );
+                    }, loading: () {
+                      return Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          '...',
+                          style: AppText.body2(context, Colors.black, 18.sp),
+                        ),
+                      );
+                    }, idle: () {
+                      return Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          '',
+                          style:
+                              AppText.body2(context, Colors.greenAccent, 18.sp),
+                        ),
+                      );
+                    }, success: (data) {
+                      return Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          data!.data.accountName.toString(),
+                          style:
+                              AppText.body2(context, Colors.greenAccent, 18.sp),
+                        ),
+                      );
+                    }),
+
                     Space(20.h),
 
                     EditForm(
@@ -298,19 +355,18 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   }
 }
 
-class SelectBank extends StatefulWidget {
-  const SelectBank({
-    Key? key,
-    required this.bankController,
-  }) : super(key: key);
-
+class SelectBank extends StatefulHookConsumerWidget {
   final TextEditingController bankController;
+  final TextEditingController bankCode;
+  const SelectBank(
+      {Key? key, required this.bankController, required this.bankCode})
+      : super(key: key);
 
   @override
-  State<SelectBank> createState() => _SelectBankState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SelectBankState();
 }
 
-class _SelectBankState extends State<SelectBank> {
+class _SelectBankState extends ConsumerState<SelectBank> {
   String gtBank = "Guarantee trust bank";
   String uba = "UBA Plc";
   String accessbankDiamond = "Access (Diamond)";
@@ -322,6 +378,7 @@ class _SelectBankState extends State<SelectBank> {
   String sterlingBank = "Sterling bank";
   @override
   Widget build(BuildContext context) {
+    final bankRes = ref.watch(getBankProvider);
     return Stack(
       children: [
         InkWell(
@@ -332,7 +389,7 @@ class _SelectBankState extends State<SelectBank> {
                   return Padding(
                     padding: EdgeInsets.only(left: 25.w, right: 25.w),
                     child: CupertinoActionSheet(
-                      actions: <Widget>[
+                      actions: [
                         Container(
                           color: Colors.white,
                           child: CupertinoActionSheetAction(
@@ -340,7 +397,7 @@ class _SelectBankState extends State<SelectBank> {
                               padding: EdgeInsets.only(left: 30.w, right: 30.w),
                               child: Center(
                                 child: Text(
-                                  gtBank,
+                                  "Select Bank",
                                   style: AppText.body2(
                                       context, Colors.black, 20.sp),
                                 ),
@@ -348,152 +405,251 @@ class _SelectBankState extends State<SelectBank> {
                             ),
                             isDefaultAction: true,
                             onPressed: () {
-                              widget.bankController.text = gtBank;
-                              Navigator.pop(context);
+                              // widget.bankController.text = gtBank;
+                              // Navigator.pop(context);
                             },
                           ),
                         ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  uba,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = uba;
-                              Navigator.pop(context);
-                            },
-                          ),
+                        const SizedBox(
+                          height: 5,
                         ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  accessbankDiamond,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = accessbankDiamond;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  accessBank,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = accessBank;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  zenithBank,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = zenithBank;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  stanbicBank,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = stanbicBank;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  sterlingBank,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = sterlingBank;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  fidelity,
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              widget.bankController.text = fidelity;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
+                        SizedBox(
+                            height: 500,
+                            child: bankRes.when(
+                              idle: () => const CircularProgressIndicator(),
+                              loading: () => const CircularProgressIndicator(),
+                              error: (e, s) => Text(e.toString()),
+                              success: (data) {
+                                return SizedBox(
+                                  height: 500,
+                                  child: ListView.separated(
+                                    itemCount: data!.data!.length,
+                                    itemBuilder: (context, index) {
+                                      final bank = data.data![index];
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 5.w, right: 5.w),
+                                        child: Container(
+                                          color: Colors.white,
+                                          child: CupertinoActionSheetAction(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 30.w, right: 30.w),
+                                              child: Center(
+                                                child: Text(
+                                                  bank.name.toString(),
+                                                  style: AppText.body2(context,
+                                                      Colors.black, 17.sp),
+                                                ),
+                                              ),
+                                            ),
+                                            isDefaultAction: true,
+                                            onPressed: () {
+                                              widget.bankController.text =
+                                                  bank.name!;
+                                              widget.bankCode.text = bank.code!;
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                      return const SizedBox(
+                                        height: 5,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            )),
                       ],
+                      // actions: [
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             gtBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDefaultAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = gtBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      // ],
+
+                      // actions: <Widget>[
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             gtBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDefaultAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = gtBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             uba,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = uba;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             accessbankDiamond,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = accessbankDiamond;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             accessBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = accessBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             zenithBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = zenithBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             stanbicBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = stanbicBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             sterlingBank,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = sterlingBank;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      //   Container(
+                      //     color: Colors.white,
+                      //     child: CupertinoActionSheetAction(
+                      //       child: Padding(
+                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      //         child: Center(
+                      //           child: Text(
+                      //             fidelity,
+                      //             style: AppText.body2(
+                      //                 context, Colors.black, 20.sp),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isDestructiveAction: true,
+                      //       onPressed: () {
+                      //         widget.bankController.text = fidelity;
+                      //         Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //   ),
+                      // ],
                       cancelButton: CupertinoActionSheetAction(
                         child: const Text("Close"),
                         onPressed: () {

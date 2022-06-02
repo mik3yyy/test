@@ -67,6 +67,7 @@ dependencies:
  
   
   date_time_picker: ^2.1.0
+  equatable: ^2.0.3
 
 
 
