@@ -91,3 +91,10 @@ String? validatePin(String? value) {
   }
   return null;
 }
+
+String? validateCurrency(String? value) {
+  if (value!.isEmpty) {
+    return 'Please select a currency';
+  }
+  return null;
+}

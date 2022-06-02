@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
@@ -212,7 +213,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                             firstColor:
                                 const Color(0xff00848C).withOpacity(0.6),
                             secondColor: const Color(0xff00404E),
-                            onPressed: () {},
+                            onPressed: () {
+                              pushNewScreen(
+                                context, screen: const AddFundsToWalletScreen(),
+                                withNavBar:
+                                    true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.fade,
+                              );
+                            },
                           ),
                           MenuCards(
                             title: 'Withdraw',
