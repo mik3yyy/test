@@ -5,6 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/get_refresh_token.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -46,9 +49,26 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(refreshControllerProvider.notifier).refreshToken();
   }
 
+//Method to convert currency name to code and use as parament for setting wallet as default
+  setCurrencyCode(String currency) {
+    if (currency == "Pounds") {
+      return 'GBP';
+    } else if (currency == "Naira") {
+      return 'NGN';
+    } else if (currency == "Euro") {
+      return 'EUR';
+    } else {
+      return 'USD';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
+    final accountNo = ref.watch(signInProvider);
+    final walletList = ref.watch(getAccountDetailsProvider);
+    //TODO: To ask BE guy to return native_symbol for set wallet as default res
+    final setWalletVm = ref.watch(setWalletAsDefaultProvider);
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(
@@ -116,10 +136,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                               color: AppColors.appColor,
                             ),
                             items: currency.map(buildItem).toList(),
+                            // items: walletList.maybeWhen(success: (v) => v!.data!.wallets!.toList(), orElse: () => []),
                             onChanged: (value) {
                               setState(() {
                                 setValue = value!;
                               });
+                              //  setCurrencyCode(setValue);
+                              ref
+                                  .read(setWalletAsDefaultProvider.notifier)
+                                  .setWalletAsDefault(
+                                      setCurrencyCode(setValue));
                             }),
                       ),
                       Space(85.w),
@@ -150,13 +176,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                               context, AppColors.appColor, 40.sp),
                         )
                       : Text(
-                          '\$ 200.00',
+                          setWalletVm.maybeWhen(
+                              success: (v) =>
+                                  '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
+                              orElse: () => ''),
+                          // '\$ 200.00',
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
                         ),
                   Space(10.h),
                   Text(
-                    'Acc No: 23456789',
+                    'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user!.accountNumber!, orElse: () => '')}',
+
+                    // 'Acc No: 23456789',
                     style: AppText.body2(context, AppColors.appColor, 20.sp),
                   ),
                 ],
