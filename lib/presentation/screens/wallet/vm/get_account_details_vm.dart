@@ -3,8 +3,8 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/repo/wallet_repo.dart';
 
-final getAccountDetailsProvider = StateNotifierProvider.autoDispose<
-    GetAccountDetailsVm, RequestState<UserAccountDetails>>(
+final getAccountDetailsProvider = StateNotifierProvider<GetAccountDetailsVm,
+    RequestState<UserAccountDetails>>(
   (ref) => GetAccountDetailsVm(ref),
 );
 

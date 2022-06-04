@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/get_country_vm.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
@@ -56,9 +57,9 @@ Future<dynamic> countryBuild(
                 width: double.maxFinite,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: value!.data!.countries!.length,
+                  itemCount: value!.data.countries.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final currency = value.data!.countries![index];
+                    final currency = value.data.countries[index];
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -70,7 +71,14 @@ Future<dynamic> countryBuild(
                             textAlign: TextAlign.center,
                           ),
                           onTap: () {
+                            final countryCode = currency.iso2.toString();
+
                             controller.text = currency.name.toString();
+
+                            ref
+                                .read(refreshControllerProvider.notifier)
+                                .addCountryCode(countryCode);
+
                             Navigator.pop(context);
                           },
                         ),

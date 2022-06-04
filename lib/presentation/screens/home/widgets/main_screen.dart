@@ -118,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: SvgPicture.asset(
-          AppImage.more,
+          AppImage.settings,
           color: AppColors.appColor,
         ),
         inactiveIcon: SvgPicture.asset(

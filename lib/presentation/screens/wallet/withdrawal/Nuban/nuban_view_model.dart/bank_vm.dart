@@ -15,5 +15,6 @@ class GetBankVM extends RequestStateNotifier<BankRes> {
     getbank();
   }
 
-  void getbank() => makeRequest(() => withdrawalManager.fetchBank());
+  Future<RequestState<BankRes>> getbank() =>
+      makeRequest(() => withdrawalManager.fetchBank());
 }
