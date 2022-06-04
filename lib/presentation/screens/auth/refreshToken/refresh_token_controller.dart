@@ -10,30 +10,30 @@ class RefreshTokenState extends Equatable {
   final bool success;
   final String error;
   final bool loading;
+  final String countryCode;
 
-  const RefreshTokenState({
-    required this.success,
-    required this.error,
-    required this.loading,
-  });
+  const RefreshTokenState(
+      {required this.success,
+      required this.error,
+      required this.loading,
+      required this.countryCode});
 
   factory RefreshTokenState.initial() {
-    return const RefreshTokenState(success: false, error: "", loading: false);
+    return const RefreshTokenState(
+        success: false, error: "", loading: false, countryCode: "");
   }
 
-  RefreshTokenState copyWith({
-    bool? success,
-    String? error,
-    bool? loading,
-  }) {
+  RefreshTokenState copyWith(
+      {bool? success, String? error, bool? loading, String? countryCode}) {
     return RefreshTokenState(
         success: success ?? this.success,
         error: error ?? this.error,
-        loading: loading ?? this.loading);
+        loading: loading ?? this.loading,
+        countryCode: countryCode ?? this.countryCode);
   }
 
   @override
-  List<Object?> get props => [success, loading, error];
+  List<Object?> get props => [success, loading, error, countryCode];
 }
 
 final refreshControllerProvider =
@@ -44,6 +44,10 @@ final refreshControllerProvider =
 class RefreshTokenController extends StateNotifier<RefreshTokenState> {
   final AuthManager authManager;
   RefreshTokenController(this.authManager) : super(RefreshTokenState.initial());
+
+  void addCountryCode(String countryCode) {
+    state = state.copyWith(countryCode: countryCode);
+  }
 
   void refreshToken() async {
     state = state.copyWith(loading: true, success: false);

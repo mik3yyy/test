@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/repo/i_wallet_repo.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/wallet_service.dart';
 
@@ -34,4 +35,8 @@ class WalletRepo extends IWalletRepo {
     final res = await _walletService.setWalletAsDefault(currency);
     return res;
   }
+
+  @override
+  Future<WalletTransactions> getTransactions() async =>
+      await _walletService.getTransactions();
 }

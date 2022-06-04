@@ -14,7 +14,7 @@ class SetWalletAsDefaultVm extends RequestStateNotifier<SetWalletAsDefaultRes> {
 
   SetWalletAsDefaultVm(Ref ref) : _walletRepo = ref.read(walletManagerProvider);
 
-  Future<RequestState<SetWalletAsDefaultRes>> setWalletAsDefault(
+  void setWalletAsDefault(
     String currency,
   ) =>
       makeRequest(() => _walletRepo.setWalletAsDefault(currency));

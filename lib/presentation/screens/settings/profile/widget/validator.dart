@@ -38,9 +38,48 @@ String? validatePhoneNumber(String? value) {
   return null;
 }
 
+// swift code validation
+String? swiftCode(String? value) {
+  if ((value!.length != 8) || (value.length != 11)) {
+    return 'swift code must be  either 8-11 characters';
+  }
+  if (value.isEmpty) {
+    return 'Please add a swift code';
+  }
+  return null;
+}
+
+// routing number validation
+String? routingNumber(String? value) {
+  if (value!.length != 9) {
+    return 'routing number must be 9 characters';
+  }
+  if (value.isEmpty) {
+    return 'Please add a routing number';
+  }
+  return null;
+}
+
 String? validateCountry(String? value) {
   if (value!.isEmpty) {
     return 'Please include your country';
+  }
+  return null;
+}
+
+String? validateAmount(String? value) {
+  if (value!.length < 3) {
+    return 'Withdrawal amount must be more than 100 ';
+  }
+  if (value.isEmpty) {
+    return 'please enter an amount';
+  }
+  return null;
+}
+
+String? wallet(String? value) {
+  if (value!.isEmpty) {
+    return 'Please select a wallet';
   }
   return null;
 }
@@ -71,6 +110,19 @@ String? validateFirstName(String? value) {
 
   if (value == null || value.isEmpty) {
     return 'First Name is required';
+  }
+  final RegExp regex = RegExp(pattern);
+  if (regex.hasMatch(value)) {
+    return 'Enter a valid name';
+  }
+  return null;
+}
+
+String? accountName(String? value) {
+  const String pattern = r"^[.!#$%&'*+<>:;,%@()(/=?^_`{|}~-]";
+
+  if (value == null || value.isEmpty) {
+    return 'account name is required';
   }
   final RegExp regex = RegExp(pattern);
   if (regex.hasMatch(value)) {
