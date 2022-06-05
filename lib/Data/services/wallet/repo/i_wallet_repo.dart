@@ -7,5 +7,20 @@ abstract class IWalletRepo {
   Future<CreateWalletRes> createWallet(String currency);
   Future<UserAccountDetails> getUserAccountDetails();
   Future<SetWalletAsDefaultRes> setWalletAsDefault(String currency);
+
+  Future<bool> transferToWallet(
+    String fromCurrency,
+    String toCurrency,
+    num transferAmount,
+    String transactionPin,
+  );
+  // //Transafer to other wallet
+  // Future<bool> transferToAnotherUser(
+  //   String accountNo,
+  //   String transferCurrency,
+  //   num transferAmount,
+  //   String transactionPin,
+  // );
+
   Future<WalletTransactions> getTransactions();
 }

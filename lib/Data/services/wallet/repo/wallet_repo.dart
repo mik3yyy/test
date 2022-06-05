@@ -37,6 +37,22 @@ class WalletRepo extends IWalletRepo {
   }
 
   @override
+  Future<bool> transferToWallet(String fromCurrency, String toCurrency,
+      num transferAmount, String transactionPin) async {
+    final res = await _walletService.transferToWallet(
+        fromCurrency, toCurrency, transferAmount, transactionPin);
+    return res;
+  }
+
+  // @override
+  // Future<bool> transferToAnotherUser(String accountNo, String transferCurrency,
+  //     num transferAmount, String transactionPin) async {
+  //   final res = await _walletService.transferToAnotherUser(
+  //       accountNo, transferCurrency, transferAmount, transactionPin);
+  //   return res;
+  // }
+
+  @override
   Future<WalletTransactions> getTransactions() async =>
       await _walletService.getTransactions();
 }

@@ -70,6 +70,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
+    final walletList = ref.watch(getAccountDetailsProvider);
 
     //TODO: To ask BE guy to return native_symbol for set wallet as default res
     final setWalletVm = ref.watch(setWalletAsDefaultProvider);
@@ -173,35 +174,51 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Space(20.w)
                     ],
                   ),
-                  setWalletVm.when(
-                      idle: () => const Text(''),
-                      loading: () {
-                        return const Padding(
-                          padding:
-                              EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                          child: SizedBox(
-                            height: 15,
-                            width: 15,
-                            child: CircularProgressIndicator.adaptive(
-                              strokeWidth: 3,
-                            ),
-                          ),
-                        );
-                      },
-                      success: (value) {
-                        return toggleAmount.state
-                            ? Text(
-                                '****',
-                                style: AppText.header1(
-                                    context, AppColors.appColor, 40.sp),
-                              )
-                            : Text(
-                                '${value!.data!.wallet!.currencyCode} ${value.data!.wallet!.balance.toString()}',
-                                style: AppText.header1(
-                                    context, AppColors.appColor, 40.sp),
-                              );
-                      },
-                      error: (e, s) => Text(e.toString())),
+                  toggleAmount.state
+                      ? Text(
+                          '****',
+                          style: AppText.header1(
+                              context, AppColors.appColor, 40.sp),
+                        )
+                      : Text(
+                          //TODO: account balance and currency clear when app restart
+                          setWalletVm.maybeWhen(
+                              success: (v) =>
+                                  '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
+                              orElse: () => ''),
+                          // '\$ 200.00',
+                          style: AppText.header1(
+                              context, AppColors.appColor, 40.sp),
+                        ),
+                  // setWalletVm.when(
+                  //     idle: () => const Text(''),
+                  //     loading: () {
+                  //       return const Padding(
+                  //         padding:
+                  //             EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                  //         child: SizedBox(
+                  //           height: 15,
+                  //           width: 15,
+                  //           child: CircularProgressIndicator.adaptive(
+                  //             strokeWidth: 3,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //     success: (value) {
+                  //       return toggleAmount.state
+                  //           ? Text(
+                  //               '****',
+                  //               style: AppText.header1(
+                  //                   context, AppColors.appColor, 40.sp),
+                  //             )
+                  //           : Text(
+                  //               '${value!.data!.wallet!.currencyCode} ${value.data!.wallet!.balance.toString()}',
+                  //               style: AppText.header1(
+                  //                   context, AppColors.appColor, 40.sp),
+                  //             );
+                  //     },
+                  //     error: (e, s) => Text(e.toString())),
                   Space(10.h),
                   Text(
                     'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user!.accountNumber!, orElse: () => '')}',
@@ -255,12 +272,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                             secondColor: AppColors.appColor,
                             onPressed: () {
                               pushNewScreen(
-                                context, screen: const Transfer(),
+                                context,
+                                screen: Transfer(
+                                  //TODO: To check if wallet has been fetched from api
+                                  wallet: walletList.maybeWhen(
+                                      success: (v) => v!.data!.wallets,
+                                      orElse: () => []),
+                                ),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
+                              ref.refresh(getAccountDetailsProvider);
                             },
                           ),
                           MenuCards(
