@@ -1,6 +1,7 @@
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 
 abstract class IWalletRepo {
   Future<CreateWalletRes> createWallet(String currency);
@@ -19,4 +20,5 @@ abstract class IWalletRepo {
     num transferAmount,
     String transactionPin,
   );
+  Future<WalletTransactions> getTransactions();
 }

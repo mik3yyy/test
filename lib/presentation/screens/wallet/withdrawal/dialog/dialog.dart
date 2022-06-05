@@ -55,4 +55,100 @@ class AppDialog {
           );
         });
   }
+
+  static void showSuccessMessageDialog(BuildContext context, String message) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(left: 25.w, right: 25.w),
+            child: CupertinoActionSheet(
+              actions: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Space(30.h),
+                      const Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: Colors.greenAccent,
+                        size: 100,
+                      ),
+                      Space(20.h),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Center(
+                          child: Text(
+                            message,
+                            style: AppText.body2(context, Colors.black, 20.sp),
+                          ),
+                        ),
+                      ),
+                      Space(40.h),
+                    ],
+                  ),
+                )
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: const Text("Close"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          );
+        });
+  }
+
+  static void showErrorMessageDialog(BuildContext context, String message) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(left: 25.w, right: 25.w),
+            child: CupertinoActionSheet(
+              actions: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Space(30.h),
+                      const Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.red,
+                        size: 100,
+                      ),
+                      Space(20.h),
+                      // Text(
+                      //   'Transfer Successful',
+                      //   style: AppText.body2(context, Colors.black, 24.sp),
+                      // ),
+
+                      Space(20.h),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: Center(
+                          child: Text(
+                            message,
+                            style: AppText.body2(context, Colors.black, 20.sp),
+                          ),
+                        ),
+                      ),
+                      Space(40.h),
+                    ],
+                  ),
+                )
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: const Text("Close"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          );
+        });
+  }
 }
