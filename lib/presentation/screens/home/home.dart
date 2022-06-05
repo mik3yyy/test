@@ -176,6 +176,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               context, AppColors.appColor, 40.sp),
                         )
                       : Text(
+                          //TODO: account balance and currency clear when app restart
                           setWalletVm.maybeWhen(
                               success: (v) =>
                                   '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
@@ -237,12 +238,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                             secondColor: AppColors.appColor,
                             onPressed: () {
                               pushNewScreen(
-                                context, screen: const Transfer(),
+                                context,
+                                screen: Transfer(
+                                  //TODO: To check if wallet has been fetched from api
+                                  wallet: walletList.maybeWhen(
+                                      success: (v) => v!.data!.wallets,
+                                      orElse: () => []),
+                                ),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
+                              ref.refresh(getAccountDetailsProvider);
                             },
                           ),
                           MenuCards(

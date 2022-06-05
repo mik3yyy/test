@@ -25,7 +25,11 @@ class WalletOptionList extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     pushNewScreen(
-                      context, screen: const Transfer(),
+                      context,
+                      screen: const Transfer(
+                        //TODO: To replace with real value
+                        wallet: [],
+                      ),
                       withNavBar: true, // OPTIONAL VALUE. True by default.
                       pageTransitionAnimation: PageTransitionAnimation.fade,
                     );
