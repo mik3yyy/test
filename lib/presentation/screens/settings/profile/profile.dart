@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
@@ -74,6 +75,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 660.h,
         child: Padding(

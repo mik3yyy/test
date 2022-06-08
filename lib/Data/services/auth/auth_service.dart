@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
@@ -6,11 +8,13 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/auth/res/failure_res.dart';
 
@@ -76,7 +80,6 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
         throw e.error;
       }
     }
@@ -95,7 +98,6 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
         throw e.error;
       }
     }
@@ -107,16 +109,15 @@ class UserService {
     String confirmPassword,
   ) async {
     const url = '/auth/create-password';
+    final pseudoToken = PreferenceManager.pseudoToken;
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(Constants.pseudoToken);
       final response = await _read(dioProvider).post(url,
           data: {
             "password": password,
             "confirm_password": confirmPassword,
           },
-          options:
-              Options(headers: {"Pseudo-Authentication": "Bearer $token"}));
+          options: Options(
+              headers: {"Pseudo-Authentication": "Bearer $pseudoToken"}));
       final result = CreatePassword.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -161,16 +162,15 @@ class UserService {
       String currency, String language, String country) async {
     const url = '/auth/set-currency';
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(Constants.pseudoToken);
+      final pseudoToken = PreferenceManager.pseudoToken;
       final response = await _read(dioProvider).post(url,
           data: {
             "currency": currency,
             "language": language,
             "country": country,
           },
-          options:
-              Options(headers: {"Pseudo-Authentication": "Bearer $token"}));
+          options: Options(
+              headers: {"Pseudo-Authentication": "Bearer $pseudoToken"}));
       final result = response.data = true;
       return result;
     } on DioError catch (e) {
@@ -194,6 +194,8 @@ class UserService {
       final response = await _read(dioProvider).post(url, data: {
         "email_phone": emailPhone,
         "password": password,
+        "timezone": "Africa/Lagos",
+        "device_id": "deviceIDSforlife"
       });
 
       final result = SigninRes.fromJson(response.data);
@@ -203,7 +205,6 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
         throw e.error;
       }
     }
@@ -258,14 +259,13 @@ class UserService {
       String transactionPin, String confirmTransactionPin) async {
     const url = '/auth/transaction-pin/set-pin';
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(Constants.token);
-      final response = await _read(dioProvider).post(url,
-          data: {
-            "pin": transactionPin,
-            "confirm_pin": confirmTransactionPin,
-          },
-          options: Options(headers: {"Authentication": "Bearer $token"}));
+      final response = await _read(dioProvider).post(
+        url,
+        data: {
+          "pin": transactionPin,
+          "confirm_pin": confirmTransactionPin,
+        },
+      );
 
       final result = response.data = true;
       return result;
@@ -283,15 +283,14 @@ class UserService {
   // referral code
   Future<bool> referralCode(String refCode) async {
     const url = '/auth/handle-referral';
+    final pseudoToken = PreferenceManager.pseudoToken;
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(Constants.pseudoToken);
       final response = await _read(dioProvider).post(url,
           data: {
             "ref_code": refCode,
           },
-          options:
-              Options(headers: {"Pseudo-Authentication": "Bearer $token"}));
+          options: Options(
+              headers: {"Pseudo-Authentication": "Bearer $pseudoToken"}));
       final result = response.data = true;
       return result;
     } on DioError catch (e) {
@@ -299,7 +298,31 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
+        throw e.error;
+      }
+    }
+  }
+
+  //Refresh Token
+
+  Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq) async {
+    const url = '/auth/refresh-tokens';
+    // final pseudoToken = PreferenceManager.pseudoToken;
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: refreshTokenReq.toJson()
+
+              // options: Options(
+              //     headers: {"Pseudo-Authentication": "Bearer $pseudoToken"})
+
+              );
+      final result = RefreshTokenRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
         throw e.error;
       }
     }

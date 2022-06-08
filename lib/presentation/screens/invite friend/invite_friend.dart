@@ -51,6 +51,7 @@ class InviteFriendScreen extends StatelessWidget {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: Container(
         padding: EdgeInsets.only(
           left: 25.w,

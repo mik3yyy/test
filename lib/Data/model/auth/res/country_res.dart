@@ -13,12 +13,12 @@ class CountryRes {
   CountryRes({
     this.message,
     this.status,
-    this.data,
+    required this.data,
   });
 
   String? message;
   String? status;
-  Data? data;
+  Data data;
 
   factory CountryRes.fromJson(Map<String, dynamic> json) => CountryRes(
         message: json["message"],
@@ -29,16 +29,16 @@ class CountryRes {
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": data!.toJson(),
+        "data": data.toJson(),
       };
 }
 
 class Data {
   Data({
-    this.countries,
+    required this.countries,
   });
 
-  List<Country>? countries;
+  List<Country> countries;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         countries: List<Country>.from(
@@ -46,7 +46,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "countries": List<dynamic>.from(countries!.map((x) => x.toJson())),
+        "countries": List<dynamic>.from(countries.map((x) => x.toJson())),
       };
 }
 
@@ -54,7 +54,10 @@ class Country {
   Country({
     this.id,
     this.name,
+    this.iso2,
     this.continent,
+    this.subRegion,
+    this.currencyCode,
     this.allowWithdrawals,
     this.createdAt,
     this.updatedAt,
@@ -62,7 +65,10 @@ class Country {
 
   int? id;
   String? name;
+  String? iso2;
   Continent? continent;
+  String? subRegion;
+  String? currencyCode;
   int? allowWithdrawals;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -70,7 +76,10 @@ class Country {
   factory Country.fromJson(Map<String, dynamic> json) => Country(
         id: json["id"],
         name: json["name"],
-        continent: continentValues.map[json["continent"]],
+        iso2: json["iso2"],
+        continent: continentValues.map![json["continent"]],
+        subRegion: json["sub_region"],
+        currencyCode: json["currency_code"],
         allowWithdrawals: json["allow_withdrawals"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -79,50 +88,36 @@ class Country {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "continent": continentValues.reverse[continent],
+        "iso2": iso2,
+        "continent": continentValues.reverse![continent],
+        "sub_region": subRegion,
+        "currency_code": currencyCode,
         "allow_withdrawals": allowWithdrawals,
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
       };
 }
 
-enum Continent {
-  // ignore: constant_identifier_names
-  ASIA,
-  // ignore: constant_identifier_names
-  EUROPE,
-  // ignore: constant_identifier_names
-  AFRICA,
-  // ignore: constant_identifier_names
-  OCEANIA,
-  // ignore: constant_identifier_names
-  NORTH_AMERICA,
-  // ignore: constant_identifier_names
-  ANTARCTICA,
-  // ignore: constant_identifier_names
-  SOUTH_AMERICA
-}
+enum Continent { asia, europe, africa, oceania, americas, polar, empty }
 
 final continentValues = EnumValues({
-  "Africa": Continent.AFRICA,
-  "Antarctica": Continent.ANTARCTICA,
-  "Asia": Continent.ASIA,
-  "Europe": Continent.EUROPE,
-  "North America": Continent.NORTH_AMERICA,
-  "Oceania": Continent.OCEANIA,
-  "South America": Continent.SOUTH_AMERICA
+  "Africa": Continent.africa,
+  "Americas": Continent.americas,
+  "Asia": Continent.asia,
+  "": Continent.empty,
+  "Europe": Continent.europe,
+  "Oceania": Continent.oceania,
+  "Polar": Continent.polar
 });
 
 class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+  Map<String, T>? map;
+  Map<T, String>? reverseMap;
 
   EnumValues(this.map);
 
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => MapEntry(v, k));
-    }
+  Map<T, String>? get reverse {
+    reverseMap ??= map!.map((k, v) => MapEntry(v, k));
     return reverseMap;
   }
 }

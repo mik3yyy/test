@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
@@ -7,7 +6,9 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/auth_service.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/i_auth_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 final authManagerProvider = Provider<AuthManager>((ref) {
   final userService = ref.watch(userServiceProvider);
@@ -35,14 +36,9 @@ class AuthManager extends IAuthManager {
   @override
   Future<VerifyRes> verifyAccount(verify) async {
     final res = await _userService.verifyAccount(verify);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final isSaved =
-        await prefs.setString(Constants.pseudoToken, res.data!.pseudoToken!);
-    if (isSaved) {
-      return res;
-    }
-    throw Exception(
-        "An Error has occured while signing you in. Please contact support");
+    PreferenceManager.pseudoToken = res.data!.pseudoToken!;
+
+    return res;
   }
 
   // resend otp
@@ -86,14 +82,11 @@ class AuthManager extends IAuthManager {
   @override
   Future<SigninRes> signIn(String emailPhone, String password) async {
     final res = await _userService.signIn(emailPhone, password);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token =
-        await prefs.setString(Constants.token, res.data!.tokens!.authToken!);
-    if (token) {
-      return res;
-    }
-    throw Exception(
-        "An Error has occured while signing you in. Please contact support");
+
+    PreferenceManager.authToken = res.data!.tokens!.authToken!;
+    PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+
+    return res;
   }
 
   // forget password
@@ -126,5 +119,12 @@ class AuthManager extends IAuthManager {
   Future<bool> referralCode(String refCode) async {
     final res = await _userService.referralCode(refCode);
     return res;
+  }
+
+  @override
+  Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq) async {
+    final refreshToken = await _userService.getAuthTOken(refreshTokenReq);
+    PreferenceManager.refreshToken = refreshToken.data!.refreshToken!;
+    return refreshToken;
   }
 }

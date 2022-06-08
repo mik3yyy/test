@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/get_refresh_token.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/settings_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/wallet_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/create_wallet.dart';
 
 class MainScreen extends StatefulWidget {
   final BuildContext menuScreenContext;
@@ -38,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
-      WalletView(
+      CreateWallet(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,
         onScreenHideButtonPressed: () {
@@ -117,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: SvgPicture.asset(
-          AppImage.more,
+          AppImage.settings,
           color: AppColors.appColor,
         ),
         inactiveIcon: SvgPicture.asset(

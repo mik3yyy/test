@@ -48,7 +48,12 @@ class WalletViewWidget extends StatelessWidget {
 class GenericWidget extends StatelessWidget {
   final Widget appbar;
   final Widget child;
-  const GenericWidget({Key? key, required this.appbar, required this.child})
+  final Color bgColor;
+  const GenericWidget(
+      {Key? key,
+      required this.appbar,
+      required this.child,
+      required this.bgColor})
       : super(key: key);
 
   @override
@@ -71,65 +76,14 @@ class GenericWidget extends StatelessWidget {
                     alignment: FractionalOffset.bottomCenter,
                     child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.whiteColor,
+                          color: bgColor,
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(45.r)),
                         ),
                         // height: 600,
                         width: double.maxFinite,
-                        child: child)
-
-                    //   Column(
-                    //     children: [
-                    //       Text(
-                    //         'Enter fund amount',
-                    //         style:
-                    //             AppText.body2(context, AppColors.appColor, 19.sp),
-                    //       ),
-                    //       Space(5.h),
-                    //       const WalletTextField(
-                    //         keyboardType: TextInputType.number,
-                    //         labelText: 'Click to type',
-                    //         obscureText: false,
-                    //         color: Colors.white,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    ),
+                        child: child)),
               )
-              // Expanded(
-              //   child: Align(
-              //       alignment: FractionalOffset.bottomCenter,
-              //       child: Container(
-              //           decoration: BoxDecoration(
-              //             color: AppColors.whiteColor,
-              //             borderRadius:
-              //                 BorderRadius.vertical(top: Radius.circular(45.r)),
-              //           ),
-              //           // height: 600,
-              //           width: double.maxFinite,
-              //           child: child)
-
-              //       //   Column(
-              //       //     children: [
-              //       //       Text(
-              //       //         'Enter fund amount',
-              //       //         style:
-              //       //             AppText.body2(context, AppColors.appColor, 19.sp),
-              //       //       ),
-              //       //       Space(5.h),
-              //       //       const WalletTextField(
-              //       //         keyboardType: TextInputType.number,
-              //       //         labelText: 'Click to type',
-              //       //         obscureText: false,
-              //       //         color: Colors.white,
-              //       //       ),
-              //       //     ],
-              //       //   ),
-              //       // ),
-              //       ),
-              // )
             ],
           ),
         ),

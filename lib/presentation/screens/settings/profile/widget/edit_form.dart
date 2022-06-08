@@ -15,7 +15,9 @@ class EditForm extends StatelessWidget {
       this.prefixIcon,
       // this.textAlign,
       this.enabled,
-      this.keyboardType})
+      this.keyboardType,
+      this.onEditingComplete,
+      this.onChanged})
       : super(key: key);
 
   final String? labelText;
@@ -28,6 +30,8 @@ class EditForm extends StatelessWidget {
   final TextEditingController controller;
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?) validator;
+  final void Function()? onEditingComplete;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,8 @@ class EditForm extends StatelessWidget {
         obscureText: obscureText,
         textInputAction: TextInputAction.next,
         keyboardType: keyboardType,
-        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+        onEditingComplete: onEditingComplete,
+        onChanged: onChanged,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,

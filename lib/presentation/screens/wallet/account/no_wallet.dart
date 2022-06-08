@@ -1,34 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:flutter_svg/svg.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/view_all_wallets.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/view_all_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../components/app image/app_image.dart';
-import '../../components/app text theme/app_text_theme.dart';
-import '../../components/reusable_widget.dart/custom_button.dart';
+class NoWalletWidget extends StatelessWidget {
+  const NoWalletWidget({
+    Key? key,
+  }) : super(key: key);
 
-class WalletView extends StatefulWidget {
-  final BuildContext menuScreenContext;
-  final Function onScreenHideButtonPressed;
-  final bool hideStatus;
-  const WalletView(
-      {Key? key,
-      required this.menuScreenContext,
-      required this.onScreenHideButtonPressed,
-      required this.hideStatus})
-      : super(key: key);
-
-  @override
-  State<WalletView> createState() => _WalletViewState();
-}
-
-class _WalletViewState extends State<WalletView> {
   @override
   Widget build(BuildContext context) {
     return GenericWidget(
@@ -73,6 +59,7 @@ class _WalletViewState extends State<WalletView> {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 700.h,
         child: Column(
@@ -99,22 +86,22 @@ class _WalletViewState extends State<WalletView> {
               'You have no wallets',
               style: AppText.header2(context, AppColors.appColor, 25.sp),
             ),
-            Space(15.h),
+            Space(5.h),
             Text(
               'Credit your account to get started',
               style: AppText.header2(
                   context, AppColors.appColor.withOpacity(0.3), 20.sp),
             ),
-            Space(55.h),
+            Space(135.h),
             CustomButton(
-                buttonText: 'Add Funds',
+                buttonText: 'Create Wallet',
                 bgColor: AppColors.appColor,
                 borderColor: AppColors.appColor,
                 textColor: Colors.white,
                 onPressed: () {
                   pushNewScreen(
                     context,
-                    screen: const ViewAllWallet(),
+                    screen: const SelectWalletToCreate(),
                     withNavBar: true, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.fade,
                   );

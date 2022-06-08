@@ -96,6 +96,7 @@ class FaqScreen extends StatelessWidget {
           ],
         ),
       ),
+      bgColor: AppColors.whiteColor,
       child: Padding(
         padding: EdgeInsets.only(
           left: 25.w,

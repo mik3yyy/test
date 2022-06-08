@@ -30,6 +30,7 @@ class CurrencyScreen extends HookConsumerWidget {
     final currencyController = useTextEditingController();
     final countryController = useTextEditingController();
     final languageController = useTextEditingController();
+
     ref.listen<RequestState>(setCurrencyProvider, (T, value) {
       if (value is Success) {
         context.navigate(ReferralCodeScreen());
@@ -73,7 +74,10 @@ class CurrencyScreen extends HookConsumerWidget {
                     // country
                     InkWell(
                       onTap: () {
-                        countryBuild(context, countryController);
+                        countryBuild(
+                          context,
+                          countryController,
+                        );
                       },
                       child: TextFormInput(
                         enabled: false,

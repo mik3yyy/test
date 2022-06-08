@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
@@ -97,16 +98,94 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                 ),
               ],
             ),
-          ),
-          child: SizedBox(
-            height: 650.h,
-            child: Padding(
-              padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics()),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+
+
+            CircleAvatar(
+              radius: 50.0.r,
+              backgroundImage: const AssetImage(
+                AppImage.image1,
+              ),
+            ),
+            Space(20.h),
+            Text(
+              'Dave Willow',
+              style: AppText.body2(context, Colors.white, 25.sp),
+            ),
+          ],
+        ),
+      ),
+      bgColor: AppColors.whiteColor,
+      child: SizedBox(
+        height: 650.h,
+        child: Padding(
+          padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics()),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const PersonalInfoCard(
+                  color: Colors.black,
+                  title: 'First Name',
+                  subTitle: 'First Name',
+                ),
+                Space(7.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                const PersonalInfoCard(
+                  color: Colors.black,
+                  title: 'Last Name',
+                  subTitle: 'Last Name',
+                ),
+                Space(7.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                const PersonalInfoCard(
+                  color: Colors.black,
+                  title: 'Email',
+                  subTitle: 'Email',
+                ),
+                Space(7.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                const PersonalInfoCard(
+                  color: Colors.black,
+                  title: 'Phone Number',
+                  subTitle: 'Phone Number',
+                ),
+                Space(7.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+                Space(30.h),
+                const PersonalInfoCard(
+                  color: Colors.black,
+                  title: 'Date of Birth',
+                  subTitle: 'Date of Birth',
+                ),
+                Space(7.h),
+                const Divider(
+                  color: Colors.black,
+                  thickness: 0.4,
+                ),
+
+                ///
+                ///
+                ///
+                ///
+                Row(
+
                   children: [
                     PersonalInfoCard(
                       color: Colors.black,

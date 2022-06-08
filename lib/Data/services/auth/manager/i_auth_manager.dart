@@ -3,6 +3,8 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dar
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 
 import '../../../model/auth/res/signin_res.dart';
 
@@ -30,4 +32,5 @@ abstract class IAuthManager {
   Future<bool> transactionPin(
       String transactionPin, String confirmTransactionPin);
   Future<bool> referralCode(String refCode);
+  Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq);
 }
