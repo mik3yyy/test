@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class OnBoardingScreen extends StatefulWidget {

@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/upload_id.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -24,6 +25,8 @@ class MyProfile extends StatefulHookConsumerWidget {
 class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
+    final vm = ref.watch(getProfileProvider);
+
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
@@ -51,17 +54,30 @@ class _MyProfileState extends ConsumerState<MyProfile> {
               ),
             ),
             Space(20.h),
-            Text(
-              'Dave Willow',
-              style: AppText.body2(context, Colors.white, 25.sp),
-            ),
+            vm.when(error: (Object error, StackTrace stackTrace) {
+              return Center(
+                child: Text(error.toString()),
+              );
+            }, loading: () {
+              return const CircularProgressIndicator();
+            }, idle: () {
+              return const CircularProgressIndicator();
+            }, success: (value) {
+              final firstName = value!.data!.user!.firstName!.split(" ")[0];
+              final secondName = value.data!.user!.lastName!.split(" ")[0];
+
+              return Text(
+                firstName.inCaps + " " + secondName.inCaps,
+                style: AppText.body2(context, Colors.white, 25.sp),
+              );
+            })
             // const WalletOptionList()
           ],
         ),
       ),
       bgColor: AppColors.whiteColor,
       child: SizedBox(
-        height: 630.h,
+        height: 660.h,
         child: Padding(
           padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
           child: SingleChildScrollView(
