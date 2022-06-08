@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
@@ -12,6 +13,11 @@ import '../../../../Data/model/profile/res/profile_res.dart';
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/personal_info.dart';
+
+enum Gender {
+  male,
+  female,
+}
 
 extension CapExtension on String {
   String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
@@ -27,7 +33,8 @@ class PersonalInfo extends StatefulHookConsumerWidget {
 class _PersonalInfoState extends ConsumerState<PersonalInfo> {
   final List<String> _gender = ['male', 'female'];
 
-  String val = 'Male';
+  String val = 'male';
+  Gender gender = Gender.female;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +59,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
       success: (ProfileRes? value) {
         final firstName = value!.data!.user!.firstName!.split(" ")[0];
         final secondName = value.data!.user!.lastName!.split(" ")[0];
+
+        String date = value.data!.user!.dateOfBirth;
+        String dob = DateFormat('dd-MM-yyyy').format(DateTime.tryParse(date)!);
 
         return GenericWidget(
           appbar: Padding(
@@ -98,94 +108,17 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                 ),
               ],
             ),
-
-
-            CircleAvatar(
-              radius: 50.0.r,
-              backgroundImage: const AssetImage(
-                AppImage.image1,
-              ),
-            ),
-            Space(20.h),
-            Text(
-              'Dave Willow',
-              style: AppText.body2(context, Colors.white, 25.sp),
-            ),
-          ],
-        ),
-      ),
-      bgColor: AppColors.whiteColor,
-      child: SizedBox(
-        height: 650.h,
-        child: Padding(
-          padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics()),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const PersonalInfoCard(
-                  color: Colors.black,
-                  title: 'First Name',
-                  subTitle: 'First Name',
-                ),
-                Space(7.h),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.4,
-                ),
-                Space(30.h),
-                const PersonalInfoCard(
-                  color: Colors.black,
-                  title: 'Last Name',
-                  subTitle: 'Last Name',
-                ),
-                Space(7.h),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.4,
-                ),
-                Space(30.h),
-                const PersonalInfoCard(
-                  color: Colors.black,
-                  title: 'Email',
-                  subTitle: 'Email',
-                ),
-                Space(7.h),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.4,
-                ),
-                Space(30.h),
-                const PersonalInfoCard(
-                  color: Colors.black,
-                  title: 'Phone Number',
-                  subTitle: 'Phone Number',
-                ),
-                Space(7.h),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.4,
-                ),
-                Space(30.h),
-                const PersonalInfoCard(
-                  color: Colors.black,
-                  title: 'Date of Birth',
-                  subTitle: 'Date of Birth',
-                ),
-                Space(7.h),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.4,
-                ),
-
-                ///
-                ///
-                ///
-                ///
-                Row(
-
+          ),
+          bgColor: AppColors.whiteColor,
+          child: SizedBox(
+            height: 650.h,
+            child: Padding(
+              padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics()),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PersonalInfoCard(
                       color: Colors.black,
@@ -240,12 +173,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ),
                     Space(30.h),
                     PersonalInfoCard(
-                      color: Colors.black,
-                      title: 'Date of Birth',
-                      subTitle: value.data!.user!.dateOfBirth == null
-                          ? "Unavailable"
-                          : value.data!.user!.dateOfBirth.toString(),
-                    ),
+                        color: Colors.black,
+                        title: 'Date of Birth',
+                        subTitle: dob),
                     Space(7.h),
                     const Divider(
                       color: Colors.black,
@@ -256,6 +186,8 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ///
                     ///
                     ///
+                    ///
+
                     Row(
                       children: [
                         Text(
@@ -276,7 +208,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                                     children: [
                                       Space(15.w),
                                       Radio<String>(
-                                        value: value.data!.user!.gender ?? sex,
+                                        value: value.data!.user!.gender,
                                         groupValue: sex,
                                         onChanged: (value) {
                                           // setState(() {
@@ -285,7 +217,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                                         },
                                       ),
                                       Text(
-                                        value.data!.user!.gender ?? sex,
+                                        sex,
                                         style: AppText.body2(
                                             context, Colors.black, 19.sp),
                                       ),
