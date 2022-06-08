@@ -203,7 +203,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                                       .read(createAccountProvider.notifier)
                                       .createAccount(
                                         fistNameController.text,
-                                        fistNameController.text,
+                                        lastNameController.text,
                                         emailPhoneController.text,
                                       );
                                 }
