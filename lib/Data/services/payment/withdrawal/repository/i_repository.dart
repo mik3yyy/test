@@ -1,5 +1,7 @@
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Aba/aba_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_beneficiaries.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/iban/iban_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
@@ -15,4 +17,9 @@ abstract class IRepository {
   Future<WithdrawRes> abaWithdrawal(AbaReq abaReq);
   Future<WithdrawRes> ibanWithdrawal(IbanReq ibanReq);
   Future<WithdrawRes> sepaWithdrawal(SepaReq sepaReq);
+
+  /// Beneficiaries
+  Future<BeneficiaryAccount> nubanBeneficiary();
+  Future<BeneficiaryAccount> abaBeneficiary();
+  Future<BeneficiaryAccount> ibanBeneficiary();
 }

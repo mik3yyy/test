@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Aba/aba_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_beneficiaries.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/iban/iban_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
@@ -50,4 +53,16 @@ class WithdrawalManager extends IRepository {
   @override
   Future<WithdrawRes> sepaWithdrawal(SepaReq sepaReq) async =>
       await withdrawalService.sepaWithdrawal(sepaReq);
+
+  @override
+  Future<BeneficiaryAccount> nubanBeneficiary() async =>
+      await withdrawalService.nubanBeneficiary();
+
+  @override
+  Future<BeneficiaryAccount> abaBeneficiary() async =>
+      await withdrawalService.abaBeneficiary();
+
+  @override
+  Future<BeneficiaryAccount> ibanBeneficiary() async =>
+      await withdrawalService.ibanBeneficiary();
 }

@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/transaction_information_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/upload_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
@@ -90,9 +91,9 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   subTitle: 'See and edit your personal information',
                   image: AppImage.profile,
                   onPressed: () {
-                    pushNewScreen(context,
-                        screen: const PersonalInfo(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade);
+                    // pushNewScreen(context,
+                    //     screen: const PersonalInfo(),
+                    //     pageTransitionAnimation: PageTransitionAnimation.fade);
                   },
                 ),
                 Space(10.h),
@@ -123,7 +124,13 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   title: 'Transaction information',
                   subTitle: 'Edit your saved bank /card details Security',
                   image: AppImage.transactionInfo,
-                  onPressed: () {},
+                  onPressed: () {
+                    pushNewScreen(
+                      context,
+                      screen: const TransactionInformationScreen(),
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
                 ),
                 Space(10.h),
                 const Divider(

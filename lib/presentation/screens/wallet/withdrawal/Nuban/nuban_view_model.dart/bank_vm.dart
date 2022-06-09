@@ -3,8 +3,7 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repository/withdrawal_manager.dart';
 
-final getBankProvider =
-    StateNotifierProvider.autoDispose<GetBankVM, RequestState<BankRes>>(
+final getBankProvider = StateNotifierProvider<GetBankVM, RequestState<BankRes>>(
   (ref) => GetBankVM(ref),
 );
 

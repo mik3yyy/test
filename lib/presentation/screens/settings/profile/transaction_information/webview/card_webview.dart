@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class CardWebView extends StatefulHookConsumerWidget {
+  final String url;
+
+  const CardWebView({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _CardWebViewState();
+}
+
+class _CardWebViewState extends ConsumerState<CardWebView> {
+  @override
+  void initState() {
+    // if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        leading: GestureDetector(
+          child: const Icon(Icons.arrow_back_ios),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: WebView(
+        initialUrl: widget.url,
+        javascriptMode: JavascriptMode.unrestricted,
+        debuggingEnabled: true,
+        userAgent: 'Flutter;Webview',
+        navigationDelegate: (navigation) {
+          if (navigation.url.contains('embed_token')) {
+            final index = navigation.url.toString().lastIndexOf('=');
+            final reference = navigation.url.toString().substring(index + 1);
+            Navigator.pop(context);
+            AppDialog.showSuccessMessageDialog(context, "Card Added");
+            //Veriy Payment Endpoint Function
+            // ref
+            //     .read(verifySubscriptionPaymentProvider.notifier)
+            //     .verifySubscriptionPayment(reference);
+            // verifyTransaction(reference);
+
+          }
+
+          return NavigationDecision.navigate;
+        },
+      ),
+    );
+  }
+}

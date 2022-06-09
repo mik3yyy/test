@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,6 +11,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nub
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repository/withdrawal_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -22,6 +26,8 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nub
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_country.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/widget/currency.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdraw.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -46,11 +52,13 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   Widget build(BuildContext context) {
     final accountName = ref.watch(getBankDetailsProvider);
     final nuban = ref.watch(nubanWithdrawalProvider);
+    final savedBeneficiary = ref.watch(withdrawalController);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     // final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final descriptionController = useTextEditingController();
-    final bankAccountController = useTextEditingController();
+    final bankAccountController = useTextEditingController(
+        text: savedBeneficiary.passBeneficiary.accountNumber);
     final currencyController = useTextEditingController();
     final bankController = useTextEditingController();
     final bankCodeController = useTextEditingController();
@@ -58,7 +66,8 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     final errorState = useState("");
     final amount = useState(0);
     final enteredAmount = useState(false);
-    final recipientAccountName = useState("");
+    final recipientAccountName =
+        useState(savedBeneficiary.passBeneficiary.accountName);
 
     ref.listen<RequestState>(nubanWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
@@ -283,40 +292,51 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         },
                       ),
                       Space(10.h),
+                      savedBeneficiary.passBeneficiary.accountName.isEmpty
+                          ? accountName.when(error: (error, stackTrace) {
+                              return Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  errorState.value.length < 10
+                                      ? ""
+                                      : error.toString(),
+                                  style:
+                                      AppText.body2(context, Colors.red, 18.sp),
+                                ),
+                              );
+                            }, loading: () {
+                              return Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  '...',
+                                  style: AppText.body2(
+                                      context, Colors.black, 18.sp),
+                                ),
+                              );
+                            }, idle: () {
+                              return const SizedBox.shrink();
+                            }, success: (data) {
+                              recipientAccountName.value =
+                                  data!.data.accountName.toString();
 
-                      accountName.when(error: (error, stackTrace) {
-                        return Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            errorState.value.length < 10
-                                ? ""
-                                : error.toString(),
-                            style: AppText.body2(context, Colors.red, 18.sp),
-                          ),
-                        );
-                      }, loading: () {
-                        return Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            '...',
-                            style: AppText.body2(context, Colors.black, 18.sp),
-                          ),
-                        );
-                      }, idle: () {
-                        return const SizedBox.shrink();
-                      }, success: (data) {
-                        recipientAccountName.value =
-                            data!.data.accountName.toString();
-
-                        return Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            data.data.accountName.toString(),
-                            style: AppText.body2(
-                                context, Colors.greenAccent, 18.sp),
-                          ),
-                        );
-                      }),
+                              return Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  data.data.accountName.toString(),
+                                  style: AppText.body2(
+                                      context, Colors.greenAccent, 18.sp),
+                                ),
+                              );
+                            })
+                          : Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                savedBeneficiary.passBeneficiary.accountName
+                                    .toString(),
+                                style: AppText.body2(
+                                    context, Colors.greenAccent, 18.sp),
+                              ),
+                            ),
 
                       Space(20.h),
 
@@ -444,10 +464,13 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           buttonWidth: MediaQuery.of(context).size.width),
                       Space(7.h),
                       Center(
-                        child: Text(
-                          'Cancel',
-                          style: AppText.header3(
-                              context, AppColors.appColor, 20.sp),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Text(
+                            'Cancel',
+                            style: AppText.header3(
+                                context, AppColors.appColor, 20.sp),
+                          ),
                         ),
                       ),
                     ],
