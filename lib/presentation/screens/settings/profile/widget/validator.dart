@@ -77,6 +77,13 @@ String? validateAmount(String? value) {
   return null;
 }
 
+String? validateCardName(String? value) {
+  if (value!.isEmpty) {
+    return 'card holder name is required';
+  }
+  return null;
+}
+
 String? wallet(String? value) {
   if (value!.isEmpty) {
     return 'Please select a wallet';
@@ -150,6 +157,43 @@ String? validatePin(String? value) {
   }
   if (value.isEmpty) {
     return 'Invalid password';
+  }
+  return null;
+}
+
+String? validateCardNumber(String? value) {
+  if (value!.isEmpty) {
+    return ' Add card number';
+  }
+  if (value.length < 16) {
+    return 'card number is incomplete';
+  }
+  return null;
+}
+
+String? validateCCV(String? value) {
+  if (value!.isEmpty) {
+    return 'Add ccv';
+  }
+  if (value.length > 3 || value.length < 3) {
+    return 'Enter ccv';
+  }
+  return null;
+}
+
+String? validateExpiryDate(String? value) {
+  if (value!.isEmpty) {
+    return 'add expiry date';
+  }
+
+  final DateTime now = DateTime.now();
+  final List<String> date = value.split(RegExp(r'/'));
+  final int month = int.parse(date.first);
+  final int year = int.parse('20${date.last}');
+  final DateTime cardDate = DateTime(year, month);
+
+  if (cardDate.isBefore(now) || month > 12 || month == 0) {
+    // return widget.dateValidationMessage;
   }
   return null;
 }

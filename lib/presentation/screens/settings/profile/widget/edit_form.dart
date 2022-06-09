@@ -13,6 +13,7 @@ class EditForm extends StatelessWidget {
       required this.obscureText,
       this.suffixIcon,
       this.prefixIcon,
+      this.focusNode,
       // this.textAlign,
       this.enabled,
       this.keyboardType,
@@ -31,6 +32,7 @@ class EditForm extends StatelessWidget {
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?) validator;
   final void Function()? onEditingComplete;
+  final FocusNode? focusNode;
   final void Function(String)? onChanged;
 
   @override
@@ -42,6 +44,7 @@ class EditForm extends StatelessWidget {
         cursorColor: Colors.blue,
         autovalidateMode: autovalidateMode,
         obscureText: obscureText,
+        focusNode: focusNode,
         textInputAction: TextInputAction.next,
         keyboardType: keyboardType,
         onEditingComplete: onEditingComplete,
@@ -51,7 +54,7 @@ class EditForm extends StatelessWidget {
           prefixIcon: prefixIcon,
 
           errorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: Colors.red),
           ),
           focusedErrorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),

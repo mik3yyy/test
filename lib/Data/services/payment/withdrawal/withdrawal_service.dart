@@ -3,6 +3,7 @@ import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Aba/aba_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/iban/iban_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
@@ -75,7 +76,11 @@ class WithdrawalService {
     }
   }
 
-  Future<WithdrawRes> nubanWithdrawal(NubanReq nubanReq) async {
+  ///NUBAN WITHDRAWAL
+
+  Future<WithdrawRes> nubanWithdrawal(
+    NubanReq nubanReq,
+  ) async {
     const url = '/payments/withdrawals/nuban/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
     try {
@@ -84,7 +89,31 @@ class WithdrawalService {
         data: nubanReq.toJson(),
         // options: Options(headers: {"Authentication": "Bearer $token"})
       );
+
       final result = WithdrawRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  /// NUBAN BENEFICIARY
+
+  Future<BeneficiaryAccount> nubanBeneficiary() async {
+    const url = '/payments/withdrawals/nuban/beneficiary-accounts';
+    // final token = PreferenceManager.authToken;
+    try {
+      final response = await _read(dioProvider).get(
+        url,
+        // options: Options(headers: {"Authentication": "Bearer $token"})
+      );
+
+      final result = BeneficiaryAccount.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
@@ -117,6 +146,29 @@ class WithdrawalService {
     }
   }
 
+  /// ABA BENEFICIARY
+
+  Future<BeneficiaryAccount> abaBeneficiary() async {
+    const url = '/payments/withdrawals/aba/beneficiary-accounts';
+    // final token = PreferenceManager.authToken;
+    try {
+      final response = await _read(dioProvider).get(
+        url,
+        // options: Options(headers: {"Authentication": "Bearer $token"})
+      );
+
+      final result = BeneficiaryAccount.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
   Future<WithdrawRes> ibanWithdrawal(IbanReq ibanReq) async {
     const url = '/payments/withdrawals/iban/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
@@ -127,6 +179,29 @@ class WithdrawalService {
         // options: Options(headers: {"Authentication": "Bearer $token"})
       );
       final result = WithdrawRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  /// SEPA BENEFICIARY
+
+  Future<BeneficiaryAccount> ibanBeneficiary() async {
+    const url = '/payments/withdrawals/iban/beneficiary-accounts';
+    // final token = PreferenceManager.authToken;
+    try {
+      final response = await _read(dioProvider).get(
+        url,
+        // options: Options(headers: {"Authentication": "Bearer $token"})
+      );
+
+      final result = BeneficiaryAccount.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
