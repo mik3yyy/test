@@ -161,6 +161,9 @@ String? validatePin(String? value) {
   return null;
 }
 
+String? validateCurrency(String? value) {
+  if (value!.isEmpty) {
+    return 'Please select a currency';
 String? validateCardNumber(String? value) {
   if (value!.isEmpty) {
     return ' Add card number';

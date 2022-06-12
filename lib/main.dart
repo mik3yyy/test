@@ -21,6 +21,7 @@ import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'presentation/screens/home/widgets/main_screen.dart';
 import 'presentation/screens/prop/chat_setting_screen.dart';
 import 'presentation/screens/prop/contact_list_prop_screen.dart';
+import 'presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

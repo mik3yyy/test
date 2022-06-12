@@ -69,6 +69,7 @@ class AppImage {
   static const confetti = "images/confetti.svg";
   static const inviteFriend = "images/invite_friend_illustration.svg";
   static const inviteFriendImg = "images/invite_friend_img.png";
+  static const debitCardIcon = "images/debit_card.png";
   static const transferIcon = "images/new_transfer.svg";
   static const withdrawIcon = "images/new_withdraw.svg";
 }

@@ -138,4 +138,22 @@ class AppText {
       fontWeight: FontWeight.bold,
     ));
   }
+
+  //TextSTyle for contact name text
+  static TextStyle body6(BuildContext context, Color color, double size) {
+    return GoogleFonts.roboto(
+        textStyle: TextStyle(
+      color: color,
+      fontSize: size,
+      fontWeight: FontWeight.w500,
+    ));
+  }
+  // //TextSTyle for contact name text
+  // static TextStyle body5(BuildContext context, Color color) {
+  //   return Theme.of(context).textTheme.labelSmall!.copyWith(
+  //       fontSize: 14.sp,
+  //       fontWeight: FontWeight.w900,
+  //       fontFamily: 'Roboto',
+  //       color: color);
+  // }
 }
