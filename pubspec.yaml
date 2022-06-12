@@ -31,6 +31,7 @@ dependencies:
   carousel_slider: ^4.0.0
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
+  flutter_cupertino_datetime_picker: ^2.0.1
   dio: ^4.0.0
   dotted_border: ^2.0.0+2
   flutter:
@@ -55,6 +56,7 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   shared_preferences: ^2.0.7
   url_launcher: ^6.0.20
+  webview_flutter: ^2.1.2
 
  
   
@@ -67,6 +69,7 @@ dependencies:
  
   
   date_time_picker: ^2.1.0
+  equatable: ^2.0.3
 
 
 

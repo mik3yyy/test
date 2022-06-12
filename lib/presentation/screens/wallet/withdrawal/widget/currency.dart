@@ -240,7 +240,6 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
           },
           child: EditForm(
               enabled: false,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               labelText: widget.text,
 
               // textAlign: TextAlign.start,

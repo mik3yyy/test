@@ -46,7 +46,7 @@ class AppImage {
   static const messageMenuIcon = "images/message_menu_icon.png";
   static const debitCard = "images/debitCard.svg";
   static const message = "images/messages.svg";
-  static const profile = "images/Profile.svg";
+  static const profile = "images/profile.svg";
   static const referFriend = "images/refer-friend.svg";
   static const safePay = "images/safe_pay.svg";
   static const investIcon = "images/invest_icon.svg";
@@ -56,7 +56,7 @@ class AppImage {
   static const prop = "images/Chat.svg";
   static const deactivate = "images/deactivate.svg";
   static const logout = "images/Logout.svg";
-  static const notification = "images/Notification.svg";
+  static const notification = "images/notification.svg";
   static const security = "images/Security.svg";
   static const transactionInfo = "images/transaction-info.svg";
   static const unlock = "images/Unlock.svg";

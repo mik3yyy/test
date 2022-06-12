@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/dialogs/wallet_dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
 
 class ToWallet extends StatefulHookConsumerWidget {
-  const ToWallet({Key? key}) : super(key: key);
+  final List<Wallet>? wallet;
+  const ToWallet({required this.wallet, Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ToWalletState();
@@ -23,182 +31,274 @@ class ToWallet extends StatefulHookConsumerWidget {
 
 class _ToWalletState extends ConsumerState<ToWallet> {
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+  final formKey = GlobalKey<FormState>();
 
   final List<Map<String, dynamic>> _items = [
     {
-      'value': '€ Euro',
+      'value': 'EUR',
       'label': '€ Euro',
       // 'icon': Icon(Icons.stop),
     },
     {
-      'value': '£ Pounds',
+      'value': 'GBP',
       'label': '£ Pounds',
       // 'icon': Icon(Icons.fiber_manual_record),
       // 'textStyle': TextStyle(color: Colors.red),
     },
     {
-      'value': 'NGN Naira',
+      'value': 'NGN',
       'label': 'NGN Naira',
       // 'enable': false,
       // 'icon': Icon(Icons.grade),
     },
+    // {
+    //   'value': '€ Euro',
+    //   'label': '€ Euro',
+    //   // 'icon': Icon(Icons.stop),
+    // },
+    // {
+    //   'value': '£ Pounds',
+    //   'label': '£ Pounds',
+    //   // 'icon': Icon(Icons.fiber_manual_record),
+    //   // 'textStyle': TextStyle(color: Colors.red),
+    // },
+    // {
+    //   'value': 'NGN Naira',
+    //   'label': 'NGN Naira',
+    //   // 'enable': false,
+    //   // 'icon': Icon(Icons.grade),
+    // },
   ];
   String? selectedItem = 'Euro';
   @override
   Widget build(BuildContext context) {
+    //TODO: to refresh accoun details
+    // ref.refresh(getAccountDetailsProvider);
+    final userWallet =
+        widget.wallet!.where((element) => element.isDefault == 1).toList();
+    final vm = ref.watch(transferToWalletProvider);
     final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
-    final fistNameController = useTextEditingController();
-    return Padding(
-      padding: EdgeInsets.only(left: 30.w, right: 30.w),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                'Transfer from dollar wallet to other wallets',
-                style: AppText.body2(context, Colors.black, 19.sp),
-              ),
-            ),
-            Space(25.h),
-            Text(
-              'Enter amount',
-              style: AppText.body2(context, AppColors.appColor, 19.sp),
-            ),
-            Space(5.h),
-            const WalletTextField(
-              labelText: 'Click to type',
-              obscureText: false,
-              color: Colors.white,
-            ),
-            Space(25.h),
-            Text(
-              'Select wallet account currency',
-              style: AppText.body2(context, AppColors.appColor, 19.sp),
-            ),
-            Space(5.h),
-            SelectFormField(
-              type: SelectFormFieldType.dropdown, // or can be dialog
-              // initialValue: selectedItem,
+    // final fistNameController = useTextEditingController();
+    final amountController = useTextEditingController();
+    final toCurrencyController = useTextEditingController();
+    final transactionPinController = useTextEditingController();
 
-              style: AppText.body2(context, Colors.black, 19.sp),
-              decoration: InputDecoration(
-                hintText: 'Select currency',
-                hintStyle: AppText.body2(context, Colors.grey[400]!, 19.sp),
-                // floatingLabelBehavior: FloatingLabelBehavior.never,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.appColor),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: AppColors.appColor, width: 1),
-                  borderRadius: BorderRadius.circular(6.r),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2),
-                  borderRadius: BorderRadius.circular(6.r),
-                ),
-                suffixIcon: const Icon(
-                  Icons.arrow_drop_down_outlined,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-              items: _items,
-              onChanged: (val) => print(val),
-              onSaved: (val) => print(val),
-            ),
-            Space(35.h),
-            Container(
-              height: 80.h,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.appColor.withOpacity(0.05),
-              child: Row(
-                children: [
-                  Space(20.w),
-                  const Icon(
-                    Icons.security,
-                    size: 30,
+    ref.listen<RequestState>(transferToWalletProvider, (T, value) {
+      if (value is Success) {
+        //Refreshing user account details, so the new balance can reflect on the screen
+        // ref.refresh(getAccountDetailsProvider);
+         context.loaderOverlay.hide();
+        return AppSnackBar.showSuccessSnackBar(context,
+            message: 'Transfer Succesfully');
+      }
+      if (value is Error) {
+        context.loaderOverlay.hide();
+        return AppSnackBar.showErrorSnackBar(context,
+            message: value.error.toString());
+      }
+    });
+
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitWave(
+          color: AppColors.appColor,
+          size: 50.0,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 30.w, right: 30.w),
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    'Transfer from ${userWallet[0].currency!.name} wallet to other wallets',
+                    style: AppText.body2(context, Colors.black, 19.sp),
                   ),
-                  Space(15.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                Space(25.h),
+                Text(
+                  'Enter amount',
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                ),
+                Space(5.h),
+                WalletTextField(
+                  labelText: 'Click to type',
+                  obscureText: false,
+                  color: Colors.white,
+                  controller: amountController,
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Please entre amount';
+                    }
+                    return null;
+                  },
+                ),
+                Space(25.h),
+                Text(
+                  'Select wallet account currency',
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
+                ),
+                Space(5.h),
+                SelectFormField(
+                  type: SelectFormFieldType.dropdown, // or can be dialog
+                  // initialValue: selectedItem,
+                  controller: toCurrencyController,
+                  style: AppText.body2(context, Colors.black, 19.sp),
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Please select a currency you want to transfer to';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Select currency',
+                    hintStyle: AppText.body2(context, Colors.grey[400]!, 19.sp),
+                    // floatingLabelBehavior: FloatingLabelBehavior.never,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.appColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: AppColors.appColor, width: 1),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.arrow_drop_down_outlined,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  items: _items,
+                  onChanged: (val) => print(val),
+                  onSaved: (val) => print(val),
+                ),
+                Space(35.h),
+                Container(
+                  height: 80.h,
+                  width: MediaQuery.of(context).size.width,
+                  color: AppColors.appColor.withOpacity(0.05),
+                  child: Row(
                     children: [
-                      Text(
-                        'For security reasons',
-                        style: AppText.header2(context, Colors.black, 20.sp),
+                      Space(20.w),
+                      const Icon(
+                        Icons.security,
+                        size: 30,
                       ),
-                      const Space(2),
-                      Text(
-                        'Enter transaction PIN',
-                        style: AppText.body2Bold(context, Colors.black, 23.sp),
+                      Space(15.w),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'For security reasons',
+                            style:
+                                AppText.header2(context, Colors.black, 20.sp),
+                          ),
+                          const Space(2),
+                          Text(
+                            'Enter transaction PIN',
+                            style:
+                                AppText.body2Bold(context, Colors.black, 23.sp),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            Space(20.h),
-            EditForm(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              labelText: 'Enter Transaction Pin',
-              keyboardType: TextInputType.text,
-              // textAlign: TextAlign.start,
-              controller: fistNameController,
-              obscureText: transactionPinToggle.state,
-              validator: (value) => validatePassword(value),
-              suffixIcon: SizedBox(
-                width: 55.w,
-                child: GestureDetector(
-                  onTap: () {
-                    transactionPinToggle.state = !transactionPinToggle.state;
+                ),
+                Space(20.h),
+                EditForm(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  labelText: 'Enter Transaction Pin',
+                  keyboardType: TextInputType.text,
+                  // textAlign: TextAlign.start,
+                  controller: transactionPinController,
+                  obscureText: transactionPinToggle.state,
+                  // validator: (value) => validatePassword(value),
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return 'Transaction pin is required';
+                    }
+                    return null;
                   },
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 0.h),
-                    child: Icon(
-                      transactionPinToggle.state
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.grey.shade300,
+                  suffixIcon: SizedBox(
+                    width: 55.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        transactionPinToggle.state =
+                            !transactionPinToggle.state;
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 0.h),
+                        child: Icon(
+                          transactionPinToggle.state
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Space(20.h),
-            CustomButton(
-                buttonText: 'Transfer',
-                bgColor: AppColors.appColor,
-                borderColor: AppColors.appColor,
-                textColor: Colors.white,
-                onPressed: () {
-                  WalletDialog.transactionDialog(context,
-                      transfered: "€ 400.00",
-                      details: 'Dollar wallet to Euro wallet',
-                      received: '£ 300.00');
-                  // pushNewScreen(
-                  //   context,
-                  //   screen: const ViewAllWallet(),
-                  //   withNavBar: true, // OPTIONAL VALUE. True by default.
-                  //   pageTransitionAnimation: PageTransitionAnimation.fade,
-                  // );
-                  // context.navigate(AvailableBalance()
+                Space(20.h),
+                CustomButton(
+                  buttonText: 'Transfer',
+                  bgColor: AppColors.appColor,
+                  borderColor: AppColors.appColor,
+                  textColor: Colors.white,
+                  onPressed: vm is Loading
+                      ? null
+                      : () {
+                          if (formKey.currentState!.validate()) {
+                            ref
+                                .read(transferToWalletProvider.notifier)
+                                .transferToWallet(
+                                  userWallet[0].currency!.code!,
+                                  toCurrencyController.text,
+                                  int.parse(amountController.text),
+                                  transactionPinController.text,
+                                );
+                            context.loaderOverlay.show();
+                          }
+                          // context.loaderOverlay.show();
+                          // WalletDialog.transactionDialog(context,
+                          //     transfered: "€ 400.00",
+                          //     details: 'Dollar wallet to Euro wallet',
+                          //     received: '£ 300.00');
+                          // pushNewScreen(
+                          //   context,
+                          //   screen: const ViewAllWallet(),
+                          //   withNavBar: true, // OPTIONAL VALUE. True by default.
+                          //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                          // );
+                          // context.navigate(AvailableBalance()
 
-                  // );
-                },
-                buttonWidth: MediaQuery.of(context).size.width),
-            Space(7.h),
-            Center(
-              child: Text(
-                'Cancel',
-                style: AppText.header3(context, AppColors.appColor, 20.sp),
-              ),
+                          // );
+                        },
+                  buttonWidth: MediaQuery.of(context).size.width,
+                ),
+                Space(7.h),
+                Center(
+                  child: Text(
+                    'Cancel',
+                    style: AppText.header3(context, AppColors.appColor, 20.sp),
+                  ),
+                ),
+                Space(80.h),
+              ],
             ),
-            Space(80.h),
-          ],
+          ),
         ),
       ),
     );

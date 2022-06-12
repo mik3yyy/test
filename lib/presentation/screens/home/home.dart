@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdraw.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -41,8 +48,37 @@ class _HomePageState extends ConsumerState<HomePage> {
   String setValue = 'Dollar';
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(refreshControllerProvider.notifier).refreshToken();
+    ref.read(withdrawalController.notifier).getBeneficiaries();
+    ref.read(withdrawalController.notifier).getAbaBeneficiaries();
+    ref.read(withdrawalController.notifier).getIbanBeneficiaries();
+    ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
+  }
+
+//Method to convert currency name to code and use as parament for setting wallet as default
+  setCurrencyCode(String currency) {
+    if (currency == "Pounds") {
+      return 'GBP';
+    } else if (currency == "Naira") {
+      return 'NGN';
+    } else if (currency == "Euro") {
+      return 'EUR';
+    } else {
+      return 'USD';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
+    final accountNo = ref.watch(signInProvider);
+    final transactions = ref.watch(walletTransactionProvider);
+    final walletList = ref.watch(getAccountDetailsProvider);
+
+    //TODO: To ask BE guy to return native_symbol for set wallet as default res
+    final setWalletVm = ref.watch(setWalletAsDefaultProvider);
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(
@@ -99,7 +135,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
-                        width: 120.w,
+                        width: 100.w,
                         child: DropdownButton<String>(
                             underline: const SizedBox.shrink(),
                             value: setValue,
@@ -110,10 +146,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                               color: AppColors.appColor,
                             ),
                             items: currency.map(buildItem).toList(),
+                            // items: walletList.maybeWhen(success: (v) => v!.data!.wallets!.toList(), orElse: () => []),
                             onChanged: (value) {
                               setState(() {
                                 setValue = value!;
                               });
+                              //  setCurrencyCode(setValue);
+                              ref
+                                  .read(setWalletAsDefaultProvider.notifier)
+                                  .setWalletAsDefault(
+                                      setCurrencyCode(setValue));
                             }),
                       ),
                       Space(85.w),
@@ -144,13 +186,49 @@ class _HomePageState extends ConsumerState<HomePage> {
                               context, AppColors.appColor, 40.sp),
                         )
                       : Text(
-                          '\$ 200.00',
+                          //TODO: account balance and currency clear when app restart
+                          setWalletVm.maybeWhen(
+                              success: (v) =>
+                                  '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
+                              orElse: () => ''),
+                          // '\$ 200.00',
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
                         ),
+                  // setWalletVm.when(
+                  //     idle: () => const Text(''),
+                  //     loading: () {
+                  //       return const Padding(
+                  //         padding:
+                  //             EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                  //         child: SizedBox(
+                  //           height: 15,
+                  //           width: 15,
+                  //           child: CircularProgressIndicator.adaptive(
+                  //             strokeWidth: 3,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //     success: (value) {
+                  //       return toggleAmount.state
+                  //           ? Text(
+                  //               '****',
+                  //               style: AppText.header1(
+                  //                   context, AppColors.appColor, 40.sp),
+                  //             )
+                  //           : Text(
+                  //               '${value!.data!.wallet!.currencyCode} ${value.data!.wallet!.balance.toString()}',
+                  //               style: AppText.header1(
+                  //                   context, AppColors.appColor, 40.sp),
+                  //             );
+                  //     },
+                  //     error: (e, s) => Text(e.toString())),
                   Space(10.h),
                   Text(
-                    'Acc No: 23456789',
+                    'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user!.accountNumber!, orElse: () => '')}',
+
+                    // 'Acc No: 23456789',
                     style: AppText.body2(context, AppColors.appColor, 20.sp),
                   ),
                 ],
@@ -199,12 +277,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                             secondColor: AppColors.appColor,
                             onPressed: () {
                               pushNewScreen(
-                                context, screen: const Transfer(),
+                                context,
+                                screen: Transfer(
+                                  //TODO: To check if wallet has been fetched from api
+                                  wallet: walletList.maybeWhen(
+                                      success: (v) => v!.data!.wallets,
+                                      orElse: () => []),
+                                ),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
+                              ref.refresh(getAccountDetailsProvider);
                             },
                           ),
                           MenuCards(
@@ -264,18 +349,37 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 Space(30.h),
-                SizedBox(
-                  height: 300.h,
-                  child: ListView.separated(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return const TransactionBuild();
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(height: 20.h);
-                    },
-                  ),
-                )
+                transactions.when(
+                    error: (error, stackTrace) => Text(error.toString()),
+                    idle: () => const Center(
+                          child: CircularProgressIndicator.adaptive(
+                            strokeWidth: 5,
+                          ),
+                        ),
+                    loading: () => const Center(
+                          child: CircularProgressIndicator.adaptive(
+                            strokeWidth: 5,
+                          ),
+                        ),
+                    success: (data) {
+                      return SizedBox(
+                        height: 300.h,
+                        child: ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
+                          itemCount: data!.data!.transactions.length,
+                          itemBuilder: (context, index) {
+                            final transactions = data.data!.transactions[index];
+                            return TransactionBuild(
+                              transactions: transactions,
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(height: 20.h);
+                          },
+                        ),
+                      );
+                    })
               ],
             ),
           ),
@@ -349,10 +453,31 @@ class MenuCards extends StatelessWidget {
 }
 
 class TransactionBuild extends StatelessWidget {
-  const TransactionBuild({Key? key}) : super(key: key);
+  final Transaction transactions;
+  const TransactionBuild({Key? key, required this.transactions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = transactions.createdAt!;
+    String dateCreated = DateFormat(' d, MMM yyyy').format(date);
+    String currencyCode() {
+      if (transactions.currencyCode == CurrencyCode.eur) {
+        return "EUR";
+      }
+      if (transactions.currencyCode == CurrencyCode.gbp) {
+        return "GBP";
+      }
+      if (transactions.currencyCode == CurrencyCode.ngn) {
+        return "NGN";
+      }
+      if (transactions.currencyCode == CurrencyCode.usd) {
+        return "USD";
+      } else {
+        return '';
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -386,29 +511,45 @@ class TransactionBuild extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'Transfer',
-                      style: AppText.body2(context, Colors.black, 18.sp),
-                    ),
-                    const Spacer(),
-                    Text(
-                      '\$ 240',
-                      style: AppText.body2(context, Colors.black, 18.sp),
-                    ),
-                  ],
-                ),
+                if (transactions.direction == Direction.debit) ...[
+                  Row(
+                    children: [
+                      Text(
+                        'Debit',
+                        style: AppText.body2(context, Colors.red, 18.sp),
+                      ),
+                      const Spacer(),
+                      Text(
+                        currencyCode() + transactions.amount.toString(),
+                        style: AppText.body2(context, Colors.red, 18.sp),
+                      ),
+                    ],
+                  ),
+                ] else ...[
+                  Row(
+                    children: [
+                      Text(
+                        "Credit",
+                        style: AppText.body2(context, Colors.green, 18.sp),
+                      ),
+                      const Spacer(),
+                      Text(
+                        currencyCode() + transactions.amount.toString(),
+                        style: AppText.body2(context, Colors.green, 18.sp),
+                      ),
+                    ],
+                  ),
+                ],
                 Space(10.h),
                 Row(
                   children: [
                     Text(
-                      'Transfer to Jane Doe',
+                      transactions.user!.firstName.toString(),
                       style: AppText.body2(context, Colors.black, 18.sp),
                     ),
                     const Spacer(),
                     Text(
-                      '03/05/2022',
+                      dateCreated,
                       style: AppText.body2(context, Colors.black, 18.sp),
                     ),
                   ],

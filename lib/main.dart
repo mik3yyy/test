@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/message_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/sample.dart';
 
 import 'presentation/route/navigator.dart';
@@ -22,7 +23,9 @@ import 'presentation/screens/prop/chat_setting_screen.dart';
 import 'presentation/screens/prop/contact_list_prop_screen.dart';
 import 'presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PreferenceManager.init();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -54,9 +57,8 @@ class MyApp extends StatelessWidget {
         home:
             // ReferralCodeScreen(),
             // TransactionPinScreen(),
-            MainScreen(menuScreenContext: context),
 
-        // const SplashScreen(),
+            const SplashScreen(),
 
         builder: (context, widget) {
           //add this line
