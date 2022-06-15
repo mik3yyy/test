@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -74,9 +74,11 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
 
     ref.listen<RequestState>(addCardProvider, (prev, value) {
       if (value is Success<AddCardRes>) {
-        // print(value.value!.data!.url.toString());
         pushNewScreen(context,
-            screen: CardWebView(url: value.value!.data!.url.toString()));
+            screen: CardWebView(
+              url: value.value!.data!.url.toString(),
+              successMsg: 'Card added',
+            ));
       }
 
       if (value is Error) {

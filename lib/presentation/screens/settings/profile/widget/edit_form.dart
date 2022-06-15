@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -16,6 +17,7 @@ class EditForm extends StatelessWidget {
       this.focusNode,
       // this.textAlign,
       this.enabled,
+      this.inputter,
       this.keyboardType,
       this.onEditingComplete,
       this.onChanged})
@@ -34,10 +36,12 @@ class EditForm extends StatelessWidget {
   final void Function()? onEditingComplete;
   final FocusNode? focusNode;
   final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputter;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        inputFormatters: inputter,
         enabled: enabled,
         // textAlign: textAlign!,
         controller: controller,

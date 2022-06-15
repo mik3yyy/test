@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CardWebView extends StatefulHookConsumerWidget {
   final String url;
+  final String successMsg;
 
-  const CardWebView({
-    Key? key,
-    required this.url,
-  }) : super(key: key);
+  const CardWebView({Key? key, required this.url, required this.successMsg})
+      : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CardWebViewState();
@@ -45,8 +42,11 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
           if (navigation.url.contains('embed_token')) {
             final index = navigation.url.toString().lastIndexOf('=');
             final reference = navigation.url.toString().substring(index + 1);
+            // ref.read(getCardProvider.notifier).getCard();
+
             Navigator.pop(context);
-            AppDialog.showSuccessMessageDialog(context, "Card Added");
+            AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+
             //Veriy Payment Endpoint Function
             // ref
             //     .read(verifySubscriptionPaymentProvider.notifier)

@@ -41,8 +41,6 @@ class _ShareOptionDetailsState extends State<ShareOptionDetails> {
                     //   item.isTap == false;
                     // }
                   });
-
-                  print(item.text);
                 },
                 child: Container(
                   padding: const EdgeInsets.only(top: 14.0, bottom: 14.0),

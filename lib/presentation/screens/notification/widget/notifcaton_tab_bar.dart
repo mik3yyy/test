@@ -88,7 +88,7 @@ class _NotificationTabBarState extends State<NotificationTabBar>
                   controller: _tabController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    AllNotificationTabBarView(),
+                    const AllNotificationTabBarView(),
                     RequestNotificationTabBarView(),
                   ],
                 ),

@@ -71,6 +71,7 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
                             isDefaultAction: true,
                             onPressed: () {
                               widget.currencyController.text = dollar;
+
                               Navigator.pop(context);
                             },
                           ),

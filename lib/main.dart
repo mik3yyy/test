@@ -1,27 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/currency.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/transaction_pin/transaction_pin.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/message_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
-import 'package:kayndrexsphere_mobile/sample.dart';
-
-import 'presentation/route/navigator.dart';
-import 'presentation/screens/notification/notification_screen.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
-import 'presentation/screens/home/widgets/main_screen.dart';
-import 'presentation/screens/prop/chat_setting_screen.dart';
-import 'presentation/screens/prop/contact_list_prop_screen.dart';
-import 'presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,15 +33,7 @@ class MyApp extends StatelessWidget {
         // theme: theme,
         // home: const HomePage(),
 
-        // CurrencyScreen(),
-        // const CurrencyScreen(),
-        //  const BottomNavBar(),
-
-        home:
-            // ReferralCodeScreen(),
-            // TransactionPinScreen(),
-
-            const SplashScreen(),
+        home: const SplashScreen(),
 
         builder: (context, widget) {
           //add this line

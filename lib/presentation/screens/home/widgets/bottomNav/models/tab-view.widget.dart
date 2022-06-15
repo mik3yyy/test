@@ -16,7 +16,8 @@ class CustomTabView extends StatefulWidget {
 }
 
 class _CustomTabViewState extends State<CustomTabView> {
-  HeroController _heroController = CupertinoApp.createCupertinoHeroController();
+  final HeroController _heroController =
+      CupertinoApp.createCupertinoHeroController();
   late List<NavigatorObserver?> _navigatorObservers;
 
   @override
@@ -74,8 +75,9 @@ class _CustomTabViewState extends State<CustomTabView> {
                 '/9f580fc5-c252-45d0-af25-9429992db112'),
       );
     }
-    if (widget.routeAndNavigatorSettings!.onGenerateRoute != null)
+    if (widget.routeAndNavigatorSettings!.onGenerateRoute != null) {
       return widget.routeAndNavigatorSettings!.onGenerateRoute!(settings);
+    }
     return null;
   }
 

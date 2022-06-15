@@ -270,7 +270,7 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
   }
 }
 
-class SelectCurrency extends StatelessWidget {
+class SelectCurrency extends StatefulWidget {
   const SelectCurrency(
       {Key? key,
       required this.dollar,
@@ -291,240 +291,242 @@ class SelectCurrency extends StatelessWidget {
   final String text;
 
   @override
+  State<SelectCurrency> createState() => _SelectCurrencyState();
+}
+
+class _SelectCurrencyState extends State<SelectCurrency> {
+  String dollars = "Dollar";
+  String pounds = "Pounds";
+  String euros = "Euro";
+  String nairas = "Naira";
+  String kayndrexs = "Kayndrex";
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        InkWell(
-          onTap: () {
-            showCupertinoModalPopup(
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 25.w, right: 25.w),
-                    child: CupertinoActionSheet(
-                      actions: <Widget>[
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    dollar,
-                                    style: AppText.body2(
-                                        context, Colors.black, 20.sp),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 25.h,
-                                    width: 25.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 1, color: Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        '\$',
-                                        style: AppText.body2(
-                                            context, Colors.black, 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
+    return InkWell(
+      onTap: () {
+        showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: EdgeInsets.only(left: 25.w, right: 25.w),
+                child: CupertinoActionSheet(
+                  actions: <Widget>[
+                    Container(
+                      color: Colors.white,
+                      child: CupertinoActionSheetAction(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                dollars,
+                                style:
+                                    AppText.body2(context, Colors.black, 20.sp),
                               ),
-                            ),
-                            isDefaultAction: true,
-                            onPressed: () {
-                              currencyController.text = dollar;
-                              Navigator.pop(context);
-                            },
+                              const Spacer(),
+                              Container(
+                                height: 25.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.black)),
+                                child: Center(
+                                  child: Text(
+                                    '\$',
+                                    style: AppText.body2(
+                                        context, Colors.black, 15.sp),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    pound,
-                                    style: AppText.body2(
-                                        context, Colors.black, 20.sp),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 25.h,
-                                    width: 25.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 1, color: Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        '\$',
-                                        style: AppText.body2(
-                                            context, Colors.black, 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              currencyController.text = pound;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    euro,
-                                    style: AppText.body2(
-                                        context, Colors.black, 20.sp),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 25.h,
-                                    width: 25.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 1, color: Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        '\$',
-                                        style: AppText.body2(
-                                            context, Colors.black, 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              currencyController.text = euro;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    naira,
-                                    style: AppText.body2(
-                                        context, Colors.black, 20.sp),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 25.h,
-                                    width: 25.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 1, color: Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        '\$',
-                                        style: AppText.body2(
-                                            context, Colors.black, 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              currencyController.text = naira;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    kayndrex,
-                                    style: AppText.body2(
-                                        context, Colors.black, 20.sp),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 25.h,
-                                    width: 25.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 1, color: Colors.black)),
-                                    child: Center(
-                                      child: Text(
-                                        '\$',
-                                        style: AppText.body2(
-                                            context, Colors.black, 15.sp),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              currencyController.text = kayndrex;
-                              Navigator.pop(context);
-                            },
-                          ),
-                        )
-                      ],
-                      cancelButton: CupertinoActionSheetAction(
-                        child: const Text("Close"),
+                        isDefaultAction: true,
                         onPressed: () {
+                          widget.currencyController.text = widget.dollar;
                           Navigator.pop(context);
                         },
                       ),
                     ),
-                  );
-                });
-          },
-          child: EditForm(
-              enabled: false,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              labelText: text,
+                    Container(
+                      color: Colors.white,
+                      child: CupertinoActionSheetAction(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                pounds,
+                                style:
+                                    AppText.body2(context, Colors.black, 20.sp),
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 25.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.black)),
+                                child: Center(
+                                  child: Text(
+                                    '\$',
+                                    style: AppText.body2(
+                                        context, Colors.black, 15.sp),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          widget.currencyController.text = widget.pound;
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: CupertinoActionSheetAction(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                euros,
+                                style:
+                                    AppText.body2(context, Colors.black, 20.sp),
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 25.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.black)),
+                                child: Center(
+                                  child: Text(
+                                    '\$',
+                                    style: AppText.body2(
+                                        context, Colors.black, 15.sp),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          widget.currencyController.text = widget.euro;
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: CupertinoActionSheetAction(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                nairas,
+                                style:
+                                    AppText.body2(context, Colors.black, 20.sp),
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 25.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.black)),
+                                child: Center(
+                                  child: Text(
+                                    '\$',
+                                    style: AppText.body2(
+                                        context, Colors.black, 15.sp),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          widget.currencyController.text = widget.naira;
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: CupertinoActionSheetAction(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                kayndrexs,
+                                style:
+                                    AppText.body2(context, Colors.black, 20.sp),
+                              ),
+                              const Spacer(),
+                              Container(
+                                height: 25.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.black)),
+                                child: Center(
+                                  child: Text(
+                                    '\$',
+                                    style: AppText.body2(
+                                        context, Colors.black, 15.sp),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          widget.currencyController.text = widget.kayndrex;
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    child: const Text("Close"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              );
+            });
+      },
+      child: EditForm(
+        enabled: false,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        labelText: widget.text,
 
-              // textAlign: TextAlign.start,
-              controller: currencyController,
-              obscureText: false,
-              validator: (value) => validateCountry(value)),
+        // textAlign: TextAlign.start,
+        controller: widget.currencyController,
+        obscureText: false,
+        validator: (value) => validateCountry(value),
+        suffixIcon: const Icon(
+          CupertinoIcons.chevron_down,
+          color: Color(0xffA8A8A8),
+          size: 15,
         ),
-        Positioned(
-          left: 370.w,
-          right: 0,
-          bottom: 17.h,
-          child: const Icon(
-            CupertinoIcons.chevron_down,
-            color: Color(0xffA8A8A8),
-            size: 15,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

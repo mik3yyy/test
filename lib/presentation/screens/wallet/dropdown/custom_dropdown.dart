@@ -121,7 +121,7 @@ class SelectFormField extends FormField<String> {
   /// to [initialValue] or the empty string.
   ///
   /// For documentation about the various parameters, see the [TextField] class
-  /// and [new TextField], the constructor.
+  /// and [ TextField], the constructor.
   SelectFormField({
     Key? key,
     this.type = SelectFormFieldType.dropdown,
@@ -211,10 +211,10 @@ class SelectFormField extends FormField<String> {
                   hintText: hintText,
                   suffixIcon: Container(
                     width: 10,
-                    margin: EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
                     child: TextButton(
                       onPressed: () {},
-                      child: Icon(Icons.arrow_drop_down),
+                      child: const Icon(Icons.arrow_drop_down),
                     ),
                   ),
                 ));
@@ -401,7 +401,7 @@ class SelectFormField extends FormField<String> {
 }
 
 class _SelectFormFieldState extends FormFieldState<String> {
-  TextEditingController _labelController = TextEditingController();
+  final TextEditingController _labelController = TextEditingController();
   TextEditingController? _stateController;
   Widget? _icon;
   Map<String, dynamic>? _item = <String, dynamic>{};
@@ -435,7 +435,7 @@ class _SelectFormFieldState extends FormFieldState<String> {
         }
       });
 
-      if (_item!.length > 0) {
+      if (_item!.isNotEmpty) {
         _labelController.text =
             _item!['label']?.toString() ?? _item!['value']!.toString();
 
@@ -477,7 +477,7 @@ class _SelectFormFieldState extends FormFieldState<String> {
         orElse: () => <String, dynamic>{},
       );
 
-      if (_item!.length > 0) {
+      if (_item!.isNotEmpty) {
         _labelController.text =
             _item!['label']?.toString() ?? _item!['value']!.toString();
 
@@ -537,7 +537,7 @@ class _SelectFormFieldState extends FormFieldState<String> {
         orElse: () => <String, dynamic>{},
       );
 
-      if (_item!.length > 0) {
+      if (_item!.isNotEmpty) {
         _labelController.text =
             _item!['label']?.toString() ?? _item!['value']!.toString();
         _effectiveController?.text = lvPicked.toString();
@@ -596,7 +596,7 @@ class _SelectFormFieldState extends FormFieldState<String> {
         textStyle: lmElement['textStyle'] ?? lmElement['textStyle'],
         child: Row(
           children: [
-            lmElement['icon'] ?? SizedBox(width: 5),
+            lmElement['icon'] ?? const SizedBox(width: 5),
             Expanded(
               child: Text(
                 lmElement['label']?.toString() ??
@@ -656,7 +656,7 @@ class ItemPickerDialog extends StatefulWidget {
   ]);
 
   @override
-  _ItemPickerDialogState createState() => new _ItemPickerDialogState();
+  _ItemPickerDialogState createState() => _ItemPickerDialogState();
 }
 
 class _ItemPickerDialogState extends State<ItemPickerDialog> {
@@ -689,7 +689,7 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: _titleDialog(),
-      content: Container(
+      content: SizedBox(
         width: double.maxFinite,
         child: _content(),
       ),
@@ -713,7 +713,7 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
         TextField(
           controller: _oCtrlSearchQuery,
           decoration: InputDecoration(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             hintText: widget.searchHint,
             //hintStyle: TextStyle(color: Colors.black),
           ),
@@ -724,7 +724,7 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
 
   Widget _content() {
     if (_iQtItems == -1) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     } else if (_iQtItems == 0) {
       return _showEmpty();
     }
@@ -734,7 +734,7 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
 
   Widget _showEmpty() {
     return Stack(
-      children: <Widget>[
+      children: const [
         Align(
           alignment: Alignment(0, -0.5),
           child: Icon(

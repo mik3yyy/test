@@ -33,7 +33,6 @@ class _FingerPrintState extends State<FingerPrint> {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       canCheckBiometrics = false;
-      print(e);
     }
     if (!mounted) {
       return;
@@ -50,7 +49,6 @@ class _FingerPrintState extends State<FingerPrint> {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
       availableBiometrics = <BiometricType>[];
-      print(e);
     }
     if (!mounted) {
       return;
@@ -79,7 +77,6 @@ class _FingerPrintState extends State<FingerPrint> {
         _isAuthenticating = false;
       });
     } on PlatformException catch (e) {
-      print(e);
       setState(() {
         _isAuthenticating = false;
         _authorized = 'Error - ${e.message}';
@@ -115,7 +112,6 @@ class _FingerPrintState extends State<FingerPrint> {
         _authorized = 'Authenticating';
       });
     } on PlatformException catch (e) {
-      print(e);
       setState(() {
         _isAuthenticating = false;
         _authorized = 'Error - ${e.message}';

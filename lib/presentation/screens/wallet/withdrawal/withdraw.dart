@@ -240,7 +240,6 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                             name: 'IBAN',
                             onPressed: () {
                               selection.state = 'IBAN';
-                              print(selection.state);
                             },
                           ),
                           ToggleSelection(
@@ -256,7 +255,6 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                             name: 'SEPA',
                             onPressed: () {
                               selection.state = 'SEPA';
-                              print(selection.state);
                             },
                           ),
                         ],

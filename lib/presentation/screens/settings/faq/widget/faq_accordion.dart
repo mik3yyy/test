@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
-import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class FaqAccodrionExpandable extends StatelessWidget {
   final String headerTitle;
