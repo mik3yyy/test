@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
 class AnimatedToggle extends StatefulWidget {
   final List<String> values;

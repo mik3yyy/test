@@ -123,7 +123,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                                 ref
                                     .read(forgotPasswordProvider.notifier)
                                     .forgotPassword(controller.text);
-                                print(controller.text);
+
                                 context.loaderOverlay.show();
                               }
                             },

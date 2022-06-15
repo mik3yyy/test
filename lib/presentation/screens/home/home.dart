@@ -195,35 +195,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
                         ),
-                  // setWalletVm.when(
-                  //     idle: () => const Text(''),
-                  //     loading: () {
-                  //       return const Padding(
-                  //         padding:
-                  //             EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                  //         child: SizedBox(
-                  //           height: 15,
-                  //           width: 15,
-                  //           child: CircularProgressIndicator.adaptive(
-                  //             strokeWidth: 3,
-                  //           ),
-                  //         ),
-                  //       );
-                  //     },
-                  //     success: (value) {
-                  //       return toggleAmount.state
-                  //           ? Text(
-                  //               '****',
-                  //               style: AppText.header1(
-                  //                   context, AppColors.appColor, 40.sp),
-                  //             )
-                  //           : Text(
-                  //               '${value!.data!.wallet!.currencyCode} ${value.data!.wallet!.balance.toString()}',
-                  //               style: AppText.header1(
-                  //                   context, AppColors.appColor, 40.sp),
-                  //             );
-                  //     },
-                  //     error: (e, s) => Text(e.toString())),
                   Space(10.h),
                   Text(
                     'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user!.accountNumber!, orElse: () => '')}',
@@ -362,23 +333,31 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         ),
                     success: (data) {
-                      return SizedBox(
-                        height: 300.h,
-                        child: ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics()),
-                          itemCount: data!.data!.transactions.length,
-                          itemBuilder: (context, index) {
-                            final transactions = data.data!.transactions[index];
-                            return TransactionBuild(
-                              transactions: transactions,
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(height: 20.h);
-                          },
-                        ),
-                      );
+                      if (data!.data!.transactions.isEmpty) {
+                        return const Center(
+                          child: Text("You have no transactions"),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: 300.h,
+                          child: ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
+                            itemCount: data.data!.transactions.length,
+                            itemBuilder: (context, index) {
+                              final transactions =
+                                  data.data!.transactions[index];
+                              return TransactionBuild(
+                                transactions: transactions,
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(height: 20.h);
+                            },
+                          ),
+                        );
+                      }
                     })
               ],
             ),

@@ -42,8 +42,6 @@ class RefreshToken {
     RestartableTimer _timer =
         RestartableTimer((const Duration(seconds: 4)), () async {
       final token = await _authManager.getAuthTOken(refreshTokenReq);
-
-      print("I GOT HERE");
     });
   }
 }

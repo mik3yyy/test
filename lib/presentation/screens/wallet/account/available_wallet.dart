@@ -38,14 +38,14 @@ class _AvailableWalletState extends State<AvailableWallet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Space(20.h),
-            InkWell(
-              onTap: (() => Navigator.pop(context)),
-              child: const Icon(
-                Icons.arrow_back_ios_outlined,
-                color: Colors.white,
-              ),
-            ),
+            // Space(20.h),
+            // InkWell(
+            //   onTap: (() => Navigator.pop(context)),
+            //   child: const Icon(
+            //     Icons.arrow_back_ios_outlined,
+            //     color: Colors.white,
+            //   ),
+            // ),
             Space(20.h),
             const Center(
               child: CircleAvatar(

@@ -44,7 +44,6 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
         throw e.error;
       }
     }
@@ -65,7 +64,6 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        print(e.error);
         throw e.error;
       }
     }

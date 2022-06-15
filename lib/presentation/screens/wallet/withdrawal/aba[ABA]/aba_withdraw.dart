@@ -161,12 +161,20 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                                           ),
                                         ),
                                     success: (data) {
-                                      amount.value = data!
-                                          .data!.wallets![1].balance!
-                                          .toInt();
+                                      data!.data!.wallets!.any(((element) {
+                                        if (element.currency!.name ==
+                                            "US Dollar") {
+                                          amount.value =
+                                              element.balance!.toInt();
+
+                                          return true;
+                                        } else {
+                                          return false;
+                                        }
+                                      }));
 
                                       return Text(
-                                        "\$ ${data.data!.wallets![2].balance.toString()}",
+                                        "\$ ${amount.value}",
                                         style: AppText.body2Bold(
                                             context, Colors.black, 23.sp),
                                       );

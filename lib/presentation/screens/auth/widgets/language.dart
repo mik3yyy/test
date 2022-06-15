@@ -29,8 +29,6 @@ void openLanguagePickerDialog(context, TextEditingController controller) =>
                 NotificationListener;
                 _selectedDialogLanguage = language;
                 controller.text = _selectedDialogLanguage.name;
-                print(_selectedDialogLanguage.name);
-                print(_selectedDialogLanguage.isoCode);
               },
               itemBuilder: _buildDialogItem)),
     );

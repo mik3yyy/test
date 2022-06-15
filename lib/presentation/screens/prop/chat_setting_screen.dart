@@ -44,8 +44,6 @@ class _ChatSettingScreenState extends State<ChatSettingScreen> {
                     setState(() {
                       isDrawerOpen = !isDrawerOpen;
                     });
-
-                    print(isDrawerOpen);
                   },
                   child: Image.asset(AppImage.messageMenuIcon)),
             ],

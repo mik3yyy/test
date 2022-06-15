@@ -1,123 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-class AllNotificationTabBarView extends StatelessWidget {
-  AllNotificationTabBarView({Key? key}) : super(key: key);
+class AllNotificationTabBarView extends StatefulHookConsumerWidget {
+  const AllNotificationTabBarView({Key? key}) : super(key: key);
 
-  final List<AllNotificationListDetails> _allNotificationDetails = [
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Deposited N50,000.00 to Beta ",
-      notificationTime: "1 hour ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg:
-          "Request to withdraw payment of ₦100,000.00 from Beta account",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Successful Transfer of N4,000.00 from Alpha to Beta",
-      notificationTime: "2 hours ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Annual alpha bonus Activated",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Congratultions! you have successfully unlocked Delta ",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.failedNotificationIcon),
-      notificationMsg: "Request to withdraw \$3, 000 from Alpha account",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.phoneContactImg1),
-      notificationMsg: "New message from John Doe",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Congratultions! you have successfully unlocked Delta ",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.failedNotificationIcon),
-      notificationMsg: "Request to withdraw \$3, 000 from Alpha account",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Congratultions! you have successfully unlocked Delta ",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.failedNotificationIcon),
-      notificationMsg: "Request to withdraw \$3, 000 from Alpha account",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.successNotificationIcon),
-      notificationMsg: "Congratultions! you have successfully unlocked Delta ",
-      notificationTime: "2 days ago",
-    ),
-    AllNotificationListDetails(
-      notificationIcon: Image.asset(AppImage.failedNotificationIcon),
-      notificationMsg: "Request to withdraw \$3, 000 from Alpha account",
-      notificationTime: "2 days ago",
-    ),
-  ];
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AllNotificationTabBarViewState();
+}
 
+class _AllNotificationTabBarViewState
+    extends ConsumerState<AllNotificationTabBarView>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 450.h,
-      child: Scrollbar(
-        isAlwaysShown: true,
-        controller: _scrollController,
-        child: ListView.separated(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          itemCount: _allNotificationDetails.length,
-          itemBuilder: (BuildContext context, int index) {
-            final item = _allNotificationDetails[index];
-            return Padding(
-              padding: const EdgeInsets.only(right: 32.0),
-              child: AllNotificationBuild(
-                notificationIcon: item.notificationIcon,
-                notificationMsg: item.notificationMsg,
-                notificationTime: item.notificationTime,
+    super.build(context);
+    final notification = ref.watch(getNotificationProvider);
+    return notification.when(
+        error: (error, stackTrace) => Text(error.toString()),
+        idle: () => const CircularProgressIndicator.adaptive(),
+        loading: () => const Center(
+            child: SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator.adaptive())),
+        success: (data) {
+          if (data!.data.notifications.isEmpty) {
+            return Text(
+              "You have notification",
+              style: AppText.body3(
+                context,
+                AppColors.appColor,
               ),
             );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Padding(
-              padding: EdgeInsets.only(right: 12.0),
-              child: Divider(
-                color: AppColors.notificationDividerColor,
-                thickness: 1.5,
-                height: 20,
-                // indent: 5.0,
+          } else {
+            return RefreshIndicator(
+              onRefresh: () async {
+                ref.refresh(getNotificationProvider);
+              },
+              child: SizedBox(
+                height: 450.h,
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  controller: _scrollController,
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
+                    ),
+                    itemCount: data.data.notifications.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final msg = data.data.notifications[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 32.0),
+                        child: AllNotificationBuild(
+                          notificationIcon:
+                              Image.asset(AppImage.successNotificationIcon),
+                          notificationMsg: msg.data!.message.toString(),
+                          notificationTime: msg.timeAgo.toString(),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Padding(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: Divider(
+                          color: AppColors.notificationDividerColor,
+                          thickness: 1.5,
+                          height: 20,
+                          // indent: 5.0,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             );
-          },
-        ),
-      ),
-    );
+          }
+        });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class AllNotificationBuild extends StatelessWidget {

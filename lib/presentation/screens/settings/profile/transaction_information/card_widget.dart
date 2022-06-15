@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 
 // import 'credit_card_animation.dart';
 // import 'credit_card_background.dart';
@@ -6,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'custom_card_type_icon.dart';
 // import 'glassmorphism_config.dart';
 
-const Map<CardType, String> CardTypeIconAsset = <CardType, String>{
-  CardType.visa: 'icons/visa.png',
-  CardType.americanExpress: 'icons/amex.png',
-  CardType.mastercard: 'icons/mastercard.png',
-  CardType.discover: 'icons/discover.png',
+const Map<CardType, String> cardTypeIconAsset = <CardType, String>{
+  CardType.visa: AppImage.visa,
+  CardType.americanExpress: AppImage.americanExpress,
+  CardType.mastercard: AppImage.masterCard,
+  CardType.verve: AppImage.verve,
 };
 
 class CreditCardWidget extends StatefulWidget {
@@ -67,7 +68,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       <String>['34'],
       <String>['37'],
     },
-    CardType.discover: <List<String>>{
+    CardType.verve: <List<String>>{
       <String>['6011'],
       <String>['622126', '622925'],
       <String>['644', '649'],
@@ -140,7 +141,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       return customCardTypeIcon.first.cardImage;
     } else {
       return Image.asset(
-        CardTypeIconAsset[cardType]!,
+        cardTypeIconAsset[cardType]!,
         height: 48,
         width: 48,
         package: 'flutter_credit_card',
@@ -162,7 +163,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       switch (ccType) {
         case CardType.visa:
           icon = Image.asset(
-            CardTypeIconAsset[ccType]!,
+            cardTypeIconAsset[ccType]!,
             height: 48,
             width: 48,
             package: 'flutter_credit_card',
@@ -172,7 +173,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
         case CardType.americanExpress:
           icon = Image.asset(
-            CardTypeIconAsset[ccType]!,
+            cardTypeIconAsset[ccType]!,
             height: 48,
             width: 48,
             package: 'flutter_credit_card',
@@ -182,7 +183,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
         case CardType.mastercard:
           icon = Image.asset(
-            CardTypeIconAsset[ccType]!,
+            cardTypeIconAsset[ccType]!,
             height: 48,
             width: 48,
             package: 'flutter_credit_card',
@@ -192,7 +193,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
 
         case CardType.discover:
           icon = Image.asset(
-            CardTypeIconAsset[ccType]!,
+            cardTypeIconAsset[ccType]!,
             height: 48,
             width: 48,
             package: 'flutter_credit_card',
@@ -201,7 +202,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           break;
 
         default:
-          icon = Container(
+          icon = const SizedBox(
             height: 48,
             width: 48,
           );
@@ -346,4 +347,6 @@ enum CardType {
   visa,
   americanExpress,
   discover,
+  verve,
+  maestro
 }
