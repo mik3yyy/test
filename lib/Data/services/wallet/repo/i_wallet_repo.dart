@@ -14,13 +14,12 @@ abstract class IWalletRepo {
     num transferAmount,
     String transactionPin,
   );
-  // //Transafer to other wallet
-  // Future<bool> transferToAnotherUser(
-  //   String accountNo,
-  //   String transferCurrency,
-  //   num transferAmount,
-  //   String transactionPin,
-  // );
+  Future<bool> transferToAnotherUser(
+    String accountNo,
+    String transferCurrency,
+    num transferAmount,
+    String transactionPin,
+  );
 
   Future<WalletTransactions> getTransactions();
 }

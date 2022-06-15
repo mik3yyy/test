@@ -123,20 +123,48 @@ class WalletService {
     }
   }
 
+  //Transafer to other wallet
+  Future<bool> transferToAnotherUser(
+    String accountNo,
+    String transferCurrency,
+    num transferAmount,
+    String transactionPin,
+  ) async {
+    const url = '/wallets/transfer-funds/to-another-user';
+    try {
+      final response = await _read(dioProvider).post(url, data: {
+        "account_no": accountNo,
+        "transfer_currency": transferCurrency,
+        "transfer_amount": transferAmount,
+        "transaction_pin": transactionPin
+      });
+
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
   // //Transafer to other wallet
   // Future<bool> transferToAnotherUser(
-  //   String accountNo,
-  //   String transferCurrency,
-  //   num transferAmount,
-  //   String transactionPin,
+  // String accountNo,
+  // String transferCurrency,
+  // num transferAmount,
+  // String transactionPin,
   // ) async {
   //   const url = '/wallets/transfer-funds/to-another-user';
   //   try {
   //     final response = await _read(dioProvider).post(url, data: {
-  //       "account_no": accountNo,
-  //       "transfer_currency": transferCurrency,
-  //       "transfer_amount": transferAmount,
-  //       "transaction_pin": transactionPin
+  // "account_no": accountNo,
+  // "transfer_currency": transferCurrency,
+  // "transfer_amount": transferAmount,
+  // "transaction_pin": transactionPin
   //     });
 
   //     final result = response.data = true;
