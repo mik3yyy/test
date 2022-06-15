@@ -9,8 +9,10 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -84,13 +86,16 @@ class _ToWalletState extends ConsumerState<ToWallet> {
         //Refreshing user account details, so the new balance can reflect on the screen
         // ref.refresh(getAccountDetailsProvider);
         context.loaderOverlay.hide();
-        return AppSnackBar.showSuccessSnackBar(context,
-            message: 'Transfer Succesfully');
+        //TODO: We might need to refactor the success dialog
+        AppDialog.showSuccessMessageDialog(
+            context, 'Funds transferred successfully');
+        ref.refresh(getAccountDetailsProvider);
+        // return AppSnackBar.showSuccessSnackBar(context,
+        //     message: 'Transfer Succesfully');
       }
       if (value is Error) {
         context.loaderOverlay.hide();
-        return AppSnackBar.showErrorSnackBar(context,
-            message: value.error.toString());
+        AppDialog.showErrorMessageDialog(context, value.error.toString());
       }
     });
 
