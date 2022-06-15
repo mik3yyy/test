@@ -1,9 +1,8 @@
-import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card_service_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 
 final addCardProvider =
     StateNotifierProvider.autoDispose<AddCardVM, RequestState<AddCardRes>>(

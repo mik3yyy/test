@@ -136,26 +136,24 @@ class BottomNavStyle3 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: this.navBarEssentials!.items!.map((item) {
-                  int index = this.navBarEssentials!.items!.indexOf(item);
+                children: navBarEssentials!.items!.map((item) {
+                  int index = navBarEssentials!.items!.indexOf(item);
                   return Flexible(
                     child: GestureDetector(
                       onTap: () {
-                        if (this.navBarEssentials!.items![index].onPressed !=
-                            null) {
-                          this.navBarEssentials!.items![index].onPressed!(this
-                              .navBarEssentials!
-                              .selectedScreenBuildContext);
+                        if (navBarEssentials!.items![index].onPressed != null) {
+                          navBarEssentials!.items![index].onPressed!(
+                              navBarEssentials!.selectedScreenBuildContext);
                         } else {
-                          this.navBarEssentials!.onItemSelected!(index);
+                          navBarEssentials!.onItemSelected!(index);
                         }
                       },
                       child: Container(
                         color: Colors.transparent,
                         child: _buildItem(
                             item,
-                            this.navBarEssentials!.selectedIndex == index,
-                            this.navBarEssentials!.navBarHeight),
+                            navBarEssentials!.selectedIndex == index,
+                            navBarEssentials!.navBarHeight),
                       ),
                     ),
                   );

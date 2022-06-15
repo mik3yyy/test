@@ -8,18 +8,14 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/sepa/sepa
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/country.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/iban_withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/view_model.dart/sepa_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/widget/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -157,8 +153,6 @@ class _SepaViewState extends ConsumerState<SepaView> {
     final toggle = ref.watch(toggleStateProvider.state);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final sepa = ref.watch(sepaWithdrawalProvider);
-    final countryCode = ref.watch(refreshControllerProvider);
-    final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final senderAddressController = useTextEditingController();
     final cityController = useTextEditingController();
     final streetNumberController = useTextEditingController();
@@ -173,7 +167,6 @@ class _SepaViewState extends ConsumerState<SepaView> {
     final countryCodeController = useTextEditingController();
     final amountController = useTextEditingController();
     final receipientNameController = useTextEditingController();
-    final fistNameController = useTextEditingController();
     final currencyController = useTextEditingController();
     final currencyCode = useState("");
     final selectedCurrency = useState("");
@@ -235,23 +228,45 @@ class _SepaViewState extends ConsumerState<SepaView> {
                               if (selectedCurrency.value == "Naira") {
                                 amount.value =
                                     data!.data!.wallets![1].balance!.toInt();
+
                                 return "NGN ${data.data!.wallets![1].balance.toString()}";
                               }
                               if (selectedCurrency.value == "Dollar") {
-                                amount.value =
-                                    data!.data!.wallets![2].balance!.toInt();
-                                return "${data.data!.wallets![2].currency!.symbol.toString()} ${data.data!.wallets![2].balance.toString()}";
+                                data!.data!.wallets!.any(((element) {
+                                  if (element.currency!.name == "US Dollar") {
+                                    amount.value = element.balance!.toInt();
+
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                }));
+                                return "\$ ${amount.value}";
                               }
                               if (selectedCurrency.value == "Euro") {
-                                amount.value =
-                                    data!.data!.wallets![3].balance!.toInt();
-                                return "${data.data!.wallets![3].currency!.symbol.toString()} ${data.data!.wallets![3].balance.toString()}";
+                                data!.data!.wallets!.any(((element) {
+                                  if (element.currency!.code == "EUR") {
+                                    amount.value = element.balance!.toInt();
+
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                }));
+                                return "€ ${amount.value}";
                               }
 
                               if (selectedCurrency.value == "Pound") {
-                                amount.value =
-                                    data!.data!.wallets![4].balance!.toInt();
-                                return "${data.data!.wallets![4].currency!.symbol.toString()} ${data.data!.wallets![4].balance.toString()}";
+                                data!.data!.wallets!.any(((element) {
+                                  if (element.currency!.code == "GBP") {
+                                    amount.value = element.balance!.toInt();
+
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                }));
+                                return "£ ${amount.value}";
                               }
                               if (selectedCurrency.value == "Kayndrex") {
                                 return "${data!.data!.wallets![0].currency!.symbol.toString()} ${data.data!.wallets![0].balance.toString()}";

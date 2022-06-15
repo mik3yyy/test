@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/get_card_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -18,8 +19,15 @@ class TransactionInformationScreen extends StatefulHookConsumerWidget {
 
 class _TransactionInformationScreenState
     extends ConsumerState<TransactionInformationScreen> {
+  final toggleStateProvider = StateProvider<int>((ref) {
+    return 0;
+  });
+
+  String groupValue = "";
   @override
   Widget build(BuildContext context) {
+    final toggle = ref.watch(toggleStateProvider.state);
+    final card = ref.watch(getCardProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -63,12 +71,12 @@ class _TransactionInformationScreenState
                       children: [
                         Container(
                           height: 70.h,
-                          width: 30,
+                          width: 20,
                           color: AppColors.appColor.withOpacity(0.2),
                         ),
                         Container(
                           height: 70.h,
-                          width: 320,
+                          width: 325,
                           // width: MediaQuery.of(context).size.width,
                           color: AppColors.appColor.withOpacity(0.1),
                           child: Padding(
@@ -103,7 +111,7 @@ class _TransactionInformationScreenState
                           child: Row(
                             children: [
                               Text(
-                                'Debit/Credit Card',
+                                'Add Debit/Credit Card',
                                 style: AppText.body2Medium(
                                     context, Colors.black54, 20.sp),
                               ),
@@ -117,6 +125,146 @@ class _TransactionInformationScreenState
                         ),
                       ),
                     ),
+                    Space(30.h),
+                    card.when(
+                        error: (error, stackTrace) => Text(
+                              error.toString(),
+                            ),
+                        idle: () => const CircularProgressIndicator.adaptive(),
+                        loading: () =>
+                            const CircularProgressIndicator.adaptive(),
+                        success: (data) {
+                          return RefreshIndicator(
+                            onRefresh: () async {
+                              ref.refresh(getCardProvider);
+                            },
+                            child: SizedBox(
+                              height: 400,
+                              child: ListView.separated(
+                                physics: const AlwaysScrollableScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
+                                itemCount: data!.data.cards.length,
+                                itemBuilder: (context, index) {
+                                  final savedCard = data.data.cards[index];
+                                  return Container(
+                                    height: 70.h,
+                                    width: MediaQuery.of(context).size.width,
+                                    color: AppColors.appColor.withOpacity(0.03),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, right: 20, left: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style:
+                                                          AppText.body2Medium(
+                                                              context,
+                                                              Colors.black54,
+                                                              20.sp),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: savedCard
+                                                                .first6Digits
+                                                                .toString(),
+                                                            style: AppText
+                                                                .body2Medium(
+                                                                    context,
+                                                                    Colors
+                                                                        .black54,
+                                                                    20.sp)),
+                                                        const TextSpan(
+                                                            text: '****'),
+                                                        TextSpan(
+                                                            text: savedCard
+                                                                .last4Digits
+                                                                .toString(),
+                                                            style: AppText
+                                                                .body2Medium(
+                                                                    context,
+                                                                    Colors
+                                                                        .black54,
+                                                                    20.sp))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const Space(5),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      style:
+                                                          AppText.body2Medium(
+                                                              context,
+                                                              Colors.black54,
+                                                              20.sp),
+                                                      children: [
+                                                        TextSpan(
+                                                            text:
+                                                                "Expiry date  ",
+                                                            style: AppText
+                                                                .body2Medium(
+                                                                    context,
+                                                                    Colors
+                                                                        .black54,
+                                                                    15.sp)),
+                                                        TextSpan(
+                                                            text: savedCard
+                                                                .expiry
+                                                                .toString(),
+                                                            style: AppText
+                                                                .body2Medium(
+                                                                    context,
+                                                                    Colors
+                                                                        .black54,
+                                                                    15.sp))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                savedCard.brand.toString(),
+                                                style: AppText.body2Medium(
+                                                    context,
+                                                    Colors.black54,
+                                                    17.sp),
+                                              ),
+
+                                              // CreditCardWidget(customCardTypeIcons: customCardTypeIcons, cardNumber: savedCard.first6Digits.toString())
+                                              Radio<String>(
+                                                  value: savedCard.isDefault
+                                                      .toString(),
+                                                  groupValue: groupValue,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      groupValue = value!;
+                                                    });
+                                                  })
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(
+                                    height: 10,
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        }),
                   ],
                 ),
               ),

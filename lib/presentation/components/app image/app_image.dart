@@ -72,4 +72,10 @@ class AppImage {
   static const debitCardIcon = "images/debit_card.png";
   static const transferIcon = "images/new_transfer.svg";
   static const withdrawIcon = "images/new_withdraw.svg";
+
+  static const americanExpress = "images/american_express.svg";
+  static const maestro = "images/maestro.svg";
+  static const masterCard = "images/mastercard.svg";
+  static const visa = "images/visa.svg";
+  static const verve = "images/verve.svg";
 }

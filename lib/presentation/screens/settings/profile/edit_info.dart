@@ -197,7 +197,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                                                     value as String;
                                                 genderCountroller.text =
                                                     _radioSelected!;
-                                                print(genderCountroller.text);
+
                                                 // val = value!;
                                               });
                                             },
@@ -246,7 +246,6 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                                     (DateFormat('MM-dd-yyyy').format(date))
                                         .split(" ")
                                         .first;
-                                print(dobCountroller.text);
                               },
                               validator: (date) {
                                 if (date == null) return 'Date is required';

@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/widget/f
 
 import 'presentation/components/app text theme/app_text_theme.dart';
 import 'presentation/screens/settings/faq/widget/faq_accordion.dart';
-import 'presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'presentation/utils/widget_spacer.dart';
 
 class Sample extends StatelessWidget {
@@ -19,7 +18,7 @@ class Sample extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: CustomScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           slivers: [
             SliverToBoxAdapter(
               child: Padding(

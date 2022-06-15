@@ -58,14 +58,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     setState(() {
                       isDrawerOpen = !isDrawerOpen;
                     });
-
-                    print(isDrawerOpen);
                   },
                   child: Image.asset(AppImage.messageMenuIcon)),
             ],
           ),
         ),
-        child: Container(
+        child: SizedBox(
           height: 750.h,
           // padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w),
           child: Column(

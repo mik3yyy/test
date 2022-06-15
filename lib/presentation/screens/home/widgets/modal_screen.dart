@@ -58,7 +58,7 @@ class SampleModalScreen extends ModalRoute<void> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 "Return",
                 style: TextStyle(color: Colors.white),
               ),

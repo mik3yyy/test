@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -144,8 +143,6 @@ class CreatePhoneAccount extends HookConsumerWidget {
                     InternationalPhoneNumberInput(
                       onInputChanged: (PhoneNumber number) {
                         code = number.dialCode!;
-
-                        print(code);
                       },
                       onInputValidated: (bool value) {},
                       selectorConfig: const SelectorConfig(

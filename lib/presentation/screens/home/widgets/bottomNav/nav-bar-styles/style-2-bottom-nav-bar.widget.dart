@@ -39,7 +39,7 @@ class BottomNavStyle2 extends StatelessWidget {
                     ),
                   ),
                   item.title == null
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : Padding(
                           padding: const EdgeInsets.only(top: 15.0),
                           child: Material(

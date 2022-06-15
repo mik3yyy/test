@@ -3,9 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../../components/app text theme/app_text_theme.dart';
-import 'wallet_textfield.dart';
-
 class WalletViewWidget extends StatelessWidget {
   final Widget appBar;
   final Widget child;
