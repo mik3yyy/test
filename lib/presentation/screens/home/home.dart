@@ -96,7 +96,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Hi Dave',
+                      'Hi ${accountNo.maybeMap(success: (v) => v.value!.data!.user!.firstName, orElse: () => '')}',
                       style: AppText.header1(context, Colors.white, 25.sp),
                     ),
                     Space(10.h),
