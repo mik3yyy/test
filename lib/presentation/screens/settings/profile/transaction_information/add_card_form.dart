@@ -3,18 +3,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/address_authentication.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/card_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/add_card_viewmodel.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/withdraw_from_wallet.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../../components/app text theme/app_text_theme.dart';
 
@@ -74,14 +77,24 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
 
     ref.listen<RequestState>(addCardProvider, (prev, value) {
       if (value is Success<AddCardRes>) {
-        pushNewScreen(context,
-            screen: CardWebView(
-              url: value.value!.data!.url.toString(),
-              successMsg: 'Card added',
-            ));
+        if (value.value!.data!.fields![1].contains("address")) {
+          pushNewScreen(context,
+              screen: AddressAuthenication(
+                depositRef: value.value!.data!.depositRef!,
+                mode: value.value!.data!.mode!,
+              ));
+        } else {
+          pushNewScreen(context,
+              screen: CardWebView(
+                url: value.value!.data!.url.toString(),
+                successMsg: 'Card added',
+                webViewRoute: WebViewRoute.addCard,
+              ));
+        }
       }
 
       if (value is Error) {
+        print(value.error);
         AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
       }
     });
@@ -266,7 +279,7 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
                     ? null
                     : () {
                         if (formKey.currentState!.validate()) {
-                          var addCardreq = AddCard(
+                          var addCardreq = AddCardReq(
                               nameOnCard: nameController.text,
                               cardNumber: cardControllerValue.value,
                               expiration: _expiryDateController.text,
@@ -277,6 +290,10 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
                                   depositCurrencyController.text,
                               walletCurrencyCode:
                                   walletCurrencyController.text);
+
+                          ref
+                              .read(genericController.notifier)
+                              .addCardReq(addCardreq);
 
                           ref
                               .read(addCardProvider.notifier)

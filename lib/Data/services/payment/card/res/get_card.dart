@@ -38,10 +38,10 @@ class Data {
     required this.cards,
   });
 
-  List<Card> cards;
+  List<Cardd> cards;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        cards: List<Card>.from(json["cards"].map((x) => Card.fromJson(x))),
+        cards: List<Cardd>.from(json["cards"].map((x) => Cardd.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,8 +49,8 @@ class Data {
       };
 }
 
-class Card {
-  Card({
+class Cardd {
+  Cardd({
     this.processor,
     this.createdAt,
     this.updatedAt,
@@ -74,7 +74,7 @@ class Card {
   String? first6Digits;
   String? last4Digits;
 
-  factory Card.fromJson(Map<String, dynamic> json) => Card(
+  factory Cardd.fromJson(Map<String, dynamic> json) => Cardd(
         processor: json["processor"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),

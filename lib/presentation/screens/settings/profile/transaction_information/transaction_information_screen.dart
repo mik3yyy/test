@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
@@ -23,10 +25,11 @@ class _TransactionInformationScreenState
     return 0;
   });
 
-  String groupValue = "";
+  int? groupValue;
+
   @override
   Widget build(BuildContext context) {
-    final toggle = ref.watch(toggleStateProvider.state);
+    // final toggle = ref.watch(toggleStateProvider.state);
     final card = ref.watch(getCardProvider);
     return Scaffold(
       appBar: AppBar(
@@ -146,113 +149,86 @@ class _TransactionInformationScreenState
                                 itemCount: data!.data.cards.length,
                                 itemBuilder: (context, index) {
                                   final savedCard = data.data.cards[index];
-                                  return Container(
-                                    height: 70.h,
-                                    width: MediaQuery.of(context).size.width,
-                                    color: AppColors.appColor.withOpacity(0.03),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, right: 20, left: 20),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style:
-                                                          AppText.body2Medium(
-                                                              context,
-                                                              Colors.black54,
-                                                              20.sp),
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                            text: savedCard
-                                                                .first6Digits
-                                                                .toString(),
-                                                            style: AppText
-                                                                .body2Medium(
-                                                                    context,
-                                                                    Colors
-                                                                        .black54,
-                                                                    20.sp)),
-                                                        const TextSpan(
-                                                            text: '****'),
-                                                        TextSpan(
-                                                            text: savedCard
-                                                                .last4Digits
-                                                                .toString(),
-                                                            style: AppText
-                                                                .body2Medium(
-                                                                    context,
-                                                                    Colors
-                                                                        .black54,
-                                                                    20.sp))
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const Space(5),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      style:
-                                                          AppText.body2Medium(
-                                                              context,
-                                                              Colors.black54,
-                                                              20.sp),
-                                                      children: [
-                                                        TextSpan(
-                                                            text:
-                                                                "Expiry date  ",
-                                                            style: AppText
-                                                                .body2Medium(
-                                                                    context,
-                                                                    Colors
-                                                                        .black54,
-                                                                    15.sp)),
-                                                        TextSpan(
-                                                            text: savedCard
-                                                                .expiry
-                                                                .toString(),
-                                                            style: AppText
-                                                                .body2Medium(
-                                                                    context,
-                                                                    Colors
-                                                                        .black54,
-                                                                    15.sp))
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Spacer(),
-                                              Text(
-                                                savedCard.brand.toString(),
-                                                style: AppText.body2Medium(
-                                                    context,
-                                                    Colors.black54,
-                                                    17.sp),
-                                              ),
+                                  String getBrand() {
+                                    if (savedCard.brand == "MASTERCARD") {
+                                      return AppImage.masterCard;
+                                    }
+                                    if (savedCard.brand == "VERVE") {
+                                      return AppImage.verve;
+                                    }
+                                    if (savedCard.brand == "VISA") {
+                                      return AppImage.visa;
+                                    }
+                                    if (savedCard.brand == "AMERICAN EXPRESS") {
+                                      return AppImage.americanExpress;
+                                    }
+                                    if (savedCard.brand == "MAESTRO") {
+                                      return AppImage.maestro;
+                                    } else {
+                                      return "";
+                                    }
+                                  }
 
-                                              // CreditCardWidget(customCardTypeIcons: customCardTypeIcons, cardNumber: savedCard.first6Digits.toString())
-                                              Radio<String>(
-                                                  value: savedCard.isDefault
-                                                      .toString(),
-                                                  groupValue: groupValue,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      groupValue = value!;
-                                                    });
-                                                  })
-                                            ],
-                                          ),
+                                  return RadioListTile<int>(
+                                    value: savedCard.isDefault!.toInt(),
+                                    groupValue: groupValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        groupValue = index;
+                                        // val = value;
+                                        // _value = true;
+                                      });
+                                    },
+                                    tileColor: Colors.grey.shade100,
+                                    title: RichText(
+                                      text: TextSpan(
+                                        style: AppText.body2Medium(
+                                            context, Colors.black54, 20.sp),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: savedCard.first6Digits
+                                                  .toString(),
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  20.sp)),
+                                          const TextSpan(text: '****'),
+                                          TextSpan(
+                                              text: savedCard.last4Digits
+                                                  .toString(),
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  20.sp))
                                         ],
                                       ),
                                     ),
+                                    subtitle: RichText(
+                                      text: TextSpan(
+                                        style: AppText.body2Medium(
+                                            context, Colors.black54, 20.sp),
+                                        children: [
+                                          TextSpan(
+                                              text: "Expiry date  ",
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  15.sp)),
+                                          TextSpan(
+                                              text: savedCard.expiry.toString(),
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  15.sp))
+                                        ],
+                                      ),
+                                    ),
+                                    secondary: SvgPicture.asset(
+                                      getBrand(),
+                                      height: 20,
+                                      width: 20,
+                                    ),
+                                    selected: false,
                                   );
                                 },
                                 separatorBuilder:

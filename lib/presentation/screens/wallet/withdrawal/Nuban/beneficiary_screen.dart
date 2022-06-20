@@ -59,7 +59,7 @@ class _BeneficiaryScreenState extends ConsumerState<BeneficiaryScreen> {
   void clear() {
     var passBeneficiary =
         PassBeneficiary(accountName: "", accountNumber: "", bankCode: "");
-    ref.read(withdrawalController.notifier).addBeneficiary(passBeneficiary);
+    ref.read(genericController.notifier).addBeneficiary(passBeneficiary);
   }
 }
 
@@ -74,7 +74,7 @@ class NubanBenficiary extends StatefulHookConsumerWidget {
 class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(withdrawalController);
+    final vm = ref.watch(genericController);
     return Padding(
       padding: const EdgeInsets.only(left: 23, right: 23),
       child: Column(
@@ -94,7 +94,7 @@ class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
                                 bankCode: receipients.bankCode!);
 
                             ref
-                                .read(withdrawalController.notifier)
+                                .read(genericController.notifier)
                                 .addBeneficiary(passBeneficiary);
 
                             pushNewScreen(context,
@@ -152,7 +152,7 @@ class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
   void clear() {
     var passBeneficiary =
         PassBeneficiary(accountName: "", accountNumber: "", bankCode: "");
-    ref.read(withdrawalController.notifier).addBeneficiary(passBeneficiary);
+    ref.read(genericController.notifier).addBeneficiary(passBeneficiary);
   }
 }
 
@@ -166,7 +166,7 @@ class AbaBeneficiary extends StatefulHookConsumerWidget {
 class _AbaBeneficiaryState extends ConsumerState<AbaBeneficiary> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(withdrawalController);
+    final vm = ref.watch(genericController);
     return Padding(
       padding: const EdgeInsets.only(left: 23, right: 23),
       child: Column(
@@ -186,7 +186,7 @@ class _AbaBeneficiaryState extends ConsumerState<AbaBeneficiary> {
                                 bankCode: receipients.bankCode!);
 
                             ref
-                                .read(withdrawalController.notifier)
+                                .read(genericController.notifier)
                                 .addBeneficiary(passBeneficiary);
 
                             pushNewScreen(context,
@@ -244,7 +244,7 @@ class _AbaBeneficiaryState extends ConsumerState<AbaBeneficiary> {
   void clear() {
     var passBeneficiary =
         PassBeneficiary(accountName: "", accountNumber: "", bankCode: "");
-    ref.read(withdrawalController.notifier).addBeneficiary(passBeneficiary);
+    ref.read(genericController.notifier).addBeneficiary(passBeneficiary);
   }
 }
 
@@ -259,7 +259,7 @@ class IbanBeneficiary extends StatefulHookConsumerWidget {
 class _IbanBeneficiaryState extends ConsumerState<IbanBeneficiary> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(withdrawalController);
+    final vm = ref.watch(genericController);
     return Padding(
       padding: const EdgeInsets.only(left: 23, right: 23),
       child: Column(
@@ -279,7 +279,7 @@ class _IbanBeneficiaryState extends ConsumerState<IbanBeneficiary> {
                                 bankCode: receipients.bankCode!);
 
                             ref
-                                .read(withdrawalController.notifier)
+                                .read(genericController.notifier)
                                 .addBeneficiary(passBeneficiary);
 
                             pushNewScreen(context,
@@ -337,6 +337,6 @@ class _IbanBeneficiaryState extends ConsumerState<IbanBeneficiary> {
   void clear() {
     var passBeneficiary =
         PassBeneficiary(accountName: "", accountNumber: "", bankCode: "");
-    ref.read(withdrawalController.notifier).addBeneficiary(passBeneficiary);
+    ref.read(genericController.notifier).addBeneficiary(passBeneficiary);
   }
 }

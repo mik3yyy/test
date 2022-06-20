@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CardWebView extends StatefulHookConsumerWidget {
   final String url;
   final String successMsg;
+  final WebViewRoute webViewRoute;
 
-  const CardWebView({Key? key, required this.url, required this.successMsg})
+  const CardWebView(
+      {Key? key,
+      required this.url,
+      required this.successMsg,
+      required this.webViewRoute})
       : super(key: key);
 
   @override
@@ -39,21 +46,83 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
         debuggingEnabled: true,
         userAgent: 'Flutter;Webview',
         navigationDelegate: (navigation) {
-          if (navigation.url.contains('embed_token')) {
-            final index = navigation.url.toString().lastIndexOf('=');
-            final reference = navigation.url.toString().substring(index + 1);
-            // ref.read(getCardProvider.notifier).getCard();
+          switch (widget.webViewRoute) {
+            case WebViewRoute.fundCard:
+              if (navigation.url.contains('embed_token')) {
+                final index = navigation.url.toString().lastIndexOf('=');
+                final reference =
+                    navigation.url.toString().substring(index + 1);
+                // ref.read(getCardProvider.notifier).getCard();
 
-            Navigator.pop(context);
-            AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+                Navigator.pop(context);
+                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
 
-            //Veriy Payment Endpoint Function
-            // ref
-            //     .read(verifySubscriptionPaymentProvider.notifier)
-            //     .verifySubscriptionPayment(reference);
-            // verifyTransaction(reference);
+                //Veriy Payment Endpoint Function
+                // ref
+                //     .read(verifySubscriptionPaymentProvider.notifier)
+                //     .verifySubscriptionPayment(reference);
+                // verifyTransaction(reference);
 
+              }
+              break;
+            case WebViewRoute.addCard:
+              if (navigation.url.contains('embed_token')) {
+                final index = navigation.url.toString().lastIndexOf('=');
+                final reference =
+                    navigation.url.toString().substring(index + 1);
+                // ref.read(getCardProvider.notifier).getCard();
+
+                Navigator.pop(context);
+                ref.refresh(walletTransactionProvider);
+                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+
+                //Veriy Payment Endpoint Function
+                // ref
+                //     .read(verifySubscriptionPaymentProvider.notifier)
+                //     .verifySubscriptionPayment(reference);
+                // verifyTransaction(reference);
+
+              }
+              break;
+            case WebViewRoute.authorization:
+              if (navigation.url.contains('embed_token')) {
+                final index = navigation.url.toString().lastIndexOf('=');
+                final reference =
+                    navigation.url.toString().substring(index + 1);
+                // ref.read(getCardProvider.notifier).getCard();
+                ref.refresh(walletTransactionProvider);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+
+                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+
+                //Veriy Payment Endpoint Function
+                // ref
+                //     .read(verifySubscriptionPaymentProvider.notifier)
+                //     .verifySubscriptionPayment(reference);
+                // verifyTransaction(reference);
+
+              }
+              break;
           }
+
+          // if (navigation.url.contains('embed_token')) {
+          //   final index = navigation.url.toString().lastIndexOf('=');
+          //   final reference = navigation.url.toString().substring(index + 1);
+          //   // ref.read(getCardProvider.notifier).getCard();
+
+          //   Navigator.pop(context);
+          //   ref.refresh(walletTransactionProvider);
+          //   AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+
+          //   //Veriy Payment Endpoint Function
+          //   // ref
+          //   //     .read(verifySubscriptionPaymentProvider.notifier)
+          //   //     .verifySubscriptionPayment(reference);
+          //   // verifyTransaction(reference);
+
+          // }
 
           return NavigationDecision.navigate;
         },

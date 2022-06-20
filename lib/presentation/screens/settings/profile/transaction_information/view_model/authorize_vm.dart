@@ -4,17 +4,17 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 
-final addCardProvider =
-    StateNotifierProvider.autoDispose<AddCardVM, RequestState<AddCardRes>>(
-  (ref) => AddCardVM(ref),
+final authorizeProvider =
+    StateNotifierProvider.autoDispose<AuthorizeVM, RequestState<AddCardRes>>(
+  (ref) => AuthorizeVM(ref),
 );
 
-class AddCardVM extends RequestStateNotifier<AddCardRes> {
+class AuthorizeVM extends RequestStateNotifier<AddCardRes> {
   final CardServiceManager _cardServiceManager;
 
-  AddCardVM(Ref ref)
+  AuthorizeVM(Ref ref)
       : _cardServiceManager = ref.read(cardServiceManagerProvider);
 
-  void addCard(AddCardReq addCardreq) =>
-      makeRequest(() => _cardServiceManager.addCard(addCardreq));
+  void authorize(AddCardReq addCardreq) =>
+      makeRequest(() => _cardServiceManager.authorize(addCardreq));
 }

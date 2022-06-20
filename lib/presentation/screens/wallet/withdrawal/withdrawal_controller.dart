@@ -1,13 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card_service_manager.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_use_beneficiary_model.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repository/withdrawal_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 
 class WithdrawalState extends Equatable {
   final List<Beneficiary> beneficiary;
   final List<Beneficiary> ababeneficiary;
   final List<Beneficiary> ibanbeneficiary;
+  final AddCardReq? addCardReq;
+  final AddCardRes? addCardRes;
   final bool loading;
   final bool success;
   final PassBeneficiary passBeneficiary;
@@ -18,6 +27,8 @@ class WithdrawalState extends Equatable {
       required this.loading,
       required this.ibanbeneficiary,
       required this.ababeneficiary,
+      this.addCardReq,
+      this.addCardRes,
       required this.error,
       required this.passBeneficiary,
       required this.success});
@@ -40,6 +51,8 @@ class WithdrawalState extends Equatable {
       final List<Beneficiary>? ibanbeneficiary,
       final bool? loading,
       final bool? success,
+      final AddCardReq? addCardReq,
+      final AddCardRes? addCardRes,
       final PassBeneficiary? passBeneficiary,
       final String? error}) {
     return WithdrawalState(
@@ -48,6 +61,8 @@ class WithdrawalState extends Equatable {
         success: success ?? this.success,
         error: error ?? this.error,
         ibanbeneficiary: this.ibanbeneficiary,
+        addCardRes: addCardRes ?? this.addCardRes,
+        addCardReq: addCardReq ?? this.addCardReq,
         ababeneficiary: ababeneficiary ?? this.ababeneficiary,
         passBeneficiary: passBeneficiary ?? this.passBeneficiary);
   }
@@ -60,18 +75,27 @@ class WithdrawalState extends Equatable {
         error,
         passBeneficiary,
         ababeneficiary,
-        ibanbeneficiary
+        ibanbeneficiary,
+        addCardReq,
+        addCardRes
       ];
 }
 
-final withdrawalController =
-    StateNotifierProvider<WithDrawalController, WithdrawalState>((ref) {
-  return WithDrawalController(ref.watch(withdrawManagerProvider));
-});
+final genericController =
+    StateNotifierProvider<WithDrawalController, WithdrawalState>((ref) =>
+            WithDrawalController(ref.watch(withdrawManagerProvider),
+                ref.watch(cardServiceManagerProvider))
+
+        // return WithDrawalController(
+        //   ref.watch(cardServiceManagerProvider),
+        //   ref.watch(withdrawManagerProvider));
+
+        );
 
 class WithDrawalController extends StateNotifier<WithdrawalState> {
   final WithdrawalManager withdrawalManager;
-  WithDrawalController(this.withdrawalManager)
+  final CardServiceManager cardServiceManager;
+  WithDrawalController(this.withdrawalManager, this.cardServiceManager)
       : super(WithdrawalState.initial());
 
   ///Get Nuban beneficiary
@@ -86,6 +110,13 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
       state =
           state.copyWith(loading: false, success: false, error: e.toString());
     }
+  }
+
+  ///add Card Req
+  void addCardReq(AddCardReq addCardReq) {
+    state = state.copyWith(addCardReq: addCardReq);
+
+    print(state.addCardReq!.depositRef);
   }
 
   ///Get Aba beneficiary
@@ -121,5 +152,51 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
 
   void addBeneficiary(PassBeneficiary passBeneficiary) {
     state = state.copyWith(passBeneficiary: passBeneficiary);
+  }
+
+  ///Get Iban beneficiary
+
+  void authorize(
+      {required String address,
+      required String city,
+      required String userState,
+      required String zipcode,
+      required String country,
+      required String depositRef,
+      required String mode,
+      required BuildContext context}) async {
+    // final depositRef = PreferenceManager.depositRef;
+    try {
+      state = state.copyWith(loading: true);
+      var addCardReq = AddCardReq(
+          nameOnCard: state.addCardReq!.nameOnCard,
+          cardNumber: state.addCardReq!.cardNumber,
+          cvv: state.addCardReq!.cvv,
+          depositRef: depositRef,
+          expiration: state.addCardReq!.expiration,
+          depositCurrencyCode: state.addCardReq!.depositCurrencyCode,
+          walletCurrencyCode: state.addCardReq!.walletCurrencyCode,
+          amount: state.addCardReq!.amount,
+          authorization: Authorization(
+              address: address,
+              state: userState,
+              city: city,
+              mode: mode,
+              country: country,
+              zipcode: zipcode));
+
+      final res = await cardServiceManager.authorize(addCardReq);
+      pushNewScreen(context,
+          screen: CardWebView(
+            url: res.data!.url!,
+            successMsg: 'Card added',
+            webViewRoute: WebViewRoute.authorization,
+          ));
+
+      state = state.copyWith(loading: false, success: true);
+    } catch (e) {
+      state =
+          state.copyWith(loading: false, success: false, error: e.toString());
+    }
   }
 }

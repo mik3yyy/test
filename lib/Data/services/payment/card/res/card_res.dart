@@ -51,23 +51,23 @@ class Data {
   String? url;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        requiresAuth: json["requires_auth"] ?? '',
-        mode: json["mode"] ?? '',
-        message: json["message"] ?? "",
+        requiresAuth: json["requires_auth"],
+        mode: json["mode"],
+        message: json["message"],
         fields: json["fields"] == null
-            ? null
+            ? []
             : List<String>.from(json["fields"].map((x) => x)),
-        depositRef: json["deposit_ref"] ?? "",
-        url: json["url"] ?? "",
+        depositRef: json["deposit_ref"],
+        url: json["url"],
       );
 
   Map<String, dynamic> toJson() => {
-        "requires_auth": requiresAuth ?? "",
-        "mode": mode ?? "",
-        "message": message ?? "",
+        "requires_auth": requiresAuth,
+        "mode": mode,
+        "message": message,
         "fields":
-            fields == null ? null : List<dynamic>.from(fields!.map((x) => x)),
-        "deposit_ref": depositRef ?? "",
-        "url": url ?? "",
+            fields == null ? [] : List<dynamic>.from(fields!.map((x) => x)),
+        "deposit_ref": depositRef,
+        "url": url,
       };
 }

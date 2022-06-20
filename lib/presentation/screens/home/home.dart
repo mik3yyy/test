@@ -51,9 +51,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
     ref.read(refreshControllerProvider.notifier).refreshToken();
-    ref.read(withdrawalController.notifier).getBeneficiaries();
-    ref.read(withdrawalController.notifier).getAbaBeneficiaries();
-    ref.read(withdrawalController.notifier).getIbanBeneficiaries();
+    ref.read(genericController.notifier).getBeneficiaries();
+    ref.read(genericController.notifier).getAbaBeneficiaries();
+    ref.read(genericController.notifier).getIbanBeneficiaries();
     ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
   }
 
@@ -342,23 +342,28 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: Text("You have no transactions"),
                         );
                       } else {
-                        return SizedBox(
-                          height: 300.h,
-                          child: ListView.separated(
-                            physics: const AlwaysScrollableScrollPhysics(
-                                parent: BouncingScrollPhysics()),
-                            itemCount: data.data!.transactions.length,
-                            itemBuilder: (context, index) {
-                              final transactions =
-                                  data.data!.transactions[index];
-                              return TransactionBuild(
-                                transactions: transactions,
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(height: 20.h);
-                            },
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            ref.refresh(walletTransactionProvider);
+                          },
+                          child: SizedBox(
+                            height: 300.h,
+                            child: ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              itemCount: data.data!.transactions.length,
+                              itemBuilder: (context, index) {
+                                final transactions =
+                                    data.data!.transactions[index];
+                                return TransactionBuild(
+                                  transactions: transactions,
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return SizedBox(height: 20.h);
+                              },
+                            ),
                           ),
                         );
                       }
@@ -444,6 +449,7 @@ class TransactionBuild extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime date = transactions.createdAt!;
     String dateCreated = DateFormat(' d, MMM yyyy').format(date);
+    var formatter = NumberFormat('###,000');
     String currencyCode() {
       if (transactions.currencyCode == CurrencyCode.eur) {
         return "EUR";
@@ -503,7 +509,7 @@ class TransactionBuild extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        currencyCode() + transactions.amount.toString(),
+                        "${currencyCode()} ${formatter.format(transactions.amount)}",
                         style: AppText.body2(context, Colors.red, 18.sp),
                       ),
                     ],
@@ -517,7 +523,7 @@ class TransactionBuild extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        currencyCode() + transactions.amount.toString(),
+                        "${currencyCode()} ${formatter.format(transactions.amount)}",
                         style: AppText.body2(context, Colors.green, 18.sp),
                       ),
                     ],
