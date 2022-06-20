@@ -27,7 +27,7 @@ class _MakeTransferState extends ConsumerState<MakeTransfer>
   late TabController _tabController;
   @override
   Widget build(BuildContext context) {
-    final walletList = ref.watch(getAccountDetailsProvider);
+    // final walletList = ref.watch(getAccountDetailsProvider);
     return Stack(
       children: [
         Padding(
@@ -102,12 +102,11 @@ class _MakeTransferState extends ConsumerState<MakeTransfer>
                 // color: Colors.grey,
                 child: TabBarView(controller: _tabController, children: [
                   FriendsTab(),
-                  ToWallet(
-                    //TODO: to refresh accoun details
+                  const ToWallet(
 
-                    wallet: walletList.maybeWhen(
-                        success: (v) => v!.data!.wallets, orElse: () => []),
-                  )
+                      // wallet: walletList.maybeWhen(
+                      //     success: (v) => v!.data!.wallets, orElse: () => []),
+                      )
                 ]),
               )
             ],

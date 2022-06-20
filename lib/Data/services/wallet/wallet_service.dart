@@ -5,6 +5,8 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_saved_wallet_beneficiary_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/verify_acct_no_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
@@ -124,22 +126,62 @@ class WalletService {
   }
 
   //Transafer to other wallet
-  Future<bool> transferToAnotherUser(
-    String accountNo,
-    String transferCurrency,
-    num transferAmount,
-    String transactionPin,
-  ) async {
+  Future<bool> transferToAnotherUser(String accountNo, String transferCurrency,
+      num transferAmount, String transactionPin, bool saveAsBeneficary) async {
     const url = '/wallets/transfer-funds/to-another-user';
     try {
       final response = await _read(dioProvider).post(url, data: {
         "account_no": accountNo,
         "transfer_currency": transferCurrency,
         "transfer_amount": transferAmount,
-        "transaction_pin": transactionPin
+        "transaction_pin": transactionPin,
+        "add_to_beneficiaries": saveAsBeneficary,
       });
 
       final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  //Verify friend acct no
+  Future<VerifyAcctNoRes> verifyAcctNo(String accountNo) async {
+    const url = '/wallets/verify-account-no';
+    try {
+      final response = await _read(dioProvider).post(
+        url,
+        data: {
+          'account_no': accountNo,
+        },
+        options: Options(headers: {"requireToken": true}),
+      );
+      final result = VerifyAcctNoRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  //get user saved wallet beneficiary
+  Future<UserSavedWalletBeneficiaryRes> userSavedWalletBeneficiary() async {
+    const url = '/wallets/beneficiaries';
+    try {
+      final response = await _read(dioProvider).get(
+        url,
+        options: Options(headers: {"requireToken": true}),
+      );
+      final result = UserSavedWalletBeneficiaryRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
