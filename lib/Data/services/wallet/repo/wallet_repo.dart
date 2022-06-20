@@ -2,6 +2,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_saved_wallet_beneficiary_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/verify_acct_no_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/repo/i_wallet_repo.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/wallet_service.dart';
@@ -46,13 +48,25 @@ class WalletRepo extends IWalletRepo {
 
   @override
   Future<bool> transferToAnotherUser(String accountNo, String transferCurrency,
-      num transferAmount, String transactionPin) async {
-    final res = await _walletService.transferToAnotherUser(
-        accountNo, transferCurrency, transferAmount, transactionPin);
+      num transferAmount, String transactionPin, bool saveAsBeneficary) async {
+    final res = await _walletService.transferToAnotherUser(accountNo,
+        transferCurrency, transferAmount, transactionPin, saveAsBeneficary);
     return res;
   }
 
   @override
   Future<WalletTransactions> getTransactions() async =>
       await _walletService.getTransactions();
+
+  @override
+  Future<VerifyAcctNoRes> verifyAcctNo(String accountNo) async {
+    final res = await _walletService.verifyAcctNo(accountNo);
+    return res;
+  }
+
+  @override
+  Future<UserSavedWalletBeneficiaryRes> userSavedWalletBeneficiary() async {
+    final res = await _walletService.userSavedWalletBeneficiary();
+    return res;
+  }
 }

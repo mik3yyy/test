@@ -27,9 +27,9 @@ class WalletOptionList extends StatelessWidget {
                     pushNewScreen(
                       context,
                       screen: const Transfer(
-                        //TODO: To replace with real value
-                        wallet: [],
-                      ),
+                          //TODO: To replace with real value
+                          // wallet: [],
+                          ),
                       withNavBar: true, // OPTIONAL VALUE. True by default.
                       pageTransitionAnimation: PageTransitionAnimation.fade,
                     );

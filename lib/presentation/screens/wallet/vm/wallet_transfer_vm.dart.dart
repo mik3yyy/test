@@ -18,11 +18,11 @@ class TransferToWalletVM extends RequestStateNotifier<bool> {
           fromCurrency, toCurrency, transferAmount, transactionPin));
 
   Future<RequestState<bool>> transferToAnotherUser(
-    String accountNo,
-    String transferCurrency,
-    num transferAmount,
-    String transactionPin,
-  ) =>
-      makeRequest(() => _walletRepo.transferToAnotherUser(
-          accountNo, transferCurrency, transferAmount, transactionPin));
+          String accountNo,
+          String transferCurrency,
+          num transferAmount,
+          String transactionPin,
+          bool saveAsBeneficary) =>
+      makeRequest(() => _walletRepo.transferToAnotherUser(accountNo,
+          transferCurrency, transferAmount, transactionPin, saveAsBeneficary));
 }

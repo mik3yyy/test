@@ -7,6 +7,8 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -20,8 +22,14 @@ import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
 
 class ToWallet extends StatefulHookConsumerWidget {
-  final List<Wallet>? wallet;
-  const ToWallet({required this.wallet, Key? key}) : super(key: key);
+  // final List<Wallet>? wallet;
+  const ToWallet(
+      {
+
+      // required this.wallet,
+
+      Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ToWalletState();
@@ -32,6 +40,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
   final formKey = GlobalKey<FormState>();
 
   final List<Map<String, dynamic>> _items = [
+    //TODO: How to loop through and remove default wallet code because you can tranfer to default wallet
     {
       'value': 'EUR',
       'label': '€ Euro',
@@ -72,8 +81,10 @@ class _ToWalletState extends ConsumerState<ToWallet> {
   Widget build(BuildContext context) {
     //TODO: to refresh accoun details
     // ref.refresh(getAccountDetailsProvider);
-    final userWallet =
-        widget.wallet!.where((element) => element.isDefault == 1).toList();
+    // final userWallet =
+    //     widget.wallet!.where((element) => element.isDefault == 1).toList();
+    final defaultWallet = ref.watch(getUserProfileProvider);
+    // final defaultWallet = ref.watch(signInProvider);
     final vm = ref.watch(transferToWalletProvider);
     final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
     // final fistNameController = useTextEditingController();
@@ -81,15 +92,23 @@ class _ToWalletState extends ConsumerState<ToWallet> {
     final toCurrencyController = useTextEditingController();
     final transactionPinController = useTextEditingController();
 
+    final currencyCode = defaultWallet.maybeWhen(
+        success: (v) => v!.data!.defaultWallet!.currencyCode!,
+        orElse: () => '');
+
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Success) {
-        //Refreshing user account details, so the new balance can reflect on the screen
-        // ref.refresh(getAccountDetailsProvider);
         context.loaderOverlay.hide();
         //TODO: We might need to refactor the success dialog
         AppDialog.showSuccessMessageDialog(
             context, 'Funds transferred successfully');
-        ref.refresh(getAccountDetailsProvider);
+        //Refreshing user account details, so the new balance can reflect on the screen
+
+        ref.refresh(getUserProfileProvider);
+        amountController.clear();
+        toCurrencyController.clear();
+        transactionPinController.clear();
+
         // return AppSnackBar.showSuccessSnackBar(context,
         //     message: 'Transfer Succesfully');
       }
@@ -117,7 +136,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               children: [
                 Center(
                   child: Text(
-                    'Transfer from ${userWallet[0].currency!.name} wallet to other wallets',
+                    'Transfer from $currencyCode wallet to other wallets',
                     style: AppText.body2(context, Colors.black, 19.sp),
                   ),
                 ),
@@ -132,9 +151,10 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                   obscureText: false,
                   color: Colors.white,
                   controller: amountController,
+                  readOnly: false,
                   validator: (String? value) {
                     if (value!.isEmpty) {
-                      return 'Please entre amount';
+                      return 'Please entee amount';
                     }
                     return null;
                   },
@@ -265,7 +285,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                             ref
                                 .read(transferToWalletProvider.notifier)
                                 .transferToWallet(
-                                  userWallet[0].currency!.code!,
+                                  currencyCode,
                                   toCurrencyController.text,
                                   int.parse(amountController.text),
                                   transactionPinController.text,
@@ -334,6 +354,7 @@ class ToWalletTab extends HookConsumerWidget {
             labelText: 'Click to type',
             obscureText: false,
             color: Colors.white,
+            readOnly: false,
           ),
           Space(25.h),
           Text(
@@ -345,6 +366,7 @@ class ToWalletTab extends HookConsumerWidget {
             labelText: 'Select currency',
             obscureText: false,
             color: Colors.white,
+            readOnly: false,
           ),
           Space(25.h),
           Center(
@@ -364,6 +386,7 @@ class ToWalletTab extends HookConsumerWidget {
           WalletTextField(
             labelText: '',
             obscureText: true,
+            readOnly: false,
             color: Colors.white,
             suffixIcon: GestureDetector(
               onTap: () {

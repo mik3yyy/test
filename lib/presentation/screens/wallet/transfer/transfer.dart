@@ -3,17 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-
-import '../../../../Data/services/wallet/models/res/user_account_details_res.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import '../widget/wallet_view_widget.dart';
 
 class Transfer extends StatefulHookConsumerWidget {
-  final List<Wallet>? wallet;
-  const Transfer({required this.wallet, Key? key}) : super(key: key);
+  // final List<Wallet>? wallet;
+  const Transfer(
+      {
+      // required this.wallet,
+      Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _TransferState();
@@ -32,22 +36,8 @@ class _TransferState extends ConsumerState<Transfer>
   @override
   @override
   Widget build(BuildContext context) {
-    // final walletList = ref.watch(getAccountDetailsProvider);
-    //TODO: To refresh account when transfer is succesfully
-    // ref.refresh(getAccountDetailsProvider);
-    // final setWalletVm = ref.watch(setWalletAsDefaultProvider);
-    final userWallet =
-        widget.wallet!.where((element) => element.isDefault == 1).toList();
-    // var result = lst.firstWhere(test, orElse: () => null)
-    // final walletDetails = walletList.maybeWhen(
-    //     success: (v) =>
-    //         v!.data!.wallets!.firstWhere((element) => element.isDefault == 0,orElse: () => []),
-    //     orElse: () => '');
-    // final walletDetails = walletList.maybeWhen(
-    //     success: (v) =>
-    //         v!.data!.wallets!.where((element) => element.isDefault == 0).,
-    //     orElse: () => '');
-    // print(walletDetails);
+    final defaultWallet = ref.watch(getUserProfileProvider);
+    final accountNo = ref.watch(signInProvider);
     return GenericWidget(
         appbar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
@@ -71,25 +61,24 @@ class _TransferState extends ConsumerState<Transfer>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        //TODO: Did some hacking, will refactor later and look for a better way
-                        "${userWallet[0].currency!.nativeSymbol} ${userWallet[0].balance.toString()}",
-                        // walletDetails.toString(),
-                        //                 walletList.maybeWhen(
-                        // success: (v) =>'${v!.data!.wallets!
-                        //     .where((element) => element.isDefault == 1)}',
-                        // orElse: () => ''),
-                        // setWalletVm.maybeWhen(
-                        //     success: (v) =>
-                        //         '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
-                        //     orElse: () => ''),
-                        // '\$ 2,400.00',
+                        defaultWallet.maybeWhen(
+                            success: (v) =>
+                                "${v!.data!.defaultWallet!.currencyCode!} ${v.data!.defaultWallet!.balance.toString()}",
+                            orElse: () => ''),
                         style: AppText.header1(context, Colors.white, 25.sp),
                       ),
                       Space(10.h),
                       Text(
-                        'Available Balance',
+                        defaultWallet.maybeWhen(
+                            success: (v) =>
+                                "Acc No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user!.accountNumber, orElse: () => '')}",
+                            orElse: () => ''),
                         style: AppText.body2(context, Colors.white, 16.sp),
                       ),
+                      // Text(
+                      //   'Available Balance',
+                      //   style: AppText.body2(context, Colors.white, 16.sp),
+                      // ),
                     ],
                   ),
                   const Spacer(),

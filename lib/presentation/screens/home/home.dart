@@ -104,6 +104,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       'Thanks for signing up with us',
                       style: AppText.body2(context, Colors.white, 18.sp),
                     ),
+                    // Text(
+                    //   'Thanks for signing up with us',
+                    //   style: AppText.body2(context, Colors.white, 18.sp),
+                    // ),
                   ],
                 ),
                 const Spacer(),
@@ -250,11 +254,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                               pushNewScreen(
                                 context,
                                 screen: Transfer(
-                                  //TODO: To check if wallet has been fetched from api
-                                  wallet: walletList.maybeWhen(
-                                      success: (v) => v!.data!.wallets,
-                                      orElse: () => []),
-                                ),
+                                    //TODO: To check if wallet has been fetched from api
+                                    // wallet: walletList.maybeWhen(
+                                    //     success: (v) => v!.data!.wallets,
+                                    //     orElse: () => []),
+                                    ),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
