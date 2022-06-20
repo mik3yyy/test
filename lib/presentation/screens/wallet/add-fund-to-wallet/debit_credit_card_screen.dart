@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
@@ -12,15 +13,18 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/get_card_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/withdraw_from_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../Data/services/payment/make_payment/fund_wallet/fund_wallet_res.dart';
+import '../../../components/app image/app_image.dart';
 import 'widget/add_fund_heading_container.dart';
 
 class DebitCreditCardScreen extends StatefulHookConsumerWidget {
@@ -56,6 +60,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
             screen: CardWebView(
               url: value.value!.link!.data!.link.toString(),
               successMsg: 'Wallet Funded',
+              webViewRoute: WebViewRoute.fundCard,
             ));
       }
 
@@ -118,16 +123,6 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                     euro: euro,
                                     naira: naira,
                                     kayndrex: kayndrex),
-                                // Positioned(
-                                //   left: 375.w,
-                                //   right: 0,
-                                //   bottom: 17.h,
-                                //   child: const Icon(
-                                //     CupertinoIcons.chevron_down,
-                                //     color: Color(0xffA8A8A8),
-                                //     size: 15,
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -337,16 +332,6 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                       ],
                                     ),
                                     Space(18.h),
-                                    // CustomButton(
-                                    //   buttonText: 'Next',
-                                    //   bgColor:
-                                    //       AppColors.appColor.withOpacity(0.3),
-                                    //   textColor: AppColors.whiteColor,
-                                    //   borderColor:
-                                    //       AppColors.appColor.withOpacity(0.3),
-                                    //   buttonWidth:
-                                    //       MediaQuery.of(context).size.width,
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -371,14 +356,19 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                       ? null
                       : () {
                           if (formKey.currentState!.validate()) {
-                            var fundWalletReq = FundWalletReq(
-                                amount: int.parse(amountController.text),
-                                depositCurrencyCode: depositController.text,
-                                walletCurrencyCode: currencyController.text);
+                            if (firstDigit.text.isEmpty) {
+                              AppSnackBar.showInfoSnackBar(context,
+                                  message: "Select a card");
+                            } else {
+                              var fundWalletReq = FundWalletReq(
+                                  amount: int.parse(amountController.text),
+                                  depositCurrencyCode: depositController.text,
+                                  walletCurrencyCode: currencyController.text);
 
-                            ref
-                                .read(fundWalletProvider.notifier)
-                                .fundWallet(fundWalletReq);
+                              ref
+                                  .read(fundWalletProvider.notifier)
+                                  .fundWallet(fundWalletReq);
+                            }
                           }
                         },
                 ),
@@ -391,9 +381,11 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
   }
 }
 
+// ignore: must_be_immutable
 class SelectSavedCards extends StatefulHookConsumerWidget {
   final TextEditingController firstDigit;
   final TextEditingController secondDigit;
+
   const SelectSavedCards({
     Key? key,
     required this.firstDigit,
@@ -408,107 +400,227 @@ class SelectSavedCards extends StatefulHookConsumerWidget {
 class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
   @override
   Widget build(BuildContext context) {
+    final brandImage = useState("");
     final card = ref.watch(getCardProvider);
     return InkWell(
         onTap: () {
-          // debugPrint('Hi, we are here');
-          //TODO: If card list is not empty from api, to implement the UI of select out of the list of card UI
-          showCupertinoModalPopup(
+          showModalBottomSheet(
+              backgroundColor: Colors.transparent,
               context: context,
-              builder: (context) {
-                return Padding(
-                  padding: EdgeInsets.only(left: 25.w, right: 25.w),
-                  child: CupertinoActionSheet(
-                    actions: [
-                      Container(
-                        color: Colors.white,
-                        child: CupertinoActionSheetAction(
-                          child: Text(
-                            'Add debit/credit card',
-                            style: AppText.body6(
-                                context, AppColors.textColor, 12.sp),
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
-                      // Container(color: Colors.white, child: const Divider()),
-                      card.when(
-                          error: (error, stackTrace) => Text(error.toString()),
-                          idle: () =>
-                              const CircularProgressIndicator.adaptive(),
-                          loading: () =>
-                              const CircularProgressIndicator.adaptive(),
-                          success: (data) {
-                            return SizedBox(
-                                height: 200,
-                                child: ListView.builder(
-                                    itemCount: data!.data.cards.length,
-                                    itemBuilder: (context, index) {
-                                      final savedSaved = data.data.cards[index];
-                                      return Container(
-                                        color: Colors.white,
-                                        child: CupertinoActionSheetAction(
-                                          child: Text(
-                                            "${savedSaved.first6Digits.toString()} ${savedSaved.last4Digits.toString()}",
-                                            style: AppText.body6(context,
-                                                AppColors.textColor, 16.sp),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              widget.firstDigit.text =
-                                                  savedSaved.first6Digits!;
-                                              widget.secondDigit.text =
-                                                  savedSaved.last4Digits!;
-                                            });
+              builder: (builder) {
+                return Container(
+                  height: 350.0,
+                  width: 200,
+                  color: Colors
+                      .transparent, //could change this to Color(0xFF737373),
+                  //so you don't have to change MaterialApp canvasColor
+                  child: Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0))),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 30,
+                            right: 30,
+                            top: 50,
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: card.when(
+                                  error: (error, stackTrace) =>
+                                      Text(error.toString()),
+                                  idle: () => const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive(),
+                                      ),
+                                  loading: () => const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive(),
+                                      ),
+                                  success: (data) {
+                                    return SizedBox(
+                                      child: ListView.builder(
+                                          itemCount: data!.data.cards.length,
+                                          itemBuilder: (context, index) {
+                                            final savedCard =
+                                                data.data.cards[index];
+                                            String _getBrand() {
+                                              if (savedCard.brand ==
+                                                  "MASTERCARD") {
+                                                return AppImage.masterCard;
+                                              }
+                                              if (savedCard.brand == "VISA") {
+                                                return AppImage.visa;
+                                              }
+                                              if (savedCard.brand == "VERVE") {
+                                                return AppImage.verve;
+                                              }
+                                              if (savedCard.brand == "VISA") {
+                                                return AppImage.visa;
+                                              }
+                                              if (savedCard.brand ==
+                                                  "MAESTRO") {
+                                                return AppImage.maestro;
+                                              }
 
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      );
-                                    }));
-                          })
-                    ],
-                    cancelButton: CupertinoActionSheetAction(
-                      child: Text(
-                        "Close",
-                        style:
-                            AppText.body6(context, AppColors.textColor, 16.sp),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                                              return '';
+                                            }
+
+                                            return Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    widget.firstDigit.text =
+                                                        savedCard.first6Digits!;
+                                                    widget.secondDigit.text =
+                                                        savedCard.last4Digits!;
+                                                    brandImage.value =
+                                                        savedCard.brand!;
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      _getBrand(),
+                                                      height: 25,
+                                                      width: 25,
+                                                    ),
+                                                    const Space(10),
+                                                    Text(
+                                                      "${savedCard.first6Digits.toString()}${savedCard.last4Digits.toString()}",
+                                                      style: AppText.body6(
+                                                          context,
+                                                          AppColors.textColor,
+                                                          25.sp),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                  }),
+                            ),
+                          ),
+                          Positioned(
+                            left: 30,
+                            right: 30,
+                            bottom: 130,
+                            child: InkWell(
+                              onTap: () {
+                                pushNewScreen(context,
+                                    screen: const AddCardForm(),
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.slideRight);
+                              },
+                              child: Container(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Add card",
+                                    style: AppText.body6(
+                                        context, AppColors.textColor, 20.sp),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 30,
+                            right: 30,
+                            bottom: 70,
+                            child: InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: Container(
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Close",
+                                    style: AppText.body6(
+                                        context, AppColors.textColor, 20.sp),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
                 );
               });
+          // debugPrint('Hi, we are here');
+          //TODO: If card list is not empty from api, to implement the UI of select out of the list of card UI
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.firstDigit.text.isNotEmpty) ...[
               Text(
-                "Select card",
+                "Select card to pay with",
                 style: AppText.body2(context, Colors.black38, 15.sp),
               ),
             ] else ...[
               Text(
-                "Select card",
+                "Select card to pay with",
                 style: AppText.body2(context, Colors.black38, 20.sp),
               ),
             ],
-            const Space(8),
-            if (widget.firstDigit.text.isEmpty) ...[
-              const SizedBox.shrink()
-            ] else ...[
-              Text(
-                "${widget.firstDigit.text}${widget.secondDigit.text} ",
-                style: AppText.body2(context, Colors.black, 20.sp),
-              ),
-            ],
-            const Space(2),
-            const Divider(
-              color: Colors.black,
-            )
+            const Space(10),
+            Row(
+              children: [
+                if (brandImage.value == "MASTERCARD") ...[
+                  SvgPicture.asset(
+                    AppImage.masterCard,
+                    height: 23,
+                    width: 23,
+                  ),
+                ] else if (brandImage.value == "VERVE") ...[
+                  SvgPicture.asset(
+                    AppImage.verve,
+                    height: 23,
+                    width: 23,
+                  ),
+                ] else if (brandImage.value == "VISA") ...[
+                  SvgPicture.asset(
+                    AppImage.visa,
+                    height: 23,
+                    width: 23,
+                  ),
+                ],
+                const Space(20),
+                const Space(8),
+                if (widget.firstDigit.text.isEmpty) ...[
+                  const SizedBox.shrink()
+                ] else ...[
+                  Text(
+                    "${widget.firstDigit.text}${widget.secondDigit.text} ",
+                    style: AppText.body2(context, Colors.black, 20.sp),
+                  ),
+                ],
+                const Space(2),
+                const Divider(
+                  color: Colors.black,
+                ),
+              ],
+            ),
           ],
         ));
   }

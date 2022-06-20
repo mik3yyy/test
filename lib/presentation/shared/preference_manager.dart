@@ -21,6 +21,10 @@ class PreferenceManager {
       prefs.setString("authToken", authToken);
   static String get authToken => prefs.getString("authToken") ?? '';
 
+  static set depositRef(String depositRef) =>
+      prefs.setString("depositRef", depositRef);
+  static String get depositRef => prefs.getString("depositRef") ?? '';
+
   static set pseudoToken(String pseudoToken) =>
       prefs.setString("pseudoToken", pseudoToken);
   static String get pseudoToken => prefs.getString("pseudoToken") ?? '';

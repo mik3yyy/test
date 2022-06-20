@@ -432,11 +432,6 @@ class _SepaViewState extends ConsumerState<SepaView> {
               obscureText: false,
               validator: (value) => null),
 
-          /// Select Bank Name here
-          // SelectBank(
-          //   bankController: bankController,
-          //   bankCode: bankCodeController,
-          // ),
           Space(20.h),
           EditForm(
               autovalidateMode: AutovalidateMode.onUserInteraction,

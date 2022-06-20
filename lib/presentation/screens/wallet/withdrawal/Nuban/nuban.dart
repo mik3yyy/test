@@ -44,7 +44,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   Widget build(BuildContext context) {
     final accountName = ref.watch(getBankDetailsProvider);
     final nuban = ref.watch(nubanWithdrawalProvider);
-    final savedBeneficiary = ref.watch(withdrawalController);
+    final savedBeneficiary = ref.watch(genericController);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     // final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
@@ -426,33 +426,36 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           bgColor: AppColors.appColor,
                           borderColor: AppColors.appColor,
                           textColor: Colors.white,
-                          onPressed: nuban is Loading
+                          onPressed: accountName is Loading
                               ? null
-                              : () {
-                                  if ((formKey.currentState!.validate())) {
-                                    fieldFocusNode.unfocus();
-                                    if (enteredAmount.value == true) {
-                                      AppDialog.showErrorMessageDialog(context,
-                                          "Withdrawal amount cannot be more than available amount");
-                                    } else {
-                                      fieldFocusNode.unfocus();
-                                      var nubanReq = NubanReq(
-                                          accountName:
-                                              recipientAccountName.value,
-                                          accountNumber:
-                                              bankAccountController.text,
-                                          amount:
-                                              int.parse(amountController.text),
-                                          bankCode: bankCodeController.text,
-                                          description:
-                                              descriptionController.text);
-                                      ref
-                                          .read(
-                                              nubanWithdrawalProvider.notifier)
-                                          .nubanWithdrawal(nubanReq);
-                                    }
-                                  }
-                                },
+                              : nuban is Loading
+                                  ? null
+                                  : () {
+                                      if ((formKey.currentState!.validate())) {
+                                        fieldFocusNode.unfocus();
+                                        if (enteredAmount.value == true) {
+                                          AppDialog.showErrorMessageDialog(
+                                              context,
+                                              "Withdrawal amount cannot be more than available amount");
+                                        } else {
+                                          fieldFocusNode.unfocus();
+                                          var nubanReq = NubanReq(
+                                              accountName:
+                                                  recipientAccountName.value,
+                                              accountNumber:
+                                                  bankAccountController.text,
+                                              amount: int.parse(
+                                                  amountController.text),
+                                              bankCode: bankCodeController.text,
+                                              description:
+                                                  descriptionController.text);
+                                          ref
+                                              .read(nubanWithdrawalProvider
+                                                  .notifier)
+                                              .nubanWithdrawal(nubanReq);
+                                        }
+                                      }
+                                    },
                           buttonWidth: MediaQuery.of(context).size.width),
                       Space(7.h),
                       Center(

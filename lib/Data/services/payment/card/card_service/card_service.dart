@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 
-import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
@@ -32,7 +32,7 @@ class CardService {
   }
 
   // FSavd Card
-  Future<AddCardRes> addCard(AddCard addCardreq) async {
+  Future<AddCardRes> addCard(AddCardReq addCardreq) async {
     const url = '/payments/deposits/card/new/initiate';
 
     try {
@@ -99,6 +99,27 @@ class CardService {
           await _read(dioProvider).post(url, data: fundWalletReq.toJson());
       final result = FundWalletRes.fromJson(response.data);
 
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+//* Authorize card
+  Future<AddCardRes> authorize(AddCardReq addCardReq) async {
+    const url = '/payments/deposits/card/new/authorize';
+
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: addCardReq.toJson()
+              // options: Options(headers: {"Authentication": "Bearer $token"})
+              );
+      final result = AddCardRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

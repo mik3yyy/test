@@ -20,7 +20,7 @@ class WithdrawalMethodScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final controller = ref.watch(withdrawalController);
+    final controller = ref.watch(genericController);
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: AppBar(
