@@ -4,42 +4,39 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/reset_pin_vm.dart';
-
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/change_transaction_pin_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-class ResetPinScreen extends HookConsumerWidget {
-  final String otpCode;
-  final String emailPhone;
-  ResetPinScreen({
-    Key? key,
-    required this.emailPhone,
-    required this.otpCode,
-  }) : super(key: key);
+import '../../../../../components/app text theme/app_text_theme.dart';
+
+class ResetTransactionPin extends HookConsumerWidget {
+  ResetTransactionPin({Key? key}) : super(key: key);
+
   final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
+  final oldPinToggleStateProvider = StateProvider<bool>((ref) => true);
 
   final fieldFocusNode = FocusNode();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(resetPinProvider);
     final confirmController = useTextEditingController();
     final controller = useTextEditingController();
+    final oldPasswordController = useTextEditingController();
     final togglePassword = ref.watch(pinToggleStateProvider.state);
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
-
-    ref.listen<RequestState>(resetPinProvider, (T, value) {
+    final toggleOldPin = ref.watch(oldPinToggleStateProvider.state);
+    final vn = ref.watch(changeTransactionPinProvider);
+    ref.listen<RequestState>(changeTransactionPinProvider, (T, value) {
       if (value is Success) {
-        ref.refresh(resetPinProvider);
+        Navigator.pop(context);
+        ref.refresh(changeTransactionPinProvider);
 
         return AppSnackBar.showSuccessSnackBar(context,
             message: 'Transaction Pin changed successfully');
@@ -79,9 +76,7 @@ class ResetPinScreen extends HookConsumerWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-              ),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -91,24 +86,58 @@ class ResetPinScreen extends HookConsumerWidget {
                       width: MediaQuery.of(context).size.width,
                       color: AppColors.appColor.withOpacity(0.1),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 23.w, top: 7),
-                        child: Text(
-                          'Reset Transaction Pin',
-                          style: AppText.body2(context, Colors.black54, 20.sp),
+                        padding: EdgeInsets.only(right: 240.w),
+                        child: Center(
+                          child: Text(
+                            'Change password',
+                            style:
+                                AppText.body2(context, Colors.black54, 20.sp),
+                          ),
                         ),
                       ),
                     ),
-
-                    Space(120.h),
-
-                    // new password
+                    Space(20.h),
                     Padding(
-                      padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                      padding:
+                          EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
                       child: Column(
                         children: [
+                          //old password
                           TextFormInput(
                             keyboardType: TextInputType.number,
-                            labelText: 'New Pin',
+                            labelText: 'Old PIN',
+                            controller: oldPasswordController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Transaction pin is requied";
+                              }
+                              if (value.length > 4) {
+                                return 'Transaction pin must not be more than 4 numbers';
+                              }
+                              return null;
+                            },
+                            obscureText: toggleOldPin.state,
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                toggleOldPin.state = !toggleOldPin.state;
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 0.h),
+                                child: Icon(
+                                  toggleOldPin.state
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: AppColors.appColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Space(32.h),
+
+                          // new password
+                          TextFormInput(
+                            keyboardType: TextInputType.number,
+                            labelText: 'New PIN',
                             controller: controller,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -135,13 +164,12 @@ class ResetPinScreen extends HookConsumerWidget {
                               ),
                             ),
                           ),
-
                           Space(32.h),
 
                           // confirm password
                           TextFormInput(
                             keyboardType: TextInputType.number,
-                            labelText: 'Confirm New Pin',
+                            labelText: 'Re-enter new PIN',
                             controller: confirmController,
                             focusNode: fieldFocusNode,
                             validator: (value) {
@@ -152,7 +180,6 @@ class ResetPinScreen extends HookConsumerWidget {
                                 return 'Transaction Pin doesn\'t match';
                               }
 
-                              // validator has to return something :)
                               return null;
                             },
                             obscureText: toggleConfirmPin.state,
@@ -172,33 +199,37 @@ class ResetPinScreen extends HookConsumerWidget {
                               ),
                             ),
                           ),
-
                           Space(150.h),
                           CustomButton(
-                            buttonWidth: double.infinity,
-                            buttonText: 'Continue',
-                            bgColor: AppColors.appColor,
-                            borderColor: AppColors.appColor,
-                            textColor: Colors.white,
-                            onPressed: vm is Loading
-                                ? null
-                                : () async {
-                                    if (formKey.currentState!.validate()) {
-                                      fieldFocusNode.unfocus();
-                                      ref
-                                          .read(resetPinProvider.notifier)
-                                          .resetPin(
-                                            otpCode,
-                                            controller.text,
-                                            confirmController.text,
-                                          );
-                                      context.loaderOverlay.show();
-                                    }
-                                  },
-                          ),
+                              buttonText: 'Save',
+                              bgColor: AppColors.appColor,
+                              borderColor: AppColors.appColor,
+                              textColor: Colors.white,
+                              onPressed: vn is Loading
+                                  ? null
+                                  : () {
+                                      if (formKey.currentState!.validate()) {
+                                        fieldFocusNode.unfocus();
+                                        ChangeTransactionPinReq
+                                            changeTransactionPin =
+                                            ChangeTransactionPinReq(
+                                          oldPin: oldPasswordController.text,
+                                          newPin: controller.text,
+                                          confirmNewPin: confirmController.text,
+                                        );
+
+                                        ref
+                                            .read(changeTransactionPinProvider
+                                                .notifier)
+                                            .changeTransactionPin(
+                                                changeTransactionPin);
+                                        context.loaderOverlay.show();
+                                      }
+                                    },
+                              buttonWidth: MediaQuery.of(context).size.width),
                         ],
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

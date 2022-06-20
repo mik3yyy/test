@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -59,6 +61,84 @@ class ProfileService {
           data: updateProfileReq.toJson(),
           options: Options(headers: {"Authentication": "Bearer $token"}));
       return response.data != null;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // change password
+  Future<bool> changePassword(ChangePasswordReq changePasswordReq) async {
+    const url = '/auth/change-password';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: changePasswordReq.toJson());
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // change transaction pin
+  Future<bool> changeTransactionPin(
+      ChangeTransactionPinReq changeTransactionPinReq) async {
+    const url = '/auth/transaction-pin/change-pin';
+    try {
+      final response = await _read(dioProvider)
+          .post(url, data: changeTransactionPinReq.toJson());
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // forget pin
+  Future<bool> forgotPin(String emailPhone) async {
+    const url = '/auth/transaction-pin/forgot-pin';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: {"route": "email"});
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // reset pin
+  Future<bool> resetPin(String otpCode, String pin, String confirmPin) async {
+    const url = '/auth/transaction-pin/reset-pin';
+    try {
+      final response = await _read(dioProvider).post(url, data: {
+        "route": "email",
+        "code": otpCode,
+        "new_pin": pin,
+        "confirm_new_pin": confirmPin
+      });
+
+      final result = response.data = true;
+      return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
         Failure result = Failure.fromJson(e.response!.data);

@@ -4,31 +4,49 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import 'widget/add_fund_container_widget.dart';
 import 'widget/add_fund_heading_container.dart';
 
 class AddFundsToWalletScreen extends StatelessWidget {
-  const AddFundsToWalletScreen({Key? key}) : super(key: key);
+  final BuildContext menuScreenContext;
+  final Function onScreenHideButtonPressed;
+  final bool hideStatus;
+  final String route;
+  const AddFundsToWalletScreen({
+    Key? key,
+    required this.route,
+    required this.hideStatus,
+    required this.menuScreenContext,
+    required this.onScreenHideButtonPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(route);
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: (() => Navigator.pop(context)),
-          child: Icon(
-            Icons.chevron_left,
-            color: AppColors.textColor,
-            size: 60.sp,
-          ),
-        ),
-      ),
+      appBar: route == "HomeScreen"
+          ? AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              leading: GestureDetector(
+                onTap: (() => Navigator.pop(context)),
+                child: Icon(
+                  Icons.chevron_left,
+                  color: AppColors.textColor,
+                  size: 60.sp,
+                ),
+              ),
+            )
+          : AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: AppColors.appBgColor,
+              elevation: 0,
+            ),
       body: SafeArea(
         child: Column(
           children: [
@@ -37,7 +55,7 @@ class AddFundsToWalletScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               paddingLeft: 0.0,
             ),
-            Space(27.h),
+            Space(30.h),
             AppFundContainerWidget(
               image: AppImage.debitCardIcon,
               text: 'Credit/Debit Card',

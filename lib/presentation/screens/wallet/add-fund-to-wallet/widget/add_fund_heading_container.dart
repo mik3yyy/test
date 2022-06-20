@@ -17,20 +17,21 @@ class AddFundHeadingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: paddingLeft, top: 4.w, bottom: 4.w),
       width: MediaQuery.of(context).size.width,
-      height: 32.h,
+      height: 52.h,
       decoration: BoxDecoration(
         color: AppColors.textColor.withOpacity(0.05),
       ),
-      child: Text(
-        text,
-        style: AppText.body6(
-          context,
-          AppColors.textColor.withOpacity(0.7),
-          15.sp,
+      child: Center(
+        child: Text(
+          text,
+          style: AppText.body6(
+            context,
+            AppColors.textColor.withOpacity(0.7),
+            22.sp,
+          ),
+          textAlign: textAlign,
         ),
-        textAlign: textAlign,
       ),
     );
   }

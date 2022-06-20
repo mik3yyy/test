@@ -91,9 +91,9 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   subTitle: 'See and edit your personal information',
                   image: AppImage.profile,
                   onPressed: () {
-                    // pushNewScreen(context,
-                    //     screen: const PersonalInfo(),
-                    //     pageTransitionAnimation: PageTransitionAnimation.fade);
+                    pushNewScreen(context,
+                        screen: const PersonalInfo(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade);
                   },
                 ),
                 Space(10.h),

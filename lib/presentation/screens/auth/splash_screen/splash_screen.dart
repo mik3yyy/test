@@ -1,7 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/onboarding_screen/onboarding_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/auth.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
         height: 400.h,
       ),
 
-      nextScreen: const OnBoardingScreen(),
+      nextScreen: const AuthHomePage(),
       // splashTransition: SplashTransition.rotationTransition,
     );
   }
