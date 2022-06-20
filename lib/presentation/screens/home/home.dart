@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
@@ -70,6 +72,20 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+  currencySymbol(String currency) {
+    if (currency == "NGN") {
+      return 'N';
+    } else if (currency == "USD") {
+      return '\$';
+    } else if (currency == "GBP") {
+      return '£';
+    } else if (currency == "EUR") {
+      return '£';
+    } else {
+      return 'KDRX';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
@@ -77,8 +93,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     final transactions = ref.watch(walletTransactionProvider);
     final walletList = ref.watch(getAccountDetailsProvider);
 
+    // var someCapitalizedString = "someString".capitalize();
+
     //TODO: To ask BE guy to return native_symbol for set wallet as default res
     final setWalletVm = ref.watch(setWalletAsDefaultProvider);
+
+    //  String setValue =  setWalletVm.maybeWhen(
+    //                           success: (v) =>
+    //                               '${currencySymbol(v!.data!.wallet!.currencyCode!)} ${v.data!.wallet!.balance.toString()}',
+    //                           orElse: () => '');
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(
@@ -96,7 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Hi ${accountNo.maybeMap(success: (v) => v.value!.data!.user!.firstName, orElse: () => '')}',
+                      'Hi ${accountNo.maybeMap(success: (v) => '${v.value!.data!.user!.firstName}'.capitalize(), orElse: () => '')}',
                       style: AppText.header1(context, Colors.white, 25.sp),
                     ),
                     Space(10.h),
@@ -193,7 +216,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           //TODO: account balance and currency clear when app restart
                           setWalletVm.maybeWhen(
                               success: (v) =>
-                                  '${v!.data!.wallet!.currencyCode} ${v.data!.wallet!.balance.toString()}',
+                                  '${currencySymbol(v!.data!.wallet!.currencyCode!)} ${v.data!.wallet!.balance.toString()}',
                               orElse: () => ''),
                           // '\$ 200.00',
                           style: AppText.header1(
@@ -322,10 +345,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   context, Colors.black26, 21.sp),
                             ),
                             const Spacer(),
-                            Text(
-                              'View all',
-                              style: AppText.body2Bold(
-                                  context, Colors.black54, 21.sp),
+                            GestureDetector(
+                              onTap: () {
+                                pushNewScreen(
+                                  context,
+                                  screen: const ViewAllTransactionScreen(),
+                                  withNavBar:
+                                      true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.fade,
+                                );
+                              },
+                              child: Text(
+                                'View all',
+                                style: AppText.body2Bold(
+                                    context, Colors.black54, 21.sp),
+                              ),
                             ),
                           ],
                         ),
@@ -361,7 +396,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: ListView.separated(
                               physics: const AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
-                              itemCount: data.data!.transactions.length,
+                              itemCount: 5,
+                              // itemCount: data.data!.transactions.length,
                               itemBuilder: (context, index) {
                                 final transactions =
                                     data.data!.transactions[index];
