@@ -62,9 +62,12 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.keyboard_arrow_left,
-                          size: 35.h,
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Icon(
+                            Icons.keyboard_arrow_left,
+                            size: 35.h,
+                          ),
                         ),
                         Space(85.w),
                         Text(

@@ -3,46 +3,38 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
-
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/reset_pin_vm.dart';
-
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/pin_otp.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/forgot_pin_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ResetPinScreen extends HookConsumerWidget {
-  final String otpCode;
-  final String emailPhone;
-  ResetPinScreen({
-    Key? key,
-    required this.emailPhone,
-    required this.otpCode,
-  }) : super(key: key);
+class ForgotTransactionPin extends HookConsumerWidget {
+  ForgotTransactionPin({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
-  final pinToggleStateProvider = StateProvider<bool>((ref) => true);
-  final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
-
   final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(resetPinProvider);
-    final confirmController = useTextEditingController();
+    final vm = ref.watch(forgotPinProvider);
     final controller = useTextEditingController();
-    final togglePassword = ref.watch(pinToggleStateProvider.state);
-    final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
-
-    ref.listen<RequestState>(resetPinProvider, (T, value) {
+    ref.listen<RequestState>(forgotPinProvider, (T, value) {
       if (value is Success) {
-        ref.refresh(resetPinProvider);
-
-        return AppSnackBar.showSuccessSnackBar(context,
-            message: 'Transaction Pin changed successfully');
+        context.navigate(PinOTPScreen(
+          emailAdress: controller.text,
+        ));
+        return AppSnackBar.showSuccessSnackBar(
+          context,
+          message: "Please Check Your Mail or SMS for Verification Code",
+        );
       }
       if (value is Error) {
         context.loaderOverlay.hide();
@@ -99,99 +91,52 @@ class ResetPinScreen extends HookConsumerWidget {
                       ),
                     ),
 
-                    Space(120.h),
+                    Space(180.h),
 
-                    // new password
+                    // phone number or email
                     Padding(
                       padding: EdgeInsets.only(left: 16.w, right: 16.w),
                       child: Column(
                         children: [
                           TextFormInput(
-                            keyboardType: TextInputType.number,
-                            labelText: 'New Pin',
+                            labelText: 'Email Address or Phone Number',
                             controller: controller,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Transaction pin is requied";
-                              }
-                              if (value.length > 4) {
-                                return 'Transaction pin must not be more than 4 numbers';
-                              }
-                              return null;
-                            },
-                            obscureText: togglePassword.state,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                togglePassword.state = !togglePassword.state;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 0.h),
-                                child: Icon(
-                                  togglePassword.state
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.appColor,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          Space(32.h),
-
-                          // confirm password
-                          TextFormInput(
-                            keyboardType: TextInputType.number,
-                            labelText: 'Confirm New Pin',
-                            controller: confirmController,
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Confirm Transaction Pin is required';
-                              } else if (controller.text !=
-                                  confirmController.text) {
-                                return 'Transaction Pin doesn\'t match';
+                                return "Email address is required";
+                              }
+                              if (!RegExp(
+                                      "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
+                                  .hasMatch(value)) {
+                                return 'Please input a valid email address';
                               }
 
-                              // validator has to return something :)
                               return null;
                             },
-                            obscureText: toggleConfirmPin.state,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                toggleConfirmPin.state =
-                                    !toggleConfirmPin.state;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 0.h),
-                                child: Icon(
-                                  toggleConfirmPin.state
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.appColor,
-                                ),
-                              ),
-                            ),
+                            obscureText: false,
                           ),
-
-                          Space(150.h),
+                          Space(260.h),
                           CustomButton(
                             buttonWidth: double.infinity,
-                            buttonText: 'Continue',
+                            buttonText:
+                                vm is Loading ? "Sending OTP..." : "Send",
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
                             onPressed: vm is Loading
                                 ? null
                                 : () async {
+                                    final pref =
+                                        await SharedPreferences.getInstance();
+                                    pref.setString(
+                                        Constants.email, controller.text);
                                     if (formKey.currentState!.validate()) {
                                       fieldFocusNode.unfocus();
                                       ref
-                                          .read(resetPinProvider.notifier)
-                                          .resetPin(
-                                            otpCode,
-                                            controller.text,
-                                            confirmController.text,
-                                          );
+                                          .read(forgotPinProvider.notifier)
+                                          .forgotPin(controller.text);
+
                                       context.loaderOverlay.show();
                                     }
                                   },

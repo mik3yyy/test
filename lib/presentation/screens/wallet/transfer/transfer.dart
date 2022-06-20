@@ -45,8 +45,8 @@ class _TransferState extends ConsumerState<Transfer>
             children: [
               Space(20.h),
               Row(
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   InkWell(
                     onTap: (() => Navigator.pop(context)),
@@ -81,19 +81,6 @@ class _TransferState extends ConsumerState<Transfer>
                       // ),
                     ],
                   ),
-                  const Spacer(),
-                  Icon(
-                    Icons.notifications,
-                    color: Colors.white,
-                    size: 20.sp,
-                  ),
-                  Space(10.w),
-                  const CircleAvatar(
-                    radius: 18.0,
-                    backgroundImage: AssetImage(
-                      AppImage.image1,
-                    ),
-                  )
                 ],
               ),
               Space(50.h),

@@ -33,8 +33,9 @@ class PersonalInfo extends StatefulHookConsumerWidget {
 class _PersonalInfoState extends ConsumerState<PersonalInfo> {
   final List<String> _gender = ['male', 'female'];
 
-  String val = 'male';
+  String val = 'female';
   Gender gender = Gender.female;
+  String? _radioSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +61,11 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         final firstName = value!.data!.user!.firstName!.split(" ")[0];
         final secondName = value.data!.user!.lastName!.split(" ")[0];
 
-        String date = value.data!.user!.dateOfBirth;
-        String dob = DateFormat('dd-MM-yyyy').format(DateTime.tryParse(date)!);
+        // String date = value.data!.user!.dateOfBirth.toString();
+        // String transactionDate = DateFormat(' d, MMM yyyy').format(date);
+
+        // String dob = DateFormat('dd-MM-yyyy')
+        //     .format(DateTime.tryParse(date.toString())!);
 
         return GenericWidget(
           appbar: Padding(
@@ -70,7 +74,6 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
               children: [
                 Space(20.h),
                 Row(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     InkWell(
@@ -111,7 +114,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
           ),
           bgColor: AppColors.whiteColor,
           child: SizedBox(
-            height: 650.h,
+            height: 660.h,
             child: Padding(
               padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
               child: SingleChildScrollView(
@@ -173,9 +176,14 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ),
                     Space(30.h),
                     PersonalInfoCard(
-                        color: Colors.black,
-                        title: 'Date of Birth',
-                        subTitle: dob),
+                      color: Colors.black,
+                      title: 'Date of Birth',
+                      subTitle: value.data!.user!.dateOfBirth == null
+                          ? "Unavailable"
+                          : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
+                              value.data!.user!.dateOfBirth)!),
+                    ),
+
                     Space(7.h),
                     const Divider(
                       color: Colors.black,
@@ -208,13 +216,10 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                                     children: [
                                       Space(15.w),
                                       Radio<String>(
-                                        value: value.data!.user!.gender,
+                                        value: value.data!.user!.gender ??
+                                            _radioSelected,
                                         groupValue: sex,
-                                        onChanged: (value) {
-                                          // setState(() {
-                                          //   value = value!;
-                                          // });
-                                        },
+                                        onChanged: (value) {},
                                       ),
                                       Text(
                                         sex,

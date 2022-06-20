@@ -275,7 +275,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                             secondColor: const Color(0xff00404E),
                             onPressed: () {
                               pushNewScreen(
-                                context, screen: const AddFundsToWalletScreen(),
+                                context,
+                                screen: AddFundsToWalletScreen(
+                                  menuScreenContext: widget.menuScreenContext,
+                                  hideStatus: widget.hideStatus,
+                                  onScreenHideButtonPressed: () {
+                                    setState(() {
+                                      // widget.hideStatus = !_hideNavBar;
+                                    });
+                                  },
+                                  route: "HomeScreen",
+                                ),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
