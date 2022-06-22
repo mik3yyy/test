@@ -5,7 +5,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 
 class ViewAllTransactionScreen extends HookConsumerWidget {
   const ViewAllTransactionScreen({Key? key}) : super(key: key);
@@ -13,24 +12,23 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final transactionsVm = ref.watch(walletTransactionProvider);
-    return GenericWidget(
-      appbar: Padding(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 40.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'All Transactions',
-              style: AppText.body2(context, AppColors.whiteColor, 25.sp),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.textColor,
+          ),
         ),
+        title: Text(
+          'All Transactions',
+          style: AppText.header3(context, AppColors.textColor, 25.sp),
+        ),
+        elevation: 0,
+        backgroundColor: AppColors.whiteColor,
       ),
-      // bgColor: AppColors.whiteColor,
-      bgColor: const Color.fromRGBO(249, 249, 249, 1),
-
-      child: SizedBox(
-        height: 700.h,
+      body: SizedBox(
         child: transactionsVm.when(
             error: (error, stackTrace) => Text(error.toString()),
             idle: () => const Center(
@@ -50,7 +48,7 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
                 );
               } else {
                 return ListView.separated(
-                  padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 45.h),
+                  padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 20.h),
                   physics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics()),
                   itemCount: data.data!.transactions.length,

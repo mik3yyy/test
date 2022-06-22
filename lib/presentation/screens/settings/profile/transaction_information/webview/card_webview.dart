@@ -105,6 +105,9 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
 
               }
               break;
+            case WebViewRoute.portfolio:
+              // TODO: Handle this case.
+              break;
           }
 
           // if (navigation.url.contains('embed_token')) {

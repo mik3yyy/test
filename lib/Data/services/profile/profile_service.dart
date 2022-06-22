@@ -1,3 +1,4 @@
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
@@ -136,6 +137,43 @@ class ProfileService {
         "new_pin": pin,
         "confirm_new_pin": confirmPin
       });
+
+      final result = response.data = true;
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<CloudinaryResponse> upLoadProfilePic(String filePath) async {
+    var cloudinary = CloudinaryPublic('dnnxnfr6c', 'ouvoc5zb', cache: false);
+    try {
+      final response = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(filePath,
+            resourceType: CloudinaryResourceType.Image),
+      );
+      print("this is  ${response.secureUrl}");
+      return response;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<bool> uploadPP(String imageUrl) async {
+    const url = '/profile/upload-picture';
+    try {
+      final response = await _read(dioProvider)
+          .post(url, data: {"profile_picture": imageUrl});
 
       final result = response.data = true;
       return result;

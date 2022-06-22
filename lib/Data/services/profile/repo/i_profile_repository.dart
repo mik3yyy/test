@@ -1,3 +1,4 @@
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 
@@ -13,4 +14,6 @@ abstract class IProfileManager {
       ChangeTransactionPinReq changeTransactionPinReq);
   Future<bool> forgotPin(String emailPhone);
   Future<bool> resetPin(String otpCode, String pin, String confirmPin);
+  Future<CloudinaryResponse> upLoadProfilePic(String filePath);
+  Future<bool> uploadPP(String imageUrl);
 }

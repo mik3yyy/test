@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -98,12 +100,13 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ),
                   ],
                 ),
-                CircleAvatar(
-                  radius: 50.0.r,
-                  backgroundImage: const AssetImage(
-                    AppImage.image1,
-                  ),
-                ),
+                UploadImage(),
+                // CircleAvatar(
+                //   radius: 50.0.r,
+                //   backgroundImage: const AssetImage(
+                //     AppImage.image1,
+                //   ),
+                // ),
                 Space(20.h),
                 Text(
                   firstName.inCaps + " " + secondName.inCaps,
@@ -273,6 +276,62 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
           ),
         );
       },
+    );
+  }
+}
+
+class UserAvatar extends StatelessWidget {
+  final String initials;
+  final String? imageUrl;
+
+  final double radius;
+  final double initialsSize;
+
+  const UserAvatar({
+    Key? key,
+    this.radius = 20,
+    this.initialsSize = 20,
+    required this.initials,
+    this.imageUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: const Color(0xfff5f5f5),
+      backgroundImage: null,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl ?? '',
+          imageBuilder: (context, imageProvider) => Container(
+            width: 120.0,
+            height: 120.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          progressIndicatorBuilder: (_, __, ___) => const SizedBox(
+            height: 5,
+            width: 5,
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => Text(
+            initials,
+            style: themeData.textTheme.caption!.copyWith(
+              fontSize: initialsSize,
+              color: const Color(0xff6F7070),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

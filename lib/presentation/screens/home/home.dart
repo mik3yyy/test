@@ -396,7 +396,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                             child: ListView.separated(
                               physics: const AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
-                              itemCount: 5,
+                              itemCount: data.data!.transactions.length < 5
+                                  ? data.data!.transactions.length
+                                  : 5,
                               // itemCount: data.data!.transactions.length,
                               itemBuilder: (context, index) {
                                 final transactions =
