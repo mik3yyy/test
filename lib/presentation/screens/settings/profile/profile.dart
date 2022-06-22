@@ -50,28 +50,44 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             ),
             CircleAvatar(
               radius: 50.0.r,
-              backgroundImage: const AssetImage(
-                AppImage.image1,
-              ),
+              backgroundImage: Image.network(vm.maybeWhen(
+                  success: (v) =>
+                      v!.data!.user!.profilePicture!.thumbnailUrl ??
+                      'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png',
+                  orElse: () =>
+                      'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')).image,
+
+              // const AssetImage(
+              //   AppImage.image1,
+              // ),
             ),
             Space(20.h),
-            vm.when(error: (Object error, StackTrace stackTrace) {
-              return Center(
-                child: Text(error.toString()),
-              );
-            }, loading: () {
-              return const CircularProgressIndicator();
-            }, idle: () {
-              return const CircularProgressIndicator();
-            }, success: (value) {
-              final firstName = value!.data!.user!.firstName!.split(" ")[0];
-              final secondName = value.data!.user!.lastName!.split(" ")[0];
+            Text(
+              vm.maybeWhen(
+                  success: (v) =>
+                      '${v!.data!.user!.firstName} ${v.data!.user!.lastName}',
+                  orElse: () => ''),
+              // firstName.inCaps + " " + secondName.inCaps,
+              style: AppText.body2(context, Colors.white, 25.sp),
+            ),
 
-              return Text(
-                firstName.inCaps + " " + secondName.inCaps,
-                style: AppText.body2(context, Colors.white, 25.sp),
-              );
-            })
+            // vm.when(error: (Object error, StackTrace stackTrace) {
+            //   return Center(
+            //     child: Text(error.toString()),
+            //   );
+            // }, loading: () {
+            //   return const CircularProgressIndicator();
+            // }, idle: () {
+            //   return const CircularProgressIndicator();
+            // }, success: (value) {
+            //   final firstName = value!.data!.user!.firstName!.split(" ")[0];
+            //   final secondName = value.data!.user!.lastName!.split(" ")[0];
+
+            // return Text(
+            //   firstName.inCaps + " " + secondName.inCaps,
+            //   style: AppText.body2(context, Colors.white, 25.sp),
+            // );
+            // })
             // const WalletOptionList()
           ],
         ),

@@ -6,12 +6,14 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/create_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/aba%5BABA%5D/aba_withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import '../../../components/app text theme/app_text_theme.dart';
+import '../vm/get_account_details_vm.dart';
 import '../withdrawal/widget/withdrawal_method_widget.dart';
 
 class SelectWalletToCreate extends StatefulHookConsumerWidget {
@@ -38,13 +40,16 @@ class _SelectWalletToCreateState extends ConsumerState<SelectWalletToCreate> {
     ref.listen<RequestState>(createWalletProvider, (T, value) {
       if (value is Success<CreateWalletRes>) {
         context.loaderOverlay.hide();
-        pushNewScreen(
-          //TODO: To replace with add fund screen, when add fund screen is merged
-          // context, screen: const AvailableWallet(),
-          context, screen: const ABAWithdrawal(),
-          withNavBar: true, // OPTIONAL VALUE. True by default.
-          pageTransitionAnimation: PageTransitionAnimation.fade,
-        );
+        ref.refresh(getAccountDetailsProvider);
+        //TODO: popview is not working, navigating back to previous screen
+        // context.popView();
+        // pushNewScreen(
+        //   //TODO: To replace with add fund screen, when add fund screen is merged
+        //   // context, screen: const AvailableWallet(),
+        //   context, screen: const ABAWithdrawal(),
+        //   withNavBar: true, // OPTIONAL VALUE. True by default.
+        //   pageTransitionAnimation: PageTransitionAnimation.fade,
+        // );
         return AppSnackBar.showErrorSnackBar(context,
             message: value.value!.message.toString());
       }
