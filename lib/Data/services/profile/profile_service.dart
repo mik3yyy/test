@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +14,8 @@ import '../../constant/constant.dart';
 import '../../model/auth/res/failure_res.dart';
 import '../../utils/api_interceptor.dart';
 import '../../utils/error_interceptor.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 final profileProvider = Provider<ProfileService>((ref) {
   return ProfileService((ref.read));
@@ -150,40 +154,68 @@ class ProfileService {
     }
   }
 
-  Future<CloudinaryResponse> upLoadProfilePic(String filePath) async {
-    var cloudinary = CloudinaryPublic('dnnxnfr6c', 'ouvoc5zb', cache: false);
-    try {
-      final response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(filePath,
-            resourceType: CloudinaryResourceType.Image),
-      );
-      print("this is  ${response.secureUrl}");
-      return response;
-    } on DioError catch (e) {
-      if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
-      } else {
-        throw e.error;
-      }
-    }
-  }
+  // Future upLoadProfilePic(String filePath) async {
+  //   var cloudinary = CloudinaryPublic('dnnxnfr6c', 'ouvoc5zb', cache: false);
+  //   try {
+  //     final response = await cloudinary.uploadFile(
+  //       CloudinaryFile.fromFile(filePath,
+  //           resourceType: CloudinaryResourceType.Image),
+  //     );
+  //     print("this is  ${response.secureUrl}");
+  //     return response.secureUrl;
+  //   } on DioError catch (e) {
+  //     if (e.response != null && e.response!.data != "") {
+  //       Failure result = Failure.fromJson(e.response!.data);
+  //       throw result.message!;
+  //     } else {
+  //       throw e.error;
+  //     }
+  //   }
+  // }
 
-  Future<bool> uploadPP(String imageUrl) async {
+  Future<bool> updateImage(String filePath) async {
     const url = '/profile/upload-picture';
-    try {
-      final response = await _read(dioProvider)
-          .post(url, data: {"profile_picture": imageUrl});
 
-      final result = response.data = true;
-      return result;
+    File file = File(filePath);
+    final mimeTypeData =
+        lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
+
+    FormData formData = FormData.fromMap({
+      "profile_picture": await MultipartFile.fromFile(file.path,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+    });
+    try {
+      final response = await _read(dioProvider).post(url,
+          data: formData, options: Options(headers: {"requireToken": true}));
+      // final result = ProfileRes.fromJson(response.data);
+      return response.data != null;
     } on DioError catch (e) {
-      if (e.response != null && e.response!.data != "") {
+      if (e.response != null && e.response!.data != '') {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
+        // print(Constants.errorMessage);
+        // throw Constants.errorMessage;
         throw e.error;
       }
     }
   }
+
+  // Future<bool> uploadPP(String imageUrl) async {
+  //   const url = '/profile/upload-picture';
+  //   try {
+  //     final response = await _read(dioProvider)
+  //         .post(url, data: {"profile_picture": imageUrl});
+
+  //     final result = response.data = true;
+  //     return result;
+  //   } on DioError catch (e) {
+  //     if (e.response != null && e.response!.data != "") {
+  //       Failure result = Failure.fromJson(e.response!.data);
+  //       throw result.message!;
+  //     } else {
+  //       throw e.error;
+  //     }
+  //   }
+  // }
 }

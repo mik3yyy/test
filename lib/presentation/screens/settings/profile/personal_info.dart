@@ -219,8 +219,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                                     children: [
                                       Space(15.w),
                                       Radio<String>(
-                                        value: value.data!.user!.gender ??
-                                            _radioSelected,
+                                        value: value.data!.user!.gender ?? sex,
                                         groupValue: sex,
                                         onChanged: (value) {},
                                       ),

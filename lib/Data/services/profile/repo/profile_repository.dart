@@ -65,14 +65,20 @@ class ProfileRepository extends IProfileManager {
   }
 
   @override
-  Future<CloudinaryResponse> upLoadProfilePic(String filePath) async {
-    final res = await _profileService.upLoadProfilePic(filePath);
+  Future<bool> updateProfilePic({required String path}) async {
+    final res = await _profileService.updateImage(path);
     return res;
   }
 
-  @override
-  Future<bool> uploadPP(String imageUrl) async {
-    final res = await _profileService.uploadPP(imageUrl);
-    return res;
-  }
+  // @override
+  // Future upLoadProfilePic(String filePath) async {
+  //   final res = await _profileService.upLoadProfilePic(filePath);
+  //   return res;
+  // }
+
+  // @override
+  // Future<bool> uploadPP(String imageUrl) async {
+  //   final res = await _profileService.uploadPP(imageUrl);
+  //   return res;
+  // }
 }

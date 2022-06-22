@@ -14,6 +14,7 @@ abstract class IProfileManager {
       ChangeTransactionPinReq changeTransactionPinReq);
   Future<bool> forgotPin(String emailPhone);
   Future<bool> resetPin(String otpCode, String pin, String confirmPin);
-  Future<CloudinaryResponse> upLoadProfilePic(String filePath);
-  Future<bool> uploadPP(String imageUrl);
+  // Future upLoadProfilePic(String filePath);
+  // Future<bool> uploadPP(String imageUrl);
+  Future<bool> updateProfilePic({required String path});
 }

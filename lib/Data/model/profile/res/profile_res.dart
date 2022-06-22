@@ -136,7 +136,7 @@ class User {
   DateTime? transactionPinAddedAt;
   DateTime? verifiedAt;
   num? isBanned;
-  dynamic profilePicture;
+  ProfilePicture? profilePicture;
   String? timezone;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -160,7 +160,7 @@ class User {
         transactionPinAddedAt: DateTime.parse(json["transaction_pin_added_at"]),
         verifiedAt: DateTime.parse(json["verified_at"]),
         isBanned: json["is_banned"],
-        profilePicture: json["profile_picture"],
+        profilePicture: ProfilePicture.fromJson(json["profile_picture"]),
         timezone: json["timezone"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -186,11 +186,43 @@ class User {
         "transaction_pin_added_at": transactionPinAddedAt!.toIso8601String(),
         "verified_at": verifiedAt!.toIso8601String(),
         "is_banned": isBanned,
-        "profile_picture": profilePicture,
+        "profile_picture": profilePicture!.toJson(),
         "timezone": timezone,
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
         "wallets": List<dynamic>.from(wallets!.map((x) => x.toJson())),
+      };
+}
+
+class ProfilePicture {
+  ProfilePicture({
+    this.imageUrl,
+    this.thumbnailUrl,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  String? imageUrl;
+  String? thumbnailUrl;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory ProfilePicture.fromJson(Map<String, dynamic> json) => ProfilePicture(
+        imageUrl: json["image_url"] ?? "",
+        thumbnailUrl: json["thumbnail_url"] ?? "",
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "image_url": imageUrl,
+        "thumbnail_url": thumbnailUrl,
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
       };
 }
 

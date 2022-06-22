@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
@@ -88,6 +89,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final vm = ref.watch(getProfileProvider);
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
@@ -140,11 +142,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                   size: 30.sp,
                 ),
                 Space(10.w),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 18.0,
-                  backgroundImage: AssetImage(
-                    AppImage.image1,
-                  ),
+                  //TODO: To use cachednetworkimage
+                  backgroundImage: Image.network(vm.maybeWhen(
+                      success: (v) =>
+                          v!.data!.user!.profilePicture!.thumbnailUrl ??
+                          'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png',
+                      orElse: () =>
+                          'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')).image,
                 )
               ],
             ),
