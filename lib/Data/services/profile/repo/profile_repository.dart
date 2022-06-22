@@ -1,3 +1,4 @@
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
@@ -60,6 +61,18 @@ class ProfileRepository extends IProfileManager {
   @override
   Future<bool> resetPin(String otpCode, String pin, String confirmPin) async {
     final res = await _profileService.resetPin(otpCode, pin, confirmPin);
+    return res;
+  }
+
+  @override
+  Future<CloudinaryResponse> upLoadProfilePic(String filePath) async {
+    final res = await _profileService.upLoadProfilePic(filePath);
+    return res;
+  }
+
+  @override
+  Future<bool> uploadPP(String imageUrl) async {
+    final res = await _profileService.uploadPP(imageUrl);
     return res;
   }
 }

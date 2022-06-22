@@ -103,7 +103,7 @@ class _AvailableWalletState extends State<AvailableWallet> {
       // bgColor: AppColors.whiteColor,
       bgColor: const Color.fromRGBO(249, 249, 249, 1),
       child: SizedBox(
-        height: 700.h,
+        height: 750.h,
         child: Padding(
           padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 45.h),
           child: Column(

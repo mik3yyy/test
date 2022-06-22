@@ -61,7 +61,7 @@ class NoWalletWidget extends StatelessWidget {
       ),
       bgColor: AppColors.whiteColor,
       child: SizedBox(
-        height: 700.h,
+        height: 750.h,
         child: Column(
           children: [
             Space(150.h),
