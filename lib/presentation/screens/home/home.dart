@@ -58,6 +58,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(genericController.notifier).getAbaBeneficiaries();
     ref.read(genericController.notifier).getIbanBeneficiaries();
     ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
+    ref.read(genericController.notifier).getCard();
   }
 
 //Method to convert currency name to code and use as parament for setting wallet as default
@@ -93,7 +94,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-    final walletList = ref.watch(getAccountDetailsProvider);
 
     // var someCapitalizedString = "someString".capitalize();
 
@@ -282,18 +282,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                             onPressed: () {
                               pushNewScreen(
                                 context,
-                                screen: Transfer(
-                                    //TODO: To check if wallet has been fetched from api
-                                    // wallet: walletList.maybeWhen(
-                                    //     success: (v) => v!.data!.wallets,
-                                    //     orElse: () => []),
-                                    ),
+                                screen: const Transfer(),
                                 withNavBar:
                                     true, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
-                              ref.refresh(getAccountDetailsProvider);
                             },
                           ),
                           MenuCards(

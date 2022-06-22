@@ -757,14 +757,14 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
       setState(() {
         _lItemListShow.clear();
 
-        _lItemListOriginal.forEach((loCredential) {
+        for (var loCredential in _lItemListOriginal) {
           lsValue = loCredential['label']?.toString().toLowerCase() ??
               loCredential['value']!.toString().toLowerCase();
 
           if (lsValue.contains(lsQuery)) {
             _lItemListShow.add(loCredential);
           }
-        });
+        }
 
         _iQtItems = _lItemListShow.length;
       });
@@ -772,9 +772,9 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
       setState(() {
         _lItemListShow.clear();
 
-        _lItemListOriginal.forEach((loCredential) {
+        for (var loCredential in _lItemListOriginal) {
           _lItemListShow.add(loCredential);
-        });
+        }
 
         _iQtItems = _lItemListShow.length;
       });
@@ -797,9 +797,9 @@ class ListItem extends StatelessWidget {
   List<Widget> _itemList(context) {
     List<Widget> llItems = <Widget>[];
 
-    _lItens.forEach((lmItem) {
+    for (var lmItem in _lItens) {
       Widget loIten = ListTile(
-        leading: lmItem['icon'] ?? null,
+        leading: lmItem['icon'],
         title: Text(
           lmItem['label']?.toString() ?? lmItem['value']!.toString(),
           style: lmItem['textStyle'] ?? lmItem['textStyle'],
@@ -809,7 +809,7 @@ class ListItem extends StatelessWidget {
       );
 
       llItems.add(loIten);
-    });
+    }
 
     return llItems;
   }

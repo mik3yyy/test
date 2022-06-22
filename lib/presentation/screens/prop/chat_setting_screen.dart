@@ -53,7 +53,7 @@ class _ChatSettingScreenState extends State<ChatSettingScreen> {
           //   isDrawerOpen: isDraweropen,
           // ),
         ),
-        child: Container(
+        child: SizedBox(
           height: 750.h,
           // padding:
           //     EdgeInsets.only(left: 25.w, right: 25.w, top: 15.w, bottom: 20.w),

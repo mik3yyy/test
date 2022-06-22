@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card_service_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_use_beneficiary_model.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repository/withdrawal_manager.dart';
@@ -17,6 +18,7 @@ class WithdrawalState extends Equatable {
   final List<Beneficiary> ibanbeneficiary;
   final AddCardReq? addCardReq;
   final AddCardRes? addCardRes;
+  final List<Cardd> cards;
   final bool loading;
   final bool success;
   final PassBeneficiary passBeneficiary;
@@ -27,6 +29,7 @@ class WithdrawalState extends Equatable {
       required this.loading,
       required this.ibanbeneficiary,
       required this.ababeneficiary,
+      required this.cards,
       this.addCardReq,
       this.addCardRes,
       required this.error,
@@ -38,6 +41,7 @@ class WithdrawalState extends Equatable {
         beneficiary: const [],
         ababeneficiary: const [],
         ibanbeneficiary: const [],
+        cards: const [],
         loading: false,
         success: false,
         error: "",
@@ -49,6 +53,7 @@ class WithdrawalState extends Equatable {
       {final List<Beneficiary>? beneficiary,
       final List<Beneficiary>? ababeneficiary,
       final List<Beneficiary>? ibanbeneficiary,
+      final List<Cardd>? cards,
       final bool? loading,
       final bool? success,
       final AddCardReq? addCardReq,
@@ -63,6 +68,7 @@ class WithdrawalState extends Equatable {
         ibanbeneficiary: this.ibanbeneficiary,
         addCardRes: addCardRes ?? this.addCardRes,
         addCardReq: addCardReq ?? this.addCardReq,
+        cards: cards ?? this.cards,
         ababeneficiary: ababeneficiary ?? this.ababeneficiary,
         passBeneficiary: passBeneficiary ?? this.passBeneficiary);
   }
@@ -77,7 +83,8 @@ class WithdrawalState extends Equatable {
         ababeneficiary,
         ibanbeneficiary,
         addCardReq,
-        addCardRes
+        addCardRes,
+        cards
       ];
 }
 
@@ -115,8 +122,6 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
   ///add Card Req
   void addCardReq(AddCardReq addCardReq) {
     state = state.copyWith(addCardReq: addCardReq);
-
-    print(state.addCardReq!.depositRef);
   }
 
   ///Get Aba beneficiary
@@ -152,6 +157,21 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
 
   void addBeneficiary(PassBeneficiary passBeneficiary) {
     state = state.copyWith(passBeneficiary: passBeneficiary);
+  }
+
+  ///Get Card
+
+  void getCard() async {
+    try {
+      state = state.copyWith(loading: true);
+      final res = await cardServiceManager.getSavedCard();
+
+      state = state.copyWith(cards: [...res.data.cards]);
+      state = state.copyWith(loading: false, success: true);
+    } catch (e) {
+      state =
+          state.copyWith(loading: false, success: false, error: e.toString());
+    }
   }
 
   ///Get Iban beneficiary

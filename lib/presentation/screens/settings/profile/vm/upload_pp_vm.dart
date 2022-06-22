@@ -1,4 +1,3 @@
-import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/profile_repository.dart';

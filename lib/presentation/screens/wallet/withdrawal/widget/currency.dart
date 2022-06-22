@@ -240,24 +240,29 @@ class _CurrencyWidgetState extends State<CurrencyWidget> {
                 });
           },
           child: EditForm(
-              enabled: false,
-              labelText: widget.text,
+            enabled: false,
+            labelText: widget.text,
 
-              // textAlign: TextAlign.start,
-              controller: widget.currencyController,
-              obscureText: false,
-              validator: (value) => validateCountry(value)),
-        ),
-        Positioned(
-          left: 375.w,
-          right: 0,
-          bottom: 17.h,
-          child: const Icon(
-            CupertinoIcons.chevron_down,
-            color: Color(0xffA8A8A8),
-            size: 15,
+            // textAlign: TextAlign.start,
+            controller: widget.currencyController,
+            obscureText: false,
+            validator: (value) => validateCountry(value),
+            suffixIcon: const Padding(
+              padding: EdgeInsets.only(left: 40),
+              child: Icon(
+                CupertinoIcons.chevron_down,
+                color: Color(0xffA8A8A8),
+                size: 15,
+              ),
+            ),
           ),
         ),
+        // Positioned(
+        //   left: 375.w,
+        //   right: 0,
+        //   bottom: 17.h,
+        //   child:
+        // ),
       ],
     );
   }

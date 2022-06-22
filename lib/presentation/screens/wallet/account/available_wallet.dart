@@ -16,8 +16,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-
-import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class AvailableWallet extends StatefulWidget {
@@ -352,7 +350,6 @@ class _AvailableWalletState extends State<AvailableWallet> {
                                                                         right: 30
                                                                             .w),
                                                                     child: Text(
-                                                                      //TODO: NO api to remove wallet
                                                                       'Remove Wallet',
                                                                       style: AppText
                                                                           .body5(
@@ -525,9 +522,7 @@ class _AvailableWalletState extends State<AvailableWallet> {
                                                                 left: 30.w,
                                                                 right: 30.w),
                                                         child: Text(
-                                                          //TODO: Need explanation on how wallet can be viewed and which api ti be used
                                                           'view wallet',
-                                                          //TODO: To change the font when add_fund_ui is merged
                                                           style: AppText.body5(
                                                             context,
                                                             AppColors.textColor,
@@ -562,17 +557,13 @@ class _AvailableWalletState extends State<AvailableWallet> {
                                                         ),
                                                       ),
                                                       isDefaultAction: true,
-                                                      onPressed: () {
-                                                        //TODO: To transafer from current wallet to another wallet
-                                                      },
+                                                      onPressed: () {},
                                                     ),
                                                   ),
 
                                                   //Make wallet default
                                                   Consumer(builder:
                                                       (context, ref, child) {
-                                                    final vm = ref.watch(
-                                                        setWalletAsDefaultProvider);
                                                     ref.listen<RequestState>(
                                                         setWalletAsDefaultProvider,
                                                         (T, value) {
@@ -589,7 +580,6 @@ class _AvailableWalletState extends State<AvailableWallet> {
                                                       }
 
                                                       if (value is Error) {
-                                                        //TODO: The KDRX can not be set as defualt
                                                         return AppSnackBar
                                                             .showErrorSnackBar(
                                                                 context,

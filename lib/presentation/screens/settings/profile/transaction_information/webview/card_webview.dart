@@ -49,9 +49,9 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
           switch (widget.webViewRoute) {
             case WebViewRoute.fundCard:
               if (navigation.url.contains('embed_token')) {
-                final index = navigation.url.toString().lastIndexOf('=');
-                final reference =
-                    navigation.url.toString().substring(index + 1);
+                // final index = navigation.url.toString().lastIndexOf('=');
+                // final reference =
+                //     navigation.url.toString().substring(index + 1);
                 // ref.read(getCardProvider.notifier).getCard();
 
                 Navigator.pop(context);
@@ -67,9 +67,9 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
               break;
             case WebViewRoute.addCard:
               if (navigation.url.contains('embed_token')) {
-                final index = navigation.url.toString().lastIndexOf('=');
-                final reference =
-                    navigation.url.toString().substring(index + 1);
+                // final index = navigation.url.toString().lastIndexOf('=');
+                // final reference =
+                //     navigation.url.toString().substring(index + 1);
                 // ref.read(getCardProvider.notifier).getCard();
 
                 Navigator.pop(context);
@@ -86,9 +86,9 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
               break;
             case WebViewRoute.authorization:
               if (navigation.url.contains('embed_token')) {
-                final index = navigation.url.toString().lastIndexOf('=');
-                final reference =
-                    navigation.url.toString().substring(index + 1);
+                // final index = navigation.url.toString().lastIndexOf('=');
+                // final reference =
+                //     navigation.url.toString().substring(index + 1);
                 // ref.read(getCardProvider.notifier).getCard();
                 ref.refresh(walletTransactionProvider);
                 Navigator.pop(context);
@@ -104,9 +104,7 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 // verifyTransaction(reference);
 
               }
-              break;
-            case WebViewRoute.portfolio:
-              // TODO: Handle this case.
+
               break;
           }
 

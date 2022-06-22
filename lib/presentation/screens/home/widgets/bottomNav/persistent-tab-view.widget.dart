@@ -430,7 +430,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             ),
           ),
           _navBarHeight == 0
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Positioned(
                   bottom: (_navBarHeight! -
                           (widget.bottomScreenMargin ??
@@ -497,7 +497,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
             ),
           ),
           _navBarHeight == 0
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Positioned(
                   bottom: (_navBarHeight! -
                           (widget.bottomScreenMargin ??
@@ -534,7 +534,7 @@ class _PersistentTabViewState extends State<PersistentTabView> {
                                         30.0) /
                                     2),
                         width: MediaQuery.of(context).size.width / 5.0 - 30.0,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.transparent,
                         ),
                       ),

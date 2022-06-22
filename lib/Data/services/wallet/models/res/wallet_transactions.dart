@@ -214,29 +214,29 @@ class User {
       };
 }
 
-enum CountryName { NIGERIA }
+enum CountryName { nigeria }
 
-final countryNameValues = EnumValues({"Nigeria": CountryName.NIGERIA});
+final countryNameValues = EnumValues({"Nigeria": CountryName.nigeria});
 
-enum Email { ETOEDIA_GMAIL_COM }
+enum Email { etoediagmailcom }
 
-final emailValues = EnumValues({"etoedia@gmail.com": Email.ETOEDIA_GMAIL_COM});
+final emailValues = EnumValues({"etoedia@gmail.com": Email.etoediagmailcom});
 
-enum StName { DAVID }
+enum StName { david }
 
-final stNameValues = EnumValues({"David": StName.DAVID});
+final stNameValues = EnumValues({"David": StName.david});
 
-enum Language { ENGLISH }
+enum Language { english }
 
-final languageValues = EnumValues({"English": Language.ENGLISH});
+final languageValues = EnumValues({"English": Language.english});
 
-enum RefCode { DD_QS7_WY }
+enum RefCode { ddqs7wy }
 
-final refCodeValues = EnumValues({"DD-QS7WY": RefCode.DD_QS7_WY});
+final refCodeValues = EnumValues({"DD-QS7WY": RefCode.ddqs7wy});
 
-enum Timezone { AFRICA_LAGOS }
+enum Timezone { africalagos }
 
-final timezoneValues = EnumValues({"Africa/Lagos": Timezone.AFRICA_LAGOS});
+final timezoneValues = EnumValues({"Africa/Lagos": Timezone.africalagos});
 
 class EnumValues<T> {
   Map<String, T>? map;

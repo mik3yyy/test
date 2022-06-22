@@ -37,7 +37,6 @@ class CustomWalletAppBarWithChild extends StatelessWidget {
           margin: EdgeInsets.only(top: containerTwoMargin),
           // margin: EdgeInsets.only(top: 150.h),
           // margin: EdgeInsets.only(top: 130.h),
-          //TODO: MIght change the height depeneing on the size of the screen
           // height: 900.h,
           height: containerTwoHeight,
           width: double.infinity,
