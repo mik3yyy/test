@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class WalletViewWidget extends StatelessWidget {
   final Widget appBar;
@@ -42,7 +47,7 @@ class WalletViewWidget extends StatelessWidget {
   }
 }
 
-class GenericWidget extends StatelessWidget {
+class GenericWidget extends HookConsumerWidget {
   final Widget appbar;
   final Widget child;
   final Color bgColor;
@@ -54,34 +59,52 @@ class GenericWidget extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.appColor,
-        body: SafeArea(
-          child: CustomScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: appbar,
-              ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Container(
-                        decoration: BoxDecoration(
-                          color: bgColor,
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(45.r)),
-                        ),
-                        // height: 600,
-                        width: double.maxFinite,
-                        child: child)),
-              )
-            ],
+  Widget build(BuildContext context, ref) {
+    ref.listen<RequestState>(transferToWalletProvider, (T, value) {
+      if (value is Success) {
+        context.loaderOverlay.hide();
+      }
+      if (value is Error) {
+        context.loaderOverlay.hide();
+      }
+    });
+
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitWave(
+          color: AppColors.appColor,
+          size: 50.0,
+        ),
+      ),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: AppColors.appColor,
+          body: SafeArea(
+            child: CustomScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: appbar,
+                ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Align(
+                      alignment: FractionalOffset.bottomCenter,
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: bgColor,
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(45.r)),
+                          ),
+                          // height: 600,
+                          width: double.maxFinite,
+                          child: child)),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -12,7 +12,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../Data/model/profile/res/profile_res.dart';
-import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/personal_info.dart';
 
@@ -100,7 +99,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ),
                   ],
                 ),
-                UploadImage(),
+                const UploadImage(),
                 // CircleAvatar(
                 //   radius: 50.0.r,
                 //   backgroundImage: const AssetImage(

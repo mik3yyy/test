@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/to_friends_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/to_wallet_tab.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';

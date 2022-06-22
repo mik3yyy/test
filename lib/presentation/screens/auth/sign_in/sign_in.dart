@@ -10,7 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
@@ -48,7 +47,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       canCheckBiometrics = false;
-      print(e);
+      throw e.toString();
     }
     if (!mounted) {
       return;
@@ -65,7 +64,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
       availableBiometrics = <BiometricType>[];
-      print(e);
+      throw e.toString();
     }
     if (!mounted) {
       return;
@@ -94,7 +93,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         _isAuthenticating = false;
       });
     } on PlatformException catch (e) {
-      print(e);
       setState(() {
         _isAuthenticating = false;
         _authorized = 'Error - ${e.message}';

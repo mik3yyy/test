@@ -80,35 +80,33 @@ class BottomNavSimple extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: this.navBarEssentials!.navBarHeight,
+      height: navBarEssentials!.navBarHeight,
       padding: EdgeInsets.only(
-          left: this.navBarEssentials!.padding?.left ??
+          left: navBarEssentials!.padding?.left ??
               MediaQuery.of(context).size.width * 0.04,
-          right: this.navBarEssentials!.padding?.right ??
+          right: navBarEssentials!.padding?.right ??
               MediaQuery.of(context).size.width * 0.04,
-          top: this.navBarEssentials!.padding?.top ??
-              this.navBarEssentials!.navBarHeight! * 0.15,
-          bottom: this.navBarEssentials!.padding?.bottom ??
-              this.navBarEssentials!.navBarHeight! * 0.12),
+          top: navBarEssentials!.padding?.top ??
+              navBarEssentials!.navBarHeight! * 0.15,
+          bottom: navBarEssentials!.padding?.bottom ??
+              navBarEssentials!.navBarHeight! * 0.12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: this.navBarEssentials!.items!.map((item) {
-          int index = this.navBarEssentials!.items!.indexOf(item);
+        children: navBarEssentials!.items!.map((item) {
+          int index = navBarEssentials!.items!.indexOf(item);
           return Flexible(
             child: GestureDetector(
               onTap: () {
-                if (this.navBarEssentials!.items![index].onPressed != null) {
-                  this.navBarEssentials!.items![index].onPressed!(
-                      this.navBarEssentials!.selectedScreenBuildContext);
+                if (navBarEssentials!.items![index].onPressed != null) {
+                  navBarEssentials!.items![index]
+                      .onPressed!(navBarEssentials!.selectedScreenBuildContext);
                 } else {
-                  this.navBarEssentials!.onItemSelected!(index);
+                  navBarEssentials!.onItemSelected!(index);
                 }
               },
-              child: _buildItem(
-                  item,
-                  this.navBarEssentials!.selectedIndex == index,
-                  this.navBarEssentials!.navBarHeight),
+              child: _buildItem(item, navBarEssentials!.selectedIndex == index,
+                  navBarEssentials!.navBarHeight),
             ),
           );
         }).toList(),

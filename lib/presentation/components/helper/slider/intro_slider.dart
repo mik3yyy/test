@@ -115,54 +115,48 @@ class IntroSlider extends StatefulWidget {
 
   // Constructor
   const IntroSlider({
+    Key? key,
     // Slides
+    // Skip
+    // Prev
+    // Done
+    // Next
+    // Dots
+    // Tabs
+    // Behavior
     this.slides,
     this.backgroundColorAllSlides,
-
-    // Skip
     this.renderSkipBtn,
     this.skipButtonStyle,
     this.showSkipBtn,
     this.skipButtonKey,
-
-    // Prev
     this.renderPrevBtn,
     this.prevButtonStyle,
     this.showPrevBtn,
     this.prevButtonKey,
-
-    // Done
-    this.renderDoneBtn,
-    this.onDonePress,
-    this.doneButtonStyle,
-    this.showDoneBtn,
-    this.doneButtonKey,
-
-    // Next
     this.renderNextBtn,
     this.nextButtonStyle,
     this.showNextBtn,
     this.onSkipPress,
     this.nextButtonKey,
-
-    // Dots
-    this.colorActiveDot,
-    this.colorDot,
+    this.renderDoneBtn,
+    this.doneButtonStyle,
+    this.onDonePress,
+    this.showDoneBtn,
+    this.doneButtonKey,
     this.showDotIndicator,
+    this.colorDot,
+    this.colorActiveDot,
     this.sizeDot,
     this.typeDotAnimation,
-
-    // Tabs
     this.listCustomTabs,
     this.onTabChangeCompleted,
     this.refFuncGoToTab,
-
-    // Behavior
     this.isScrollable,
     this.scrollPhysics,
     this.hideStatusBar,
     this.verticalScrollbarBehavior,
-  });
+  }) : super(key: key);
 
   @override
   IntroSliderState createState() => IntroSliderState();
@@ -451,7 +445,7 @@ class IntroSliderState extends State<IntroSlider>
           "PREV",
           style: TextStyle(color: Colors.white),
         );
-    prevButtonStyle = widget.prevButtonStyle ?? ButtonStyle();
+    prevButtonStyle = widget.prevButtonStyle ?? const ButtonStyle();
 
     showNextBtn = widget.showNextBtn ?? true;
 

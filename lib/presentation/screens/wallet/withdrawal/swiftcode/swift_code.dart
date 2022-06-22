@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/sepa/sepa_req.dart';
@@ -15,8 +16,10 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/iban_withdraw.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/view_model.dart/iban_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/view_model.dart/sepa_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
 import '../aba[ABA]/viewmodel/currency_list.dart';
@@ -39,93 +42,124 @@ class _SwiftCodeViewState extends ConsumerState<SwiftCodeView> {
   Widget build(BuildContext context) {
     final selection = ref.watch(toggleSelectionProvider.state);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'SWIFTCODE [BIC]',
-          style: AppText.header2(context, Colors.black, 20.sp),
+    /// listens to Sepa withraw
+    ref.listen<RequestState>(sepaWithdrawalProvider, (previous, value) {
+      if (value is Success<WithdrawRes>) {
+        context.loaderOverlay.hide();
+      }
+
+      if (value is Error) {
+        context.loaderOverlay.hide();
+      }
+    });
+
+    /// listens to Iban withraw
+    ref.listen<RequestState>(ibanWithdrawalProvider, (previous, value) {
+      if (value is Success<WithdrawRes>) {
+        context.loaderOverlay.hide();
+      }
+
+      if (value is Error) {
+        context.loaderOverlay.hide();
+      }
+    });
+
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidget: const Center(
+        child: SpinKitWave(
+          color: AppColors.appColor,
+          size: 50.0,
         ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            color: Colors.black,
-          ),
-        ),
-        automaticallyImplyLeading: false,
-        elevation: 0,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics()),
-          child: Column(
-            children: [
-              Container(
-                height: 40.h,
-                width: MediaQuery.of(context).size.width,
-                color: AppColors.appColor.withOpacity(0.05),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 210.w),
-                  child: Center(
-                    child: Text(
-                      'Withdraw From Wallets',
-                      style: AppText.body2(context, Colors.black54, 20.sp),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'SWIFTCODE [BIC]',
+            style: AppText.header2(context, Colors.black, 20.sp),
+          ),
+          leading: InkWell(
+            onTap: (() => Navigator.pop(context)),
+            child: const Icon(
+              Icons.arrow_back_ios_outlined,
+              color: Colors.black,
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics()),
+            child: Column(
+              children: [
+                Container(
+                  height: 40.h,
+                  width: MediaQuery.of(context).size.width,
+                  color: AppColors.appColor.withOpacity(0.05),
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 210.w),
+                    child: Center(
+                      child: Text(
+                        'Withdraw From Wallets',
+                        style: AppText.body2(context, Colors.black54, 20.sp),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 20.w, left: 20.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Space(20.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ToggleSelection(
-                          textColor: selection.state == 'IBAN'
-                              ? AppColors.appColor
-                              : Colors.grey[400]!,
-                          borderColor: selection.state == 'IBAN'
-                              ? AppColors.appColor
-                              : Colors.grey[200]!,
-                          color: selection.state == 'IBAN'
-                              ? Colors.grey[200]!
-                              : Colors.grey[100]!,
-                          name: 'IBAN',
-                          onPressed: () {
-                            selection.state = 'IBAN';
-                          },
-                        ),
-                        ToggleSelection(
-                          textColor: selection.state == 'SEPA'
-                              ? AppColors.appColor
-                              : Colors.grey[400]!,
-                          borderColor: selection.state == 'SEPA'
-                              ? AppColors.appColor
-                              : Colors.grey[200]!,
-                          color: selection.state == 'SEPA'
-                              ? Colors.grey[200]!
-                              : Colors.grey[100]!,
-                          name: 'SEPA',
-                          onPressed: () {
-                            selection.state = 'SEPA';
-                          },
-                        ),
-                      ],
-                    ),
-                    Space(20.h),
-                    selection.state == "IBAN"
-                        ? const IbanView()
-                        : const SepaView()
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(right: 20.w, left: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Space(20.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ToggleSelection(
+                            textColor: selection.state == 'IBAN'
+                                ? AppColors.appColor
+                                : Colors.grey[400]!,
+                            borderColor: selection.state == 'IBAN'
+                                ? AppColors.appColor
+                                : Colors.grey[200]!,
+                            color: selection.state == 'IBAN'
+                                ? Colors.grey[200]!
+                                : Colors.grey[100]!,
+                            name: 'IBAN',
+                            onPressed: () {
+                              selection.state = 'IBAN';
+                            },
+                          ),
+                          ToggleSelection(
+                            textColor: selection.state == 'SEPA'
+                                ? AppColors.appColor
+                                : Colors.grey[400]!,
+                            borderColor: selection.state == 'SEPA'
+                                ? AppColors.appColor
+                                : Colors.grey[200]!,
+                            color: selection.state == 'SEPA'
+                                ? Colors.grey[200]!
+                                : Colors.grey[100]!,
+                            name: 'SEPA',
+                            onPressed: () {
+                              selection.state = 'SEPA';
+                            },
+                          ),
+                        ],
+                      ),
+                      Space(20.h),
+                      selection.state == "IBAN"
+                          ? const IbanView()
+                          : const SepaView()
+                    ],
+                  ),
                 ),
-              ),
-              Space(100.h),
-            ],
+                Space(100.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -674,6 +708,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
                           ref
                               .read(sepaWithdrawalProvider.notifier)
                               .sepaWithdrawal(sepaReq);
+                          context.loaderOverlay.show();
                         }
                       }
                     },

@@ -4,7 +4,7 @@ class SampleModalScreen extends ModalRoute<void> {
   SampleModalScreen();
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 500);
+  Duration get transitionDuration => const Duration(milliseconds: 500);
 
   @override
   bool get opaque => false;
@@ -38,14 +38,14 @@ class SampleModalScreen extends ModalRoute<void> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
       width: MediaQuery.of(context).size.width * 0.3,
-      margin: EdgeInsets.all(30.0),
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
+      margin: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
       color: Colors.amber,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
+          const Text(
             "This is a modal screen",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -70,10 +70,8 @@ class SampleModalScreen extends ModalRoute<void> {
   }
 
   @override
-  // TODO: implement barrierLabel
   String? get barrierLabel => 'dav';
 
   // @override
-  // // TODO: implement barrierLabel
   // String? get barrierLabel => throw UnimplementedError();
 }

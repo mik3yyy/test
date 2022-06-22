@@ -8,9 +8,7 @@ Future<T?> pushNewScreen<T>(
       PageTransitionAnimation.cupertino,
   PageRoute? customPageRoute,
 }) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
+  withNavBar ??= true;
   return Navigator.of(context, rootNavigator: !withNavBar).push<T>(
       customPageRoute as Route<T>? ??
           getPageRoute(pageTransitionAnimation, enterPage: screen));
@@ -21,9 +19,7 @@ Future<T?> pushDynamicScreen<T>(
   required dynamic screen,
   bool? withNavBar,
 }) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
+  withNavBar ??= true;
   return Navigator.of(context, rootNavigator: !withNavBar).push<T>(screen);
 }
 
@@ -36,9 +32,7 @@ Future<T?> pushNewScreenWithRouteSettings<T>(
       PageTransitionAnimation.cupertino,
   PageRoute? customPageRoute,
 }) {
-  if (withNavBar == null) {
-    withNavBar = true;
-  }
+  withNavBar ??= true;
 
   return Navigator.of(context, rootNavigator: !withNavBar).push<T>(
       customPageRoute as Route<T>? ??

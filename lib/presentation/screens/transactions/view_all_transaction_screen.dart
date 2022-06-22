@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ViewAllTransactionScreen extends HookConsumerWidget {
   const ViewAllTransactionScreen({Key? key}) : super(key: key);
@@ -47,20 +48,28 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
                   child: Text("You have no transactions"),
                 );
               } else {
-                return ListView.separated(
-                  padding: EdgeInsets.only(left: 25.w, right: 25.w, top: 20.h),
-                  physics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics()),
-                  itemCount: data.data!.transactions.length,
-                  itemBuilder: (context, index) {
-                    final transactions = data.data!.transactions[index];
-                    return TransactionBuild(
-                      transactions: transactions,
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 20.h);
-                  },
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        padding:
+                            EdgeInsets.only(left: 25.w, right: 25.w, top: 20.h),
+                        physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
+                        itemCount: data.data!.transactions.length,
+                        itemBuilder: (context, index) {
+                          final transactions = data.data!.transactions[index];
+                          return TransactionBuild(
+                            transactions: transactions,
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 20.h);
+                        },
+                      ),
+                    ),
+                    const Space(80)
+                  ],
                 );
               }
             }),

@@ -13,6 +13,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/view_model.dart/iban_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
 
@@ -57,6 +58,7 @@ class _IbanViewState extends ConsumerState<IbanView> {
     ref.listen<RequestState>(ibanWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
         ref.refresh(getAccountDetailsProvider);
+
         AppDialog.showSuccessMessageDialog(context, value.value!.message!);
       }
 
@@ -335,6 +337,7 @@ class _IbanViewState extends ConsumerState<IbanView> {
                         ref
                             .read(ibanWithdrawalProvider.notifier)
                             .ibanWithdrawal(ibanReq);
+                        context.loaderOverlay.show();
                       }
                     },
               buttonWidth: MediaQuery.of(context).size.width),

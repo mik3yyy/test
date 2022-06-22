@@ -4,7 +4,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import 'widget/add_fund_container_widget.dart';
@@ -25,7 +24,6 @@ class AddFundsToWalletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(route);
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: route == "HomeScreen"
@@ -69,21 +67,15 @@ class AddFundsToWalletScreen extends StatelessWidget {
             ),
             Space(10.h),
             AppFundContainerWidget(
-              //TODO: To get image later, they are grouped together in the figma file
               image: AppImage.debitCardIcon,
               text: 'Pay',
-              onTap: () {
-                //TODO: To implement pay method
-              },
+              onTap: () {},
             ),
             Space(10.h),
             AppFundContainerWidget(
-              //TODO: To get image later, they are grouped together in the figma file
               image: AppImage.debitCardIcon,
               text: 'Google Pay',
-              onTap: () {
-                //TODO: To implement Google Pay method
-              },
+              onTap: () {},
             ),
           ],
         ),

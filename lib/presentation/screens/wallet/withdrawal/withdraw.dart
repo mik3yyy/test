@@ -217,7 +217,7 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                   onChanged: (val) {
                     selected.value = val;
                   },
-                  onSaved: (val) => print(val),
+                  onSaved: (val) => val,
                 ),
                 if (selected.value == 'Swift code/BIC') ...[
                   Column(
@@ -307,8 +307,8 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                     fillColor: Colors.white,
                   ),
                   items: _wallet,
-                  onChanged: (val) => print(val),
-                  onSaved: (val) => print(val),
+                  onChanged: (val) {},
+                  onSaved: (val) {},
                 ),
                 Space(25.h),
 

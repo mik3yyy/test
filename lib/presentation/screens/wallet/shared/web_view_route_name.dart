@@ -1,1 +1,5 @@
-enum WebViewRoute { fundCard, addCard, authorization, portfolio }
+enum WebViewRoute {
+  fundCard,
+  addCard,
+  authorization,
+}
