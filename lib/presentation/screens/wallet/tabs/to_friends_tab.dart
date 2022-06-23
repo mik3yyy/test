@@ -248,7 +248,7 @@ class FriendsTab extends HookConsumerWidget {
                   ),
                   Space(5.h),
                   WalletTextField(
-                    labelText: 'Click to type',
+                    labelText: 'Enter amount',
                     obscureText: false,
                     color: Colors.white,
                     readOnly: false,
@@ -306,7 +306,7 @@ class FriendsTab extends HookConsumerWidget {
                   EditForm(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     labelText: 'Enter Transaction Pin',
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.number,
                     // textAlign: TextAlign.start,
                     controller: pinController,
                     obscureText: transactionPinToggle.state,

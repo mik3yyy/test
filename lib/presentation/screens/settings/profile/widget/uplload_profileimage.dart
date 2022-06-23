@@ -44,41 +44,51 @@ class _UploadImageState extends ConsumerState<UploadImage> {
       }
     });
 
-    return CircleAvatar(
-      radius: 45.0,
-      // backgroundImage: Image.network(vm
-      //             .asData?.value?.imageLink ??
-      //         'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')
-      //     .image,
-      backgroundImage: Image.network(vm.maybeWhen(
-          success: (v) =>
-              v!.data!.user!.profilePicture!.thumbnailUrl ??
-              'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png',
-          orElse: () =>
-              'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')).image,
-      child: Stack(children: [
-        InkWell(
-          onTap: () async {
-            final _picker = ImagePicker();
-            final XFile? image =
-                await _picker.pickImage(source: ImageSource.gallery);
-            ref
-                .read(userPhotoProvider.notifier)
-                .uploadProfilePhoto(image!.path);
-            selectedImage.value = File(image.path);
-          },
-          child: const Align(
-            alignment: Alignment.bottomRight,
-            child: CircleAvatar(
-              radius: 18.0,
-              // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-              child: Icon(Icons.camera_alt_outlined,
-                  size: 18, color: Colors.white),
+    return vm.when(
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () => CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.transparent,
+              radius: 45,
+              child: Image.asset("images/person.png", color: Colors.white),
             ),
-          ),
-        ),
-      ]),
-    );
+        idle: () => CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.transparent,
+              radius: 45,
+              child: Image.asset("images/person.png", color: Colors.white),
+            ),
+        success: (data) {
+          return CircleAvatar(
+            radius: 45.0,
+            backgroundImage: data!.data!.user!.profilePicture == ""
+                ? const AssetImage("images/person.png")
+                : AssetImage(data.data!.user!.profilePicture),
+            child: Stack(children: [
+              InkWell(
+                onTap: () async {
+                  final _picker = ImagePicker();
+                  final XFile? image =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  ref
+                      .read(userPhotoProvider.notifier)
+                      .uploadProfilePhoto(image!.path);
+                  selectedImage.value = File(image.path);
+                },
+                child: const Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    radius: 18.0,
+                    // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+                    child: Icon(Icons.camera_alt_outlined,
+                        size: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ]),
+          );
+        });
+
     // return ValueListenableBuilder(
     //     valueListenable: selectedImage,
     //     builder: (context, File imageFile, child) {

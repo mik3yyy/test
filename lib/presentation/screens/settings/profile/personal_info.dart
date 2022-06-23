@@ -32,12 +32,6 @@ class PersonalInfo extends StatefulHookConsumerWidget {
 }
 
 class _PersonalInfoState extends ConsumerState<PersonalInfo> {
-  final List<String> _gender = ['male', 'female'];
-
-  String val = 'female';
-  Gender gender = Gender.female;
-  String? _radioSelected;
-
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
@@ -66,7 +60,11 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         // String transactionDate = DateFormat(' d, MMM yyyy').format(date);
 
         // String dob = DateFormat('dd-MM-yyyy')
-        //     .format(DateTime.tryParse(date.toString())!);
+        //     .format(DateTime.tryParse(value.data!.user!.dateOfBirth.toString())!);
+
+        final date = value.data!.user!.dateOfBirth!;
+        // DateFormat(' d, MMM yyyy').format(date)
+        final dob = DateTime.tryParse(date);
 
         return GenericWidget(
           appbar: Padding(
@@ -128,7 +126,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'First Name',
-                      subTitle: value.data!.user!.firstName == null
+                      subTitle: value.data!.user!.firstName == ""
                           ? "Unavailable"
                           : firstName.inCaps,
                     ),
@@ -141,7 +139,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Last Name',
-                      subTitle: value.data!.user!.lastName == null
+                      subTitle: value.data!.user!.lastName == ""
                           ? "Unavailable"
                           : secondName.inCaps,
                     ),
@@ -154,9 +152,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Email',
-                      subTitle: value.data!.user!.email == null
-                          ? "Unavailable"
-                          : value.data!.user!.email.toString(),
+                      subTitle: value.data!.user!.email.toString(),
                     ),
                     Space(7.h),
                     const Divider(
@@ -167,7 +163,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Phone Number',
-                      subTitle: value.data!.user!.phoneNumber == null
+                      subTitle: value.data!.user!.phoneNumber == ""
                           ? "Unavailable"
                           : value.data!.user!.phoneNumber.toString(),
                     ),
@@ -178,13 +174,17 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ),
                     Space(30.h),
                     PersonalInfoCard(
-                      color: Colors.black,
-                      title: 'Date of Birth',
-                      subTitle: value.data!.user!.dateOfBirth == null
-                          ? "Unavailable"
-                          : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
-                              value.data!.user!.dateOfBirth)!),
-                    ),
+                        color: Colors.black,
+                        title: 'Date of Birth',
+                        subTitle: value.data!.user!.dateOfBirth == ""
+                            ? "Unavailable"
+                            : dob.toString()
+                        // ? "Unavailable"
+                        // : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
+                        //     value.data!.user!.dateOfBirth)!
+
+                        //     ),
+                        ),
 
                     Space(7.h),
                     const Divider(
@@ -197,42 +197,18 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     ///
                     ///
                     ///
-
-                    Row(
-                      children: [
-                        Text(
-                          'Gender',
-                          style: AppText.body2(context, Colors.black, 19.sp),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            height: 60.h,
-                            width: 50,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _gender.length,
-                                itemBuilder: (context, index) {
-                                  final sex = _gender[index];
-
-                                  return Row(
-                                    children: [
-                                      Space(15.w),
-                                      Radio<String>(
-                                        value: value.data!.user!.gender ?? sex,
-                                        groupValue: sex,
-                                        onChanged: (value) {},
-                                      ),
-                                      Text(
-                                        sex,
-                                        style: AppText.body2(
-                                            context, Colors.black, 19.sp),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                          ),
-                        ),
-                      ],
+                    Space(30.h),
+                    PersonalInfoCard(
+                      color: Colors.black,
+                      title: 'Gender',
+                      subTitle: value.data!.user!.gender == ""
+                          ? "Unavailable"
+                          : value.data!.user!.gender,
+                    ),
+                    Space(7.h),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 0.4,
                     ),
 
                     ///
@@ -244,7 +220,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Address',
-                      subTitle: value.data!.user!.address == null
+                      subTitle: value.data!.user!.address == ""
                           ? "Unavailable"
                           : value.data!.user!.address.toString(),
                     ),
@@ -257,9 +233,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Country',
-                      subTitle: value.data!.user!.countryName == null
-                          ? "Unavailable"
-                          : value.data!.user!.countryName.toString(),
+                      subTitle: value.data!.user!.countryName.toString(),
                     ),
                     Space(7.h),
                     const Divider(
