@@ -14,6 +14,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:local_auth/local_auth.dart';
@@ -129,6 +131,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         if (value.value!.data!.user!.transactionPinAddedAt == null) {
           context.navigate(TransactionPinScreen());
         } else {
+          ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
+          ref.read(getProfileProvider.notifier).getProfile();
           context.navigate(MainScreen(menuScreenContext: context));
         }
       }

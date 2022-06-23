@@ -48,19 +48,29 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                 Space(15.w),
               ],
             ),
-            CircleAvatar(
-              radius: 50.0.r,
-              backgroundImage: Image.network(vm.maybeWhen(
-                  success: (v) =>
-                      v!.data!.user!.profilePicture!.thumbnailUrl ??
-                      'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png',
-                  orElse: () =>
-                      'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')).image,
 
-              // const AssetImage(
-              //   AppImage.image1,
-              // ),
-            ),
+            vm.maybeWhen(success: (data) {
+              return CircleAvatar(
+                radius: 50.0.r,
+                backgroundImage: data!.data!.user!.profilePicture == ""
+                    ? const AssetImage("images/person.png")
+                    : AssetImage(data.data!.user!.profilePicture),
+
+                // const AssetImage(
+                //   AppImage.image1,
+                // ),
+              );
+            }, orElse: () {
+              return CircleAvatar(
+                radius: 50.0.r,
+                backgroundImage: const AssetImage("images/person.png"),
+
+                // const AssetImage(
+                //   AppImage.image1,
+                // ),
+              );
+            }),
+
             Space(20.h),
             Text(
               vm.maybeWhen(

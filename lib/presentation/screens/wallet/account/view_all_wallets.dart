@@ -38,15 +38,8 @@ class _SelectWalletToCreateState extends ConsumerState<SelectWalletToCreate> {
       if (value is Success<CreateWalletRes>) {
         context.loaderOverlay.hide();
         ref.refresh(getAccountDetailsProvider);
-        //TODO: popview is not working, navigating back to previous screen
-        // context.popView();
-        // pushNewScreen(
-        //   //TODO: To replace with add fund screen, when add fund screen is merged
-        //   // context, screen: const AvailableWallet(),
-        //   context, screen: const ABAWithdrawal(),
-        //   withNavBar: true, // OPTIONAL VALUE. True by default.
-        //   pageTransitionAnimation: PageTransitionAnimation.fade,
-        // );
+        Navigator.pop(context);
+
         return AppSnackBar.showErrorSnackBar(context,
             message: value.value!.message.toString());
       }

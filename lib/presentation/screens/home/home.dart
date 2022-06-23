@@ -57,7 +57,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.read(genericController.notifier).getBeneficiaries();
     ref.read(genericController.notifier).getAbaBeneficiaries();
     ref.read(genericController.notifier).getIbanBeneficiaries();
-    ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
+
     ref.read(genericController.notifier).getCard();
   }
 
@@ -90,20 +90,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(getProfileProvider);
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-
-    // var someCapitalizedString = "someString".capitalize();
-
-    //TODO: To ask BE guy to return native_symbol for set wallet as default res
+    final vm = ref.watch(getProfileProvider);
     final setWalletVm = ref.watch(setWalletAsDefaultProvider);
-
-    //  String setValue =  setWalletVm.maybeWhen(
-    //                           success: (v) =>
-    //                               '${currencySymbol(v!.data!.wallet!.currencyCode!)} ${v.data!.wallet!.balance.toString()}',
-    //                           orElse: () => '');
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(
@@ -142,16 +133,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                   size: 30.sp,
                 ),
                 Space(10.w),
-                CircleAvatar(
-                  radius: 18.0,
-                  //TODO: To use cachednetworkimage
-                  backgroundImage: Image.network(vm.maybeWhen(
-                      success: (v) =>
-                          v!.data!.user!.profilePicture!.thumbnailUrl ??
-                          'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png',
-                      orElse: () =>
-                          'https://www.pngkey.com/png/full/52-522921_kathrine-vangen-profile-pic-empty-png.png')).image,
-                )
+                vm.maybeWhen(success: (data) {
+                  return CircleAvatar(
+                    radius: 25.0.r,
+                    backgroundImage: data!.data!.user!.profilePicture == ""
+                        ? const AssetImage("images/person.png")
+                        : AssetImage(data.data!.user!.profilePicture),
+
+                    // const AssetImage(
+                    //   AppImage.image1,
+                    // ),
+                  );
+                }, orElse: () {
+                  return CircleAvatar(
+                    radius: 30.0.r,
+                    backgroundImage: const AssetImage("images/person.png"),
+
+                    // const AssetImage(
+                    //   AppImage.image1,
+                    // ),
+                  );
+                }),
               ],
             ),
             Space(30.h),
