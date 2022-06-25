@@ -73,7 +73,7 @@ class _TransferState extends ConsumerState<Transfer>
                       Text(
                         defaultWallet.maybeWhen(
                             success: (v) =>
-                                "Acc No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user!.accountNumber, orElse: () => '')}",
+                                "Acc No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
                             orElse: () => ''),
                         style: AppText.body2(context, Colors.white, 16.sp),
                       ),

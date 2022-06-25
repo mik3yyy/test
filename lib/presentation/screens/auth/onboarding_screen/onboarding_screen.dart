@@ -38,8 +38,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                     height: height,
                     image: AppImage.image1,
                     text1: "Welcome!",
-                    text:
-                        "Lorem ipsum ornare ultrices interdum. Teaks husek dhhuef gshe",
+                    text: "",
                   ),
                   //Image Two
                   ImageWidget(
@@ -47,8 +46,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                     height: height,
                     image: AppImage.image2,
                     text1: "Invest Easily",
-                    text:
-                        "Lorem ipsum ornare ultrices interdum. Teaks husek dhhuef gshe",
+                    text: "",
                   ),
 
                   //Image Three
@@ -57,8 +55,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                     height: height,
                     image: AppImage.image3,
                     text1: "Secure Pay",
-                    text:
-                        "Lorem ipsum ornare ultrices interdum. Teaks husek dhhuef gshe",
+                    text: "",
                   ),
                 ],
                 // items: imageSliders,

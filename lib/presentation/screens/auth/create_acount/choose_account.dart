@@ -34,14 +34,14 @@ class ChooseAccount extends StatelessWidget {
               Space(120.h),
               AccountRow(
                 icon: Icons.phone,
-                text: "Sign in with phone number",
+                text: "Sign up with phone number",
                 ontap: () => context.navigate(CreatePhoneAccount()),
               ),
               Space(50.h),
               AccountRow(
                 ontap: () => context.navigate(CreateAccountScreen()),
                 icon: Icons.mail,
-                text: "Sign in with email",
+                text: "Sign up with email",
               ),
               Space(50.h),
               Row(

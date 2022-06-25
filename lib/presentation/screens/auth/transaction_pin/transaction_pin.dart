@@ -31,6 +31,7 @@ class TransactionPinScreen extends HookConsumerWidget {
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
       if (value is Success) {
+        context.loaderOverlay.hide();
         successAlart(context, "Your Transaction Pin has been set", "Continue");
       }
 
@@ -142,7 +143,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                     Space(300.h),
                     CustomButton(
                       buttonWidth: double.infinity,
-                      buttonText: 'Set PIN',
+                      buttonText: vm is Loading ? "Please wait" : 'Set PIN',
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

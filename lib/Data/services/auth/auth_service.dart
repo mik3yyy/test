@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
@@ -178,18 +182,12 @@ class UserService {
   }
 
   // sign in
-  Future<SigninRes> signIn(
-    String emailPhone,
-    String password,
-  ) async {
+  Future<SigninRes> signIn(SigninReq signinReq) async {
     const url = '/auth/sign-in';
     try {
-      final response = await _read(dioProvider).post(url, data: {
-        "email_phone": emailPhone,
-        "password": password,
-        "timezone": "Africa/Lagos",
-        "device_id": "deviceIDSforlife"
-      });
+      final response =
+          await _read(dioProvider).post(url, data: signinReq.toJson());
+      PreferenceManager.appUser = jsonEncode(response.data);
 
       final result = SigninRes.fromJson(response.data);
       return result;
@@ -301,6 +299,23 @@ class UserService {
       final response =
           await _read(dioProvider).post(url, data: refreshTokenReq.toJson());
       final result = RefreshTokenRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<SigninOutRes> signOut(String deviceId) async {
+    const url = '/auth/sign-out';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: {"device_id": deviceId});
+      final result = SigninOutRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

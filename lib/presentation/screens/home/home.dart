@@ -92,7 +92,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-    final vm = ref.watch(getProfileProvider);
     final setWalletVm = ref.watch(setWalletAsDefaultProvider);
     return GenericWidget(
       appbar: Padding(
@@ -111,7 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Hi ${accountNo.maybeMap(success: (v) => '${v.value!.data!.user!.firstName}'.capitalize(), orElse: () => '')}',
+                      'Hi ${accountNo.maybeMap(success: (v) => v.value!.data!.user.firstName.capitalize(), orElse: () => '')}',
                       style: AppText.header1(context, Colors.white, 25.sp),
                     ),
                     Space(10.h),
@@ -132,28 +131,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   size: 30.sp,
                 ),
                 Space(10.w),
-                // vm.maybeWhen(success: (data) {
-                //   return CircleAvatar(
-                //     radius: 25.0.r,
-                //     backgroundImage: data!.data.user.profilePicture!.imageUrl ==
-                //             ""
-                //         ? const AssetImage("images/person.png")
-                //         : AssetImage(data.data.user.profilePicture.toString()),
-
-                //     // const AssetImage(
-                //     //   AppImage.image1,
-                //     // ),
-                //   );
-                // }, orElse: () {
-                //   return CircleAvatar(
-                //     radius: 30.0.r,
-                //     backgroundImage: const AssetImage("images/person.png"),
-
-                //     // const AssetImage(
-                //     //   AppImage.image1,
-                //     // ),
-                //   );
-                // }),
               ],
             ),
             Space(30.h),
@@ -232,7 +209,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                   Space(10.h),
                   Text(
-                    'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user!.accountNumber!, orElse: () => '')}',
+                    'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
 
                     // 'Acc No: 23456789',
                     style: AppText.body2(context, AppColors.appColor, 20.sp),

@@ -182,15 +182,14 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                         );
                       },
                       loading: () => SizedBox(
-                          height: 25.w,
-                          width: 25.w,
+                          height: 20.w,
+                          width: 20.w,
                           child: const CircularProgressIndicator.adaptive()),
                       idle: () => SizedBox(
-                          height: 25.w,
-                          width: 25.w,
+                          height: 20.w,
+                          width: 20.w,
                           child: const CircularProgressIndicator.adaptive()),
                       error: (Object error, StackTrace stackTrace) {
-                        print(error);
                         return Text(
                           error.toString(),
                           style: AppText.header2(
@@ -214,8 +213,20 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                       idle: () => const CircularProgressIndicator.adaptive(),
                       success: (data) {
                         walletCount.value = data!.data!.wallets!.length;
+                        double _getSized() {
+                          if (walletCount.value == 2) {
+                            return 200;
+                          } else if (walletCount.value == 3) {
+                            return 250;
+                          } else if (walletCount.value == 4) {
+                            return 350;
+                          } else {
+                            return 400;
+                          }
+                        }
+
                         return SizedBox(
-                          height: 400,
+                          height: _getSized(),
                           child: ListView.separated(
                             itemCount: data.data!.wallets!.length,
                             itemBuilder: (context, index) {
@@ -283,25 +294,27 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                       }),
                   walletCount.value == 5
                       ? const SizedBox.shrink()
-                      : CustomButton(
-                          buttonText: 'Create Wallet',
-                          bgColor: AppColors.appColor,
-                          borderColor: AppColors.appColor,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            pushNewScreen(
-                              context,
-                              screen: const SelectWalletToCreate(),
-                              withNavBar:
-                                  true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.fade,
-                            );
-                            // context.navigate(AvailableBalance()
+                      : Center(
+                          child: CustomButton(
+                              buttonText: 'Create Wallet',
+                              bgColor: AppColors.appColor,
+                              borderColor: AppColors.appColor,
+                              textColor: Colors.white,
+                              onPressed: () {
+                                pushNewScreen(
+                                  context,
+                                  screen: const SelectWalletToCreate(),
+                                  withNavBar:
+                                      true, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.fade,
+                                );
+                                // context.navigate(AvailableBalance()
 
-                            // );
-                          },
-                          buttonWidth: 320),
+                                // );
+                              },
+                              buttonWidth: 320),
+                        ),
                 ],
               ),
             ),
@@ -335,6 +348,10 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
         AppSnackBar.showSuccessSnackBar(context,
             message:
                 "${value.value!.data!.wallet!.currencyCode} is set to default");
+      }
+
+      if (value is Error) {
+        context.loaderOverlay.hide();
       }
     });
 
@@ -377,7 +394,6 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 30.w, right: 30.w),
                           child: Text(
-                            //TODO: To change the font when add_fund_ui is merged
                             'view wallet',
                             style: AppText.body5(
                               context,

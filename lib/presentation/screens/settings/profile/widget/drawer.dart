@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/device_id.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_out_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../invite friend/invite_friend.dart';
 
-class Navigation extends StatelessWidget {
+class Navigation extends HookConsumerWidget {
   const Navigation({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final padding = EdgeInsets.only(left: 30.w, right: 30.w);
 
     return SizedBox(
@@ -132,7 +140,13 @@ class Navigation extends StatelessWidget {
               color: Colors.black,
               title: 'log out',
               image: AppImage.logout,
-              onPressed: () {},
+              onPressed: () {
+                DeviceID.deviceId().then((value) {
+                  ref.read(signOutProvider.notifier).signOut(value);
+                });
+                context.navigate(const SigninScreen());
+                PreferenceManager.clear();
+              },
             ),
             Space(10.h),
             Divider(

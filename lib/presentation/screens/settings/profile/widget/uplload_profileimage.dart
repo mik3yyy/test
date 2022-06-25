@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/pick_image_dialog.dart';
@@ -19,7 +17,7 @@ class UploadImage extends StatefulHookConsumerWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<UploadImage> createState() => _UploadImageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _UploadImageState();
 }
 
 class _UploadImageState extends ConsumerState<UploadImage> {
@@ -27,9 +25,10 @@ class _UploadImageState extends ConsumerState<UploadImage> {
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
     final profileImage = PreferenceManager.avatarUrl;
-    // final selectedImage = ValueNotifier<File>(File(''));
-    final selectedImage = useState<File>(File(''));
-    bool isPicked = false;
+    final image = ref.watch(userPhotoProvider);
+    // // final selectedImage = ValueNotifier<File>(File(''));
+    // final selectedImage = useState<File>(File(''));
+    // bool isPicked = false;
     // ref.listen<RequestState>(userPhotoProvider, (T, value) {
     //   if (value is Success) {
     //     ref
@@ -38,70 +37,85 @@ class _UploadImageState extends ConsumerState<UploadImage> {
     //   }
     // });
 
-    ref.listen<RequestState>(userPhotoProvider, (_, value) {
-      if (value is Success) {
-        ref.refresh(getProfileProvider);
-        return AppSnackBar.showSuccessSnackBar(context,
-            message: 'Profile Photo updated.');
-      }
-      if (value is Error) {
-        return AppSnackBar.showErrorSnackBar(context,
-            message: value.error.toString());
-      }
-    });
-    return profileImage.isNotEmpty
-        ? CircleAvatar(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.transparent,
-            radius: 60.w,
-            backgroundImage: FileImage(File(profileImage)),
-            child: Stack(children: [
-              InkWell(
-                onTap: () async {
-                  PickImageDialog().pickImage(context, () {
-                    getImage(ImageSource.camera);
-                  }, () {
-                    getImage(ImageSource.gallery);
-                  });
-                },
-                child: const Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    radius: 18.0,
-                    // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-                    child: Icon(Icons.camera_alt_outlined,
-                        size: 18, color: Colors.white),
-                  ),
-                ),
-              ),
-            ]),
-          )
-        : CircleAvatar(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.transparent,
-            radius: 60.w,
-            backgroundImage: const AssetImage("images/person.png"),
-            child: Stack(children: [
-              InkWell(
-                onTap: () async {
-                  PickImageDialog().pickImage(context, () {
-                    getImage(ImageSource.camera);
-                  }, () {
-                    getImage(ImageSource.gallery);
-                  });
-                },
-                child: const Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    radius: 18.0,
-                    // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-                    child: Icon(Icons.camera_alt_outlined,
-                        size: 18, color: Colors.white),
-                  ),
-                ),
-              ),
-            ]),
-          );
+    // ref.listen<RequestState>(userPhotoProvider, (_, value) {
+    //   if (value is Success) {
+    //     ref.refresh(getProfileProvider);
+    //     return AppSnackBar.showSuccessSnackBar(context,
+    //         message: 'Profile Photo updated.');
+    //   }
+    //   if (value is Error) {
+    //     return AppSnackBar.showErrorSnackBar(context,
+    //         message: value.error.toString());
+    //   }
+    // });
+    return Stack(
+      children: [
+        SizedBox(
+            height: 140.h,
+            width: 130.w,
+            child: image is Loading
+                ? const CircularProgressIndicator(
+                    strokeWidth: 4,
+                    color: Colors.white24,
+                  )
+                : const SizedBox.shrink()),
+        Padding(
+            padding: const EdgeInsets.only(left: 5, top: 3),
+            child: profileImage.isNotEmpty
+                ? CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    radius: 60.w,
+                    backgroundImage: FileImage(File(profileImage)),
+                    child: Stack(children: [
+                      InkWell(
+                        onTap: () async {
+                          PickImageDialog().pickImage(context, () {
+                            getImage(ImageSource.camera);
+                          }, () {
+                            getImage(ImageSource.gallery);
+                          });
+                        },
+                        child: const Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            radius: 18.0,
+                            // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+                            child: Icon(Icons.camera_alt_outlined,
+                                size: 18, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )
+                : CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    radius: 60.w,
+                    backgroundImage: const AssetImage("images/person.png"),
+                    child: Stack(children: [
+                      InkWell(
+                        onTap: () async {
+                          PickImageDialog().pickImage(context, () {
+                            getImage(ImageSource.camera);
+                          }, () {
+                            getImage(ImageSource.gallery);
+                          });
+                        },
+                        child: const Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            radius: 18.0,
+                            // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+                            child: Icon(Icons.camera_alt_outlined,
+                                size: 18, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )),
+      ],
+    );
 
     // return vm.when(
     //     error: (error, stackTrace) => Text(error.toString()),
@@ -190,6 +204,8 @@ class _UploadImageState extends ConsumerState<UploadImage> {
 
     // selectedValue = imageFile;
 
+    ref.read(userPhotoProvider.notifier).uploadProfilePhoto(image.path);
+
     final appDir = await path_provider.getApplicationDocumentsDirectory();
 
     // This is the saved image path
@@ -198,7 +214,5 @@ class _UploadImageState extends ConsumerState<UploadImage> {
     PreferenceManager.avatarUrl = localPath;
 
     // print("I PRINTED PROFILEIMAGE $localPath");
-
-    ref.read(userPhotoProvider.notifier).uploadProfilePhoto(image.path);
   }
 }
