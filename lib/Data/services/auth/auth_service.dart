@@ -297,15 +297,9 @@ class UserService {
 
   Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq) async {
     const url = '/auth/refresh-tokens';
-    // final pseudoToken = PreferenceManager.pseudoToken;
     try {
       final response =
-          await _read(dioProvider).post(url, data: refreshTokenReq.toJson()
-
-              // options: Options(
-              //     headers: {"Pseudo-Authentication": "Bearer $pseudoToken"})
-
-              );
+          await _read(dioProvider).post(url, data: refreshTokenReq.toJson());
       final result = RefreshTokenRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {

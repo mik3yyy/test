@@ -9,6 +9,7 @@ import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PreferenceManager.init();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 

@@ -76,6 +76,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                     TextFormInput(
                       keyboardType: TextInputType.number,
                       labelText: 'Enter Transaction Pin',
+                      capitalization: TextCapitalization.none,
                       controller: pinController,
                       validator: (String? value) {
                         if (value!.isEmpty) {
@@ -107,6 +108,7 @@ class TransactionPinScreen extends HookConsumerWidget {
                     //confirm pin
                     TextFormInput(
                       keyboardType: TextInputType.number,
+                      capitalization: TextCapitalization.none,
                       labelText: 'Re-Enter Transaction PIN',
                       controller: confirmPinController,
                       focusNode: fieldFocusNode,

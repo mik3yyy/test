@@ -101,6 +101,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
+                        capitalization: TextCapitalization.words,
                         controller: fistNameController,
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -116,6 +117,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                         keyboardType: TextInputType.name,
                         labelText: 'Last Name',
                         controller: lastNameController,
+                        capitalization: TextCapitalization.words,
                         validator: (String? value) {
                           if (value!.isEmpty) {
                             return "Last Name is required";
@@ -131,6 +133,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                         labelText: 'Email',
                         controller: emailPhoneController,
                         focusNode: fieldFocusNode,
+                        capitalization: TextCapitalization.none,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email address is required";

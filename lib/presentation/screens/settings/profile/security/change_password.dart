@@ -106,6 +106,7 @@ class ChangePassword extends HookConsumerWidget {
                           TextFormInput(
                             labelText: 'Old Password',
                             controller: oldPasswordController,
+                            capitalization: TextCapitalization.none,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Password is requied";
@@ -137,6 +138,7 @@ class ChangePassword extends HookConsumerWidget {
                           TextFormInput(
                             labelText: 'New Password',
                             controller: controller,
+                            capitalization: TextCapitalization.none,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return "Password is requied";
@@ -168,6 +170,7 @@ class ChangePassword extends HookConsumerWidget {
                           TextFormInput(
                             labelText: 'Re-enter new password',
                             controller: confirmController,
+                            capitalization: TextCapitalization.none,
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {

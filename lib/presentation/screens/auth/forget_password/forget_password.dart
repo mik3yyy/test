@@ -91,6 +91,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                     // phone number or email
                     TextFormInput(
                       labelText: 'Email Address or Phone Number',
+                      capitalization: TextCapitalization.none,
                       controller: controller,
                       focusNode: fieldFocusNode,
                       validator: (value) {

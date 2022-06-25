@@ -69,8 +69,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
     final transactionPinController = useTextEditingController();
 
     final currencyCode = defaultWallet.maybeWhen(
-        success: (v) => v!.data!.defaultWallet!.currencyCode!,
-        orElse: () => '');
+        success: (v) => v!.data.defaultWallet.currencyCode!, orElse: () => '');
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Success) {

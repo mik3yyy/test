@@ -158,13 +158,13 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${currencyName(data!.data!.defaultWallet!.currencyCode.toString())} wallet',
+                                    '${currencyName(data!.data.defaultWallet.currencyCode.toString())} wallet',
                                     style: AppText.header2(
                                         context, AppColors.appColor, 18.sp),
                                   ),
                                   Space(10.h),
                                   Text(
-                                    '${currencySymbol(data.data!.defaultWallet!.currencyCode.toString())} ${formatCurrency(data.data!.defaultWallet!.balance.toString())}',
+                                    '${currencySymbol(data.data.defaultWallet.currencyCode.toString())} ${formatCurrency(data.data.defaultWallet.balance.toString())}',
                                     style: AppText.header2(
                                         context, AppColors.appColor, 20.sp),
                                   ),
@@ -173,7 +173,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                               const Spacer(),
                               OptionsModalSheet(
                                 currencyCode: data
-                                    .data!.defaultWallet!.currencyCode
+                                    .data.defaultWallet.currencyCode
                                     .toString(),
                                 isDefault: true,
                               )
@@ -190,6 +190,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                           width: 25.w,
                           child: const CircularProgressIndicator.adaptive()),
                       error: (Object error, StackTrace stackTrace) {
+                        print(error);
                         return Text(
                           error.toString(),
                           style: AppText.header2(
@@ -332,7 +333,8 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
         context.loaderOverlay.hide();
 
         AppSnackBar.showSuccessSnackBar(context,
-            message: "${widget.currencyCode} is set to default");
+            message:
+                "${value.value!.data!.wallet!.currencyCode} is set to default");
       }
     });
 

@@ -115,6 +115,7 @@ class CreatePhoneAccount extends HookConsumerWidget {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
+                        capitalization: TextCapitalization.words,
                         controller: fistNameController,
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -130,6 +131,7 @@ class CreatePhoneAccount extends HookConsumerWidget {
                         keyboardType: TextInputType.name,
                         labelText: 'Last Name',
                         controller: lastNameController,
+                        capitalization: TextCapitalization.words,
                         validator: (String? value) {
                           if (value!.isEmpty) {
                             return "Last Name is required";

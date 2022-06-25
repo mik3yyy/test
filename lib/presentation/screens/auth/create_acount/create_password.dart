@@ -90,6 +90,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'Password',
                       controller: passwordController,
+                      capitalization: TextCapitalization.none,
                       validator: (String? value) {
                         if (value!.isEmpty) {
                           return "Password is requied";
@@ -121,6 +122,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'Confirm Password',
                       controller: confirmPasswordController,
+                      capitalization: TextCapitalization.none,
                       focusNode: fieldFocusNode,
                       validator: (String? value) {
                         if (value!.isEmpty) {

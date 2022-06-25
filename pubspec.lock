@@ -162,13 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  cloudinary_public:
-    dependency: "direct main"
-    description:
-      name: cloudinary_public
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.1"
   code_builder:
     dependency: transitive
     description:
@@ -429,13 +422,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.6"
-  google_fonts:
-    dependency: "direct main"
-    description:
-      name: google_fonts
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.3.1"
   graphs:
     dependency: transitive
     description:

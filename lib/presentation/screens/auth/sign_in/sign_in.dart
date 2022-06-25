@@ -16,6 +16,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.da
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:local_auth/local_auth.dart';
@@ -178,6 +179,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                         labelText: 'Email or Phone Number',
                         controller: emailPhoneController,
+                        capitalization: TextCapitalization.none,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email address or Phone Number is required";
@@ -193,6 +195,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       labelText: 'Password',
                       controller: passwordController,
                       focusNode: fieldFocusNode,
+                      capitalization: TextCapitalization.none,
                       validator: (String? value) {
                         if (value!.length < 8) {
                           return 'Password must at least be 8 characters';

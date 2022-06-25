@@ -15,6 +15,7 @@ class TextFormInput extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.enabled,
+      required this.capitalization,
       this.focusNode,
       this.keyboardType})
       : super(key: key);
@@ -29,6 +30,7 @@ class TextFormInput extends StatelessWidget {
   final TextEditingController controller;
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?) validator;
+  final TextCapitalization capitalization;
   final FocusNode? focusNode;
 
   @override
@@ -39,6 +41,7 @@ class TextFormInput extends StatelessWidget {
         cursorColor: Colors.blue,
         focusNode: focusNode,
         autovalidateMode: autovalidateMode,
+        textCapitalization: capitalization,
         obscureText: obscureText,
         textInputAction: TextInputAction.next,
         keyboardType: keyboardType,
