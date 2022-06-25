@@ -40,7 +40,7 @@ class _SelectWalletToCreateState extends ConsumerState<SelectWalletToCreate> {
         ref.refresh(getAccountDetailsProvider);
         Navigator.pop(context);
 
-        return AppSnackBar.showErrorSnackBar(context,
+        return AppSnackBar.showSuccessSnackBar(context,
             message: value.value!.message.toString());
       }
       if (value is Error) {

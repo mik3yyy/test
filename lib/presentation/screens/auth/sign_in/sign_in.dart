@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -12,21 +12,21 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:local_auth/local_auth.dart';
 
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import '../transaction_pin/transaction_pin.dart';
+import 'device_id.dart';
 
 class SigninScreen extends StatefulHookConsumerWidget {
-  SigninScreen({Key? key}) : super(key: key);
+  const SigninScreen({Key? key}) : super(key: key);
 
   @override
   _SigninScreenState createState() => _SigninScreenState();
@@ -38,98 +38,23 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   final fieldFocusNode = FocusNode();
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
 
-  final LocalAuthentication auth = LocalAuthentication();
-  bool? _canCheckBiometrics;
-  List<BiometricType>? _availableBiometrics;
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
-
-  Future<void> _checkBiometrics() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      throw e.toString();
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
-
-  Future<void> _getAvailableBiometrics() async {
-    late List<BiometricType> availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      availableBiometrics = <BiometricType>[];
-      throw e.toString();
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
-  }
-
-  Future<void> _authenticate() async {
-    bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = 'Authenticating';
-      });
-      authenticated = await auth.authenticate(
-        localizedReason: 'Verify your FingerPrint',
-        options: const AuthenticationOptions(
-          useErrorDialogs: true,
-          stickyAuth: true,
-        ),
-      );
-      setState(() {
-        _isAuthenticating = false;
-      });
-    } on PlatformException catch (e) {
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Error - ${e.message}';
-      });
-      return;
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(
-        () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
-
-    context.navigate(MainScreen(menuScreenContext: context));
-  }
-
   @override
   void initState() {
     super.initState();
-    _checkBiometrics();
-    _getAvailableBiometrics();
+    ref.read(localAuthStateProvider.notifier).hasBiometrics();
   }
 
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
-
+    final localAuth = ref.watch(localAuthStateProvider);
     final emailPhoneController = useTextEditingController();
     final passwordController = useTextEditingController();
     final togglePasswords = ref.watch(passwordToggleStateProvider.state);
 
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
-        if (value.value!.data!.user!.transactionPinAddedAt == null) {
+        if (value.value!.data!.user.transactionPinAddedAt == null) {
           context.navigate(TransactionPinScreen());
         } else {
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
@@ -239,7 +164,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     Space(160.h),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: localAuth.hasBiometric
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.center,
                       children: [
                         CustomButton(
                           buttonWidth: 280.w,
@@ -250,32 +177,50 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           onPressed: vm is Loading
                               ? null
                               : () async {
+                                  // DateTime dateTime = DateTime.now();
+                                  // print(dateTime.timeZoneName);
+
                                   if (formKey.currentState!.validate()) {
                                     fieldFocusNode.unfocus();
-                                    ref.read(signInProvider.notifier).signIn(
-                                        emailPhoneController.text,
-                                        passwordController.text);
+                                    DeviceID.deviceId().then((deviceId) {
+                                      var signinReq = SigninReq(
+                                          emailPhone: emailPhoneController.text,
+                                          password: passwordController.text,
+                                          timezone: "Africa/Lagos",
+                                          deviceId: deviceId);
+
+                                      ref
+                                          .read(signInProvider.notifier)
+                                          .signIn(signinReq);
+                                    });
+
                                     context.loaderOverlay.show();
                                   }
                                 },
                         ),
-                        GestureDetector(
-                          onTap: _authenticate,
-                          child: Container(
-                            height: 55.h,
-                            width: 80.w,
-                            decoration: BoxDecoration(
-                              color: AppColors.appColor,
-                              borderRadius: BorderRadius.circular(6.r),
-                            ),
-                            child: const Image(
-                              image: AssetImage(
-                                "images/fingerprint-3.png",
-                              ),
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        )
+                        localAuth.hasBiometric
+                            ? GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(localAuthStateProvider.notifier)
+                                      .authenticate();
+                                },
+                                child: Container(
+                                  height: 55.h,
+                                  width: 80.w,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.appColor,
+                                    borderRadius: BorderRadius.circular(6.r),
+                                  ),
+                                  child: const Image(
+                                    image: AssetImage(
+                                      "images/fingerprint-3.png",
+                                    ),
+                                    color: AppColors.whiteColor,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink()
                       ],
                     ),
                     Space(20.h),

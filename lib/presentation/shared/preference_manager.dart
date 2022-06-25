@@ -33,6 +33,10 @@ class PreferenceManager {
       prefs.setString("refreshToken", refreshToken);
   static String get refreshToken => prefs.getString("refreshToken") ?? '';
 
+  //* AppUser
+  static set appUser(String appUser) => prefs.setString("appUser", appUser);
+  static String get appUser => prefs.getString("appUser") ?? '';
+
   static void clear() {
     prefs.clear();
     // PreferenceManager.isFirstLaunch = false;

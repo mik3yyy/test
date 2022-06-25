@@ -1,8 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/auth_service.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/i_auth_manager.dart';
@@ -80,8 +82,8 @@ class AuthManager extends IAuthManager {
 
   // sign in
   @override
-  Future<SigninRes> signIn(String emailPhone, String password) async {
-    final res = await _userService.signIn(emailPhone, password);
+  Future<SigninRes> signIn(SigninReq signinReq) async {
+    final res = await _userService.signIn(signinReq);
 
     PreferenceManager.authToken = res.data!.tokens!.authToken!;
     PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
@@ -127,4 +129,8 @@ class AuthManager extends IAuthManager {
     PreferenceManager.refreshToken = refreshToken.data!.refreshToken!;
     return refreshToken;
   }
+
+  @override
+  Future<SigninOutRes> signOut(String deviceId) async =>
+      await _userService.signOut(deviceId);
 }

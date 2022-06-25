@@ -41,6 +41,7 @@ class ProfileService {
     try {
       final response = await _read(dioProvider).get(url,
           options: Options(headers: {"Authentication": "Bearer $token"}));
+
       final result = ProfileRes.fromJson(response.data);
 
       return result;

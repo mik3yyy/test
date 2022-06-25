@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/settings_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/available_wallet.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/create_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 
 class MainScreen extends StatefulWidget {
