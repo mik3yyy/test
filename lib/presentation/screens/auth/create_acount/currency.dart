@@ -83,6 +83,7 @@ class CurrencyScreen extends HookConsumerWidget {
                         enabled: false,
                         labelText: 'Country',
                         controller: countryController,
+                        capitalization: TextCapitalization.none,
                         suffixIcon: const Icon(
                           Icons.arrow_drop_down,
                           color: AppColors.textColor,
@@ -108,6 +109,7 @@ class CurrencyScreen extends HookConsumerWidget {
                         enabled: false,
                         labelText: 'Currency',
                         controller: currencyController,
+                        capitalization: TextCapitalization.none,
                         suffixIcon: const Icon(
                           Icons.arrow_drop_down,
                           color: AppColors.textColor,
@@ -133,6 +135,7 @@ class CurrencyScreen extends HookConsumerWidget {
                         enabled: false,
                         labelText: 'Language',
                         controller: languageController,
+                        capitalization: TextCapitalization.none,
                         suffixIcon: const Icon(
                           Icons.arrow_drop_down,
                           color: AppColors.textColor,

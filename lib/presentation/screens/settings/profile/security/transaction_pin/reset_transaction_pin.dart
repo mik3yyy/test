@@ -109,6 +109,7 @@ class ResetPinScreen extends HookConsumerWidget {
                           TextFormInput(
                             keyboardType: TextInputType.number,
                             labelText: 'New Pin',
+                            capitalization: TextCapitalization.none,
                             controller: controller,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -142,6 +143,7 @@ class ResetPinScreen extends HookConsumerWidget {
                           TextFormInput(
                             keyboardType: TextInputType.number,
                             labelText: 'Confirm New Pin',
+                            capitalization: TextCapitalization.none,
                             controller: confirmController,
                             focusNode: fieldFocusNode,
                             validator: (value) {

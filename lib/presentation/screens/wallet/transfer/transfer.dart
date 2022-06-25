@@ -65,7 +65,7 @@ class _TransferState extends ConsumerState<Transfer>
                       Text(
                         defaultWallet.maybeWhen(
                             success: (v) =>
-                                "${v!.data!.defaultWallet!.currencyCode!} ${formatter.format(v.data!.defaultWallet!.balance)} ",
+                                "${v!.data.defaultWallet.currencyCode!} ${formatter.format(v.data.defaultWallet.balance)} ",
                             orElse: () => ''),
                         style: AppText.header1(context, Colors.white, 25.sp),
                       ),

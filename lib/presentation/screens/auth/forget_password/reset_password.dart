@@ -101,6 +101,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'New Password',
                       controller: controller,
+                      capitalization: TextCapitalization.none,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Password is requied";
@@ -132,6 +133,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'Confirm Password',
                       controller: confirmController,
+                      capitalization: TextCapitalization.none,
                       focusNode: fieldFocusNode,
                       validator: (value) {
                         if (value!.isEmpty) {

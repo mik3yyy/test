@@ -101,6 +101,7 @@ class ForgotTransactionPin extends HookConsumerWidget {
                           TextFormInput(
                             labelText: 'Email Address or Phone Number',
                             controller: controller,
+                            capitalization: TextCapitalization.none,
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {

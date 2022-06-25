@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +13,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/uplo
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';
@@ -27,6 +30,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
+    final profileImage = PreferenceManager.avatarUrl;
 
     return GenericWidget(
       appbar: Padding(
@@ -48,34 +52,49 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                 Space(15.w),
               ],
             ),
+            profileImage.isNotEmpty
+                ? CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    radius: 60.w,
+                    backgroundImage: FileImage(File(profileImage)))
+                : CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    radius: 60.w,
+                    child:
+                        Image.asset("images/person.png", color: Colors.white),
+                  ),
 
-            vm.maybeWhen(success: (data) {
-              return CircleAvatar(
-                radius: 50.0.r,
-                backgroundImage: data!.data!.user!.profilePicture == ""
-                    ? const AssetImage("images/person.png")
-                    : AssetImage(data.data!.user!.profilePicture),
+            // vm.maybeWhen(success: (data) {
+            //   return CircleAvatar(
+            //     radius: 50.0.r,
+            //     backgroundImage:
+            //         data!.data.user.profilePicture?.imageUrl.toString() == ""
+            //             ? const AssetImage("images/person.png")
+            //             : AssetImage(data.data.user.profilePicture?.imageUrl ??
+            //                 "images/person.png"),
 
-                // const AssetImage(
-                //   AppImage.image1,
-                // ),
-              );
-            }, orElse: () {
-              return CircleAvatar(
-                radius: 50.0.r,
-                backgroundImage: const AssetImage("images/person.png"),
+            //     // const AssetImage(
+            //     //   AppImage.image1,
+            //     // ),
+            //   );
+            // }, orElse: () {
+            //   return CircleAvatar(
+            //     radius: 50.0.r,
+            //     backgroundImage: const AssetImage("images/person.png"),
 
-                // const AssetImage(
-                //   AppImage.image1,
-                // ),
-              );
-            }),
+            //     // const AssetImage(
+            //     //   AppImage.image1,
+            //     // ),
+            //   );
+            // }),
 
             Space(20.h),
             Text(
               vm.maybeWhen(
                   success: (v) =>
-                      '${v!.data!.user!.firstName} ${v.data!.user!.lastName}',
+                      '${v!.data.user.firstName} ${v.data.user.lastName}',
                   orElse: () => ''),
               // firstName.inCaps + " " + secondName.inCaps,
               style: AppText.body2(context, Colors.white, 25.sp),

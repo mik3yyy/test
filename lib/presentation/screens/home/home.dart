@@ -11,7 +11,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -133,27 +132,28 @@ class _HomePageState extends ConsumerState<HomePage> {
                   size: 30.sp,
                 ),
                 Space(10.w),
-                vm.maybeWhen(success: (data) {
-                  return CircleAvatar(
-                    radius: 25.0.r,
-                    backgroundImage: data!.data!.user!.profilePicture == ""
-                        ? const AssetImage("images/person.png")
-                        : AssetImage(data.data!.user!.profilePicture),
+                // vm.maybeWhen(success: (data) {
+                //   return CircleAvatar(
+                //     radius: 25.0.r,
+                //     backgroundImage: data!.data.user.profilePicture!.imageUrl ==
+                //             ""
+                //         ? const AssetImage("images/person.png")
+                //         : AssetImage(data.data.user.profilePicture.toString()),
 
-                    // const AssetImage(
-                    //   AppImage.image1,
-                    // ),
-                  );
-                }, orElse: () {
-                  return CircleAvatar(
-                    radius: 30.0.r,
-                    backgroundImage: const AssetImage("images/person.png"),
+                //     // const AssetImage(
+                //     //   AppImage.image1,
+                //     // ),
+                //   );
+                // }, orElse: () {
+                //   return CircleAvatar(
+                //     radius: 30.0.r,
+                //     backgroundImage: const AssetImage("images/person.png"),
 
-                    // const AssetImage(
-                    //   AppImage.image1,
-                    // ),
-                  );
-                }),
+                //     // const AssetImage(
+                //     //   AppImage.image1,
+                //     // ),
+                //   );
+                // }),
               ],
             ),
             Space(30.h),

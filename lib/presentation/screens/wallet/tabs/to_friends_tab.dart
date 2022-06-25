@@ -40,8 +40,7 @@ class FriendsTab extends HookConsumerWidget {
     // 62239195
 
     final currencyCode = defaultWallet.maybeWhen(
-        success: (v) => v!.data!.defaultWallet!.currencyCode!,
-        orElse: () => '');
+        success: (v) => v!.data.defaultWallet.currencyCode!, orElse: () => '');
 
     ref.listen<RequestState>(verifyAcctNoProvider, (T, value) {
       if (value is Success<VerifyAcctNoRes>) {

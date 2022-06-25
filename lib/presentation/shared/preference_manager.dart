@@ -11,10 +11,10 @@ class PreferenceManager {
       prefs.setBool("isLoggedIn", isLoggedIn);
   static bool get isLoggedIn => prefs.getBool("isLoggedIn") ?? false;
 
-  //* Google
-  static set googleUserName(String googleUserName) =>
-      prefs.setString("googleUserName", googleUserName);
-  static String get googleUserName => prefs.getString("googleUserName") ?? '';
+//* avatarUrl
+  static set avatarUrl(String avatarUrl) =>
+      prefs.setString("avatarUrl", avatarUrl);
+  static String get avatarUrl => prefs.getString("avatarUrl") ?? '';
 
   //* auth token
   static set authToken(String authToken) =>
@@ -40,5 +40,6 @@ class PreferenceManager {
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 }

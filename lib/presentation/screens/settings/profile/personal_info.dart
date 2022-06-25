@@ -53,8 +53,8 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         );
       },
       success: (ProfileRes? value) {
-        final firstName = value!.data!.user!.firstName!.split(" ")[0];
-        final secondName = value.data!.user!.lastName!.split(" ")[0];
+        final firstName = value!.data.user.firstName.split(" ")[0];
+        final secondName = value.data.user.lastName.split(" ")[0];
 
         // String date = value.data!.user!.dateOfBirth.toString();
         // String transactionDate = DateFormat(' d, MMM yyyy').format(date);
@@ -62,9 +62,23 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         // String dob = DateFormat('dd-MM-yyyy')
         //     .format(DateTime.tryParse(value.data!.user!.dateOfBirth.toString())!);
 
-        final date = value.data!.user!.dateOfBirth!;
-        // DateFormat(' d, MMM yyyy').format(date)
-        final dob = DateTime.tryParse(date);
+        String _date() {
+          final date = value.data.user.dateOfBirth;
+
+          if (date == null) {
+            return "Unavailable";
+          } else {
+            DateTime parseDate =
+                DateFormat("yyyy-MM-dd").parse(date.toString());
+            var inputDate = DateTime.parse(parseDate.toString());
+            var outputFormat = DateFormat('MM/dd/yyyy');
+            var dob = outputFormat.format(inputDate);
+            return dob;
+          }
+        }
+
+        // final dob = DateFormat(' d, MMM yyyy').format(date);
+        // final dob = DateTime.tryParse(date);
 
         return GenericWidget(
           appbar: Padding(
@@ -106,7 +120,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                 // ),
                 Space(20.h),
                 Text(
-                  firstName.inCaps + " " + secondName.inCaps,
+                  firstName.toString().inCaps + " " + secondName.inCaps,
                   style: AppText.body2(context, Colors.white, 25.sp),
                 ),
               ],
@@ -126,7 +140,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'First Name',
-                      subTitle: value.data!.user!.firstName == ""
+                      subTitle: value.data.user.firstName == ""
                           ? "Unavailable"
                           : firstName.inCaps,
                     ),
@@ -139,7 +153,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Last Name',
-                      subTitle: value.data!.user!.lastName == ""
+                      subTitle: value.data.user.lastName == ""
                           ? "Unavailable"
                           : secondName.inCaps,
                     ),
@@ -152,7 +166,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Email',
-                      subTitle: value.data!.user!.email.toString(),
+                      subTitle: value.data.user.email.toString(),
                     ),
                     Space(7.h),
                     const Divider(
@@ -163,9 +177,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Phone Number',
-                      subTitle: value.data!.user!.phoneNumber == ""
+                      subTitle: value.data.user.phoneNumber == ""
                           ? "Unavailable"
-                          : value.data!.user!.phoneNumber.toString(),
+                          : value.data.user.phoneNumber.toString(),
                     ),
                     Space(7.h),
                     const Divider(
@@ -176,9 +190,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                         color: Colors.black,
                         title: 'Date of Birth',
-                        subTitle: value.data!.user!.dateOfBirth == ""
-                            ? "Unavailable"
-                            : dob.toString()
+                        subTitle: _date()
                         // ? "Unavailable"
                         // : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
                         //     value.data!.user!.dateOfBirth)!
@@ -201,9 +213,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Gender',
-                      subTitle: value.data!.user!.gender == ""
+                      subTitle: value.data.user.gender.toString() == ""
                           ? "Unavailable"
-                          : value.data!.user!.gender,
+                          : value.data.user.gender.toString(),
                     ),
                     Space(7.h),
                     const Divider(
@@ -220,9 +232,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Address',
-                      subTitle: value.data!.user!.address == ""
+                      subTitle: value.data.user.address.toString() == ""
                           ? "Unavailable"
-                          : value.data!.user!.address.toString(),
+                          : value.data.user.address.toString(),
                     ),
                     Space(7.h),
                     const Divider(
@@ -233,7 +245,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     PersonalInfoCard(
                       color: Colors.black,
                       title: 'Country',
-                      subTitle: value.data!.user!.countryName.toString(),
+                      subTitle: value.data.user.countryName.toString(),
                     ),
                     Space(7.h),
                     const Divider(

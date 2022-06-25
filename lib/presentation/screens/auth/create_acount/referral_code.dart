@@ -83,6 +83,7 @@ class ReferralCodeScreen extends HookConsumerWidget {
                     TextFormInput(
                       labelText: 'Enter referral code',
                       focusNode: fieldFocusNode,
+                      capitalization: TextCapitalization.none,
                       controller: controller,
                       validator: (value) {
                         if (value!.isEmpty) {
