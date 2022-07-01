@@ -14,12 +14,12 @@ class GetWithdrawalReq {
   GetWithdrawalReq({
     this.message,
     this.status,
-    this.data,
+    required this.data,
   });
 
   String? message;
   String? status;
-  Data? data;
+  Data data;
 
   factory GetWithdrawalReq.fromJson(Map<String, dynamic> json) =>
       GetWithdrawalReq(
@@ -31,16 +31,16 @@ class GetWithdrawalReq {
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": data!.toJson(),
+        "data": data.toJson(),
       };
 }
 
 class Data {
   Data({
-    this.withdrawals,
+    required this.withdrawals,
   });
 
-  List<Withdrawal>? withdrawals;
+  List<Withdrawal> withdrawals;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         withdrawals: List<Withdrawal>.from(
@@ -48,7 +48,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "withdrawals": List<dynamic>.from(withdrawals!.map((x) => x.toJson())),
+        "withdrawals": List<dynamic>.from(withdrawals.map((x) => x.toJson())),
       };
 }
 

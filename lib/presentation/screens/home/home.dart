@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
@@ -14,7 +15,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.da
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -52,12 +53,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    ref.read(refreshControllerProvider.notifier).refreshToken();
+
+    Timer.periodic(const Duration(minutes: 9), (Timer timer) async {
+      ref.read(refreshControllerProvider.notifier).refreshToken();
+    });
+
     ref.read(genericController.notifier).getBeneficiaries();
     ref.read(genericController.notifier).getAbaBeneficiaries();
     ref.read(genericController.notifier).getIbanBeneficiaries();
-
     ref.read(genericController.notifier).getCard();
+    ref.read(genericController.notifier).getNotification();
+    ref.read(genericController.notifier).withdrawalNotificationRequest();
   }
 
 //Method to convert currency name to code and use as parament for setting wallet as default
@@ -118,10 +124,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                       'Thanks for signing up with us',
                       style: AppText.body2(context, Colors.white, 18.sp),
                     ),
-                    // Text(
-                    //   'Thanks for signing up with us',
-                    //   style: AppText.body2(context, Colors.white, 18.sp),
-                    // ),
                   ],
                 ),
                 const Spacer(),

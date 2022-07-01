@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
@@ -14,7 +15,10 @@ class TextFormInput extends StatelessWidget {
       required this.obscureText,
       this.suffixIcon,
       this.prefixIcon,
+      this.onChanged,
+      this.inputFormatters,
       this.enabled,
+      this.textLength,
       required this.capitalization,
       this.focusNode,
       this.keyboardType})
@@ -31,6 +35,9 @@ class TextFormInput extends StatelessWidget {
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?) validator;
   final TextCapitalization capitalization;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? textLength;
+  final void Function(String)? onChanged;
   final FocusNode? focusNode;
 
   @override
@@ -40,11 +47,15 @@ class TextFormInput extends StatelessWidget {
         controller: controller,
         cursorColor: Colors.blue,
         focusNode: focusNode,
+        maxLength: textLength,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
         autovalidateMode: autovalidateMode,
         textCapitalization: capitalization,
+        inputFormatters: inputFormatters,
         obscureText: obscureText,
         textInputAction: TextInputAction.next,
         keyboardType: keyboardType,
+        onChanged: onChanged,
         onEditingComplete: () => FocusScope.of(context).nextFocus(),
         decoration: InputDecoration(
           suffixIcon: suffixIcon,

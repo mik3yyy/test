@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -137,8 +137,7 @@ class _TransactionInformationScreenState
                       child: SizedBox(
                         height: 400,
                         child: ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics()),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: cards.cards.length,
                           itemBuilder: (context, index) {
                             final savedCard = cards.cards[index];

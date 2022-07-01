@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawa
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -20,7 +21,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nub
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_country.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/widget/currency.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -67,6 +68,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
         ref.refresh(getAccountDetailsProvider);
+        ref.read(getNotificationProvider.notifier).getNotification();
         AppDialog.showSuccessMessageDialog(context, value.value!.message!);
       }
 

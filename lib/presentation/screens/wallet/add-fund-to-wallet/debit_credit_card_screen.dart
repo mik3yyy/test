@@ -21,7 +21,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widg
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/withdraw_from_wallet.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -39,6 +39,7 @@ class DebitCreditCardScreen extends StatefulHookConsumerWidget {
 
 class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   String dollar = "USD";
   String pound = "GBP";
   String euro = "EUR";
@@ -175,6 +176,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                 ),
 
                 Space(43.h),
+
                 //TODO: To implement custom keyboard
                 ExpandableTheme(
                   data: const ExpandableThemeData(

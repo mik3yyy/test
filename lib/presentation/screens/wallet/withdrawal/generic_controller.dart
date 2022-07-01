@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/services/notification/withdrawal_request/withdrawal_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card_service_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
@@ -11,56 +12,80 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repositor
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
+import 'package:kayndrexsphere_mobile/Data/services/notification/res/get_notification.dart'
+    as nots;
 
-class WithdrawalState extends Equatable {
+import '../../../../Data/services/notification/repo/notification_manager.dart';
+
+class GenericState extends Equatable {
   final List<Beneficiary> beneficiary;
   final List<Beneficiary> ababeneficiary;
   final List<Beneficiary> ibanbeneficiary;
+  final List<nots.Notification> notification;
+  final List<nots.Notification> oldState;
+  final List<Withdrawal> withDrawalReq;
+  final List<Withdrawal> oldWithDrawalState;
   final AddCardReq? addCardReq;
   final AddCardRes? addCardRes;
   final List<Cardd> cards;
   final bool loading;
   final bool success;
+  final int tabState;
   final PassBeneficiary passBeneficiary;
   final String error;
 
-  const WithdrawalState(
+  const GenericState(
       {required this.beneficiary,
       required this.loading,
       required this.ibanbeneficiary,
       required this.ababeneficiary,
       required this.cards,
+      required this.oldState,
+      required this.notification,
+      required this.withDrawalReq,
+      required this.oldWithDrawalState,
+      required this.tabState,
       this.addCardReq,
       this.addCardRes,
       required this.error,
       required this.passBeneficiary,
       required this.success});
 
-  factory WithdrawalState.initial() {
-    return WithdrawalState(
+  factory GenericState.initial() {
+    return GenericState(
         beneficiary: const [],
         ababeneficiary: const [],
         ibanbeneficiary: const [],
+        notification: const [],
+        oldState: const [],
+        withDrawalReq: const [],
+        oldWithDrawalState: const [],
         cards: const [],
         loading: false,
+        tabState: 0,
         success: false,
         error: "",
         passBeneficiary:
             PassBeneficiary(accountName: "", accountNumber: "", bankCode: ""));
   }
 
-  WithdrawalState copyWith(
+  GenericState copyWith(
       {final List<Beneficiary>? beneficiary,
       final List<Beneficiary>? ababeneficiary,
       final List<Beneficiary>? ibanbeneficiary,
+      final List<nots.Notification>? notification,
+      final List<nots.Notification>? oldState,
+      final List<Withdrawal>? withDrawalReq,
+      final List<Withdrawal>? oldWithDrawalState,
       final List<Cardd>? cards,
       final bool? loading,
       final bool? success,
       final AddCardReq? addCardReq,
       final AddCardRes? addCardRes,
       final PassBeneficiary? passBeneficiary,
+      final int? tabState,
       final String? error}) {
-    return WithdrawalState(
+    return GenericState(
         beneficiary: beneficiary ?? this.beneficiary,
         loading: loading ?? this.loading,
         success: success ?? this.success,
@@ -68,7 +93,12 @@ class WithdrawalState extends Equatable {
         ibanbeneficiary: this.ibanbeneficiary,
         addCardRes: addCardRes ?? this.addCardRes,
         addCardReq: addCardReq ?? this.addCardReq,
+        withDrawalReq: withDrawalReq ?? this.withDrawalReq,
+        oldWithDrawalState: oldWithDrawalState ?? this.oldWithDrawalState,
         cards: cards ?? this.cards,
+        tabState: tabState ?? this.tabState,
+        oldState: oldState ?? this.oldState,
+        notification: notification ?? this.notification,
         ababeneficiary: ababeneficiary ?? this.ababeneficiary,
         passBeneficiary: passBeneficiary ?? this.passBeneficiary);
   }
@@ -82,34 +112,30 @@ class WithdrawalState extends Equatable {
         passBeneficiary,
         ababeneficiary,
         ibanbeneficiary,
+        notification,
+        withDrawalReq,
+        oldState,
+        oldWithDrawalState,
         addCardReq,
         addCardRes,
-        cards
+        cards,
+        tabState,
       ];
 }
 
 final genericController =
-    StateNotifierProvider<WithDrawalController, WithdrawalState>((ref) =>
-            WithDrawalController(ref.watch(withdrawManagerProvider),
-                ref.watch(cardServiceManagerProvider))
+    StateNotifierProvider<GenericController, GenericState>(
+        (ref) => GenericController(ref));
 
-        // return WithDrawalController(
-        //   ref.watch(cardServiceManagerProvider),
-        //   ref.watch(withdrawManagerProvider));
-
-        );
-
-class WithDrawalController extends StateNotifier<WithdrawalState> {
-  final WithdrawalManager withdrawalManager;
-  final CardServiceManager cardServiceManager;
-  WithDrawalController(this.withdrawalManager, this.cardServiceManager)
-      : super(WithdrawalState.initial());
+class GenericController extends StateNotifier<GenericState> {
+  Ref ref;
+  GenericController(this.ref) : super(GenericState.initial());
 
   ///Get Nuban beneficiary
   void getBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await withdrawalManager.nubanBeneficiary();
+      final res = await ref.read(withdrawManagerProvider).nubanBeneficiary();
 
       state = state.copyWith(beneficiary: [...res.data!.beneficiaries!]);
       state = state.copyWith(loading: false, success: true);
@@ -124,11 +150,16 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
     state = state.copyWith(addCardReq: addCardReq);
   }
 
+  //* TabState
+  void selectTab(int tabState) {
+    state = state.copyWith(tabState: tabState);
+  }
+
   ///Get Aba beneficiary
   void getAbaBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await withdrawalManager.abaBeneficiary();
+      final res = await ref.read(withdrawManagerProvider).abaBeneficiary();
 
       state = state.copyWith(ababeneficiary: [...res.data!.beneficiaries!]);
       state = state.copyWith(loading: false, success: true);
@@ -143,7 +174,7 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
   void getIbanBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await withdrawalManager.ibanBeneficiary();
+      final res = await ref.read(withdrawManagerProvider).ibanBeneficiary();
 
       state = state.copyWith(ibanbeneficiary: [...res.data!.beneficiaries!]);
       state = state.copyWith(loading: false, success: true);
@@ -164,13 +195,79 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
   void getCard() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await cardServiceManager.getSavedCard();
+      final res = await ref.read(cardServiceManagerProvider).getSavedCard();
 
       state = state.copyWith(cards: [...res.data.cards]);
       state = state.copyWith(loading: false, success: true);
     } catch (e) {
       state =
           state.copyWith(loading: false, success: false, error: e.toString());
+    }
+  }
+
+  //* Get Notifications
+  void getNotification() async {
+    try {
+      state = state.copyWith(loading: true);
+      final res =
+          await ref.read(notificationServiceManagerProvider).getNotification();
+
+      state = state.copyWith(notification: [...res.data.notifications]);
+      state = state.copyWith(oldState: [...res.data.notifications]);
+
+      state = state.copyWith(loading: false, success: true);
+    } catch (e) {
+      state =
+          state.copyWith(loading: false, success: false, error: e.toString());
+    }
+  }
+
+  //* filter search in notifications
+  void filteredNots(String query) {
+    final prevState = state.oldState;
+
+    final newState = state.notification
+        .where(
+            (element) => element.data!.message!.toLowerCase().contains(query))
+        .toList();
+
+    if (query.isEmpty) {
+      state = state.copyWith(notification: [...prevState]);
+    } else {
+      state = state.copyWith(notification: [...newState]);
+    }
+  }
+
+  void withdrawalNotificationRequest() async {
+    try {
+      state = state.copyWith(loading: true);
+      final res = await ref
+          .read(notificationServiceManagerProvider)
+          .getWithdrawalRequest();
+
+      state = state.copyWith(withDrawalReq: [...res.data.withdrawals]);
+      state = state.copyWith(oldWithDrawalState: [...res.data.withdrawals]);
+
+      state = state.copyWith(loading: false, success: true);
+    } catch (e) {
+      state =
+          state.copyWith(loading: false, success: false, error: e.toString());
+    }
+  }
+
+  //* filter withdrawl request notifications
+  void filteredWithdrawalReq(String query) {
+    final prevState = state.oldState;
+
+    final newState = state.notification
+        .where(
+            (element) => element.data!.message!.toLowerCase().contains(query))
+        .toList();
+
+    if (query.isEmpty) {
+      state = state.copyWith(notification: [...prevState]);
+    } else {
+      state = state.copyWith(notification: [...newState]);
     }
   }
 
@@ -205,7 +302,9 @@ class WithDrawalController extends StateNotifier<WithdrawalState> {
               country: country,
               zipcode: zipcode));
 
-      final res = await cardServiceManager.authorize(addCardReq);
+      final res =
+          await ref.read(cardServiceManagerProvider).authorize(addCardReq);
+
       pushNewScreen(context,
           screen: CardWebView(
             url: res.data!.url!,

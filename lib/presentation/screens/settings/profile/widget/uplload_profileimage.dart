@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/pick_image_dialog.dart';
@@ -23,31 +24,18 @@ class UploadImage extends StatefulHookConsumerWidget {
 class _UploadImageState extends ConsumerState<UploadImage> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(getProfileProvider);
     final profileImage = PreferenceManager.avatarUrl;
     final image = ref.watch(userPhotoProvider);
-    // // final selectedImage = ValueNotifier<File>(File(''));
-    // final selectedImage = useState<File>(File(''));
-    // bool isPicked = false;
-    // ref.listen<RequestState>(userPhotoProvider, (T, value) {
-    //   if (value is Success) {
-    //     ref
-    //         .read(uploadImageProvider.notifier)
-    //         .upLoadImage(value.value!.secureUrl);
-    //   }
-    // });
 
-    // ref.listen<RequestState>(userPhotoProvider, (_, value) {
-    //   if (value is Success) {
-    //     ref.refresh(getProfileProvider);
-    //     return AppSnackBar.showSuccessSnackBar(context,
-    //         message: 'Profile Photo updated.');
-    //   }
-    //   if (value is Error) {
-    //     return AppSnackBar.showErrorSnackBar(context,
-    //         message: value.error.toString());
-    //   }
-    // });
+    ref.listen<RequestState>(userPhotoProvider, (_, value) {
+      if (value is Success) {
+        return ref.refresh(getProfileProvider);
+      }
+      if (value is Error) {
+        return AppSnackBar.showErrorSnackBar(context,
+            message: value.error.toString());
+      }
+    });
     return Stack(
       children: [
         SizedBox(
@@ -116,76 +104,6 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                   )),
       ],
     );
-
-    // return vm.when(
-    //     error: (error, stackTrace) => Text(error.toString()),
-    //     loading: () => CircleAvatar(
-    //           backgroundColor: Colors.transparent,
-    //           foregroundColor: Colors.transparent,
-    //           radius: 45,
-    //           child: Image.asset("images/person.png", color: Colors.white),
-    //         ),
-    //     idle: () => CircleAvatar(
-    //           backgroundColor: Colors.transparent,
-    //           foregroundColor: Colors.transparent,
-    //           radius: 45,
-    //           child: Stack(children: [
-    //             InkWell(
-    //               onTap: () async {
-    //                 final _picker = ImagePicker();
-    //                 final XFile? image =
-    //                     await _picker.pickImage(source: ImageSource.gallery);
-    //                 ref
-    //                     .read(userPhotoProvider.notifier)
-    //                     .uploadProfilePhoto(image!.path);
-    //                 selectedImage.value = File(image.path);
-    //               },
-    //               child: const Align(
-    //                 alignment: Alignment.bottomRight,
-    //                 child: CircleAvatar(
-    //                   radius: 18.0,
-    //                   // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-    //                   child: Icon(Icons.camera_alt_outlined,
-    //                       size: 18, color: Colors.white),
-    //                 ),
-    //               ),
-    //             ),
-    //           ]),
-    //         ),
-    //     success: (data) {
-    //       return CircleAvatar(
-    //         radius: 45.0,
-    //         backgroundImage:
-    //             // const AssetImage("images/person.png"),
-
-    //             data!.data.user.profilePicture?.imageUrl.toString() == ""
-    //                 ? const AssetImage("images/person.png")
-    //                 : AssetImage(data.data.user.profilePicture?.imageUrl ??
-    //                     "images/person.png"),
-    //         child: Stack(children: [
-    //           InkWell(
-    //             onTap: () async {
-    //               final _picker = ImagePicker();
-    //               final XFile? image =
-    //                   await _picker.pickImage(source: ImageSource.gallery);
-    //               ref
-    //                   .read(userPhotoProvider.notifier)
-    //                   .uploadProfilePhoto(image!.path);
-    //               selectedImage.value = File(image.path);
-    //             },
-    //             child: const Align(
-    //               alignment: Alignment.bottomRight,
-    //               child: CircleAvatar(
-    //                 radius: 18.0,
-    //                 // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-    //                 child: Icon(Icons.camera_alt_outlined,
-    //                     size: 18, color: Colors.white),
-    //               ),
-    //             ),
-    //           ),
-    //         ]),
-    //       );
-    //     });
   }
 
   void getImage(

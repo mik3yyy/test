@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:get_it/get_it.dart';
-import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
+
+import '../../Data/model/profile/res/profile_res.dart';
 
 final locator = GetIt.instance;
 final newUser = jsonDecode(PreferenceManager.appUser);
@@ -12,5 +13,5 @@ Future<void> initialize() async {
 }
 
 void _initUser() {
-  locator.registerLazySingleton<SigninRes>(() => SigninRes.fromJson(newUser));
+  locator.registerLazySingleton<ProfileRes>(() => ProfileRes.fromJson(newUser));
 }

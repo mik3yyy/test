@@ -6,10 +6,13 @@ import 'package:kayndrexsphere_mobile/Data/services/notification/withdrawal_requ
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/request_withdrawal_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class RequestNotificationTabBarView extends StatefulHookConsumerWidget {
-  const RequestNotificationTabBarView({Key? key}) : super(key: key);
+  const RequestNotificationTabBarView({
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -23,68 +26,113 @@ class _RequestNotificationTabBarViewState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final request = ref.watch(getWithdrawalNotificationProvider);
+    // final request = ref.watch(getWithdrawalNotificationProvider);
 
-    return request.when(
-        error: (error, stackTrace) => Text(error.toString()),
-        idle: () => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-        loading: () => const Center(
-              child: CircularProgressIndicator.adaptive(),
-            ),
-        success: (data) {
-          if (data!.data!.withdrawals!.isEmpty) {
-            return Center(
-              child: Text(
-                "You have notification",
-                style: AppText.body3(
-                  context,
-                  AppColors.appColor,
-                ),
-              ),
-            );
-          } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                ref.refresh(getWithdrawalNotificationProvider);
-              },
-              child: SizedBox(
-                height: 450.h,
-                child: Scrollbar(
-                  //TODO: To fix the scroll, it's not showing
-                  isAlwaysShown: true,
+    final data = ref.watch(genericController);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.refresh(getWithdrawalNotificationProvider);
+      },
+      child: data.withDrawalReq.isEmpty
+          ? const Center(
+              child: Text("You have no Notification"),
+            )
+          : SizedBox(
+              height: 450.h,
+              child: Scrollbar(
+                //TODO: To fix the scroll, it's not showing
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: ListView.separated(
                   controller: _scrollController,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics(),
-                    ),
-                    itemCount: data.data!.withdrawals!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final notification = data.data!.withdrawals![index];
-
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 32.0),
-                        child: AllNotificationBuild(
-                          data: notification,
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider(
-                        color: AppColors.notificationDividerColor,
-                        thickness: 1.5,
-                        height: 20,
-                        // indent: 5.0,
-                      );
-                    },
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
                   ),
+                  itemCount: data.withDrawalReq.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final notification = data.withDrawalReq[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 32.0),
+                      child: AllNotificationBuild(
+                        data: notification,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      color: AppColors.notificationDividerColor,
+                      thickness: 1.5,
+                      height: 20,
+                      // indent: 5.0,
+                    );
+                  },
                 ),
               ),
-            );
-          }
-        });
+            ),
+    );
+
+    // request.when(
+    //     error: (error, stackTrace) => Text(error.toString()),
+    //     idle: () => const Center(
+    //           child: CircularProgressIndicator.adaptive(),
+    //         ),
+    //     loading: () => const Center(
+    //           child: CircularProgressIndicator.adaptive(),
+    //         ),
+    //     success: (data) {
+    //       if (data!.data.withdrawals.isEmpty) {
+    //         return Center(
+    //           child: Text(
+    //             "You have notification",
+    //             style: AppText.body3(
+    //               context,
+    //               AppColors.appColor,
+    //             ),
+    //           ),
+    //         );
+    //       } else {
+    //         return RefreshIndicator(
+    //           onRefresh: () async {
+    //             ref.refresh(getWithdrawalNotificationProvider);
+    //           },
+    //           child: SizedBox(
+    //             height: 450.h,
+    //             child: Scrollbar(
+    //               //TODO: To fix the scroll, it's not showing
+    //               isAlwaysShown: true,
+    //               controller: _scrollController,
+    //               child: ListView.separated(
+    //                 controller: _scrollController,
+    //                 physics: const AlwaysScrollableScrollPhysics(
+    //                   parent: BouncingScrollPhysics(),
+    //                 ),
+    //                 itemCount: data.data.withdrawals.length,
+    //                 itemBuilder: (BuildContext context, int index) {
+    //                   final notification = data.data.withdrawals[index];
+
+    //                   return Padding(
+    //                     padding: const EdgeInsets.only(right: 32.0),
+    //                     child: AllNotificationBuild(
+    //                       data: notification,
+    //                     ),
+    //                   );
+    //                 },
+    //                 separatorBuilder: (BuildContext context, int index) {
+    //                   return const Divider(
+    //                     color: AppColors.notificationDividerColor,
+    //                     thickness: 1.5,
+    //                     height: 20,
+    //                     // indent: 5.0,
+    //                   );
+    //                 },
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       }
+    //     });
   }
 
   @override

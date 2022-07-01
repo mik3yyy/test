@@ -39,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
+
       AvailableWallet(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,
@@ -48,6 +49,7 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
       ),
+
       AddFundsToWalletScreen(
         menuScreenContext: widget.menuScreenContext,
         hideStatus: _hideNavBar,

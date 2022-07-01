@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/observer/logger_observer.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
@@ -50,4 +53,8 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class SessionExpiredEvent {
+  SessionExpiredEvent();
 }

@@ -3,8 +3,8 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/notification/repo/notification_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/res/get_notification.dart';
 
-final getNotificationProvider = StateNotifierProvider.autoDispose<
-    NotificationVM, RequestState<GetNotification>>(
+final getNotificationProvider =
+    StateNotifierProvider<NotificationVM, RequestState<GetNotification>>(
   (ref) => NotificationVM(ref),
 );
 

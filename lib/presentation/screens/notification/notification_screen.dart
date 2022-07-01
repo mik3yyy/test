@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -7,13 +8,15 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/widget/notifcaton_tab_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends HookConsumerWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final tab = ref.watch(genericController);
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),
@@ -81,6 +84,15 @@ class NotificationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                 ),
+                onChanged: (value) {
+                  if (tab.tabState == 0) {
+                    ref.read(genericController.notifier).filteredNots(value);
+                  } else {
+                    ref
+                        .read(genericController.notifier)
+                        .filteredWithdrawalReq(value);
+                  }
+                },
               ),
               Space(15.h),
               const NotificationTabBar(),
