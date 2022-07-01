@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/card_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -15,18 +16,35 @@ import '../../../components/text field/text_form_field.dart';
 import '../vm/set_transaction_pin_vm.dart';
 import '../widgets/alert_dialog.dart';
 
-class TransactionPinScreen extends HookConsumerWidget {
-  TransactionPinScreen({Key? key}) : super(key: key);
+class TransactionPinScreen extends StatefulHookConsumerWidget {
+  const TransactionPinScreen({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _TransactionPinScreenState();
+}
+
+class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
   final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
   final fieldFocusNode = FocusNode();
+  final TextEditingController pinController =
+      MaskedTextController(mask: '0000');
+  final TextEditingController confirmPinController =
+      MaskedTextController(mask: '0000');
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    pinController.dispose();
+    confirmPinController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final vm = ref.watch(transactionPinProvider);
-    final pinController = useTextEditingController();
-    final confirmPinController = useTextEditingController();
+
     final togglePin = ref.watch(pinToggleStateProvider.state);
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
@@ -71,13 +89,15 @@ class TransactionPinScreen extends HookConsumerWidget {
                           AppText.header2(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,
                     ),
-                    Space(120.h),
+                    Space(70.h),
 
                     // pin
                     TextFormInput(
                       keyboardType: TextInputType.number,
                       labelText: 'Enter Transaction Pin',
                       capitalization: TextCapitalization.none,
+                      textLength: 4,
+                      inputFormatters: [LengthLimitingTextInputFormatter(4)],
                       controller: pinController,
                       validator: (String? value) {
                         if (value!.isEmpty) {
@@ -140,7 +160,8 @@ class TransactionPinScreen extends HookConsumerWidget {
                         ),
                       ),
                     ),
-                    Space(300.h),
+                    const Space(300),
+
                     CustomButton(
                       buttonWidth: double.infinity,
                       buttonText: vm is Loading ? "Please wait" : 'Set PIN',

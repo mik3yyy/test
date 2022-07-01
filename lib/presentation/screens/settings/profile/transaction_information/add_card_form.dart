@@ -18,7 +18,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widg
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/withdraw_from_wallet.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import '../../../../components/app text theme/app_text_theme.dart';

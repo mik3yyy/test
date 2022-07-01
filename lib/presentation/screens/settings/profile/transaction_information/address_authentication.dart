@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
@@ -39,7 +39,7 @@ class _AddressAuthenicationState extends ConsumerState<AddressAuthenication> {
     final countryCode = useTextEditingController();
     final zipcode = useTextEditingController();
 
-    ref.listen<WithdrawalState>(genericController, (prev, value) {
+    ref.listen<GenericState>(genericController, (prev, value) {
       if (value.success == true) {}
 
       if (value is Error) {

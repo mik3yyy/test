@@ -8,7 +8,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/shared/route_name.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class BeneficiaryScreen extends StatefulHookConsumerWidget {
@@ -140,7 +140,9 @@ class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
                 if (vm.passBeneficiary.accountName.isNotEmpty) {
                   clear();
                   pushNewScreen(context, screen: const NubanWithdraw());
-                } else {}
+                } else {
+                  pushNewScreen(context, screen: const NubanWithdraw());
+                }
               },
               buttonWidth: MediaQuery.of(context).size.width),
           const Space(70)

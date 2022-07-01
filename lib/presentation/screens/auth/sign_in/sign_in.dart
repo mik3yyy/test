@@ -42,12 +42,15 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   void initState() {
     super.initState();
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
+
+    ref.read(deviceInfoProvider.notifier).deviceId();
   }
 
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
     final localAuth = ref.watch(localAuthStateProvider);
+    final deviceId = ref.watch(deviceInfoProvider);
     final emailPhoneController = useTextEditingController();
     final passwordController = useTextEditingController();
     final togglePasswords = ref.watch(passwordToggleStateProvider.state);
@@ -55,7 +58,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
         if (value.value!.data!.user.transactionPinAddedAt == null) {
-          context.navigate(TransactionPinScreen());
+          context.navigate(const TransactionPinScreen());
         } else {
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
           ref.read(getProfileProvider.notifier).getProfile();
@@ -182,17 +185,18 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                                   if (formKey.currentState!.validate()) {
                                     fieldFocusNode.unfocus();
-                                    DeviceID.deviceId().then((deviceId) {
-                                      var signinReq = SigninReq(
-                                          emailPhone: emailPhoneController.text,
-                                          password: passwordController.text,
-                                          timezone: "Africa/Lagos",
-                                          deviceId: deviceId);
 
-                                      ref
-                                          .read(signInProvider.notifier)
-                                          .signIn(signinReq);
-                                    });
+                                    var signinReq = SigninReq(
+                                        emailPhone: emailPhoneController.text,
+                                        password: passwordController.text,
+                                        timezone: "Africa/Lagos",
+                                        deviceId: deviceId);
+
+                                    ref
+                                        .read(signInProvider.notifier)
+                                        .signIn(signinReq);
+
+                                    print("PRINTED $deviceId");
 
                                     context.loaderOverlay.show();
                                   }

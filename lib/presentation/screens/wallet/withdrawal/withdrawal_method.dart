@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/aba
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/select_beneficiary.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/shared/route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/swift_code.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../home/widgets/bottomNav/persistent-tab-view.dart';

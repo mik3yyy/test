@@ -1,34 +1,41 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/widget/all_notification_tab_bar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/widget/request_notification_tab_bar_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 
-class NotificationTabBar extends StatefulWidget {
-  // final String text1;
-  // final String text2;
-  // final String text3;
-  // final List<Widget> children;
-  const NotificationTabBar(
-      {
-      //   required this.text1,
-      // required this.text2,
-      // required this.text3,
-      // required this.children,
-      Key? key})
-      : super(key: key);
+class NotificationTabBar extends StatefulHookConsumerWidget {
+  const NotificationTabBar({Key? key}) : super(key: key);
 
   @override
   _NotificationTabBarState createState() => _NotificationTabBarState();
 }
 
-class _NotificationTabBarState extends State<NotificationTabBar>
+class _NotificationTabBarState extends ConsumerState<NotificationTabBar>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this)
+      ..addListener(() {
+        setState(() {
+          switch (_tabController.index) {
+            case 0:
+              ref
+                  .read(genericController.notifier)
+                  .selectTab(_tabController.index);
+              break;
+            case 1:
+              ref
+                  .read(genericController.notifier)
+                  .selectTab(_tabController.index);
+            // some code here
+          }
+        });
+      });
   }
 
   late TabController _tabController;
@@ -39,12 +46,7 @@ class _NotificationTabBarState extends State<NotificationTabBar>
       child: Stack(
         children: [
           Container(
-            // margin: EdgeInsets.only(left: 20.w, right: 20.w),
             height: 50.h,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(5.r),
-            //   color: const Color(0xffe8e8e8),
-            // ),
           ),
           Column(
             children: [
@@ -63,11 +65,6 @@ class _NotificationTabBarState extends State<NotificationTabBar>
                   labelPadding: EdgeInsets.zero,
                   indicatorPadding: EdgeInsets.zero,
                   indicatorColor: AppColors.greenColor,
-
-                  // indicator: BoxDecoration(
-                  //   // borderRadius: BorderRadius.circular(6.r),
-                  //   color: AppColors.primaryColor,
-                  // ),
                   tabs: const [
                     Tab(
                       child: Text("All"),
