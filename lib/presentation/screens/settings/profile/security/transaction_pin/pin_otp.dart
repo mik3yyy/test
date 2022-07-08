@@ -172,28 +172,31 @@ class PinOTPScreen extends HookConsumerWidget {
                       ],
                     ),
                     Space(160.h),
-                    CustomButton(
-                      buttonWidth: double.infinity,
-                      buttonText: vm is Loading ? "Verifying..." : "Proceed",
-                      bgColor: AppColors.appColor,
-                      borderColor: AppColors.appColor,
-                      textColor: Colors.white,
-                      onPressed: vm is Loading
-                          ? null
-                          : () async {
-                              final pref =
-                                  await SharedPreferences.getInstance();
-                              final email = pref.getString(Constants.email);
+                    Padding(
+                      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                      child: CustomButton(
+                        buttonWidth: double.infinity,
+                        buttonText: vm is Loading ? "Verifying..." : "Proceed",
+                        bgColor: AppColors.appColor,
+                        borderColor: AppColors.appColor,
+                        textColor: Colors.white,
+                        onPressed: vm is Loading
+                            ? null
+                            : () async {
+                                final pref =
+                                    await SharedPreferences.getInstance();
+                                final email = pref.getString(Constants.email);
 
-                              if (formKey.currentState!.validate()) {
-                                // to be removed
+                                if (formKey.currentState!.validate()) {
+                                  // to be removed
 
-                                context.navigate(ResetPinScreen(
-                                  otpCode: verifyController.text,
-                                  emailPhone: emailAdress,
-                                ));
-                              }
-                            },
+                                  context.navigate(ResetPinScreen(
+                                    otpCode: verifyController.text,
+                                    emailPhone: emailAdress,
+                                  ));
+                                }
+                              },
+                      ),
                     ),
                   ],
                 ),

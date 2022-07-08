@@ -34,7 +34,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
 
     return GenericWidget(
       appbar: Padding(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 0.h),
         child: Column(
           children: [
             Space(20.h),
@@ -90,7 +90,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             //   );
             // }),
 
-            Space(20.h),
+            Space(10.h),
             Text(
               vm.maybeWhen(
                   success: (v) =>
@@ -99,7 +99,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
               // firstName.inCaps + " " + secondName.inCaps,
               style: AppText.body2(context, Colors.white, 25.sp),
             ),
-
+            Space(5.h),
             // vm.when(error: (Object error, StackTrace stackTrace) {
             //   return Center(
             //     child: Text(error.toString()),

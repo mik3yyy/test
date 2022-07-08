@@ -98,11 +98,11 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                         if (value!.isEmpty) {
                           return "Email address or Phone Number is required";
                         }
-                        if (!RegExp(
-                                "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
-                            .hasMatch(value)) {
-                          return 'Please input a valid email address';
-                        }
+                        // if (!RegExp(
+                        //         "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
+                        //     .hasMatch(value)) {
+                        //   return 'Please input a valid email address';
+                        // }
 
                         return null;
                       },

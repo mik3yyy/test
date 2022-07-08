@@ -185,23 +185,25 @@ class CreatePhoneAccount extends HookConsumerWidget {
                             onChanged: (value) {
                               toggleState.state = value!;
                             }),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "By creating your account you agree with our",
-                              style:
-                                  AppText.body4(context, AppColors.hintColor),
-                              textAlign: TextAlign.start,
-                            ),
-                            Space(2.h),
-                            Text(
-                              "Terms and Conditions",
-                              style:
-                                  AppText.body4(context, AppColors.hintColor),
-                              textAlign: TextAlign.start,
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "By creating your account you agree with",
+                                style:
+                                    AppText.body4(context, AppColors.hintColor),
+                                textAlign: TextAlign.start,
+                              ),
+                              Space(2.h),
+                              Text(
+                                "our Terms and Conditions",
+                                style:
+                                    AppText.body4(context, AppColors.hintColor),
+                                textAlign: TextAlign.start,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

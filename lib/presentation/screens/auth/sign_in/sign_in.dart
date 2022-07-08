@@ -26,7 +26,8 @@ import '../transaction_pin/transaction_pin.dart';
 import 'device_id.dart';
 
 class SigninScreen extends StatefulHookConsumerWidget {
-  const SigninScreen({Key? key}) : super(key: key);
+  final String? email;
+  const SigninScreen({Key? key, this.email}) : super(key: key);
 
   @override
   _SigninScreenState createState() => _SigninScreenState();
@@ -51,7 +52,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     final vm = ref.watch(signInProvider);
     final localAuth = ref.watch(localAuthStateProvider);
     final deviceId = ref.watch(deviceInfoProvider);
-    final emailPhoneController = useTextEditingController();
+    final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
     final togglePasswords = ref.watch(passwordToggleStateProvider.state);
 
@@ -105,7 +106,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                     //email
                     TextFormInput(
-                        labelText: 'Email or Phone Number',
+                        labelText: "Email or Phone Number",
                         controller: emailPhoneController,
                         capitalization: TextCapitalization.none,
                         validator: (value) {
@@ -197,9 +198,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                         .signIn(signinReq);
 
                                     print("PRINTED $deviceId");
-
-                                    context.loaderOverlay.show();
                                   }
+                                  context.loaderOverlay.show();
                                 },
                         ),
                         localAuth.hasBiometric

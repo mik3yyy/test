@@ -168,6 +168,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
                                     .read(createPasswordProvider.notifier)
                                     .createPassword(passwordController.text,
                                         confirmPasswordController.text);
+
                                 context.loaderOverlay.show();
                               }
                             },

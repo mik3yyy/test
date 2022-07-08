@@ -105,13 +105,13 @@ class ForgotTransactionPin extends HookConsumerWidget {
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Email address is required";
+                                return "Email address or phone number is required";
                               }
-                              if (!RegExp(
-                                      "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
-                                  .hasMatch(value)) {
-                                return 'Please input a valid email address';
-                              }
+                              // if (!RegExp(
+                              //         "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
+                              //     .hasMatch(value)) {
+                              //   return 'Please input a valid email address';
+                              // }
 
                               return null;
                             },

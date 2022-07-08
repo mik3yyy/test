@@ -60,7 +60,7 @@ class SecurityScreen extends StatelessWidget {
               ProfileCard(
                 color: Colors.black,
                 title: 'Transaction PIN',
-                subTitle: 'Add or Reset your transaction PIN',
+                subTitle: 'Change or Retrieve forgotten transaction PIN',
                 image: AppImage.transactionPin,
                 onPressed: () {
                   pushNewScreen(
