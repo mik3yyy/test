@@ -60,8 +60,8 @@ class ChangeTransactionPin extends StatelessWidget {
                     children: [
                       ProfileCard(
                         color: Colors.black,
-                        title: 'Reset Transaction PIN',
-                        subTitle: 'Confirm all transactions using this PIN',
+                        title: 'Forgotten Transaction PIN',
+                        subTitle: 'Retrieve your forgotten transaction pin',
                         image: AppImage.setTransactionPin,
                         onPressed: () {
                           pushNewScreen(
@@ -81,7 +81,7 @@ class ChangeTransactionPin extends StatelessWidget {
                       ProfileCard(
                         color: Colors.black,
                         title: 'Change Transaction PIN',
-                        subTitle: 'Reset or change your transaction PIN',
+                        subTitle: 'Change your transaction PIN',
                         image: AppImage.resetPin,
                         onPressed: () {
                           pushNewScreen(

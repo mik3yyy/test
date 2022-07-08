@@ -39,7 +39,7 @@ class _UploadImageState extends ConsumerState<UploadImage> {
     return Stack(
       children: [
         SizedBox(
-            height: 140.h,
+            height: 120.h,
             width: 130.w,
             child: image is Loading
                 ? const CircularProgressIndicator(

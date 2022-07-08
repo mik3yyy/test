@@ -39,6 +39,7 @@ class ResetPinScreen extends HookConsumerWidget {
 
     ref.listen<RequestState>(resetPinProvider, (T, value) {
       if (value is Success) {
+        Navigator.pop(context);
         ref.refresh(resetPinProvider);
 
         return AppSnackBar.showSuccessSnackBar(context,

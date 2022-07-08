@@ -39,7 +39,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
     final user = locator.get<ProfileRes>();
     return GenericWidget(
       appbar: Padding(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
         child: Column(
           children: [
             Space(20.h),
@@ -74,11 +74,12 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
             //     AppImage.image1,
             //   ),
             // ),
-            Space(20.h),
+            Space(10.h),
             Text(
               user.data.user.firstName + " " + user.data.user.lastName,
               style: AppText.body2(context, Colors.white, 25.sp),
             ),
+            Space(5.h),
           ],
         ),
       ),

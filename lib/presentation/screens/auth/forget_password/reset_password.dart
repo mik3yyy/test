@@ -7,6 +7,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/reset_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/alert_dialog.dart';
@@ -41,10 +43,18 @@ class ResetPasswordScreen extends HookConsumerWidget {
     final togglePassword = ref.watch(pinToggleStateProvider.state);
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
 
-    ref.listen<RequestState>(resetPasswordProvider, (T, value) {
+    ref.listen<RequestState>(resetPasswordProvider, (T, value) async {
+      final pref = await SharedPreferences.getInstance();
+      final email = pref.getString(Constants.email);
+      print(email.toString());
       if (value is Success) {
-        successAlart(
-            context, "Your Password has been changed", "Continue to Dashboard");
+        context.navigate(SigninScreen(
+          email: email.toString(),
+        ));
+        return AppSnackBar.showSuccessSnackBar(
+          context,
+          message: "Password reset successfully",
+        );
       }
       if (value is Error) {
         context.loaderOverlay.hide();

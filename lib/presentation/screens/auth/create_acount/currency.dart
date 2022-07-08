@@ -167,7 +167,6 @@ class CurrencyScreen extends HookConsumerWidget {
                                         currencyController.text,
                                         languageController.text,
                                         countryController.text);
-
                                 context.loaderOverlay.show();
                               }
                             },
