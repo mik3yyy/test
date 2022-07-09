@@ -29,6 +29,7 @@ class GenericState extends Equatable {
   final AddCardRes? addCardRes;
   final List<Cardd> cards;
   final bool loading;
+  final bool notificationloading;
   final bool success;
   final int tabState;
   final PassBeneficiary passBeneficiary;
@@ -40,6 +41,7 @@ class GenericState extends Equatable {
       required this.ibanbeneficiary,
       required this.ababeneficiary,
       required this.cards,
+      required this.notificationloading,
       required this.oldState,
       required this.notification,
       required this.withDrawalReq,
@@ -66,7 +68,8 @@ class GenericState extends Equatable {
         success: false,
         error: "",
         passBeneficiary:
-            PassBeneficiary(accountName: "", accountNumber: "", bankCode: ""));
+            PassBeneficiary(accountName: "", accountNumber: "", bankCode: ""),
+        notificationloading: false);
   }
 
   GenericState copyWith(
@@ -83,11 +86,13 @@ class GenericState extends Equatable {
       final AddCardReq? addCardReq,
       final AddCardRes? addCardRes,
       final PassBeneficiary? passBeneficiary,
+      final bool? notificationloading,
       final int? tabState,
       final String? error}) {
     return GenericState(
         beneficiary: beneficiary ?? this.beneficiary,
         loading: loading ?? this.loading,
+        notificationloading: notificationloading ?? this.notificationloading,
         success: success ?? this.success,
         error: error ?? this.error,
         ibanbeneficiary: this.ibanbeneficiary,
@@ -120,25 +125,27 @@ class GenericState extends Equatable {
         addCardRes,
         cards,
         tabState,
+        notificationloading
       ];
 }
 
 final genericController =
-    StateNotifierProvider<GenericController, GenericState>(
+    StateNotifierProvider.autoDispose<GenericController, GenericState>(
         (ref) => GenericController(ref));
 
 class GenericController extends StateNotifier<GenericState> {
-  Ref ref;
+  final Ref ref;
   GenericController(this.ref) : super(GenericState.initial());
 
   ///Get Nuban beneficiary
   void getBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await ref.read(withdrawManagerProvider).nubanBeneficiary();
-
-      state = state.copyWith(beneficiary: [...res.data!.beneficiaries!]);
-      state = state.copyWith(loading: false, success: true);
+      ref.read(withdrawManagerProvider).nubanBeneficiary().then((value) {
+        state = state.copyWith(beneficiary: [...value.data!.beneficiaries!]);
+        state = state.copyWith(loading: false, success: true);
+        return value;
+      });
     } catch (e) {
       state =
           state.copyWith(loading: false, success: false, error: e.toString());
@@ -159,9 +166,11 @@ class GenericController extends StateNotifier<GenericState> {
   void getAbaBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await ref.read(withdrawManagerProvider).abaBeneficiary();
+      ref.read(withdrawManagerProvider).abaBeneficiary().then((value) {
+        state = state.copyWith(ababeneficiary: [...value.data!.beneficiaries!]);
+        return value;
+      });
 
-      state = state.copyWith(ababeneficiary: [...res.data!.beneficiaries!]);
       state = state.copyWith(loading: false, success: true);
     } catch (e) {
       state =
@@ -174,9 +183,12 @@ class GenericController extends StateNotifier<GenericState> {
   void getIbanBeneficiaries() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await ref.read(withdrawManagerProvider).ibanBeneficiary();
+      ref.read(withdrawManagerProvider).ibanBeneficiary().then((value) {
+        // state =
+        //     state.copyWith(ibanbeneficiary: [...value.data!.beneficiaries!]);
+        return value;
+      });
 
-      state = state.copyWith(ibanbeneficiary: [...res.data!.beneficiaries!]);
       state = state.copyWith(loading: false, success: true);
     } catch (e) {
       state =
@@ -195,10 +207,11 @@ class GenericController extends StateNotifier<GenericState> {
   void getCard() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await ref.read(cardServiceManagerProvider).getSavedCard();
-
-      state = state.copyWith(cards: [...res.data.cards]);
-      state = state.copyWith(loading: false, success: true);
+      ref.read(cardServiceManagerProvider).getSavedCard().then((value) {
+        state = state.copyWith(cards: [...value.data.cards]);
+        state = state.copyWith(loading: false, success: true);
+        return value;
+      });
     } catch (e) {
       state =
           state.copyWith(loading: false, success: false, error: e.toString());
@@ -208,14 +221,19 @@ class GenericController extends StateNotifier<GenericState> {
   //* Get Notifications
   void getNotification() async {
     try {
-      state = state.copyWith(loading: true);
-      final res =
-          await ref.read(notificationServiceManagerProvider).getNotification();
+      state = state.copyWith(notificationloading: true);
+      print("LOADING STATUS ${state.loading}");
+      ref
+          .read(notificationServiceManagerProvider)
+          .getNotification()
+          .then((value) {
+        state = state.copyWith(
+            notification: [...value.data.notifications],
+            oldState: [...value.data.notifications]);
+        state = state.copyWith(notificationloading: false, success: true);
 
-      state = state.copyWith(notification: [...res.data.notifications]);
-      state = state.copyWith(oldState: [...res.data.notifications]);
-
-      state = state.copyWith(loading: false, success: true);
+        // state = state.copyWith();
+      });
     } catch (e) {
       state =
           state.copyWith(loading: false, success: false, error: e.toString());
@@ -241,12 +259,15 @@ class GenericController extends StateNotifier<GenericState> {
   void withdrawalNotificationRequest() async {
     try {
       state = state.copyWith(loading: true);
-      final res = await ref
+      ref
           .read(notificationServiceManagerProvider)
-          .getWithdrawalRequest();
-
-      state = state.copyWith(withDrawalReq: [...res.data.withdrawals]);
-      state = state.copyWith(oldWithDrawalState: [...res.data.withdrawals]);
+          .getWithdrawalRequest()
+          .then((value) {
+        state = state.copyWith(
+            withDrawalReq: [...value.data.withdrawals],
+            oldWithDrawalState: [...value.data.withdrawals]);
+        state = state.copyWith(loading: false, success: true);
+      });
 
       state = state.copyWith(loading: false, success: true);
     } catch (e) {
@@ -302,15 +323,16 @@ class GenericController extends StateNotifier<GenericState> {
               country: country,
               zipcode: zipcode));
 
-      final res =
-          await ref.read(cardServiceManagerProvider).authorize(addCardReq);
-
-      pushNewScreen(context,
-          screen: CardWebView(
-            url: res.data!.url!,
-            successMsg: 'Card added',
-            webViewRoute: WebViewRoute.authorization,
-          ));
+      ref.read(cardServiceManagerProvider).authorize(addCardReq).then(
+        (value) {
+          pushNewScreen(context,
+              screen: CardWebView(
+                url: value.data!.url!,
+                successMsg: 'Card added',
+                webViewRoute: WebViewRoute.authorization,
+              ));
+        },
+      );
 
       state = state.copyWith(loading: false, success: true);
     } catch (e) {

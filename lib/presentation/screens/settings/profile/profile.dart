@@ -13,6 +13,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/uplo
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -30,6 +31,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
+    final cards = ref.watch(genericController);
     final profileImage = PreferenceManager.avatarUrl;
 
     return GenericWidget(
@@ -134,7 +136,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   color: Colors.black,
                   title: 'Personal information',
                   subTitle: 'See and edit your personal information',
-                  image: AppImage.profile,
+                  image: AppImage.myProfile,
                   onPressed: () {
                     pushNewScreen(context,
                         screen: const PersonalInfo(),
@@ -151,7 +153,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   color: Colors.black,
                   title: 'Upload ID',
                   subTitle: 'Verify yourself by providing an ID',
-                  image: AppImage.upload,
+                  image: AppImage.uploadId,
                   onPressed: () {
                     pushNewScreen(context,
                         screen: UploadID(),
@@ -168,13 +170,22 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   color: Colors.black,
                   title: 'Transaction information',
                   subTitle: 'Edit your saved bank /card details Security',
-                  image: AppImage.transactionInfo,
+                  image: AppImage.transaction,
                   onPressed: () {
-                    pushNewScreen(
-                      context,
-                      screen: const TransactionInformationScreen(),
-                      pageTransitionAnimation: PageTransitionAnimation.fade,
-                    );
+                    if (cards.cards.isEmpty) {
+                      ref.read(genericController.notifier).getCard();
+                      pushNewScreen(
+                        context,
+                        screen: const TransactionInformationScreen(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    } else {
+                      pushNewScreen(
+                        context,
+                        screen: const TransactionInformationScreen(),
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    }
                   },
                 ),
                 Space(10.h),
@@ -187,7 +198,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   color: Colors.black,
                   title: 'Security',
                   subTitle: 'Change your passwords at any time',
-                  image: AppImage.security,
+                  image: AppImage.securityProfile,
                   onPressed: () {
                     pushNewScreen(
                       context,
@@ -206,7 +217,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   color: Colors.black,
                   title: 'Deactivate account',
                   subTitle: 'You can deactivate your account',
-                  image: AppImage.deactivate,
+                  image: AppImage.deactivateAccount,
                   onPressed: () {
                     pushNewScreen(
                       context,
@@ -253,7 +264,7 @@ class ProfileCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SvgPicture.asset(
+          Image.asset(
             image,
             color: color,
             height: 20.h,

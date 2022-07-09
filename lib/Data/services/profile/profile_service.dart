@@ -27,6 +27,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
 
 class ProfileService {
   final Reader _read;
+
   ProfileService(this._read) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());

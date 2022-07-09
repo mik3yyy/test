@@ -5,7 +5,6 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 import '../profile_service.dart';
 

@@ -46,26 +46,19 @@ class AppImage {
   static const messageMenuIcon = "images/message_menu_icon.png";
   static const debitCard = "images/debitCard.svg";
   static const message = "images/messages.svg";
-  static const profile = "images/profile.svg";
-  static const referFriend = "images/refer-friend.svg";
   static const safePay = "images/safe_pay.svg";
   static const investIcon = "images/invest_icon.svg";
   static const startInvestin = "images/start_investing.svg";
   static const settings = "images/Setting.svg";
-  static const faq = "images/faq.svg";
   static const prop = "images/Chat.svg";
   static const deactivate = "images/deactivate.svg";
-  static const logout = "images/Logout.svg";
   static const notification = "images/notification.svg";
   static const security = "images/Security.svg";
   static const transactionInfo = "images/transaction-info.svg";
-  static const unlock = "images/Unlock.svg";
   static const upload = "images/upload-id.svg";
   static const password = "images/password.svg";
   static const successPin = "images/pass_success.svg";
   static const resetPin = "images/reset_pin.svg";
-  static const setTransactionPin = "images/set_transaction_pin.svg";
-  static const transactionPin = "images/transaction_pin.svg";
   static const confetti = "images/confetti.svg";
   static const inviteFriend = "images/invite_friend_illustration.svg";
   static const inviteFriendImg = "images/invite_friend_img.png";
@@ -78,4 +71,21 @@ class AppImage {
   static const masterCard = "images/mastercard.svg";
   static const visa = "images/visa.svg";
   static const verve = "images/verve.svg";
+  //
+  //
+  //ICONS FOR SETTINGS SCREEN
+  static const myProfile = "images/profile.png";
+  static const myProp = "images/props.png";
+  static const myNotification = "images/notifications.png";
+  static const mySafePay = "images/safepay.png";
+  static const referAFriend = "images/refer_a_friend.png";
+  static const faq = "images/faq.png";
+  static const logOut = "images/logout.png";
+  static const deactivateAccount = "images/deactivate_account.png";
+  static const securityProfile = "images/profile_security.png";
+  static const transaction = "images/transaction_info.png";
+  static const uploadId = "images/upload_id.png";
+  static const transactionPin = "images/transaction_pin.png";
+  static const resetTransactionPin = "images/reset_transaction_pin.png";
+  static const setPassword = "images/password_icon.png";
 }

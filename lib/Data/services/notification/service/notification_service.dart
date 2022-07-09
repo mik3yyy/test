@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  return NotificationService((ref.read));
+  return NotificationService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -20,7 +20,8 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
 
 class NotificationService {
   final Reader _read;
-  NotificationService(this._read) {
+  final Ref ref;
+  NotificationService(this._read, this.ref) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());

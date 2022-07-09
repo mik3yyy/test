@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
@@ -15,8 +16,10 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -45,6 +48,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
 
     ref.read(deviceInfoProvider.notifier).deviceId();
+    // ref
+    //     .read(credentialProvider.notifier)
+    //     .getEmailCredential(Constants.userEmail);
+    // ref
+    //     .read(credentialProvider.notifier)
+    //     .getPasswordCredential(Constants.userPassword);
   }
 
   @override
@@ -63,7 +72,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         } else {
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
           ref.read(getProfileProvider.notifier).getProfile();
-          context.navigate(MainScreen(menuScreenContext: context));
+
+          Future.delayed(const Duration(seconds: 2), () {
+            context.loaderOverlay.hide();
+            context.navigate(MainScreen(menuScreenContext: context));
+          });
         }
       }
       if (value is Error) {
@@ -71,6 +84,13 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
+    });
+
+    ref.listen<LocalAuthState>(localAuthStateProvider, (T, value) {
+      if (value.isAuthenticated) {
+        context.loaderOverlay.show();
+      }
+      if (value is Error) {}
     });
     return LoaderOverlay(
       useDefaultLoading: false,
@@ -181,9 +201,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           onPressed: vm is Loading
                               ? null
                               : () async {
-                                  // DateTime dateTime = DateTime.now();
-                                  // print(dateTime.timeZoneName);
-
                                   if (formKey.currentState!.validate()) {
                                     fieldFocusNode.unfocus();
 
@@ -192,22 +209,31 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                         password: passwordController.text,
                                         timezone: "Africa/Lagos",
                                         deviceId: deviceId);
+                                    ref
+                                        .read(credentialProvider.notifier)
+                                        .storeCredential(Constants.userPassword,
+                                            passwordController.text);
 
                                     ref
                                         .read(signInProvider.notifier)
                                         .signIn(signinReq);
 
-                                    print("PRINTED $deviceId");
+                                    context.loaderOverlay.show();
                                   }
                                   context.loaderOverlay.show();
                                 },
                         ),
                         localAuth.hasBiometric
                             ? GestureDetector(
-                                onTap: () {
-                                  ref
-                                      .read(localAuthStateProvider.notifier)
-                                      .authenticate();
+                                onTap: () async {
+                                  if (PreferenceManager.enableBioMetrics ==
+                                      true) {
+                                    ref
+                                        .read(localAuthStateProvider.notifier)
+                                        .authenticate();
+                                  } else {
+                                    return;
+                                  }
                                 },
                                 child: Container(
                                   height: 55.h,

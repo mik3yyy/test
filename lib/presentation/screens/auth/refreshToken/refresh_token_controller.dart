@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
@@ -51,30 +50,34 @@ class RefreshTokenController extends StateNotifier<RefreshTokenState> {
     state = state.copyWith(countryCode: countryCode);
   }
 
-  Future<RefreshTokenRes> refreshToken() async {
+  Future<void> refreshToken() async {
     state = state.copyWith(loading: true, success: false);
 
     try {
       Future.delayed(const Duration(seconds: 20));
 
-      final refreshToken = PreferenceManager.refreshToken;
-      final deviceId = ref.watch(deviceInfoProvider);
-      // DeviceID.deviceId().then((value) async {
-      var refreshTokenReq =
-          RefreshTokenReq(refreshToken: refreshToken, deviceId: deviceId);
-      final token =
-          await ref.read(authManagerProvider).getAuthTOken(refreshTokenReq);
+      Timer.periodic(const Duration(minutes: 9), (Timer timer) async {
+        final refreshToken = PreferenceManager.refreshToken;
+        final deviceId = ref.watch(deviceInfoProvider);
+        var refreshTokenReq =
+            RefreshTokenReq(refreshToken: refreshToken, deviceId: deviceId);
+        if (PreferenceManager.authToken.isNotEmpty) {
+          final token =
+              await ref.read(authManagerProvider).getAuthTOken(refreshTokenReq);
+          PreferenceManager.authToken = token.data!.authToken.toString();
+          PreferenceManager.refreshToken = token.data!.refreshToken.toString();
+        } else {
+          timer.cancel();
+        }
+      });
 
-      PreferenceManager.authToken = token.data!.authToken.toString();
-      PreferenceManager.refreshToken = token.data!.refreshToken.toString();
       state = state.copyWith(loading: false, success: true);
       // });
 
-      return token;
+      // return token;
     } catch (e) {
       state = state.copyWith(error: e.toString());
       print(e);
-      throw e.toString();
     }
   }
 }

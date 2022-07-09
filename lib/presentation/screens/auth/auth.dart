@@ -16,7 +16,7 @@ class AuthHomePage extends StatelessWidget {
       final state = ref.watch(authControllerProvider);
 
       if (state is AuthAuthenticated) {
-        return SigninScreen();
+        return const SigninScreen();
       } else if (state is AuthUnauthenticated) {
         return const OnBoardingScreen();
       } else if (state is AuthLoading) {

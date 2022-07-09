@@ -33,47 +33,51 @@ class _AllNotificationTabBarViewState
         // ref.refresh(getNotificationProvider);
         ref.read(genericController.notifier).getNotification();
       },
-      child: data.notification.isEmpty
+      child: data.notificationloading
           ? const Center(
-              child: Text("You have no Notification"),
+              child: CircularProgressIndicator(),
             )
-          : SizedBox(
-              height: 450.h,
-              child: Scrollbar(
-                isAlwaysShown: true,
-                controller: _scrollController,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics(),
+          : data.notification.isEmpty
+              ? const Center(
+                  child: Text("You have no Notification"),
+                )
+              : SizedBox(
+                  height: 450.h,
+                  child: Scrollbar(
+                    isAlwaysShown: true,
+                    controller: _scrollController,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics(),
+                      ),
+                      itemCount: data.notification.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final msg = data.notification[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 32.0),
+                          child: AllNotificationBuild(
+                            notificationIcon:
+                                Image.asset(AppImage.successNotificationIcon),
+                            notificationMsg: msg.data!.message.toString(),
+                            notificationTime: msg.timeAgo.toString(),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Padding(
+                          padding: EdgeInsets.only(right: 12.0),
+                          child: Divider(
+                            color: AppColors.notificationDividerColor,
+                            thickness: 1.5,
+                            height: 20,
+                            // indent: 5.0,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  itemCount: data.notification.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final msg = data.notification[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 32.0),
-                      child: AllNotificationBuild(
-                        notificationIcon:
-                            Image.asset(AppImage.successNotificationIcon),
-                        notificationMsg: msg.data!.message.toString(),
-                        notificationTime: msg.timeAgo.toString(),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: Divider(
-                        color: AppColors.notificationDividerColor,
-                        thickness: 1.5,
-                        height: 20,
-                        // indent: 5.0,
-                      ),
-                    );
-                  },
                 ),
-              ),
-            ),
     );
 
     // notification.when(
