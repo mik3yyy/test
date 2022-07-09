@@ -62,7 +62,7 @@ class ChangeTransactionPin extends StatelessWidget {
                         color: Colors.black,
                         title: 'Forgotten Transaction PIN',
                         subTitle: 'Retrieve your forgotten transaction pin',
-                        image: AppImage.setTransactionPin,
+                        image: AppImage.transactionPin,
                         onPressed: () {
                           pushNewScreen(
                             context,
@@ -82,7 +82,7 @@ class ChangeTransactionPin extends StatelessWidget {
                         color: Colors.black,
                         title: 'Change Transaction PIN',
                         subTitle: 'Change your transaction PIN',
-                        image: AppImage.resetPin,
+                        image: AppImage.resetTransactionPin,
                         onPressed: () {
                           pushNewScreen(
                             context,

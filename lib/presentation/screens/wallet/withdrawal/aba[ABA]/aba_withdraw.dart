@@ -41,7 +41,6 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
     final aba = ref.watch(abaWithdrawalProvider);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
-    // final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final routNumberController = useTextEditingController();
     final swiftCodeController = useTextEditingController();
     final descriptionController = useTextEditingController();

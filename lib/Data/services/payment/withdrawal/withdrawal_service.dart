@@ -16,7 +16,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
 
 final withdrawServiceProvider = Provider<WithdrawalService>((ref) {
-  return WithdrawalService((ref.read));
+  return WithdrawalService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -27,7 +27,8 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
 
 class WithdrawalService {
   final Reader _read;
-  WithdrawalService(this._read) {
+  final Ref ref;
+  WithdrawalService(this._read, this.ref) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());

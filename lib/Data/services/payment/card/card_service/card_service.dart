@@ -14,7 +14,7 @@ import '../../make_payment/fund_wallet/fund_wallet_req.dart';
 import '../../make_payment/fund_wallet/fund_wallet_res.dart';
 
 final cardServiceProvider = Provider<CardService>((ref) {
-  return CardService((ref.read));
+  return CardService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -25,7 +25,8 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
 
 class CardService {
   final Reader _read;
-  CardService(this._read) {
+  final Ref ref;
+  CardService(this._read, this.ref) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());

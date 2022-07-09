@@ -1,0 +1,16 @@
+{
+    "language": "English",
+    "@language":{
+      "description": "The current Language"
+    },
+   
+    "text": "{value}",
+    "@text": {
+      "description": "A welcome message",
+      "placeholders": {
+         "value": {
+           "type": "String"
+         }
+      }
+    }
+}

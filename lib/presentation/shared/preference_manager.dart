@@ -3,13 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferenceManager {
   static late SharedPreferences prefs;
 
-  static set isFirstLaunch(bool isFirstLaunch) =>
-      prefs.setBool("isFirstLaunch", isFirstLaunch);
-  static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? true;
-
-  static set isLoggedIn(bool isLoggedIn) =>
-      prefs.setBool("isLoggedIn", isLoggedIn);
-  static bool get isLoggedIn => prefs.getBool("isLoggedIn") ?? false;
+  static set enableBioMetrics(bool enableBioMetrics) =>
+      prefs.setBool("enableBioMetrics", enableBioMetrics);
+  static bool get enableBioMetrics =>
+      prefs.getBool("enableBioMetrics") ?? false;
 
 //* avatarUrl
   static set avatarUrl(String avatarUrl) =>
@@ -20,6 +17,9 @@ class PreferenceManager {
   static set authToken(String authToken) =>
       prefs.setString("authToken", authToken);
   static String get authToken => prefs.getString("authToken") ?? '';
+  //* auth token
+  static set deviceId(String deviceId) => prefs.setString("deviceId", deviceId);
+  static String get deviceId => prefs.getString("deviceId") ?? '';
 
   static set depositRef(String depositRef) =>
       prefs.setString("depositRef", depositRef);
@@ -37,8 +37,21 @@ class PreferenceManager {
   static set appUser(String appUser) => prefs.setString("appUser", appUser);
   static String get appUser => prefs.getString("appUser") ?? '';
 
+  //* password
+  static set password(String password) => prefs.setString("password", password);
+  static String get password => prefs.getString("password") ?? '';
+
   static void clear() {
     prefs.clear();
+    // PreferenceManager.isFirstLaunch = false;
+  }
+
+  static void removeToken() {
+    PreferenceManager.authToken = "";
+    PreferenceManager.refreshToken = "";
+    PreferenceManager.depositRef = "";
+    // PreferenceManager.password = "";
+
     // PreferenceManager.isFirstLaunch = false;
   }
 

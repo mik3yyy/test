@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -129,7 +131,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
   }
 }
 
-class ImageWidget extends StatelessWidget {
+class ImageWidget extends HookConsumerWidget {
   const ImageWidget(
       {Key? key,
       required this.height,
@@ -146,7 +148,8 @@ class ImageWidget extends StatelessWidget {
   final String language;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    // final lang = ref.watch(localeProvider);
     return SizedBox(
       width: double.infinity,
       height: height,
@@ -156,16 +159,21 @@ class ImageWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 9.w, right: 29.w),
             child: Row(
               children: [
-                Text(
-                  language,
-                  style: AppText.body3(context, AppColors.appColor),
-                  textAlign: TextAlign.center,
+                InkWell(
+                  onTap: () {
+                    // context.navigate(const LanguageScreen());
+                  },
+                  child: Text(
+                    language,
+                    style: AppText.body3(context, AppColors.appColor),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const Spacer(),
                 InkWell(
                   onTap: () => context.navigate(const ChooseAccount()),
                   child: Text(
-                    "Skip",
+                    AppLocalizations.of(context)!.text("Skip"),
                     style: AppText.body3(context, AppColors.appColor),
                     textAlign: TextAlign.center,
                   ),

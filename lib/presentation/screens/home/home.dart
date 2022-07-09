@@ -54,16 +54,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   void initState() {
     super.initState();
 
-    Timer.periodic(const Duration(minutes: 9), (Timer timer) async {
-      ref.read(refreshControllerProvider.notifier).refreshToken();
-    });
+    ref.read(refreshControllerProvider.notifier).refreshToken();
 
-    ref.read(genericController.notifier).getBeneficiaries();
-    ref.read(genericController.notifier).getAbaBeneficiaries();
-    ref.read(genericController.notifier).getIbanBeneficiaries();
-    ref.read(genericController.notifier).getCard();
-    ref.read(genericController.notifier).getNotification();
-    ref.read(genericController.notifier).withdrawalNotificationRequest();
+    // ref.read(genericController.notifier).getAbaBeneficiaries();
+    // ref.read(genericController.notifier).getIbanBeneficiaries();
+    // ref.read(genericController.notifier).getNotification();
+    // ref.read(genericController.notifier).withdrawalNotificationRequest();
   }
 
 //Method to convert currency name to code and use as parament for setting wallet as default
@@ -99,6 +95,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
     final setWalletVm = ref.watch(setWalletAsDefaultProvider);
+
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(

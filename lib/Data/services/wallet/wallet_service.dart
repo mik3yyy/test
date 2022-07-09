@@ -13,7 +13,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final walletServiceProvider = Provider<WalletService>((ref) {
-  return WalletService((ref.read));
+  return WalletService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -24,7 +24,8 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
 
 class WalletService {
   final Reader _read;
-  WalletService(this._read) {
+  final Ref ref;
+  WalletService(this._read, this.ref) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());

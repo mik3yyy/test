@@ -17,6 +17,7 @@ class NotificationScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final tab = ref.watch(genericController);
+
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w),

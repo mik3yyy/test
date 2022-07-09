@@ -15,11 +15,23 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../home/widgets/bottomNav/persistent-tab-view.dart';
 import 'widget/withdrawal_method_widget.dart';
 
-class WithdrawalMethodScreen extends HookConsumerWidget {
+class WithdrawalMethodScreen extends StatefulHookConsumerWidget {
   const WithdrawalMethodScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _WithdrawalMethodScreenState();
+}
+
+class _WithdrawalMethodScreenState
+    extends ConsumerState<WithdrawalMethodScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final controller = ref.watch(genericController);
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
@@ -88,31 +100,53 @@ class WithdrawalMethodScreen extends HookConsumerWidget {
                   WithdrawMethod(
                       method: "NUBAN [Nigeria]",
                       onPressed: () {
-                        pushNewScreen(
-                          context,
-                          screen: controller.beneficiary.isNotEmpty
-                              ? const BeneficiaryScreen(
-                                  routeName: RouteName.nuban)
-                              : const NubanWithdraw(),
+                        if (controller.beneficiary.isEmpty) {
+                          ref
+                              .read(genericController.notifier)
+                              .getBeneficiaries();
+                          pushNewScreen(
+                            context,
+                            screen: controller.beneficiary.isNotEmpty
+                                ? const BeneficiaryScreen(
+                                    routeName: RouteName.nuban)
+                                : const NubanWithdraw(),
 
-                          // const NubanWithdraw(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
+                            // const NubanWithdraw(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.fade,
+                          );
+                        } else {
+                          pushNewScreen(
+                            context,
+                            screen: controller.beneficiary.isNotEmpty
+                                ? const BeneficiaryScreen(
+                                    routeName: RouteName.nuban)
+                                : const NubanWithdraw(),
+
+                            // const NubanWithdraw(),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.fade,
+                          );
+                        }
                       }),
                   Space(20.h),
                   WithdrawMethod(
-                      method: "Swift Code [BIC]",
+                      method: "Swift Code [BIC]  coming soon",
                       onPressed: () {
-                        pushNewScreen(
-                          context,
-                          screen: controller.ibanbeneficiary.isNotEmpty
-                              ? const BeneficiaryScreen(
-                                  routeName: RouteName.swift)
-                              : const SwiftCodeView(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
+                        return;
+                        // pushNewScreen(
+                        //   context,
+                        //   screen: controller.ibanbeneficiary.isNotEmpty
+                        //       ? const BeneficiaryScreen(
+                        //           routeName: RouteName.swift)
+                        //       : const SwiftCodeView(),
+                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
+                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                        // );
                       }),
                 ],
               ),
