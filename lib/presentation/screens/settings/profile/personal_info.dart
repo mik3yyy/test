@@ -67,13 +67,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                 ),
               ],
             ),
-            const UploadImage(),
-            // CircleAvatar(
-            //   radius: 50.0.r,
-            //   backgroundImage: const AssetImage(
-            //     AppImage.image1,
-            //   ),
-            // ),
+            const UploadImage(
+              hasIcon: true,
+            ),
             Space(10.h),
             Text(
               user.data.user.firstName + " " + user.data.user.lastName,

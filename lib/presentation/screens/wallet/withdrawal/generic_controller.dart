@@ -34,6 +34,7 @@ class GenericState extends Equatable {
   final int tabState;
   final PassBeneficiary passBeneficiary;
   final String error;
+  final String defaultWallet;
 
   const GenericState(
       {required this.beneficiary,
@@ -47,6 +48,7 @@ class GenericState extends Equatable {
       required this.withDrawalReq,
       required this.oldWithDrawalState,
       required this.tabState,
+      required this.defaultWallet,
       this.addCardReq,
       this.addCardRes,
       required this.error,
@@ -64,6 +66,7 @@ class GenericState extends Equatable {
         oldWithDrawalState: const [],
         cards: const [],
         loading: false,
+        defaultWallet: "",
         tabState: 0,
         success: false,
         error: "",
@@ -88,13 +91,15 @@ class GenericState extends Equatable {
       final PassBeneficiary? passBeneficiary,
       final bool? notificationloading,
       final int? tabState,
-      final String? error}) {
+      final String? error,
+      final String? defaultWallet}) {
     return GenericState(
         beneficiary: beneficiary ?? this.beneficiary,
         loading: loading ?? this.loading,
         notificationloading: notificationloading ?? this.notificationloading,
         success: success ?? this.success,
         error: error ?? this.error,
+        defaultWallet: defaultWallet ?? this.defaultWallet,
         ibanbeneficiary: this.ibanbeneficiary,
         addCardRes: addCardRes ?? this.addCardRes,
         addCardReq: addCardReq ?? this.addCardReq,
@@ -125,7 +130,8 @@ class GenericState extends Equatable {
         addCardRes,
         cards,
         tabState,
-        notificationloading
+        notificationloading,
+        defaultWallet
       ];
 }
 
@@ -160,6 +166,11 @@ class GenericController extends StateNotifier<GenericState> {
   //* TabState
   void selectTab(int tabState) {
     state = state.copyWith(tabState: tabState);
+  }
+
+  //* DefaultWallet state
+  void addDefault(String defaultWallet) {
+    state = state.copyWith(defaultWallet: defaultWallet);
   }
 
   ///Get Aba beneficiary

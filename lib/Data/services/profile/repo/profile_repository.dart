@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 import '../profile_service.dart';
 
@@ -23,6 +24,8 @@ class ProfileRepository extends IProfileManager {
   @override
   Future<ProfileRes> getPrfileDetails() async {
     final res = await _profileService.getPrfileDetails();
+    PreferenceManager.defaultWallet =
+        res.data.defaultWallet.currencyCode.toString();
     if (res.data.user.profilePicture?.imageUrl != null) {
       SaveImage.download(res.data.user.profilePicture!.imageUrl.toString());
     } else {}

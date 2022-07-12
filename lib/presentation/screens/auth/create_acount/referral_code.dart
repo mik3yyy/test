@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/ref_code_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -29,6 +30,7 @@ class ReferralCodeScreen extends HookConsumerWidget {
     ref.listen<RequestState>(refCodeProvider, (T, value) {
       if (value is Success) {
         context.navigate(const SuccessScreen());
+
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Check Your Mail or SMS for Verification Code",
@@ -65,7 +67,7 @@ class ReferralCodeScreen extends HookConsumerWidget {
                     ),
                     Space(19.h),
                     Text(
-                      "Type in referral code of whomevver",
+                      "Type in referral code of whomever",
                       style:
                           AppText.header2(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,

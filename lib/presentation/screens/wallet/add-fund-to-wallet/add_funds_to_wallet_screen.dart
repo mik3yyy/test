@@ -73,13 +73,13 @@ class AddFundsToWalletScreen extends StatelessWidget {
             ),
             Space(10.h),
             AppFundContainerWidget(
-              image: AppImage.debitCardIcon,
-              text: 'Pay',
+              image: AppImage.applePay,
+              text: 'Apple Pay',
               onTap: () {},
             ),
             Space(10.h),
             AppFundContainerWidget(
-              image: AppImage.debitCardIcon,
+              image: AppImage.googlePay,
               text: 'Google Pay',
               onTap: () {},
             ),

@@ -76,11 +76,11 @@ class _WithdrawalMethodScreenState
                   WithdrawMethod(
                       method: "Safe Transfer",
                       onPressed: () {
-                        // pushNewScreen(
-                        //   context, screen: const SelectBeneficiary(),
-                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
-                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
-                        // );
+                        pushNewScreen(
+                          context, screen: const SelectBeneficiary(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
                       }),
                   Space(20.h),
                   WithdrawMethod(

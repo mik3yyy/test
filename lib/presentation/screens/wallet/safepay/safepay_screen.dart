@@ -1,10 +1,17 @@
+import 'package:flutter/cupertino.dart';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/custom_paint/custom_paint_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/view_virtual_card.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -26,6 +33,10 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
   final toggleNumberProvider = StateProvider<bool>((ref) => true);
   @override
   Widget build(BuildContext context) {
+    final fromCurrency = useTextEditingController();
+    final toCurrency = useTextEditingController();
+    final fromExchangeCurrency = useTextEditingController();
+    final toExchangeCurrency = useTextEditingController();
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
@@ -82,177 +93,388 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
       bgColor: AppColors.whiteColor,
       child: SizedBox(
         height: 750.h,
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Space(30.h),
-            const SafePayCard(),
-            Space(20.h),
+        child: SingleChildScrollView(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Space(30.h),
+              const SafePayCard(),
+              Space(20.h),
 
-            Container(
-              padding: EdgeInsets.only(left: 35.w, right: 35.w),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      pushNewScreen(context,
-                          screen: const ViewVirtualCard(),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.fade);
-                    },
-                    child: Text(
-                      'View',
-                      style: AppText.body2Medium(context, Colors.black, 20.sp),
+              Container(
+                padding: EdgeInsets.only(left: 35.w, right: 35.w),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        pushNewScreen(context,
+                            screen: const ViewVirtualCard(),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.fade);
+                      },
+                      child: Text(
+                        'View',
+                        style:
+                            AppText.body2Medium(context, Colors.black, 20.sp),
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'Remove ',
-                    style: AppText.body2Medium(context, Colors.black12, 20.sp),
-                  ),
-                ],
-              ),
-            ),
-
-            Space(30.h),
-
-            Container(
-              height: 60.h,
-              color: AppColors.appColor,
-              padding: EdgeInsets.only(left: 20.w, right: 20.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'View Exchange rates',
-                    style: AppText.body2Medium(context, Colors.white, 20.sp),
-                  ),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white,
-                    size: 30,
-                  )
-                ],
-              ),
-            ),
-            Space(30.h),
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w),
-              child: Column(
-                children: [
-                  Container(
-                    height: 90.h,
-                    color: AppColors.appColor.withOpacity(0.1),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          color: AppColors.appColor.withOpacity(0.5),
-                        ),
-                        Space(20.w),
-                        Text(
-                          'Make use of your virtual cards for payment.\nClick on the card to make easy payment',
-                          style: AppText.body2Medium(
-                              context, Colors.black54, 17.sp),
-                        ),
-                      ],
+                    const Spacer(),
+                    Text(
+                      'Remove ',
+                      style:
+                          AppText.body2Medium(context, Colors.black12, 20.sp),
                     ),
-                  ),
-                  Space(30.h),
-                  SizedBox(
-                    height: 90.h,
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  ],
+                ),
+              ),
+
+              Space(30.h),
+              ExpandableTheme(
+                data: const ExpandableThemeData(
+                  iconColor: Colors.blue,
+                  useInkWell: true,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ExpandableNotifier(
+                      child: ScrollOnExpand(
+                        child: Column(
                           children: [
-                            Text(
-                              'Upgrade Free account',
-                              style: AppText.body2Bold(
-                                  context, Colors.black54, 22.sp),
-                            ),
-                            Space(10.h),
-                            Text(
-                              'Upgrade your account to add a\nnew virtual card',
-                              style: AppText.body2Medium(
-                                  context, Colors.black54, 16.sp),
+                            ExpandablePanel(
+                              theme: const ExpandableThemeData(
+                                headerAlignment:
+                                    ExpandablePanelHeaderAlignment.center,
+                                tapBodyToExpand: false,
+                                tapBodyToCollapse: false,
+                                hasIcon: false,
+                              ),
+                              header: Container(
+                                padding: EdgeInsets.only(
+                                    left: 19.w,
+                                    top: 14.w,
+                                    bottom: 14.w,
+                                    right: 19.w),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.appColor,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'View Exchange rates',
+                                      style: AppText.body2Medium(
+                                          context, Colors.white, 20.sp),
+                                    ),
+                                    const ExpandableIcon(
+                                      theme: ExpandableThemeData(
+                                        expandIcon: Icons.expand_more_outlined,
+                                        collapseIcon:
+                                            Icons.expand_less_outlined,
+                                        iconColor: AppColors.whiteColor,
+                                        iconSize: 28.0,
+                                        iconRotationAngle: math.pi / 2,
+                                        iconPadding: EdgeInsets.only(right: 5),
+                                        hasIcon: false,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              collapsed: Container(),
+                              expanded: Padding(
+                                padding:
+                                    EdgeInsets.only(left: 19.w, right: 19.w),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Space(10.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'From',
+                                          style: AppText.body6(
+                                            context,
+                                            AppColors.textColor,
+                                            16.sp,
+                                          ),
+                                        ),
+                                        Text(
+                                          'To',
+                                          style: AppText.body6(
+                                            context,
+                                            AppColors.textColor,
+                                            16.sp,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Space(10.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            pushNewScreen(context,
+                                                screen: SelectCurrencyScreen(
+                                                  currencyCode: fromCurrency,
+                                                  routeName: 'addFunds',
+                                                ),
+                                                pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .slideRight);
+                                          },
+                                          child: SizedBox(
+                                            width: 100.w,
+                                            child: EditForm(
+                                              enabled: false,
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              labelText: 'USD',
+
+                                              // textAlign: TextAlign.start,
+                                              controller: fromCurrency,
+                                              obscureText: false,
+                                              validator: (value) =>
+                                                  validateCurrency(value),
+                                              suffixIcon: const Icon(
+                                                CupertinoIcons.chevron_down,
+                                                color: Color(0xffA8A8A8),
+                                                size: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            pushNewScreen(context,
+                                                screen: SelectCurrencyScreen(
+                                                  currencyCode: toCurrency,
+                                                  routeName: "addFunds",
+                                                ),
+                                                pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .slideRight);
+                                          },
+                                          child: SizedBox(
+                                            width: 100.w,
+                                            child: EditForm(
+                                              enabled: false,
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              labelText: 'USD',
+
+                                              // textAlign: TextAlign.start,
+                                              controller: toCurrency,
+                                              obscureText: false,
+                                              validator: (value) =>
+                                                  validateCurrency(value),
+                                              suffixIcon: const Icon(
+                                                CupertinoIcons.chevron_down,
+                                                color: Color(0xffA8A8A8),
+                                                size: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Space(14.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 150.w,
+                                          child: EditForm(
+                                            enabled: true,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            labelText: 'Enter amount',
+
+                                            // textAlign: TextAlign.start,
+                                            controller: fromExchangeCurrency,
+                                            obscureText: false,
+                                            validator: (value) =>
+                                                validateCurrency(value),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 150.w,
+                                          child: EditForm(
+                                            enabled: true,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            labelText: 'Enter amount',
+
+                                            // textAlign: TextAlign.start,
+                                            controller: toExchangeCurrency,
+                                            obscureText: false,
+                                            validator: (value) =>
+                                                validateCurrency(value),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Space(18.h),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        // Space(20.w),
-                        Container(
-                          width: 120,
-                          height: 40.h,
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(30.r)),
-                          child: Center(
-                            child: Text(
-                              'UPGRADE',
-                              style: AppText.body2Bold(
-                                  context, Colors.white, 15.sp),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
 
-            //!!!!!
-            //!!!!!
-            //!!!!! change to successful when payment is successful
+              // Container(
+              //   height: 60.h,
+              //   color: AppColors.appColor,
+              //   padding: EdgeInsets.only(left: 20.w, right: 20.w),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'View Exchange rates',
+              //         style: AppText.body2Medium(context, Colors.white, 20.sp),
+              //       ),
+              //       const Icon(
+              //         Icons.arrow_drop_down,
+              //         color: Colors.white,
+              //         size: 30,
+              //       )
+              //     ],
+              //   ),
+              // ),
+              Space(30.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 90.h,
+                      color: AppColors.appColor.withOpacity(0.1),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 20,
+                            color: AppColors.appColor.withOpacity(0.5),
+                          ),
+                          Space(20.w),
+                          Text(
+                            'Make use of your virtual cards for payment.\nClick on the card to make easy payment',
+                            style: AppText.body2Medium(
+                                context, Colors.black54, 17.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Space(30.h),
+                    Opacity(
+                      opacity: 0.1,
+                      child: SizedBox(
+                        height: 90.h,
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Upgrade Free account',
+                                  style: AppText.body2Bold(
+                                      context, Colors.black54, 22.sp),
+                                ),
+                                Space(10.h),
+                                Text(
+                                  'Upgrade your account to add a\nnew virtual card',
+                                  style: AppText.body2Medium(
+                                      context, Colors.black54, 16.sp),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            // Space(20.w),
+                            Container(
+                              width: 120,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(30.r)),
+                              child: Center(
+                                child: Text(
+                                  'UPGRADE',
+                                  style: AppText.body2Bold(
+                                      context, Colors.white, 15.sp),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-            //  const Image(
-            //     image: AssetImage(
-            //   AppImage.successSafepay,
-            // )),
-            //!!!!!
-            //!!!!!
-            //!!!!!
-            //!!!!!
-            //!!!!! change to insufficient when payment is insufficent
+              //!!!!!
+              //!!!!!
+              //!!!!! change to successful when payment is successful
 
-            //  const Image(
-            //     image: AssetImage(
-            //   AppImage.insufficient,
-            // )),
+              //  const Image(
+              //     image: AssetImage(
+              //   AppImage.successSafepay,
+              // )),
+              //!!!!!
+              //!!!!!
+              //!!!!!
+              //!!!!!
+              //!!!!! change to insufficient when payment is insufficent
 
-            //!!!!!
-            //!!!!!
-            //!!!!! This is for scanning POS Machine
-            //!!!!!
-            //!!!!!
-            //  Container(
-            //   margin: EdgeInsets.only(left: 20.w, right: 20.w),
-            //   child: Text(
-            //     'Scan POS machine using NFC for quick pay',
-            //     textAlign: TextAlign.center,
-            //     style: AppText.header2(context, AppColors.appColor, 20.sp),
-            //   ),
-            // ),
-            Space(55.h),
-            // CustomButton(
-            //     buttonText: 'Fund card',
-            //     bgColor: AppColors.appColor,
-            //     borderColor: AppColors.appColor,
-            //     textColor: Colors.white,
-            //     onPressed: () {
-            //       pushNewScreen(
-            //         context,
-            //         screen: const FundVirtualCard(),
-            //         withNavBar: true, // OPTIONAL VALUE. True by default.
-            //         pageTransitionAnimation: PageTransitionAnimation.fade,
-            //       );
-            //       // context.navigate(AvailableBalance()
+              //  const Image(
+              //     image: AssetImage(
+              //   AppImage.insufficient,
+              // )),
 
-            //       // );
-            //     },
-            //     buttonWidth: 320),
-          ],
+              //!!!!!
+              //!!!!!
+              //!!!!! This is for scanning POS Machine
+              //!!!!!
+              //!!!!!
+              //  Container(
+              //   margin: EdgeInsets.only(left: 20.w, right: 20.w),
+              //   child: Text(
+              //     'Scan POS machine using NFC for quick pay',
+              //     textAlign: TextAlign.center,
+              //     style: AppText.header2(context, AppColors.appColor, 20.sp),
+              //   ),
+              // ),
+              Space(55.h),
+              // CustomButton(
+              //     buttonText: 'Fund card',
+              //     bgColor: AppColors.appColor,
+              //     borderColor: AppColors.appColor,
+              //     textColor: Colors.white,
+              //     onPressed: () {
+              //       pushNewScreen(
+              //         context,
+              //         screen: const FundVirtualCard(),
+              //         withNavBar: true, // OPTIONAL VALUE. True by default.
+              //         pageTransitionAnimation: PageTransitionAnimation.fade,
+              //       );
+              //       // context.navigate(AvailableBalance()
+
+              //       // );
+              //     },
+              //     buttonWidth: 320),
+            ],
+          ),
         ),
       ),
     );

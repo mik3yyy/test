@@ -219,22 +219,22 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         ] else
                           ...[],
 
-                        Space(20.h),
+                        // Space(20.h),
                         //*
                         //*
                         //* Select currency
                         //*
                         //*
 
-                        CurrencyWidget(
-                          currencyController: currencyController,
-                          text: 'Select wallet to transfer from',
-                        ),
+                        // CurrencyWidget(
+                        //   currencyController: currencyController,
+                        //   text: 'Select wallet to transfer from',
+                        // ),
                         Space(20.h),
                         //*
                         //*
                         //* Select bank
-                        //*
+                        //
                         //*
                         Stack(
                           children: [
@@ -358,7 +358,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             // textAlign: TextAlign.start,
                             controller: descriptionController,
                             obscureText: false,
-                            validator: (value) => validatePhoneNumber(value)),
+                            validator: (value) => validatePurpose(value)),
                         Space(20.h),
                         Row(
                           children: [

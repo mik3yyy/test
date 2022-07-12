@@ -13,12 +13,12 @@ class CurrencyRes {
   CurrencyRes({
     this.message,
     this.status,
-    this.data,
+    required this.data,
   });
 
   String? message;
   String? status;
-  Data? data;
+  Data data;
 
   factory CurrencyRes.fromJson(Map<String, dynamic> json) => CurrencyRes(
         message: json["message"],
@@ -29,16 +29,16 @@ class CurrencyRes {
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": data!.toJson(),
+        "data": data.toJson(),
       };
 }
 
 class Data {
   Data({
-    this.currencies,
+    required this.currencies,
   });
 
-  List<Currency>? currencies;
+  List<Currency> currencies;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         currencies: List<Currency>.from(
@@ -46,7 +46,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "currencies": List<dynamic>.from(currencies!.map((x) => x.toJson())),
+        "currencies": List<dynamic>.from(currencies.map((x) => x.toJson())),
       };
 }
 

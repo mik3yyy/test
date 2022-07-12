@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,11 +17,20 @@ class ViewVirtualCard extends StatefulHookConsumerWidget {
 
 class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
   final toggleStateProvider = StateProvider<bool>((ref) {
-    return true;
+    return false;
+  });
+
+  final apppleToggleStateProvider = StateProvider<bool>((ref) {
+    return false;
+  });
+  final googleToggleStateProvider = StateProvider<bool>((ref) {
+    return false;
   });
   @override
   Widget build(BuildContext context) {
     final toggle = ref.watch(toggleStateProvider.state);
+    final apple = ref.watch(apppleToggleStateProvider.state);
+    final google = ref.watch(googleToggleStateProvider.state);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -96,38 +107,41 @@ class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Add card to apple pay',
-                            style:
-                                AppText.header2(context, Colors.black, 20.sp),
-                          ),
-                          const Spacer(),
-                          Switch.adaptive(
-                              activeColor: Colors.greenAccent,
-                              value: toggle.state,
-                              onChanged: (value) {
-                                toggle.state = !toggle.state;
-                              }),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Add virtual card to Google pay',
-                            style:
-                                AppText.header2(context, Colors.black, 20.sp),
-                          ),
-                          const Spacer(),
-                          Switch.adaptive(
-                              activeColor: Colors.greenAccent,
-                              value: toggle.state,
-                              onChanged: (value) {
-                                toggle.state = !toggle.state;
-                              }),
-                        ],
-                      ),
+                      if (Platform.isAndroid) ...[
+                        Row(
+                          children: [
+                            Text(
+                              'Add virtual card to Google pay',
+                              style:
+                                  AppText.header2(context, Colors.black, 20.sp),
+                            ),
+                            const Spacer(),
+                            Switch.adaptive(
+                                activeColor: Colors.greenAccent,
+                                value: google.state,
+                                onChanged: (value) {
+                                  google.state = !google.state;
+                                }),
+                          ],
+                        ),
+                      ] else ...[
+                        Row(
+                          children: [
+                            Text(
+                              'Add virtual card to apple pay',
+                              style:
+                                  AppText.header2(context, Colors.black, 20.sp),
+                            ),
+                            const Spacer(),
+                            Switch.adaptive(
+                                activeColor: Colors.greenAccent,
+                                value: apple.state,
+                                onChanged: (value) {
+                                  apple.state = !apple.state;
+                                }),
+                          ],
+                        ),
+                      ],
                       Row(
                         children: [
                           Text(

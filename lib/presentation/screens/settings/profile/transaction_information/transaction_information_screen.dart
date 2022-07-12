@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/get_card_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -27,9 +30,12 @@ class _TransactionInformationScreenState
 
   int? groupValue;
 
+  List<Cardd> storedCard = [];
+
   @override
   Widget build(BuildContext context) {
     final cards = ref.watch(genericController);
+    final getCard = ref.watch(getCardProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -97,14 +103,16 @@ class _TransactionInformationScreenState
                     ),
                     Space(30.h),
                     InkWell(
-                      onTap: cards.cards.length == 4
+                      onTap: getCard is Loading
                           ? null
-                          : () {
-                              pushNewScreen(context,
-                                  screen: const AddCardForm(),
-                                  pageTransitionAnimation:
-                                      PageTransitionAnimation.fade);
-                            },
+                          : storedCard.length == 3
+                              ? null
+                              : () {
+                                  pushNewScreen(context,
+                                      screen: const AddCardForm(),
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.fade);
+                                },
                       child: Container(
                         height: 70.h,
                         width: MediaQuery.of(context).size.width,
@@ -130,111 +138,133 @@ class _TransactionInformationScreenState
                       ),
                     ),
                     Space(30.h),
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        ref.refresh(genericController.notifier).getCard();
-                      },
-                      child: cards.loading
-                          ? const Center(
-                              child: CircularProgressIndicator.adaptive())
-                          : SizedBox(
-                              height: 400,
-                              child: ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: cards.cards.length,
-                                itemBuilder: (context, index) {
-                                  final savedCard = cards.cards[index];
-                                  String getBrand() {
-                                    if (savedCard.brand == "MASTERCARD") {
-                                      return AppImage.masterCard;
-                                    }
-                                    if (savedCard.brand == "VERVE") {
-                                      return AppImage.verve;
-                                    }
-                                    if (savedCard.brand == "VISA") {
-                                      return AppImage.visa;
-                                    }
-                                    if (savedCard.brand == "AMERICAN EXPRESS") {
-                                      return AppImage.americanExpress;
-                                    }
-                                    if (savedCard.brand == "MAESTRO") {
-                                      return AppImage.maestro;
-                                    } else {
-                                      return "";
-                                    }
-                                  }
-
-                                  return RadioListTile<int>(
-                                    value: savedCard.isDefault!.toInt(),
-                                    groupValue: groupValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        groupValue = index;
-                                        // val = value;
-                                        // _value = true;
-                                      });
-                                    },
-                                    tileColor: Colors.grey.shade100,
-                                    title: RichText(
-                                      text: TextSpan(
-                                        style: AppText.body2Medium(
-                                            context, Colors.black54, 20.sp),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                              text: savedCard.first6Digits
-                                                  .toString(),
-                                              style: AppText.body2Medium(
-                                                  context,
-                                                  Colors.black54,
-                                                  20.sp)),
-                                          const TextSpan(text: '****'),
-                                          TextSpan(
-                                              text: savedCard.last4Digits
-                                                  .toString(),
-                                              style: AppText.body2Medium(
-                                                  context,
-                                                  Colors.black54,
-                                                  20.sp))
-                                        ],
-                                      ),
-                                    ),
-                                    subtitle: RichText(
-                                      text: TextSpan(
-                                        style: AppText.body2Medium(
-                                            context, Colors.black54, 20.sp),
-                                        children: [
-                                          TextSpan(
-                                              text: "Expiry date  ",
-                                              style: AppText.body2Medium(
-                                                  context,
-                                                  Colors.black54,
-                                                  15.sp)),
-                                          TextSpan(
-                                              text: savedCard.expiry.toString(),
-                                              style: AppText.body2Medium(
-                                                  context,
-                                                  Colors.black54,
-                                                  15.sp))
-                                        ],
-                                      ),
-                                    ),
-                                    secondary: SvgPicture.asset(
-                                      getBrand(),
-                                      height: 20,
-                                      width: 20,
-                                    ),
-                                    selected: false,
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
-                                  return const SizedBox(
-                                    height: 10,
-                                  );
-                                },
-                              ),
+                    getCard.when(
+                        error: (error, stackTrace) => Text(error.toString()),
+                        idle: () => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                    ),
+                        loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        success: (data) {
+                          return data!.data.cards.isEmpty
+                              ? Text("You have no card",
+                                  style: AppText.body2Medium(
+                                      context, AppColors.textColor, 25.sp))
+                              : RefreshIndicator(
+                                  onRefresh: () async {
+                                    return ref
+                                        .refresh(getCardProvider.notifier)
+                                        .getCard();
+                                  },
+                                  child: SizedBox(
+                                    height: 400,
+                                    child: ListView.separated(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: data.data.cards.length,
+                                      itemBuilder: (context, index) {
+                                        storedCard = data.data.cards;
+                                        final savedCard =
+                                            data.data.cards[index];
+                                        String getBrand() {
+                                          if (savedCard.brand == "MASTERCARD") {
+                                            return AppImage.masterCard;
+                                          }
+                                          if (savedCard.brand == "VERVE") {
+                                            return AppImage.verve;
+                                          }
+                                          if (savedCard.brand == "VISA") {
+                                            return AppImage.visa;
+                                          }
+                                          if (savedCard.brand ==
+                                              "AMERICAN EXPRESS") {
+                                            return AppImage.americanExpress;
+                                          }
+                                          if (savedCard.brand == "MAESTRO") {
+                                            return AppImage.maestro;
+                                          } else {
+                                            return "";
+                                          }
+                                        }
+
+                                        return RadioListTile<int>(
+                                          value: savedCard.isDefault!.toInt(),
+                                          groupValue: groupValue,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              groupValue = index;
+                                              // val = value;
+                                              // _value = true;
+                                            });
+                                          },
+                                          tileColor: Colors.grey.shade100,
+                                          title: RichText(
+                                            text: TextSpan(
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  20.sp),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                    text: savedCard.first6Digits
+                                                        .toString(),
+                                                    style: AppText.body2Medium(
+                                                        context,
+                                                        Colors.black54,
+                                                        20.sp)),
+                                                const TextSpan(text: '****'),
+                                                TextSpan(
+                                                    text: savedCard.last4Digits
+                                                        .toString(),
+                                                    style: AppText.body2Medium(
+                                                        context,
+                                                        Colors.black54,
+                                                        20.sp))
+                                              ],
+                                            ),
+                                          ),
+                                          subtitle: RichText(
+                                            text: TextSpan(
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  Colors.black54,
+                                                  20.sp),
+                                              children: [
+                                                TextSpan(
+                                                    text: "Expiry date  ",
+                                                    style: AppText.body2Medium(
+                                                        context,
+                                                        Colors.black54,
+                                                        15.sp)),
+                                                TextSpan(
+                                                    text: savedCard.expiry
+                                                        .toString(),
+                                                    style: AppText.body2Medium(
+                                                        context,
+                                                        Colors.black54,
+                                                        15.sp))
+                                              ],
+                                            ),
+                                          ),
+                                          secondary: SvgPicture.asset(
+                                            getBrand(),
+                                            height: 20,
+                                            width: 20,
+                                          ),
+                                          selected: false,
+                                        );
+                                      },
+                                      separatorBuilder:
+                                          (BuildContext context, int index) {
+                                        return const SizedBox(
+                                          height: 10,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                        })
                   ],
                 ),
               ),

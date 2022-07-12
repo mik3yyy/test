@@ -86,10 +86,10 @@ class ResetTransactionPin extends HookConsumerWidget {
                       width: MediaQuery.of(context).size.width,
                       color: AppColors.appColor.withOpacity(0.1),
                       child: Padding(
-                        padding: EdgeInsets.only(right: 240.w),
+                        padding: EdgeInsets.only(right: 200.w),
                         child: Center(
                           child: Text(
-                            'Change password',
+                            'Change Transaction Pin',
                             style:
                                 AppText.body2(context, Colors.black54, 20.sp),
                           ),

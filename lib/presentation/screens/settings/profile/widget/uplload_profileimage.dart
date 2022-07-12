@@ -13,9 +13,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 class UploadImage extends StatefulHookConsumerWidget {
-  const UploadImage({
-    Key? key,
-  }) : super(key: key);
+  final bool hasIcon;
+  const UploadImage({Key? key, required this.hasIcon}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _UploadImageState();
@@ -56,24 +55,26 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                     radius: 60.w,
                     backgroundImage: FileImage(File(profileImage)),
                     child: Stack(children: [
-                      InkWell(
-                        onTap: () async {
-                          PickImageDialog().pickImage(context, () {
-                            getImage(ImageSource.camera);
-                          }, () {
-                            getImage(ImageSource.gallery);
-                          });
-                        },
-                        child: const Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            radius: 18.0,
-                            // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-                            child: Icon(Icons.camera_alt_outlined,
-                                size: 18, color: Colors.white),
-                          ),
-                        ),
-                      ),
+                      widget.hasIcon
+                          ? InkWell(
+                              onTap: () async {
+                                PickImageDialog().pickImage(context, () {
+                                  getImage(ImageSource.camera);
+                                }, () {
+                                  getImage(ImageSource.gallery);
+                                });
+                              },
+                              child: const Align(
+                                alignment: Alignment.bottomRight,
+                                child: CircleAvatar(
+                                  radius: 18.0,
+                                  // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+                                  child: Icon(Icons.camera_alt_outlined,
+                                      size: 18, color: Colors.white),
+                                ),
+                              ),
+                            )
+                          : const SizedBox.expand()
                     ]),
                   )
                 : CircleAvatar(
@@ -82,24 +83,25 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                     radius: 60.w,
                     backgroundImage: const AssetImage("images/person.png"),
                     child: Stack(children: [
-                      InkWell(
-                        onTap: () async {
-                          PickImageDialog().pickImage(context, () {
-                            getImage(ImageSource.camera);
-                          }, () {
-                            getImage(ImageSource.gallery);
-                          });
-                        },
-                        child: const Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            radius: 18.0,
-                            // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
-                            child: Icon(Icons.camera_alt_outlined,
-                                size: 18, color: Colors.white),
-                          ),
-                        ),
-                      ),
+                      widget.hasIcon
+                          ? InkWell(
+                              onTap: () async {
+                                PickImageDialog().pickImage(context, () {
+                                  getImage(ImageSource.camera);
+                                }, () {
+                                  getImage(ImageSource.gallery);
+                                });
+                              },
+                              child: const Align(
+                                alignment: Alignment.bottomRight,
+                                child: CircleAvatar(
+                                  radius: 18.0,
+                                  // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
+                                  child: Icon(Icons.camera_alt_outlined,
+                                      size: 18, color: Colors.white),
+                                ),
+                              ))
+                          : const SizedBox.shrink()
                     ]),
                   )),
       ],

@@ -56,9 +56,9 @@ Future<dynamic> currencyBuild(
                 width: double.maxFinite,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: value!.data!.currencies!.length,
+                  itemCount: value!.data.currencies.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final currency = value.data!.currencies![index];
+                    final currency = value.data.currencies[index];
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
