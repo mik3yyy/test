@@ -8,7 +8,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -173,7 +173,8 @@ class ImageWidget extends HookConsumerWidget {
                 InkWell(
                   onTap: () => context.navigate(const ChooseAccount()),
                   child: Text(
-                    AppLocalizations.of(context)!.text("Skip"),
+                    "Skip",
+                    // AppLocalizations.of(context)!.text("Skip"),
                     style: AppText.body3(context, AppColors.appColor),
                     textAlign: TextAlign.center,
                   ),
