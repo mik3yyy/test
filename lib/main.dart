@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dar
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,12 +39,12 @@ class MyApp extends HookConsumerWidget {
             primarySwatch: Colors.blue),
         locale: locale,
         supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate, // Add this line
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+        // localizationsDelegates: const [
+        //   AppLocalizations.delegate, // Add this line
+        //   GlobalMaterialLocalizations.delegate,
+        //   GlobalWidgetsLocalizations.delegate,
+        //   GlobalCupertinoLocalizations.delegate,
+        // ],
 
         // theme: theme,
         // home: const HomePage(),
