@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/secu
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/transaction_information_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/upload_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
@@ -32,7 +33,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
     final cards = ref.watch(genericController);
-    final profileImage = PreferenceManager.avatarUrl;
+    // final profileImage = PreferenceManager.avatarUrl;
 
     return GenericWidget(
       appbar: Padding(
@@ -54,19 +55,22 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                 Space(15.w),
               ],
             ),
-            profileImage.isNotEmpty
-                ? CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.transparent,
-                    radius: 60.w,
-                    backgroundImage: FileImage(File(profileImage)))
-                : CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.transparent,
-                    radius: 60.w,
-                    child:
-                        Image.asset("images/person.png", color: Colors.white),
-                  ),
+            const UploadImage(
+              hasIcon: false,
+            ),
+            // profileImage.isNotEmpty
+            //     ? CircleAvatar(
+            //         backgroundColor: Colors.transparent,
+            //         foregroundColor: Colors.transparent,
+            //         radius: 60.w,
+            //         backgroundImage: FileImage(File(profileImage)))
+            //     : CircleAvatar(
+            //         backgroundColor: Colors.transparent,
+            //         foregroundColor: Colors.transparent,
+            //         radius: 60.w,
+            //         child:
+            //             Image.asset("images/person.png", color: Colors.white),
+            //       ),
 
             // vm.maybeWhen(success: (data) {
             //   return CircleAvatar(
@@ -172,20 +176,11 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   subTitle: 'Edit your saved bank /card details Security',
                   image: AppImage.transaction,
                   onPressed: () {
-                    if (cards.cards.isEmpty) {
-                      ref.read(genericController.notifier).getCard();
-                      pushNewScreen(
-                        context,
-                        screen: const TransactionInformationScreen(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    } else {
-                      pushNewScreen(
-                        context,
-                        screen: const TransactionInformationScreen(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    }
+                    pushNewScreen(
+                      context,
+                      screen: const TransactionInformationScreen(),
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
                   },
                 ),
                 Space(10.h),

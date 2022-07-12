@@ -13,8 +13,12 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/view_all_wallets.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/to_wallet_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import '../../../components/app text theme/app_text_theme.dart';
@@ -68,6 +72,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
     final vm = ref.watch(getProfileProvider);
     final wallet = ref.watch(getAccountDetailsProvider);
     final walletCount = useState(0);
+    final currency = useTextEditingController();
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
@@ -94,7 +99,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            'Currency Wallets',
+            'Wallets',
             style: AppText.header2(context, Colors.black, 20.sp),
           ),
           centerTitle: true,
@@ -112,7 +117,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 7.5, horizontal: 20),
                 child: Text(
-                  'Let\'s view your currency accounts',
+                  'Let\'s view your currency wallets',
                   style: AppText.body2Medium(context, Colors.black54, 20.sp),
                 ),
               ),
@@ -172,6 +177,8 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                               ),
                               const Spacer(),
                               OptionsModalSheet(
+                                balance:
+                                    data.data.defaultWallet.balance.toString(),
                                 currencyCode: data
                                     .data.defaultWallet.currencyCode
                                     .toString(),
@@ -209,8 +216,10 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                   const Space(10),
                   wallet.when(
                       error: (error, stackTrace) => Text(error.toString()),
-                      loading: () => const CircularProgressIndicator.adaptive(),
-                      idle: () => const CircularProgressIndicator.adaptive(),
+                      loading: () => const Center(
+                          child: CircularProgressIndicator.adaptive()),
+                      idle: () => const Center(
+                          child: CircularProgressIndicator.adaptive()),
                       success: (data) {
                         walletCount.value = data!.data!.wallets!.length;
                         double _getSized() {
@@ -225,96 +234,109 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                           }
                         }
 
-                        return SizedBox(
-                          height: _getSized(),
-                          child: ListView.separated(
-                            itemCount: data.data!.wallets!.length,
-                            itemBuilder: (context, index) {
-                              final walletList = data.data!.wallets![index];
-                              return Container(
-                                height: 80.h,
-                                width: MediaQuery.of(context).size.width,
-                                padding:
-                                    EdgeInsets.only(left: 20.w, right: 20.w),
-                                decoration: BoxDecoration(
-                                  color: AppColors.whiteColor,
-                                  borderRadius: BorderRadius.circular(5.r),
-                                  // border: Border.all(
-                                  //     width: 1, color: AppColors.appColor),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color.fromRGBO(255, 255, 255, 1),
-                                      offset: Offset(
-                                        2.0,
-                                        2.0,
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            return ref.refresh(getAccountDetailsProvider);
+                          },
+                          child: SizedBox(
+                            height: 350,
+                            child: ListView.separated(
+                              physics: const AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              itemCount: data.data!.wallets!.length,
+                              itemBuilder: (context, index) {
+                                final walletList = data.data!.wallets![index];
+                                return Container(
+                                  height: 80.h,
+                                  width: MediaQuery.of(context).size.width,
+                                  padding:
+                                      EdgeInsets.only(left: 20.w, right: 20.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.whiteColor,
+                                    borderRadius: BorderRadius.circular(5.r),
+                                    // border: Border.all(
+                                    //     width: 1, color: AppColors.appColor),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(255, 255, 255, 1),
+                                        offset: Offset(
+                                          2.0,
+                                          2.0,
+                                        ),
+                                        blurRadius: 0.0,
+                                        spreadRadius: 2.0,
                                       ),
-                                      blurRadius: 0.0,
-                                      spreadRadius: 2.0,
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '${currencyName(walletList.currencyCode.toString())} wallet',
-                                          style: AppText.header2(context,
-                                              AppColors.appColor, 18.sp),
-                                        ),
-                                        Space(10.h),
-                                        Text(
-                                          '${currencySymbol(walletList.currencyCode.toString())} ${formatCurrency(walletList.balance.toString())}',
-                                          style: AppText.header2(context,
-                                              AppColors.appColor, 20.sp),
-                                        ),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    OptionsModalSheet(
-                                      currencyCode:
-                                          walletList.currencyCode.toString(),
-                                      isDefault: false,
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                height: 10,
-                              );
-                            },
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${currencyName(walletList.currencyCode.toString())} wallet',
+                                            style: AppText.header2(context,
+                                                AppColors.appColor, 18.sp),
+                                          ),
+                                          Space(10.h),
+                                          Text(
+                                            '${currencySymbol(walletList.currencyCode.toString())} ${formatCurrency(walletList.balance.toString())}',
+                                            style: AppText.header2(context,
+                                                AppColors.appColor, 20.sp),
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      OptionsModalSheet(
+                                        balance: walletList.balance.toString(),
+                                        currencyCode:
+                                            walletList.currencyCode.toString(),
+                                        isDefault: false,
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 10,
+                                );
+                              },
+                            ),
                           ),
                         );
                       }),
-                  walletCount.value == 5
-                      ? const SizedBox.shrink()
-                      : Center(
-                          child: CustomButton(
-                              buttonText: 'Create Wallet',
-                              bgColor: AppColors.appColor,
-                              borderColor: AppColors.appColor,
-                              textColor: Colors.white,
-                              onPressed: () {
-                                pushNewScreen(
-                                  context,
-                                  screen: const SelectWalletToCreate(),
-                                  withNavBar:
-                                      true, // OPTIONAL VALUE. True by default.
-                                  pageTransitionAnimation:
-                                      PageTransitionAnimation.fade,
-                                );
-                                // context.navigate(AvailableBalance()
+                  Center(
+                    child: CustomButton(
+                        buttonText: 'Create Wallet',
+                        bgColor: AppColors.appColor,
+                        borderColor: AppColors.appColor,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          pushNewScreen(context,
+                              screen: SelectCurrencyScreen(
+                                currencyCode: currency,
+                                routeName: 'createWallet',
+                              ),
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.slideRight);
+                          // pushNewScreen(
+                          //   context,
+                          //   screen: const SelectWalletToCreate(),
+                          //   withNavBar:
+                          //       true, // OPTIONAL VALUE. True by default.
+                          //   pageTransitionAnimation:
+                          //       PageTransitionAnimation.fade,
+                          // );
+                          // context.navigate(AvailableBalance()
 
-                                // );
-                              },
-                              buttonWidth: 320),
-                        ),
+                          // );
+                        },
+                        buttonWidth: 320),
+                  ),
                 ],
               ),
             ),
@@ -327,9 +349,13 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
 
 class OptionsModalSheet extends StatefulHookConsumerWidget {
   final String currencyCode;
+  final String balance;
   final bool isDefault;
   const OptionsModalSheet(
-      {Key? key, required this.currencyCode, required this.isDefault})
+      {Key? key,
+      required this.currencyCode,
+      required this.isDefault,
+      required this.balance})
       : super(key: key);
 
   @override
@@ -371,7 +397,6 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 30.w, right: 30.w),
                           child: Text(
-                            //TODO: To convert the symbol to name E.G NGN = Naira
                             '${widget.currencyCode} wallet',
                             style: AppText.body5(
                               context,
@@ -426,6 +451,11 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                         ),
                         isDefaultAction: true,
                         onPressed: () {
+                          // pushNewScreen(context,
+                          //     screen: const ToWallet(),
+                          //     pageTransitionAnimation:
+                          //         PageTransitionAnimation.slideRight);
+
                           // currencyController.text = dollar;
                           // Navigator.pop(context);
                         },
@@ -453,6 +483,9 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                               isDefaultAction: true,
                               onPressed: () {
                                 context.loaderOverlay.show();
+
+                                PreferenceManager.defaultWallet =
+                                    widget.currencyCode.toString();
                                 ref
                                     .read(setWalletAsDefaultProvider.notifier)
                                     .setWalletAsDefault(widget.currencyCode);
@@ -464,22 +497,29 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                             ),
                           ),
                     //Remove wallet
+
                     Container(
                       color: Colors.white,
                       child: CupertinoActionSheetAction(
                         child: Padding(
                           padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                          child: Text(
-                            'Remove Wallet',
-                            style: AppText.body5(
-                              context,
-                              AppColors.textColor,
-                              16.sp,
+                          child: Opacity(
+                            opacity: widget.balance.isEmpty ? 0.5 : 0.2,
+                            child: Text(
+                              'Remove Wallet',
+                              style: AppText.body5(
+                                context,
+                                AppColors.textColor,
+                                16.sp,
+                              ),
                             ),
                           ),
                         ),
                         isDefaultAction: true,
                         onPressed: () {
+                          if (widget.balance.isEmpty) {
+                            return;
+                          }
                           // currencyController.text = dollar;
                           // Navigator.pop(context);
                         },
@@ -504,6 +544,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
             });
       },
       child: SizedBox(
+        height: 50,
         child: Row(
           children: const [
             Icon(

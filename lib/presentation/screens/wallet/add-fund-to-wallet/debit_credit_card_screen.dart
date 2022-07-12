@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
@@ -18,16 +19,16 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/tran
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/withdraw_from_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../Data/services/payment/make_payment/fund_wallet/fund_wallet_res.dart';
 import '../../../components/app image/app_image.dart';
-import 'widget/add_fund_heading_container.dart';
+import '../../settings/profile/transaction_information/view_model/get_card_vm.dart';
 
 class DebitCreditCardScreen extends StatefulHookConsumerWidget {
   const DebitCreditCardScreen({Key? key}) : super(key: key);
@@ -40,17 +41,53 @@ class DebitCreditCardScreen extends StatefulHookConsumerWidget {
 class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  String dollar = "USD";
-  String pound = "GBP";
-  String euro = "EUR";
-  String naira = "NGN";
-  String kayndrex = "KAYNDREX";
+  // String dollar = "USD";
+  // String pound = "GBP";
+  // String euro = "EUR";
+  // String naira = "NGN";
+  // String kayndrex = "KAYNDREX";
+
+  // TextEditingController depositController = TextEditingController();
+  // TextEditingController currencyController = TextEditingController();
+  // TextEditingController currency = TextEditingController();
+
+  // TextEditingController amountController = TextEditingController();
+  // TextEditingController firstDigit = TextEditingController();
+  // TextEditingController secondDigit = TextEditingController();
+
+  // void handleValidation() {
+  //   if(depositController.text.isEmpty){
+  //        AppSnackBar.showInfoSnackBar(context, message: "Please select deposit currency");
+
+  //   }
+  //   if (currencyController.text.isEmpty) {
+  //     AppSnackBar.showInfoSnackBar(context,
+  //         message: "Please choose currency");
+  //   }
+  //   if (currency.text.isEmpty) {
+  //     AppSnackBar.showInfoSnackBar(context,
+  //         message: "Please choose deposit currency");
+  //   }
+  //   if (amountController.text.isEmpty) {
+  //     AppSnackBar.showInfoSnackBar(context,
+  //         message: "Please enter amount");
+  //   }
+  //   if (firstDigit.text.isEmpty) {
+  //     AppSnackBar.showInfoSnackBar(context,
+  //         message: "Please choose a card to proceed");
+  //   }
+
+  // }
+
   @override
   Widget build(BuildContext context) {
     final fundWallet = ref.watch(fundWalletProvider);
     final depositController = useTextEditingController();
     final currencyController = useTextEditingController();
-    final currency = useTextEditingController();
+    final fromCurrency = useTextEditingController();
+    final toCurrency = useTextEditingController();
+    final fromExchangeCurrency = useTextEditingController();
+    final toExchangeCurrency = useTextEditingController();
 
     final amountController = useTextEditingController();
     final firstDigit = useTextEditingController();
@@ -126,22 +163,52 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                       children: [
                         Row(
                           children: [
-                            SizedBox(
-                              width: 150.w,
-                              child: Stack(
-                                children: [
-                                  SelectCurrency(
-                                      text: "currency",
-                                      dollar: dollar,
-                                      currencyController: currencyController,
-                                      pound: pound,
-                                      euro: euro,
-                                      naira: naira,
-                                      kayndrex: kayndrex),
-                                ],
+                            InkWell(
+                              onTap: () {
+                                pushNewScreen(context,
+                                    screen: SelectCurrencyScreen(
+                                      currencyCode: currencyController,
+                                      routeName: 'addFunds',
+                                    ),
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.slideRight);
+                              },
+                              child: SizedBox(
+                                width: 130,
+                                child: EditForm(
+                                    enabled: false,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    labelText: 'currency',
+                                    keyboardType: TextInputType.text,
+                                    // textAlign: TextAlign.start,
+                                    controller: currencyController,
+                                    obscureText: false,
+                                    suffixIcon: const Icon(
+                                      CupertinoIcons.chevron_down,
+                                      color: Color(0xffA8A8A8),
+                                      size: 15,
+                                    ),
+                                    validator: (value) =>
+                                        validateCountry(value)),
                               ),
                             ),
-                            Space(30.w),
+                            // SizedBox(
+                            //   width: 150.w,
+                            //   child: Stack(
+                            //     children: [
+                            //       SelectCurrency(
+                            //           text: "currency",
+                            //           dollar: dollar,
+                            //           currencyController: currencyController,
+                            //           pound: pound,
+                            //           euro: euro,
+                            //           naira: naira,
+                            //           kayndrex: kayndrex),
+                            //     ],
+                            //   ),
+                            // ),
+                            const Spacer(),
                             SizedBox(
                               // width: MediaQuery.of(context).size.width - 150.w,
                               width: 200.w,
@@ -167,14 +234,41 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                           color: Colors.black,
                         ),
                         Space(10.h),
-                        SelectCurrency(
-                            text: "Deposit currency",
-                            dollar: dollar,
-                            currencyController: depositController,
-                            pound: pound,
-                            euro: euro,
-                            naira: naira,
-                            kayndrex: kayndrex),
+
+                        InkWell(
+                          onTap: () {
+                            pushNewScreen(context,
+                                screen: SelectCurrencyScreen(
+                                  currencyCode: depositController,
+                                  routeName: 'addFunds',
+                                ),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.slideRight);
+                          },
+                          child: EditForm(
+                              enabled: false,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              labelText: 'Deposit currency',
+                              keyboardType: TextInputType.text,
+                              // textAlign: TextAlign.start,
+                              controller: depositController,
+                              obscureText: false,
+                              suffixIcon: const Icon(
+                                CupertinoIcons.chevron_down,
+                                color: Color(0xffA8A8A8),
+                                size: 15,
+                              ),
+                              validator: (value) => validateCountry(value)),
+                        ),
+                        // SelectCurrency(
+                        //     text: "Deposit currency",
+                        //     dollar: dollar,
+                        //     currencyController: depositController,
+                        //     pound: pound,
+                        //     euro: euro,
+                        //     naira: naira,
+                        //     kayndrex: kayndrex),
                       ],
                     ),
                   ),
@@ -186,6 +280,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                     useInkWell: true,
                   ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       ExpandableNotifier(
                         child: ScrollOnExpand(
@@ -195,15 +290,15 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                 theme: const ExpandableThemeData(
                                   headerAlignment:
                                       ExpandablePanelHeaderAlignment.center,
-                                  tapBodyToExpand: true,
-                                  tapBodyToCollapse: true,
+                                  tapBodyToExpand: false,
+                                  tapBodyToCollapse: false,
                                   hasIcon: false,
                                 ),
                                 header: Container(
                                   padding: EdgeInsets.only(
                                       left: 19.w,
-                                      top: 7.w,
-                                      bottom: 7.w,
+                                      top: 14.w,
+                                      bottom: 14.w,
                                       right: 19.w),
                                   decoration: const BoxDecoration(
                                     color: AppColors.appColor,
@@ -214,8 +309,8 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                     children: [
                                       Text(
                                         'View Exchange rates',
-                                        style: AppText.body6(context,
-                                            AppColors.whiteColor, 16.sp),
+                                        style: AppText.body2Medium(
+                                            context, Colors.white, 20.sp),
                                       ),
                                       const ExpandableIcon(
                                         theme: ExpandableThemeData(
@@ -270,43 +365,69 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          SizedBox(
-                                            width: 100.w,
-                                            child: EditForm(
-                                              enabled: false,
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              labelText: 'USD',
+                                          InkWell(
+                                            onTap: () {
+                                              pushNewScreen(context,
+                                                  screen: SelectCurrencyScreen(
+                                                    currencyCode: fromCurrency,
+                                                    routeName: 'addFunds',
+                                                  ),
+                                                  pageTransitionAnimation:
+                                                      PageTransitionAnimation
+                                                          .slideRight);
+                                            },
+                                            child: SizedBox(
+                                              width: 100.w,
+                                              child: EditForm(
+                                                enabled: false,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
+                                                labelText: 'USD',
 
-                                              // textAlign: TextAlign.start,
-                                              controller: currency,
-                                              obscureText: false,
-                                              validator: (value) =>
-                                                  validateCurrency(value),
-                                              suffixIcon: const Icon(
-                                                CupertinoIcons.chevron_down,
-                                                color: Color(0xffA8A8A8),
-                                                size: 15,
+                                                // textAlign: TextAlign.start,
+                                                controller: fromCurrency,
+                                                obscureText: false,
+                                                validator: (value) =>
+                                                    validateCurrency(value),
+                                                suffixIcon: const Icon(
+                                                  CupertinoIcons.chevron_down,
+                                                  color: Color(0xffA8A8A8),
+                                                  size: 15,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 100.w,
-                                            child: EditForm(
-                                              enabled: false,
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              labelText: 'USD',
+                                          InkWell(
+                                            onTap: () {
+                                              pushNewScreen(context,
+                                                  screen: SelectCurrencyScreen(
+                                                    currencyCode: toCurrency,
+                                                    routeName: "addFunds",
+                                                  ),
+                                                  pageTransitionAnimation:
+                                                      PageTransitionAnimation
+                                                          .slideRight);
+                                            },
+                                            child: SizedBox(
+                                              width: 100.w,
+                                              child: EditForm(
+                                                enabled: false,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
+                                                labelText: 'USD',
 
-                                              // textAlign: TextAlign.start,
-                                              controller: currency,
-                                              obscureText: false,
-                                              validator: (value) =>
-                                                  validateCurrency(value),
-                                              suffixIcon: const Icon(
-                                                CupertinoIcons.chevron_down,
-                                                color: Color(0xffA8A8A8),
-                                                size: 15,
+                                                // textAlign: TextAlign.start,
+                                                controller: toCurrency,
+                                                obscureText: false,
+                                                validator: (value) =>
+                                                    validateCurrency(value),
+                                                suffixIcon: const Icon(
+                                                  CupertinoIcons.chevron_down,
+                                                  color: Color(0xffA8A8A8),
+                                                  size: 15,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -320,13 +441,13 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                           SizedBox(
                                             width: 150.w,
                                             child: EditForm(
-                                              enabled: false,
+                                              enabled: true,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
                                               labelText: 'Enter amount',
 
                                               // textAlign: TextAlign.start,
-                                              controller: currency,
+                                              controller: fromExchangeCurrency,
                                               obscureText: false,
                                               validator: (value) =>
                                                   validateCurrency(value),
@@ -335,13 +456,13 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                           SizedBox(
                                             width: 150.w,
                                             child: EditForm(
-                                              enabled: false,
+                                              enabled: true,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
                                               labelText: 'Enter amount',
 
                                               // textAlign: TextAlign.start,
-                                              controller: currency,
+                                              controller: toExchangeCurrency,
                                               obscureText: false,
                                               validator: (value) =>
                                                   validateCurrency(value),
@@ -361,7 +482,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                     ],
                   ),
                 ),
-                Space(176.h),
+                Space(90.h),
                 Padding(
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: CustomButton(
@@ -376,7 +497,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                             if (formKey.currentState!.validate()) {
                               if (firstDigit.text.isEmpty) {
                                 AppSnackBar.showInfoSnackBar(context,
-                                    message: "Select a card");
+                                    message: "choose a card");
                               } else {
                                 var fundWalletReq = FundWalletReq(
                                     amount: int.parse(amountController.text),
@@ -419,20 +540,22 @@ class SelectSavedCards extends StatefulHookConsumerWidget {
 }
 
 class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
+  List<Cardd> card = [];
   @override
   Widget build(BuildContext context) {
     final brandImage = useState("");
     // final card = ref.watch(getCardProvider);
-    final cards = ref.watch(genericController);
+    // final cards = ref.watch(genericController);
+    final getCard = ref.watch(getCardProvider);
 
-    double _cards() {
-      if (cards.cards.length == 4) {
+    double _cardsHeight() {
+      if (card.length == 4) {
         return 200;
-      } else if (cards.cards.length == 3) {
+      } else if (card.length == 3) {
         return 170;
-      } else if (cards.cards.length == 2) {
+      } else if (card.length == 2) {
         return 110;
-      } else if (cards.cards.length == 1) {
+      } else if (card.length == 1) {
         return 70;
       } else {
         return 100;
@@ -465,73 +588,202 @@ class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
                             right: 30,
                             bottom: 200,
                             child: Container(
-                              height: _cards(),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
-                              ),
-                              child: SizedBox(
-                                height: 50,
-                                child: ListView.builder(
-                                    itemCount: cards.cards.length,
-                                    itemBuilder: (context, index) {
-                                      final savedCard = cards.cards[index];
-                                      String _getBrand() {
-                                        if (savedCard.brand == "MASTERCARD") {
-                                          return AppImage.masterCard;
+                                height: _cardsHeight(),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.white,
+                                ),
+                                child: getCard.when(
+                                    idle: () => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    loading: () => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    success: (data) {
+                                      card = data!.data.cards;
+                                      double _listSize() {
+                                        if (data.data.cards.length == 4) {
+                                          return 200;
+                                        } else if (data.data.cards.length ==
+                                            3) {
+                                          return 170;
+                                        } else if (data.data.cards.length ==
+                                            2) {
+                                          return 110;
+                                        } else if (data.data.cards.length ==
+                                            1) {
+                                          return 70;
+                                        } else {
+                                          return 100;
                                         }
-                                        if (savedCard.brand == "VISA") {
-                                          return AppImage.visa;
-                                        }
-                                        if (savedCard.brand == "VERVE") {
-                                          return AppImage.verve;
-                                        }
-                                        if (savedCard.brand == "VISA") {
-                                          return AppImage.visa;
-                                        }
-                                        if (savedCard.brand == "MAESTRO") {
-                                          return AppImage.maestro;
-                                        }
-
-                                        return '';
                                       }
 
-                                      return Container(
-                                        padding: const EdgeInsets.only(top: 20),
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              widget.firstDigit.text =
-                                                  savedCard.first6Digits!;
-                                              widget.secondDigit.text =
-                                                  savedCard.last4Digits!;
-                                              brandImage.value =
-                                                  savedCard.brand!;
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                _getBrand(),
-                                                height: 25,
-                                                width: 25,
-                                              ),
-                                              const Space(10),
-                                              Text(
-                                                "${savedCard.first6Digits.toString()}${savedCard.last4Digits.toString()}",
-                                                style: AppText.body6(context,
-                                                    AppColors.textColor, 25.sp),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ),
+                                      return data.data.cards.isEmpty
+                                          ? Text("You have no card",
+                                              style: AppText.body2Medium(
+                                                  context,
+                                                  AppColors.textColor,
+                                                  25.sp))
+                                          : SizedBox(
+                                              height: _listSize(),
+                                              child: ListView.builder(
+                                                  itemCount:
+                                                      data.data.cards.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final savedCard =
+                                                        data.data.cards[index];
+                                                    String _getBrand() {
+                                                      if (savedCard.brand ==
+                                                          "MASTERCARD") {
+                                                        return AppImage
+                                                            .masterCard;
+                                                      }
+                                                      if (savedCard.brand ==
+                                                          "VISA") {
+                                                        return AppImage.visa;
+                                                      }
+                                                      if (savedCard.brand ==
+                                                          "VERVE") {
+                                                        return AppImage.verve;
+                                                      }
+                                                      if (savedCard.brand ==
+                                                          "VISA") {
+                                                        return AppImage.visa;
+                                                      }
+                                                      if (savedCard.brand ==
+                                                          "MAESTRO") {
+                                                        return AppImage.maestro;
+                                                      }
+
+                                                      return '';
+                                                    }
+
+                                                    return Container(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            widget.firstDigit
+                                                                    .text =
+                                                                savedCard
+                                                                    .first6Digits!;
+                                                            widget.secondDigit
+                                                                    .text =
+                                                                savedCard
+                                                                    .last4Digits!;
+                                                            brandImage.value =
+                                                                savedCard
+                                                                    .brand!;
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              _getBrand(),
+                                                              height: 25,
+                                                              width: 25,
+                                                            ),
+                                                            const Space(10),
+                                                            Text(
+                                                              "${savedCard.first6Digits.toString()}${savedCard.last4Digits.toString()}",
+                                                              style: AppText.body6(
+                                                                  context,
+                                                                  AppColors
+                                                                      .textColor,
+                                                                  25.sp),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                            );
+                                    },
+                                    error: (e, s) => Text(e.toString()))
+
+                                // cards.cards.isEmpty
+                                //     ? Center(
+                                //         child: Text("You have no card",
+                                //             style: AppText.body2Medium(context,
+                                //                 AppColors.textColor, 25.sp)),
+                                //       )
+                                //     : SizedBox(
+                                //         height: 50,
+                                //         child: ListView.builder(
+                                //             itemCount: cards.cards.length,
+                                //             itemBuilder: (context, index) {
+                                //               final savedCard =
+                                //                   cards.cards[index];
+                                //               String _getBrand() {
+                                //                 if (savedCard.brand ==
+                                //                     "MASTERCARD") {
+                                //                   return AppImage.masterCard;
+                                //                 }
+                                //                 if (savedCard.brand == "VISA") {
+                                //                   return AppImage.visa;
+                                //                 }
+                                //                 if (savedCard.brand == "VERVE") {
+                                //                   return AppImage.verve;
+                                //                 }
+                                //                 if (savedCard.brand == "VISA") {
+                                //                   return AppImage.visa;
+                                //                 }
+                                //                 if (savedCard.brand ==
+                                //                     "MAESTRO") {
+                                //                   return AppImage.maestro;
+                                //                 }
+
+                                //                 return '';
+                                //               }
+
+                                //               return Container(
+                                //                 padding: const EdgeInsets.only(
+                                //                     top: 20),
+                                //                 child: InkWell(
+                                //                   onTap: () {
+                                //                     setState(() {
+                                //                       widget.firstDigit.text =
+                                //                           savedCard.first6Digits!;
+                                //                       widget.secondDigit.text =
+                                //                           savedCard.last4Digits!;
+                                //                       brandImage.value =
+                                //                           savedCard.brand!;
+                                //                     });
+                                //                     Navigator.pop(context);
+                                //                   },
+                                //                   child: Row(
+                                //                     mainAxisAlignment:
+                                //                         MainAxisAlignment.center,
+                                //                     children: [
+                                //                       SvgPicture.asset(
+                                //                         _getBrand(),
+                                //                         height: 25,
+                                //                         width: 25,
+                                //                       ),
+                                //                       const Space(10),
+                                //                       Text(
+                                //                         "${savedCard.first6Digits.toString()}${savedCard.last4Digits.toString()}",
+                                //                         style: AppText.body6(
+                                //                             context,
+                                //                             AppColors.textColor,
+                                //                             25.sp),
+                                //                       ),
+                                //                     ],
+                                //                   ),
+                                //                 ),
+                                //               );
+                                //             }),
+                                //       ),
+                                ),
                           ),
                           Positioned(
                             left: 30,

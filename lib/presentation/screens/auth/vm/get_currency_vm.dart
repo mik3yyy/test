@@ -6,8 +6,10 @@ import '../../../../Data/services/auth/manager/auth_manager.dart';
 
 final getCurrencyProvider =
     StateNotifierProvider.autoDispose<GetCurrencyVm, RequestState<CurrencyRes>>(
-  (ref) => GetCurrencyVm(ref),
-);
+        (ref) {
+  ref.maintainState = true;
+  return GetCurrencyVm(ref);
+});
 
 class GetCurrencyVm extends RequestStateNotifier<CurrencyRes> {
   final AuthManager _authManager;

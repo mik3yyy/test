@@ -8,6 +8,10 @@ class PreferenceManager {
   static bool get enableBioMetrics =>
       prefs.getBool("enableBioMetrics") ?? false;
 
+  static set isFirstLaunch(bool isFirstLaunch) =>
+      prefs.setBool("isFirstLaunch", isFirstLaunch);
+  static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? false;
+
   static set revealBalance(bool revealBalance) =>
       prefs.setBool("revealBalance", revealBalance);
   static bool get revealBalance => prefs.getBool("revealBalance") ?? false;
@@ -16,6 +20,11 @@ class PreferenceManager {
   static set avatarUrl(String avatarUrl) =>
       prefs.setString("avatarUrl", avatarUrl);
   static String get avatarUrl => prefs.getString("avatarUrl") ?? '';
+
+  //* avatarUrl
+  static set defaultWallet(String defaultWallet) =>
+      prefs.setString("defaultWallet", defaultWallet);
+  static String get defaultWallet => prefs.getString("defaultWallet") ?? '';
 
   //* auth token
   static set authToken(String authToken) =>

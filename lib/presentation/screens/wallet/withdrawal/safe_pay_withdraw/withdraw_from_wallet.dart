@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
@@ -81,50 +82,6 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Space(20.h),
-                    Container(
-                      height: 80.h,
-                      width: MediaQuery.of(context).size.width,
-                      color: AppColors.appColor.withOpacity(0.05),
-                      child: Row(
-                        children: [
-                          Space(20.w),
-                          Container(
-                            height: 30.h,
-                            width: 30.w,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(width: 1, color: Colors.black)),
-                            child: Center(
-                              child: Text(
-                                '\$',
-                                style:
-                                    AppText.body2(context, Colors.black, 15.sp),
-                              ),
-                            ),
-                          ),
-                          Space(15.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Dollar wallet balance',
-                                style:
-                                    AppText.body2(context, Colors.black, 18.sp),
-                              ),
-                              const Space(2),
-                              Text(
-                                '\$ 750',
-                                style: AppText.body2Bold(
-                                    context, Colors.black, 23.sp),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Space(20.h),
                     EditForm(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       labelText: 'Enter Amount',
@@ -136,14 +93,30 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                       validator: (value) => validateFirstName(value),
                     ),
                     Space(20.h),
-                    SelectCurrency(
-                        text: "Select wallet to transfer from",
-                        dollar: dollar,
-                        currencyController: currencyController,
-                        pound: pound,
-                        euro: euro,
-                        naira: naira,
-                        kayndrex: kayndrex),
+
+                    EditForm(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      labelText: 'Select wallet to transfer from',
+                      keyboardType: TextInputType.number,
+                      // textAlign: TextAlign.start,
+                      controller: currencyController,
+                      suffixIcon: SelectWalletList(
+                        currency: currencyController,
+                        routeName: "transferScreen",
+                      ),
+
+                      obscureText: false,
+                      validator: (value) => validateFirstName(value),
+                    ),
+
+                    // SelectCurrency(
+                    //     text: "Select wallet to transfer from",
+                    //     dollar: dollar,
+                    //     currencyController: currencyController,
+                    //     pound: pound,
+                    //     euro: euro,
+                    //     naira: naira,
+                    //     kayndrex: kayndrex),
                     Space(20.h),
                     EditForm(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -162,23 +135,23 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                         controller: fistNameController,
                         obscureText: false,
                         validator: (value) => validateState(value)),
-                    Space(20.h),
-                    Row(
-                      children: [
-                        Text(
-                          'Add to beneficiaries',
-                          style: AppText.header2(context, Colors.black, 20.sp),
-                        ),
-                        const Spacer(),
-                        Switch.adaptive(
-                            activeColor: Colors.greenAccent,
-                            value: toggle.state,
-                            onChanged: (value) {
-                              toggle.state = !toggle.state;
-                            }),
-                      ],
-                    ),
-                    Space(20.h),
+
+                    // Row(
+                    //   children: [
+                    //     Text(
+                    //       'Add to beneficiaries',
+                    //       style: AppText.header2(context, Colors.black, 20.sp),
+                    //     ),
+                    //     const Spacer(),
+                    //     Switch.adaptive(
+                    //         activeColor: Colors.greenAccent,
+                    //         value: toggle.state,
+                    //         onChanged: (value) {
+                    //           toggle.state = !toggle.state;
+                    //         }),
+                    //   ],
+                    // ),
+                    Space(30.h),
                     Container(
                       height: 80.h,
                       width: MediaQuery.of(context).size.width,

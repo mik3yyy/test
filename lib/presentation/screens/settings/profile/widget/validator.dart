@@ -38,6 +38,13 @@ String? validatePhoneNumber(String? value) {
   return null;
 }
 
+String? validatePurpose(String? value) {
+  if (value!.isEmpty) {
+    return 'Please add reason for withdrawal';
+  }
+  return null;
+}
+
 // swift code validation
 String? swiftCode(String? value) {
   if ((value!.length != 8) || (value.length != 11)) {

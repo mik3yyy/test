@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
@@ -26,9 +27,19 @@ class EditInfo extends StatefulHookConsumerWidget {
 }
 
 class _EditInfoState extends ConsumerState<EditInfo> {
+  void getPhoneNumber(String phoneNumber) async {
+    PhoneNumber number =
+        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
+
+    number = number;
+  }
+
+  PhoneNumber number = PhoneNumber(isoCode: 'NG');
   final formKey = GlobalKey<FormState>();
+  final fieldFocusNode = FocusNode();
   final List<String> _gender = ['male', 'female'];
   String? _radioSelected;
+  String code = "+234";
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
@@ -224,14 +235,42 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           validator: (value) => validateEmail(value),
                         ),
                         Space(20.h),
-                        EditForm(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            labelText: 'Phone Number',
-                            keyboardType: TextInputType.number,
-                            controller: phoneNoCountroller,
-                            obscureText: false,
-                            validator: (value) => validatePhoneNumber(value)),
+                        InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber number) {
+                            code = number.dialCode!;
+                          },
+                          onInputValidated: (bool value) {},
+                          selectorConfig: const SelectorConfig(
+                            selectorType: PhoneInputSelectorType.DROPDOWN,
+                            leadingPadding: 0,
+                            trailingSpace: false,
+                            setSelectorButtonAsPrefixIcon: false,
+                          ),
+                          spaceBetweenSelectorAndTextField: 0,
+                          ignoreBlank: false,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          selectorTextStyle:
+                              const TextStyle(color: Colors.black),
+                          initialValue: number,
+                          textFieldController: phoneNoCountroller,
+                          formatInput: false,
+                          inputDecoration: const InputDecoration(
+                            hintText: "Phone number",
+                          ),
+                          focusNode: fieldFocusNode,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              signed: true, decimal: true),
+                          inputBorder: InputBorder.none,
+                          onSaved: (PhoneNumber number) {},
+                        ),
+                        // EditForm(
+                        //     autovalidateMode:
+                        //         AutovalidateMode.onUserInteraction,
+                        //     labelText: 'Phone Number',
+                        //     keyboardType: TextInputType.number,
+                        //     controller: phoneNoCountroller,
+                        //     obscureText: false,
+                        //     validator: (value) => validatePhoneNumber(value)),
                         Space(20.h),
                         Builder(
                           builder: (ctx) {

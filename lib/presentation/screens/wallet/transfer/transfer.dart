@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -36,9 +37,9 @@ class _TransferState extends ConsumerState<Transfer>
   @override
   @override
   Widget build(BuildContext context) {
-    final defaultWallet = ref.watch(getUserProfileProvider);
+    final defaultWallet = ref.watch(getProfileProvider);
     final accountNo = ref.watch(signInProvider);
-    var formatter = NumberFormat('###,000');
+    var formatter = NumberFormat("#,##0.00");
 
     return GenericWidget(
         appbar: Padding(

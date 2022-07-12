@@ -62,8 +62,10 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
         if (value.value!.data!.user.transactionPinAddedAt == null) {
+          PreferenceManager.isFirstLaunch = true;
           context.navigate(const TransactionPinScreen());
         } else {
+          PreferenceManager.isFirstLaunch = false;
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
           ref.read(getProfileProvider.notifier).getProfile();
 

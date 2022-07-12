@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
@@ -34,28 +35,28 @@ class _ToWalletState extends ConsumerState<ToWallet> {
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
   final formKey = GlobalKey<FormState>();
 
-  final List<Map<String, dynamic>> _items = [
-    //TODO: How to loop through and remove default wallet code because you can tranfer to default wallet
-    {
-      'value': 'EUR',
-      'label': '€ Euro',
-      // 'icon': Icon(Icons.stop),
-    },
-    {
-      'value': 'GBP',
-      'label': '£ Pounds',
-      // 'icon': Icon(Icons.fiber_manual_record),
-      // 'textStyle': TextStyle(color: Colors.red),
-    },
-    {
-      'value': 'NGN',
-      'label': 'NGN Naira',
-      // 'enable': false,
-      // 'icon': Icon(Icons.grade),
-    },
+  // final List<Map<String, dynamic>> _items = [
+  //   //TODO: How to loop through and remove default wallet code because you can tranfer to default wallet
+  //   {
+  //     'value': 'EUR',
+  //     'label': '€ Euro',
+  //     // 'icon': Icon(Icons.stop),
+  //   },
+  //   {
+  //     'value': 'GBP',
+  //     'label': '£ Pounds',
+  //     // 'icon': Icon(Icons.fiber_manual_record),
+  //     // 'textStyle': TextStyle(color: Colors.red),
+  //   },
+  //   {
+  //     'value': 'NGN',
+  //     'label': 'NGN Naira',
+  //     // 'enable': false,
+  //     // 'icon': Icon(Icons.grade),
+  //   },
 
-    // },
-  ];
+  //   // },
+  // ];
   String? selectedItem = 'Euro';
   @override
   Widget build(BuildContext context) {
@@ -126,45 +127,30 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                 style: AppText.body2(context, AppColors.appColor, 19.sp),
               ),
               Space(5.h),
-              SelectFormField(
-                type: SelectFormFieldType.dropdown, // or can be dialog
-                // initialValue: selectedItem,
+              WalletTextField(
+                labelText: 'Select wallet account currency',
+                obscureText: false,
+                color: Colors.white,
+                keyboardType: TextInputType.number,
                 controller: toCurrencyController,
-                style: AppText.body2(context, Colors.black, 19.sp),
+                readOnly: false,
+                suffixIcon: SelectWalletList(
+                  currency: toCurrencyController,
+                  routeName: "transferScreen",
+                ),
                 validator: (String? value) {
                   if (value!.isEmpty) {
-                    return 'Please select a currency you want to transfer to';
+                    return 'Please enter amount';
                   }
                   return null;
                 },
-                decoration: InputDecoration(
-                  hintText: 'Select currency',
-                  hintStyle: AppText.body2(context, Colors.grey[400]!, 19.sp),
-                  // floatingLabelBehavior: FloatingLabelBehavior.never,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.appColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: AppColors.appColor, width: 1),
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.blue, width: 2),
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  suffixIcon: const Icon(
-                    Icons.arrow_drop_down_outlined,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                items: _items,
-                onChanged: (val) => {},
-                onSaved: (val) => {},
               ),
+              // Text(
+              //   'Select wallet account currency',
+              //   style: AppText.body2(context, AppColors.appColor, 19.sp),
+              // ),
+              Space(5.h),
+
               Space(35.h),
               Container(
                 height: 80.h,
