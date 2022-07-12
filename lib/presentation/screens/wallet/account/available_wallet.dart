@@ -42,7 +42,7 @@ currencySymbol(String currency) {
   } else if (currency == "GBP") {
     return '£';
   } else if (currency == "EUR") {
-    return '£';
+    return '€';
   } else {
     return 'KDRX';
   }
@@ -345,9 +345,9 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
         ref.read(getProfileProvider.notifier).getProfile();
         context.loaderOverlay.hide();
 
-        AppSnackBar.showSuccessSnackBar(context,
-            message:
-                "${value.value!.data!.wallet!.currencyCode} is set to default");
+        // AppSnackBar.showSuccessSnackBar(context,
+        //     message:
+        //         "${value.value!.data!.wallet!.currencyCode} is set to default");
       }
 
       if (value is Error) {

@@ -22,9 +22,10 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
             color: AppColors.textColor,
           ),
         ),
+        centerTitle: true,
         title: Text(
           'All Transactions',
-          style: AppText.header3(context, AppColors.textColor, 25.sp),
+          style: AppText.header3(context, AppColors.textColor, 20.sp),
         ),
         elevation: 0,
         backgroundColor: AppColors.whiteColor,
@@ -68,7 +69,7 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
                         },
                       ),
                     ),
-                    const Space(80)
+                    const Space(60)
                   ],
                 );
               }

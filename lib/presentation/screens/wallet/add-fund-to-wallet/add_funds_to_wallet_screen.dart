@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
+import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/add_fund_container_widget.dart';
 import 'widget/add_fund_heading_container.dart';
 
@@ -33,10 +34,9 @@ class AddFundsToWalletScreen extends StatelessWidget {
               automaticallyImplyLeading: false,
               leading: GestureDetector(
                 onTap: (() => Navigator.pop(context)),
-                child: Icon(
-                  Icons.chevron_left,
-                  color: AppColors.textColor,
-                  size: 60.sp,
+                child: const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.black,
                 ),
               ),
             )
@@ -48,10 +48,16 @@ class AddFundsToWalletScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AddFundHeadingContainer(
-              text: 'Add funds to your wallet',
-              textAlign: TextAlign.center,
-              paddingLeft: 0.0,
+            Container(
+              height: 40.h,
+              width: MediaQuery.of(context).size.width,
+              color: AppColors.appColor.withOpacity(0.1),
+              child: Center(
+                child: Text(
+                  'Add funds to your wallet',
+                  style: AppText.body2Medium(context, Colors.black54, 20.sp),
+                ),
+              ),
             ),
             Space(30.h),
             AppFundContainerWidget(

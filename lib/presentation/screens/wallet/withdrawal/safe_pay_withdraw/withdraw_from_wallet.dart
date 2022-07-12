@@ -521,10 +521,13 @@ class _SelectCurrencyState extends State<SelectCurrency> {
         controller: widget.currencyController,
         obscureText: false,
         validator: (value) => validateCountry(value),
-        suffixIcon: const Icon(
-          CupertinoIcons.chevron_down,
-          color: Color(0xffA8A8A8),
-          size: 15,
+        suffixIcon: const Padding(
+          padding: EdgeInsets.only(left: 32),
+          child: Icon(
+            CupertinoIcons.chevron_down,
+            color: Color(0xffA8A8A8),
+            size: 15,
+          ),
         ),
       ),
     );

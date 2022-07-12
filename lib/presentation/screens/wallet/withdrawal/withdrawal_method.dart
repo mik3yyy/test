@@ -76,25 +76,25 @@ class _WithdrawalMethodScreenState
                   WithdrawMethod(
                       method: "Safe Transfer",
                       onPressed: () {
-                        pushNewScreen(
-                          context, screen: const SelectBeneficiary(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
+                        // pushNewScreen(
+                        //   context, screen: const SelectBeneficiary(),
+                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
+                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                        // );
                       }),
                   Space(20.h),
                   WithdrawMethod(
-                      method: "ACH [ABA]",
+                      method: "ACH [ABA] coming soon",
                       onPressed: () {
-                        pushNewScreen(
-                          context,
-                          screen: controller.ababeneficiary.isNotEmpty
-                              ? const BeneficiaryScreen(
-                                  routeName: RouteName.aba)
-                              : const ABAWithdrawal(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
+                        // pushNewScreen(
+                        //   context,
+                        //   screen: controller.ababeneficiary.isNotEmpty
+                        //       ? const BeneficiaryScreen(
+                        //           routeName: RouteName.aba)
+                        //       : const ABAWithdrawal(),
+                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
+                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                        // );
                       }),
                   Space(20.h),
                   WithdrawMethod(
