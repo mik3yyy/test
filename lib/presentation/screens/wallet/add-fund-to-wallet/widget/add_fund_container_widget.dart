@@ -21,7 +21,7 @@ class AppFundContainerWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 64.h,
+        height: 70.h,
         padding: EdgeInsets.only(top: 22.w, bottom: 22.w),
         margin: EdgeInsets.only(left: 25.w, right: 25.w),
         decoration: BoxDecoration(
@@ -35,10 +35,10 @@ class AppFundContainerWidget extends StatelessWidget {
             Space(9.w),
             Text(
               text,
-              style: AppText.body6(
+              style: AppText.body2Medium(
                 context,
                 AppColors.textColor,
-                15.sp,
+                20.sp,
               ),
             ),
           ],

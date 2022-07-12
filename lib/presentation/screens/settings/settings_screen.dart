@@ -22,7 +22,7 @@ class SettingScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: Text(
           'Settings',
-          style: AppText.header2(context, Colors.black, 30.sp),
+          style: AppText.header2(context, Colors.black, 20.sp),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,

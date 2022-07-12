@@ -8,6 +8,10 @@ class PreferenceManager {
   static bool get enableBioMetrics =>
       prefs.getBool("enableBioMetrics") ?? false;
 
+  static set revealBalance(bool revealBalance) =>
+      prefs.setBool("revealBalance", revealBalance);
+  static bool get revealBalance => prefs.getBool("revealBalance") ?? false;
+
 //* avatarUrl
   static set avatarUrl(String avatarUrl) =>
       prefs.setString("avatarUrl", avatarUrl);
@@ -43,20 +47,16 @@ class PreferenceManager {
 
   static void clear() {
     prefs.clear();
-    // PreferenceManager.isFirstLaunch = false;
   }
 
   static void removeToken() {
     PreferenceManager.authToken = "";
     PreferenceManager.refreshToken = "";
     PreferenceManager.depositRef = "";
-    // PreferenceManager.password = "";
-
-    // PreferenceManager.isFirstLaunch = false;
   }
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    // prefs.clear();
   }
 }

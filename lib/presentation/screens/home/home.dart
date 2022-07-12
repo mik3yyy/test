@@ -1,26 +1,35 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/extension/format_currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/available_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';
+import '../settings/profile/vm/get_profile_vm.dart';
 import '../wallet/transfer/transfer.dart';
 import 'widgets/bottomNav/persistent-tab-view.dart';
 
@@ -63,27 +72,41 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
 //Method to convert currency name to code and use as parament for setting wallet as default
-  setCurrencyCode(String currency) {
-    if (currency == "Pounds") {
-      return 'GBP';
-    } else if (currency == "Naira") {
-      return 'NGN';
-    } else if (currency == "Euro") {
-      return 'EUR';
-    } else {
-      return 'USD';
-    }
-  }
+  // setCurrencyCode(String currency) {
+  //   if (currency == "Pounds") {
+  //     return 'GBP';
+  //   } else if (currency == "Naira") {
+  //     return 'NGN';
+  //   } else if (currency == "Euro") {
+  //     return 'EUR';
+  //   } else {
+  //     return 'USD';
+  //   }
+  // }
 
-  currencySymbol(String currency) {
+  // currencySymbol(String currency) {
+  //   if (currency == "NGN") {
+  //     return 'N';
+  //   } else if (currency == "USD") {
+  //     return '\$';
+  //   } else if (currency == "GBP") {
+  //     return '£';
+  //   } else if (currency == "EUR") {
+  //     return '€';
+  //   } else {
+  //     return 'KDRX';
+  //   }
+  // }
+
+  currencyName(String currency) {
     if (currency == "NGN") {
-      return 'N';
+      return 'Naira';
     } else if (currency == "USD") {
-      return '\$';
+      return 'Dollar';
     } else if (currency == "GBP") {
-      return '£';
+      return 'Pounds';
     } else if (currency == "EUR") {
-      return '£';
+      return 'Euro';
     } else {
       return 'KDRX';
     }
@@ -94,7 +117,21 @@ class _HomePageState extends ConsumerState<HomePage> {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-    final setWalletVm = ref.watch(setWalletAsDefaultProvider);
+    // final setWalletVm = ref.watch(setWalletAsDefaultProvider);
+    final defaultWallet = ref.watch(getProfileProvider);
+    final wallet = ref.watch(getAccountDetailsProvider);
+    var formatter = NumberFormat("#,##0.00");
+
+    ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
+      if (value is Success<SetWalletAsDefaultRes>) {
+        ref.read(getProfileProvider.notifier).getProfile();
+      }
+
+      if (value is Error) {
+        AppSnackBar.showSuccessSnackBar(context,
+            message: "Wallet could not be set as default at the moment");
+      }
+    });
 
     return GenericWidget(
       appbar: Padding(
@@ -142,45 +179,167 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               child: Column(
                 children: [
+                  const Space(10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: 100.w,
-                        child: DropdownButton<String>(
-                            underline: const SizedBox.shrink(),
-                            value: setValue,
-                            isExpanded: true,
-                            dropdownColor: Colors.white,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: AppColors.appColor,
-                            ),
-                            items: currency.map(buildItem).toList(),
-                            // items: walletList.maybeWhen(success: (v) => v!.data!.wallets!.toList(), orElse: () => []),
-                            onChanged: (value) {
-                              setState(() {
-                                setValue = value!;
+                      defaultWallet.maybeWhen(success: (data) {
+                        return Text(
+                          '${currencyName(data!.data.defaultWallet.currencyCode.toString())} wallet',
+                          style: AppText.header2(
+                              context, AppColors.appColor, 18.sp),
+                        );
+                      }, orElse: () {
+                        return Text(
+                          '-----',
+                          style: AppText.header2(
+                              context, AppColors.appColor, 18.sp),
+                        );
+                      }),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20))),
+                              builder: (context) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Space(20),
+                                    Text(
+                                      'Set Default Wallet',
+                                      style: AppText.header2(
+                                          context, AppColors.appColor, 20.sp),
+                                    ),
+                                    const Space(30),
+                                    wallet.when(
+                                        error: (error, stackTrace) =>
+                                            Text(error.toString()),
+                                        loading: () =>
+                                            const CircularProgressIndicator
+                                                .adaptive(),
+                                        idle: () =>
+                                            const CircularProgressIndicator
+                                                .adaptive(),
+                                        success: (data) {
+                                          double _getSized() {
+                                            if (data!.data!.wallets!.length ==
+                                                2) {
+                                              return 200;
+                                            } else if (data
+                                                    .data!.wallets!.length ==
+                                                3) {
+                                              return 250;
+                                            } else if (data
+                                                    .data!.wallets!.length ==
+                                                4) {
+                                              return 350;
+                                            } else if (data
+                                                    .data!.wallets!.length ==
+                                                5) {
+                                              return 400;
+                                            } else {
+                                              return 500;
+                                            }
+                                          }
+
+                                          return SizedBox(
+                                            height: _getSized(),
+                                            child: ListView.separated(
+                                              itemCount:
+                                                  data!.data!.wallets!.length,
+                                              itemBuilder: (context, index) {
+                                                final walletList =
+                                                    data.data!.wallets![index];
+                                                return InkWell(
+                                                  onTap: () {
+                                                    print(walletList
+                                                        .currencyCode
+                                                        .toString());
+                                                    ref
+                                                        .read(
+                                                            setWalletAsDefaultProvider
+                                                                .notifier)
+                                                        .setWalletAsDefault(
+                                                            walletList
+                                                                .currencyCode
+                                                                .toString());
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    height: 60.h,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    padding: EdgeInsets.only(
+                                                        left: 20.w,
+                                                        right: 20.w),
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          AppColors.whiteColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.r),
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromRGBO(
+                                                              255, 255, 255, 1),
+                                                          offset: Offset(
+                                                            2.0,
+                                                            2.0,
+                                                          ),
+                                                          blurRadius: 0.0,
+                                                          spreadRadius: 2.0,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${currencyName(walletList.currencyCode.toString())} wallet',
+                                                        style: AppText.header2(
+                                                            context,
+                                                            AppColors.appColor,
+                                                            20.sp),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return const SizedBox(
+                                                  height: 15,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        })
+                                  ],
+                                );
                               });
-                              //  setCurrencyCode(setValue);
-                              ref
-                                  .read(setWalletAsDefaultProvider.notifier)
-                                  .setWalletAsDefault(
-                                      setCurrencyCode(setValue));
-                            }),
+                        },
+                        child: const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: AppColors.appColor,
+                        ),
                       ),
                       Space(85.w),
                       InkWell(
                         onTap: () {
                           toggleAmount.state = !toggleAmount.state;
+                          PreferenceManager.revealBalance = toggleAmount.state;
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Icon(
-                            toggleAmount.state
+                            PreferenceManager.revealBalance
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: toggleAmount.state
+                            color: PreferenceManager.revealBalance
                                 ? AppColors.appColor
                                 : Colors.grey.shade400,
                             size: 20,
@@ -190,27 +349,75 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Space(20.w)
                     ],
                   ),
-                  toggleAmount.state
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+
+                  //     SizedBox(
+                  //       width: 100.w,
+                  //       child: DropdownButton<String>(
+                  //           underline: const SizedBox.shrink(),
+                  //           value: setValue,
+                  //           isExpanded: true,
+                  //           dropdownColor: Colors.white,
+                  //           icon: const Icon(
+                  //             Icons.keyboard_arrow_down,
+                  //             color: AppColors.appColor,
+                  //           ),
+                  //           items: currency.map(buildItem).toList(),
+                  //           // items: walletList.maybeWhen(success: (v) => v!.data!.wallets!.toList(), orElse: () => []),
+                  //           onChanged: (value) {
+                  //             setState(() {
+                  //               setValue = value!;
+                  //             });
+                  //             //  setCurrencyCode(setValue);
+                  //             ref
+                  //                 .read(setWalletAsDefaultProvider.notifier)
+                  //                 .setWalletAsDefault(
+                  //                     setCurrencyCode(setValue));
+                  //           }),
+                  //     ),
+                  //     Space(85.w),
+                  //     InkWell(
+                  //       onTap: () {
+                  //         toggleAmount.state = !toggleAmount.state;
+                  //       },
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(2.0),
+                  //         child: Icon(
+                  //           toggleAmount.state
+                  //               ? Icons.visibility_off
+                  //               : Icons.visibility,
+                  //           color: toggleAmount.state
+                  //               ? AppColors.appColor
+                  //               : Colors.grey.shade400,
+                  //           size: 20,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Space(20.w)
+                  //   ],
+                  // ),
+
+                  const Space(15),
+                  PreferenceManager.revealBalance
                       ? Text(
                           '****',
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
                         )
                       : Text(
-                          //TODO: account balance and currency clear when app restart
-                          setWalletVm.maybeWhen(
+                          defaultWallet.maybeWhen(
                               success: (v) =>
-                                  '${currencySymbol(v!.data!.wallet!.currencyCode!)} ${v.data!.wallet!.balance.toString()}',
-                              orElse: () => ''),
-                          // '\$ 200.00',
+                                  '${currencySymbol(v!.data.defaultWallet.currencyCode.toString())} ${formatter.format(v.data.defaultWallet.balance)}',
+                              orElse: () => '----'),
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
                         ),
-                  Space(10.h),
+                  Space(8.h),
                   Text(
                     'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
-
-                    // 'Acc No: 23456789',
                     style: AppText.body2(context, AppColors.appColor, 20.sp),
                   ),
                 ],

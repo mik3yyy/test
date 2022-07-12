@@ -86,21 +86,16 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
           centerTitle: true,
           title: Text(
             'Credit/Debit Card',
-            style: AppText.body6(
-              context,
-              AppColors.textColor,
-              16.sp,
-            ),
+            style: AppText.header2(context, Colors.black, 20.sp),
           ),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
           leading: GestureDetector(
             onTap: (() => Navigator.pop(context)),
-            child: Icon(
-              Icons.chevron_left,
-              color: AppColors.textColor,
-              size: 60.sp,
+            child: const Icon(
+              Icons.arrow_back_ios_outlined,
+              color: Colors.black,
             ),
           ),
         ),
@@ -108,10 +103,17 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                AddFundHeadingContainer(
-                  text: 'Enter an amount you want to fund',
-                  textAlign: TextAlign.left,
-                  paddingLeft: 25.sp,
+                Container(
+                  height: 40.h,
+                  width: MediaQuery.of(context).size.width,
+                  color: AppColors.appColor.withOpacity(0.1),
+                  child: Center(
+                    child: Text(
+                      'Enter an amount you want to fund',
+                      style:
+                          AppText.body2Medium(context, Colors.black54, 20.sp),
+                    ),
+                  ),
                 ),
                 Space(27.h),
                 Padding(
@@ -125,7 +127,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                         Row(
                           children: [
                             SizedBox(
-                              width: 130.w,
+                              width: 150.w,
                               child: Stack(
                                 children: [
                                   SelectCurrency(
@@ -139,10 +141,10 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                 ],
                               ),
                             ),
-                            Space(5.w),
+                            Space(30.w),
                             SizedBox(
                               // width: MediaQuery.of(context).size.width - 150.w,
-                              width: 245.w,
+                              width: 200.w,
                               child: EditForm(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -156,10 +158,13 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                             ),
                           ],
                         ),
-                        Space(30.h),
+                        Space(40.h),
                         SelectSavedCards(
                           firstDigit: firstDigit,
                           secondDigit: secondDigit,
+                        ),
+                        const Divider(
+                          color: Colors.black,
                         ),
                         Space(10.h),
                         SelectCurrency(
@@ -174,10 +179,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                     ),
                   ),
                 ),
-
                 Space(43.h),
-
-                //TODO: To implement custom keyboard
                 ExpandableTheme(
                   data: const ExpandableThemeData(
                     iconColor: Colors.blue,
@@ -600,7 +602,7 @@ class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
                 style: AppText.body2(context, Colors.black38, 20.sp),
               ),
             ],
-            const Space(10),
+            const Space(7),
             Row(
               children: [
                 if (brandImage.value == "MASTERCARD") ...[
@@ -632,10 +634,6 @@ class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
                     style: AppText.body2(context, Colors.black, 20.sp),
                   ),
                 ],
-                const Space(2),
-                const Divider(
-                  color: Colors.black,
-                ),
               ],
             ),
           ],

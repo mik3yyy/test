@@ -48,12 +48,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
 
     ref.read(deviceInfoProvider.notifier).deviceId();
-    // ref
-    //     .read(credentialProvider.notifier)
-    //     .getEmailCredential(Constants.userEmail);
-    // ref
-    //     .read(credentialProvider.notifier)
-    //     .getPasswordCredential(Constants.userPassword);
   }
 
   @override
