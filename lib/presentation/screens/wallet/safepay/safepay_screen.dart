@@ -235,7 +235,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                               enabled: false,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
-                                              labelText: 'USD',
+                                              labelText: 'From',
 
                                               // textAlign: TextAlign.start,
                                               controller: fromCurrency,
@@ -267,7 +267,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                               enabled: false,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
-                                              labelText: 'USD',
+                                              labelText: 'To',
 
                                               // textAlign: TextAlign.start,
                                               controller: toCurrency,

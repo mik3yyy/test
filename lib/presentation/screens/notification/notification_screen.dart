@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_setting_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/widget/notifcaton_tab_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
@@ -33,31 +30,35 @@ class NotificationScreen extends HookConsumerWidget {
           child: Column(
             children: [
               Space(25.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: AppColors.appColor,
+              Padding(
+                padding: const EdgeInsets.only(right: 120),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (() => Navigator.pop(context)),
+                      child: const Icon(
+                        Icons.arrow_back_ios_outlined,
+                        color: AppColors.appColor,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Notifications',
-                    style: AppText.body2(context, AppColors.appColor, 20.sp),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      pushNewScreen(
-                        context,
-                        screen: const NotificationSettingScreen(),
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                    child: Image.asset(AppImage.notificationSettingIcon),
-                  ),
-                ],
+                    Text(
+                      'Notifications',
+                      style: AppText.body2(context, AppColors.appColor, 20.sp),
+                    ),
+
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     pushNewScreen(
+                    //       context,
+                    //       screen: const NotificationSettingScreen(),
+                    //       pageTransitionAnimation: PageTransitionAnimation.fade,
+                    //     );
+                    //   },
+                    //   child: Image.asset(AppImage.notificationSettingIcon),
+                    // ),
+                  ],
+                ),
               ),
               Space(35.h),
               TextFormField(

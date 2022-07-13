@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
@@ -14,8 +11,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/g
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';
@@ -32,7 +27,6 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
-    final cards = ref.watch(genericController);
     // final profileImage = PreferenceManager.avatarUrl;
 
     return GenericWidget(
@@ -70,31 +64,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             //         radius: 60.w,
             //         child:
             //             Image.asset("images/person.png", color: Colors.white),
-            //       ),
-
-            // vm.maybeWhen(success: (data) {
-            //   return CircleAvatar(
-            //     radius: 50.0.r,
-            //     backgroundImage:
-            //         data!.data.user.profilePicture?.imageUrl.toString() == ""
-            //             ? const AssetImage("images/person.png")
-            //             : AssetImage(data.data.user.profilePicture?.imageUrl ??
-            //                 "images/person.png"),
-
-            //     // const AssetImage(
-            //     //   AppImage.image1,
-            //     // ),
-            //   );
-            // }, orElse: () {
-            //   return CircleAvatar(
-            //     radius: 50.0.r,
-            //     backgroundImage: const AssetImage("images/person.png"),
-
-            //     // const AssetImage(
-            //     //   AppImage.image1,
-            //     // ),
-            //   );
-            // }),
+            //       )
 
             Space(10.h),
             Text(

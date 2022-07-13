@@ -10,7 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/ref_code_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 

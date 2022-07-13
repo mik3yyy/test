@@ -4,21 +4,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import '../widget/wallet_view_widget.dart';
 
 class Transfer extends StatefulHookConsumerWidget {
   // final List<Wallet>? wallet;
-  const Transfer(
-      {
-      // required this.wallet,
-      Key? key})
-      : super(key: key);
+  const Transfer({
+    // required this.wallet,
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _TransferState();
@@ -40,6 +39,7 @@ class _TransferState extends ConsumerState<Transfer>
     final defaultWallet = ref.watch(getProfileProvider);
     final accountNo = ref.watch(signInProvider);
     var formatter = NumberFormat("#,##0.00");
+    final currency = PreferenceManager.defaultWallet;
 
     return GenericWidget(
         appbar: Padding(
@@ -160,7 +160,12 @@ class _TransferState extends ConsumerState<Transfer>
                       child: TabBarView(
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabController,
-                          children: const [AccounInfoTab(), MakeTransfer()]),
+                          children: [
+                            AccounInfoTab(
+                              currency: currency,
+                            ),
+                            const MakeTransfer()
+                          ]),
                     ),
                   ],
                 )

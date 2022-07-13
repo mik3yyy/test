@@ -8,7 +8,6 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/add_fund_container_widget.dart';
-import 'widget/add_fund_heading_container.dart';
 
 class AddFundsToWalletScreen extends StatelessWidget {
   final BuildContext menuScreenContext;

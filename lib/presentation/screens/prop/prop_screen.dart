@@ -19,7 +19,7 @@ class PropScreen extends StatelessWidget {
         appbar: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Column(
-            children: [],
+            children: const [],
           ),
         ),
         bgColor: AppColors.whiteColor,

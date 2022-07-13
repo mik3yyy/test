@@ -12,12 +12,9 @@ import 'package:kayndrexsphere_mobile/presentation/components/extension/format_c
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/view_all_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/to_wallet_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -435,32 +432,32 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                       ),
                     ),
                     //Transfer to another wallet
-                    Container(
-                      color: Colors.white,
-                      child: CupertinoActionSheetAction(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                          child: Text(
-                            'Transfer to another wallet',
-                            style: AppText.body5(
-                              context,
-                              AppColors.textColor,
-                              16.sp,
-                            ),
-                          ),
-                        ),
-                        isDefaultAction: true,
-                        onPressed: () {
-                          // pushNewScreen(context,
-                          //     screen: const ToWallet(),
-                          //     pageTransitionAnimation:
-                          //         PageTransitionAnimation.slideRight);
+                    // Container(
+                    //   color: Colors.white,
+                    //   child: CupertinoActionSheetAction(
+                    //     child: Padding(
+                    //       padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                    //       child: Text(
+                    //         'Transfer to another wallet',
+                    //         style: AppText.body5(
+                    //           context,
+                    //           AppColors.textColor,
+                    //           16.sp,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     isDefaultAction: true,
+                    //     onPressed: () {
+                    //       // pushNewScreen(context,
+                    //       //     screen: const ToWallet(),
+                    //       //     pageTransitionAnimation:
+                    //       //         PageTransitionAnimation.slideRight);
 
-                          // currencyController.text = dollar;
-                          // Navigator.pop(context);
-                        },
-                      ),
-                    ),
+                    //       // currencyController.text = dollar;
+                    //       // Navigator.pop(context);
+                    //     },
+                    //   ),
+                    // ),
                     //Make wallet default
                     widget.isDefault
                         ? const SizedBox.shrink()
@@ -504,7 +501,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 30.w, right: 30.w),
                           child: Opacity(
-                            opacity: widget.balance.isEmpty ? 0.5 : 0.2,
+                            opacity: widget.balance == "0.0" ? 0.2 : 0.8,
                             child: Text(
                               'Remove Wallet',
                               style: AppText.body5(
@@ -517,7 +514,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                         ),
                         isDefaultAction: true,
                         onPressed: () {
-                          if (widget.balance.isEmpty) {
+                          if (widget.balance == "0.0") {
                             return;
                           }
                           // currencyController.text = dollar;

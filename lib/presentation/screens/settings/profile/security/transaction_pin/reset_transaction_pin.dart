@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,32 +14,48 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/r
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-class ResetPinScreen extends HookConsumerWidget {
+class ResetPinScreen extends StatefulHookConsumerWidget {
   final String otpCode;
   final String emailPhone;
-  ResetPinScreen({
+  const ResetPinScreen({
     Key? key,
     required this.emailPhone,
     required this.otpCode,
   }) : super(key: key);
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ResetPinScreenState();
+}
+
+class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
   final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
 
   final fieldFocusNode = FocusNode();
+  TextEditingController confirmController = TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    confirmController.dispose();
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final vm = ref.watch(resetPinProvider);
-    final confirmController = useTextEditingController();
-    final controller = useTextEditingController();
+
     final togglePassword = ref.watch(pinToggleStateProvider.state);
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
 
     ref.listen<RequestState>(resetPinProvider, (T, value) {
       if (value is Success) {
+        context.loaderOverlay.hide();
         Navigator.pop(context);
-        ref.refresh(resetPinProvider);
+        Navigator.pop(context);
+        Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,
             message: 'Transaction Pin changed successfully');
@@ -179,7 +194,8 @@ class ResetPinScreen extends HookConsumerWidget {
                           Space(150.h),
                           CustomButton(
                             buttonWidth: double.infinity,
-                            buttonText: 'Continue',
+                            buttonText:
+                                vm is Loading ? "Setting New Pin" : 'Continue',
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
@@ -191,7 +207,7 @@ class ResetPinScreen extends HookConsumerWidget {
                                       ref
                                           .read(resetPinProvider.notifier)
                                           .resetPin(
-                                            otpCode,
+                                            widget.otpCode,
                                             controller.text,
                                             confirmController.text,
                                           );

@@ -34,7 +34,6 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
 
   @override
   Widget build(BuildContext context) {
-    final toggle = ref.watch(toggleStateProvider.state);
     final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final fistNameController = useTextEditingController();
     final currencyController = useTextEditingController();
