@@ -35,8 +35,8 @@ class ResetTransactionPin extends HookConsumerWidget {
     final vn = ref.watch(changeTransactionPinProvider);
     ref.listen<RequestState>(changeTransactionPinProvider, (T, value) {
       if (value is Success) {
+        context.loaderOverlay.hide();
         Navigator.pop(context);
-        ref.refresh(changeTransactionPinProvider);
 
         return AppSnackBar.showSuccessSnackBar(context,
             message: 'Transaction Pin changed successfully');
@@ -204,7 +204,8 @@ class ResetTransactionPin extends HookConsumerWidget {
                           ),
                           Space(150.h),
                           CustomButton(
-                              buttonText: 'Save',
+                              buttonText:
+                                  vn is Loading ? "Setting pin" : 'Save',
                               bgColor: AppColors.appColor,
                               borderColor: AppColors.appColor,
                               textColor: Colors.white,

@@ -75,10 +75,10 @@ String? validateCountry(String? value) {
 }
 
 String? validateAmount(String? value) {
-  if (value!.length < 3) {
-    return 'Withdrawal amount must be more than 100 ';
+  if (value == "10") {
+    return 'amount must be more than 10 ';
   }
-  if (value.isEmpty) {
+  if (value!.isEmpty) {
     return 'please enter an amount';
   }
   return null;

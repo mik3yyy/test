@@ -87,7 +87,6 @@ class FriendsTab extends HookConsumerWidget {
           children: [
             beneficiaryVm.when(
               success: (value) {
-                //TODO: To implement when a beneficiary is tap, the details show on the text formfield
                 return value!.data!.walletBeneficiaries!.isEmpty
                     ? const SizedBox.shrink()
                     : Container(

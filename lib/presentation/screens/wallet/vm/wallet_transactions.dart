@@ -3,9 +3,12 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/repo/wallet_repo.dart';
 
-final walletTransactionProvider = StateNotifierProvider<WalletTransactionsVM,
-    RequestState<WalletTransactions>>(
-  (ref) => WalletTransactionsVM(ref),
+final walletTransactionProvider = StateNotifierProvider.autoDispose<
+    WalletTransactionsVM, RequestState<WalletTransactions>>(
+  (ref) {
+    ref.maintainState = true;
+    return WalletTransactionsVM(ref);
+  },
 );
 
 class WalletTransactionsVM extends RequestStateNotifier<WalletTransactions> {

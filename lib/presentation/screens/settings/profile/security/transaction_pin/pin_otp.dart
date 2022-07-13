@@ -4,32 +4,42 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/resend_otp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/verify_account_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/reset_transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PinOTPScreen extends HookConsumerWidget {
+class PinOTPScreen extends StatefulHookConsumerWidget {
   final String emailAdress;
-  PinOTPScreen({Key? key, required this.emailAdress}) : super(key: key);
+  const PinOTPScreen({Key? key, required this.emailAdress}) : super(key: key);
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _PinOTPScreenState();
+}
+
+class _PinOTPScreenState extends ConsumerState<PinOTPScreen> {
   final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
-
   final formKey = GlobalKey<FormState>();
+  TextEditingController verifyController = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    verifyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final vm = ref.watch(verifyAccountProvider);
 
     final verifyController = useTextEditingController();
@@ -37,6 +47,7 @@ class PinOTPScreen extends HookConsumerWidget {
 
     ref.listen<RequestState>(resendOtpProvider, (T, value) {
       if (value is Success) {
+        context.loaderOverlay.hide();
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Please Check Your Mail or SMS for Verification Code",
@@ -107,7 +118,7 @@ class PinOTPScreen extends HookConsumerWidget {
                     ),
                     Space(5.h),
                     Text(
-                      emailAdress,
+                      widget.emailAdress,
                       style:
                           AppText.header2(context, AppColors.appColor, 20.sp),
                       textAlign: TextAlign.center,
@@ -162,7 +173,7 @@ class PinOTPScreen extends HookConsumerWidget {
                           onTap: () {
                             ref
                                 .read(resendOtpProvider.notifier)
-                                .resendOtp(emailAdress);
+                                .resendOtp(widget.emailAdress);
                           },
                           child: Text(
                             ' Resend Code',
@@ -183,17 +194,23 @@ class PinOTPScreen extends HookConsumerWidget {
                         onPressed: vm is Loading
                             ? null
                             : () async {
-                                final pref =
-                                    await SharedPreferences.getInstance();
-                                final email = pref.getString(Constants.email);
-
                                 if (formKey.currentState!.validate()) {
                                   // to be removed
-
-                                  context.navigate(ResetPinScreen(
-                                    otpCode: verifyController.text,
-                                    emailPhone: emailAdress,
-                                  ));
+                                  pushNewScreen(
+                                    context,
+                                    screen: ResetPinScreen(
+                                      otpCode: verifyController.text,
+                                      emailPhone: widget.emailAdress,
+                                    ),
+                                    withNavBar:
+                                        true, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.fade,
+                                  );
+                                  // context.navigate(ResetPinScreen(
+                                  //   otpCode: verifyController.text,
+                                  //   emailPhone: emailAdress,
+                                  // ));
                                 }
                               },
                       ),

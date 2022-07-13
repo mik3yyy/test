@@ -1,6 +1,8 @@
 // Author: Bilal Shahid
 // For queries, contact me at bilalscheema@gmail.com
 
+// ignore_for_file: annotate_overrides, overridden_fields
+
 part of persistent_bottom_nav_bar;
 
 ///A highly customizable persistent navigation bar for flutter.

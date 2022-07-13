@@ -9,8 +9,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/pin_otp.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/forgot_pin_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -28,9 +28,18 @@ class ForgotTransactionPin extends HookConsumerWidget {
     final controller = useTextEditingController();
     ref.listen<RequestState>(forgotPinProvider, (T, value) {
       if (value is Success) {
-        context.navigate(PinOTPScreen(
-          emailAdress: controller.text,
-        ));
+        context.loaderOverlay.hide();
+        pushNewScreen(
+          context,
+          screen: PinOTPScreen(
+            emailAdress: controller.text,
+          ),
+          withNavBar: true, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.fade,
+        );
+        // context.navigate(PinOTPScreen(
+        //   emailAdress: controller.text,
+        // ));
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Please Check Your Mail or SMS for Verification Code",

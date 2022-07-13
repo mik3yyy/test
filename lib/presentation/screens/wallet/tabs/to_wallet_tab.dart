@@ -7,7 +7,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/dropdown/custom_dropdown.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
@@ -35,28 +34,6 @@ class _ToWalletState extends ConsumerState<ToWallet> {
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
   final formKey = GlobalKey<FormState>();
 
-  // final List<Map<String, dynamic>> _items = [
-  //   //TODO: How to loop through and remove default wallet code because you can tranfer to default wallet
-  //   {
-  //     'value': 'EUR',
-  //     'label': '€ Euro',
-  //     // 'icon': Icon(Icons.stop),
-  //   },
-  //   {
-  //     'value': 'GBP',
-  //     'label': '£ Pounds',
-  //     // 'icon': Icon(Icons.fiber_manual_record),
-  //     // 'textStyle': TextStyle(color: Colors.red),
-  //   },
-  //   {
-  //     'value': 'NGN',
-  //     'label': 'NGN Naira',
-  //     // 'enable': false,
-  //     // 'icon': Icon(Icons.grade),
-  //   },
-
-  //   // },
-  // ];
   String? selectedItem = 'Euro';
   @override
   Widget build(BuildContext context) {
@@ -145,12 +122,6 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                   return null;
                 },
               ),
-              // Text(
-              //   'Select wallet account currency',
-              //   style: AppText.body2(context, AppColors.appColor, 19.sp),
-              // ),
-              Space(5.h),
-
               Space(35.h),
               Container(
                 height: 80.h,

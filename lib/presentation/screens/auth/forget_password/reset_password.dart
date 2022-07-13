@@ -11,7 +11,6 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/reset_password_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/alert_dialog.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -46,7 +45,6 @@ class ResetPasswordScreen extends HookConsumerWidget {
     ref.listen<RequestState>(resetPasswordProvider, (T, value) async {
       final pref = await SharedPreferences.getInstance();
       final email = pref.getString(Constants.email);
-      print(email.toString());
       if (value is Success) {
         context.navigate(SigninScreen(
           email: email.toString(),

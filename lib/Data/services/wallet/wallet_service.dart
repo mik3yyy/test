@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/currency_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_account_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/user_saved_wallet_beneficiary_res.dart';
@@ -194,24 +195,6 @@ class WalletService {
     }
   }
 
-  // //Transafer to other wallet
-  // Future<bool> transferToAnotherUser(
-  // String accountNo,
-  // String transferCurrency,
-  // num transferAmount,
-  // String transactionPin,
-  // ) async {
-  //   const url = '/wallets/transfer-funds/to-another-user';
-  //   try {
-  //     final response = await _read(dioProvider).post(url, data: {
-  // "account_no": accountNo,
-  // "transfer_currency": transferCurrency,
-  // "transfer_amount": transferAmount,
-  // "transaction_pin": transactionPin
-  //     });
-
-  //     final result = response.data = true;
-
   Future<WalletTransactions> getTransactions() async {
     const url = '/wallets/transactions';
     try {
@@ -219,6 +202,25 @@ class WalletService {
         url,
       );
       final result = WalletTransactions.fromJson(response.data);
+
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<CurrencyTransaction> currencyTransactions(String currency) async {
+    final url = '/wallets/transactions/$currency';
+    try {
+      final response = await _read(dioProvider).get(
+        url,
+      );
+      final result = CurrencyTransaction.fromJson(response.data);
 
       return result;
     } on DioError catch (e) {

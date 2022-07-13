@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
@@ -14,6 +15,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
 import '../../../../components/reusable_widget.dart/custom_button.dart';
+import 'auth_security/auth_secure.dart';
 
 class ChangePassword extends HookConsumerWidget {
   ChangePassword({Key? key}) : super(key: key);
@@ -35,6 +37,7 @@ class ChangePassword extends HookConsumerWidget {
     final vn = ref.watch(changePasswordProvider);
     ref.listen<RequestState>(changePasswordProvider, (T, value) {
       if (value is Success) {
+        context.loaderOverlay.hide();
         Navigator.pop(context);
         ref.refresh(changePasswordProvider);
 
@@ -104,6 +107,7 @@ class ChangePassword extends HookConsumerWidget {
                         children: [
                           //old password
                           TextFormInput(
+                            enabled: vn is Loading ? false : true,
                             labelText: 'Old Password',
                             controller: oldPasswordController,
                             capitalization: TextCapitalization.none,
@@ -136,6 +140,7 @@ class ChangePassword extends HookConsumerWidget {
 
                           // new password
                           TextFormInput(
+                            enabled: vn is Loading ? false : true,
                             labelText: 'New Password',
                             controller: controller,
                             capitalization: TextCapitalization.none,
@@ -168,6 +173,7 @@ class ChangePassword extends HookConsumerWidget {
 
                           // confirm password
                           TextFormInput(
+                            enabled: vn is Loading ? false : true,
                             labelText: 'Re-enter new password',
                             controller: confirmController,
                             capitalization: TextCapitalization.none,
@@ -201,7 +207,8 @@ class ChangePassword extends HookConsumerWidget {
                           ),
                           Space(150.h),
                           CustomButton(
-                              buttonText: 'Save',
+                              buttonText:
+                                  vn is Loading ? "Please wait ..." : 'Save',
                               bgColor: AppColors.appColor,
                               borderColor: AppColors.appColor,
                               textColor: Colors.white,
@@ -218,6 +225,11 @@ class ChangePassword extends HookConsumerWidget {
                                           confirmPassword:
                                               confirmController.text,
                                         );
+                                        ref
+                                            .read(credentialProvider.notifier)
+                                            .storeCredential(
+                                                Constants.userPassword,
+                                                controller.text);
 
                                         ref
                                             .read(

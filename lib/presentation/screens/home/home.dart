@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +9,6 @@ import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_defaul
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/extension/format_currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
@@ -20,7 +17,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/availa
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -72,55 +68,13 @@ class _HomePageState extends ConsumerState<HomePage> {
     // ref.read(genericController.notifier).withdrawalNotificationRequest();
   }
 
-//Method to convert currency name to code and use as parament for setting wallet as default
-  // setCurrencyCode(String currency) {
-  //   if (currency == "Pounds") {
-  //     return 'GBP';
-  //   } else if (currency == "Naira") {
-  //     return 'NGN';
-  //   } else if (currency == "Euro") {
-  //     return 'EUR';
-  //   } else {
-  //     return 'USD';
-  //   }
-  // }
-
-  // currencySymbol(String currency) {
-  //   if (currency == "NGN") {
-  //     return 'N';
-  //   } else if (currency == "USD") {
-  //     return '\$';
-  //   } else if (currency == "GBP") {
-  //     return '£';
-  //   } else if (currency == "EUR") {
-  //     return '€';
-  //   } else {
-  //     return 'KDRX';
-  //   }
-  // }
-
-  currencyName(String currency) {
-    if (currency == "NGN") {
-      return 'Naira';
-    } else if (currency == "USD") {
-      return 'Dollar';
-    } else if (currency == "GBP") {
-      return 'Pounds';
-    } else if (currency == "EUR") {
-      return 'Euro';
-    } else {
-      return 'KDRX';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-    // final setWalletVm = ref.watch(setWalletAsDefaultProvider);
     final defaultWallet = ref.watch(getProfileProvider);
-    final wallet = ref.watch(getAccountDetailsProvider);
+    // final wallet = ref.watch(getAccountDetailsProvider);
     var formatter = NumberFormat("#,##0.00");
     final currency = useTextEditingController();
     final newUser = PreferenceManager.isFirstLaunch;

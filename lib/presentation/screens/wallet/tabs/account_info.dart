@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'dart:math' as math;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/currency_transactions.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
@@ -11,17 +15,28 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-class AccounInfoTab extends HookConsumerWidget {
-  const AccounInfoTab({Key? key}) : super(key: key);
+class AccounInfoTab extends StatefulHookConsumerWidget {
+  final String currency;
+  const AccounInfoTab({Key? key, required this.currency}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _AccounInfoTabState();
+}
+
+class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
     final toExchangeCurrency = useTextEditingController();
+    final transaction = ref.watch(currencyTransactionProvider(widget.currency));
     return Padding(
       padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 15.h),
       child: SizedBox(
@@ -158,7 +173,7 @@ class AccounInfoTab extends HookConsumerWidget {
                                               enabled: false,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
-                                              labelText: 'USD',
+                                              labelText: 'From',
 
                                               // textAlign: TextAlign.start,
                                               controller: fromCurrency,
@@ -190,7 +205,7 @@ class AccounInfoTab extends HookConsumerWidget {
                                               enabled: false,
                                               autovalidateMode: AutovalidateMode
                                                   .onUserInteraction,
-                                              labelText: 'USD',
+                                              labelText: 'To',
 
                                               // textAlign: TextAlign.start,
                                               controller: toCurrency,
@@ -256,239 +271,152 @@ class AccounInfoTab extends HookConsumerWidget {
                   ],
                 ),
               ),
-
-              //* Successful card
-
-              Container(
-                margin: EdgeInsets.only(top: 15.h, bottom: 15.h),
-                height: 220.h,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      begin: Alignment.centerRight,
-                      end: Alignment.centerLeft,
-                      stops: [0.10, 0.1],
-                      colors: [Colors.greenAccent, Colors.white]),
-                  border: Border.all(width: 1, color: const Color(0xffDDDDDD)),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 23.w, right: 9.w),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 260.w,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Amount Transferred',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '\$ 20000',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Recipient Name',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'Folashade Kemi',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Acc.No',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '3422358973',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Date',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '12 April 2022',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            )
-                          ],
+              const Space(30),
+              transaction.when(
+                  error: (error, stackTrace) {
+                    return Text(error.toString());
+                  },
+                  loading: () => const Center(
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 5,
                         ),
                       ),
-                      const Spacer(),
-                      RotatedBox(
-                        quarterTurns: -1,
-                        child: Text(
-                          'Successful',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 17.sp),
+                  data: (data) {
+                    if (data.data.transactions.isEmpty) {
+                      return const Center(
+                        child: Text("You have no transactions"),
+                      );
+                    } else {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          return ref.refresh(
+                              currencyTransactionProvider(widget.currency));
+                        },
+                        child: SizedBox(
+                          height: 400.h,
+                          child: ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
+                            itemCount: data.data.transactions.length,
+                            // itemCount: data.data!.transactions.length,
+                            itemBuilder: (context, index) {
+                              final transaction = data.data.transactions[index];
+                              return CurrencyTransactionBuild(
+                                transactions: transaction,
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(height: 20.h);
+                            },
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-
-              // Space(10.h),
-
-              //* Failed card
-
-              Container(
-                margin: EdgeInsets.only(top: 15.h, bottom: 15.h),
-                height: 220.h,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                      begin: Alignment.centerRight,
-                      end: Alignment.centerLeft,
-                      stops: [0.10, 0.1],
-                      colors: [Colors.red, Colors.white]),
-                  border: Border.all(width: 1, color: const Color(0xffDDDDDD)),
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 23.w, right: 9.w),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 260.w,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Amount Transferred',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '\$ 20000',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Recipient Name',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'Folashade Kemi',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Acc.No',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '3422358973',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            ),
-                            Space(
-                              20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Date',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  '12 April 2022',
-                                  style: AppText.body2(
-                                      context, AppColors.appColor, 17.sp),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      RotatedBox(
-                        quarterTurns: -1,
-                        child: Text(
-                          'Failed',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 17.sp),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                      );
+                    }
+                  })
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class CurrencyTransactionBuild extends StatelessWidget {
+  final Transactions transactions;
+  const CurrencyTransactionBuild({Key? key, required this.transactions})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime date = transactions.createdAt!;
+    String dateCreated = DateFormat(' d, MMM yyyy').format(date);
+    var formatter = NumberFormat("#,##0.00");
+    final currency = PreferenceManager.defaultWallet;
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: const Offset(0, 2), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 60.h,
+            width: 60.w,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Colors.orange.withOpacity(0.3)),
+            child: Center(
+              child: SvgPicture.asset(
+                AppImage.transferIcon,
+                height: 20.h,
+                width: 20.w,
+              ),
+            ),
+          ),
+          Space(10.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (transactions.direction == Direction.debit) ...[
+                  Row(
+                    children: [
+                      Text(
+                        'Debit',
+                        style: AppText.body2(context, Colors.red, 18.sp),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "$currency ${formatter.format(transactions.amount)}",
+                        style: AppText.body2(context, Colors.red, 18.sp),
+                      ),
+                    ],
+                  ),
+                ] else ...[
+                  Row(
+                    children: [
+                      Text(
+                        "Credit",
+                        style: AppText.body2(context, Colors.green, 18.sp),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "${transactions.currencyCode} ${formatter.format(transactions.amount)}",
+                        style: AppText.body2(context, Colors.green, 18.sp),
+                      ),
+                    ],
+                  ),
+                ],
+                Space(10.h),
+                Row(
+                  children: [
+                    Text(
+                      transactions.user.firstName.toString(),
+                      style: AppText.body2(context, Colors.black, 18.sp),
+                    ),
+                    const Spacer(),
+                    Text(
+                      dateCreated,
+                      style: AppText.body2(context, Colors.black, 18.sp),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

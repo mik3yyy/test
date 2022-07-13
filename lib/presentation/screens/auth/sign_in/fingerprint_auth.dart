@@ -98,7 +98,6 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
       );
 
       if (isAuthenticated) {
-        print("PRINTED $email and $password");
         var signinReq = SigninReq(
             emailPhone: email!,
             password: password!,

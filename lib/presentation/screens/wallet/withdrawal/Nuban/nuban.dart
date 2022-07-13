@@ -20,7 +20,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nub
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_country.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/widget/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -54,7 +53,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     final descriptionController = useTextEditingController();
     final bankAccountController = useTextEditingController(
         text: savedBeneficiary.passBeneficiary.accountNumber);
-    final currencyController = useTextEditingController();
     final bankController = useTextEditingController();
     final bankCodeController = useTextEditingController();
     final amountController = useTextEditingController();

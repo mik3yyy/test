@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
-import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/device_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 

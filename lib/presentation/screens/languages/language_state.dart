@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
 
 class LanguageNotifier extends StateNotifier<Locale> {
   LanguageNotifier() : super(const Locale("en"));

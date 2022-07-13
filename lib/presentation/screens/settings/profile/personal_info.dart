@@ -57,7 +57,15 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                 InkWell(
                   onTap: () {
                     pushNewScreen(context,
-                        screen: const EditInfo(),
+                        screen: EditInfo(
+                          dob: user.data.user.dateOfBirth.toString(),
+                          country: user.data.user.countryName,
+                          email: user.data.user.email,
+                          firstName: user.data.user.firstName,
+                          gender: user.data.user.gender.toString(),
+                          lastName: user.data.user.lastName,
+                          phoneNo: user.data.user.phoneNumber.toString(),
+                        ),
                         pageTransitionAnimation: PageTransitionAnimation.fade);
                   },
                   child: Text(

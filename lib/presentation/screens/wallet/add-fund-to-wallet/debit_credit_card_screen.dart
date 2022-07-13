@@ -22,7 +22,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widg
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -220,7 +219,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                 // textAlign: TextAlign.start,
                                 controller: amountController,
                                 obscureText: false,
-                                validator: (value) => validateCurrency(value),
+                                validator: (value) => validateAmount(value),
                               ),
                             ),
                           ],
@@ -383,7 +382,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                 autovalidateMode:
                                                     AutovalidateMode
                                                         .onUserInteraction,
-                                                labelText: 'USD',
+                                                labelText: 'From',
 
                                                 // textAlign: TextAlign.start,
                                                 controller: fromCurrency,
@@ -416,7 +415,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                 autovalidateMode:
                                                     AutovalidateMode
                                                         .onUserInteraction,
-                                                labelText: 'USD',
+                                                labelText: 'To',
 
                                                 // textAlign: TextAlign.start,
                                                 controller: toCurrency,

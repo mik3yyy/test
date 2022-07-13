@@ -5,6 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
@@ -13,14 +15,30 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widg
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/date_time.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class EditInfo extends StatefulHookConsumerWidget {
-  const EditInfo({Key? key}) : super(key: key);
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String country;
+  final String phoneNo;
+  final String gender;
+  final String dob;
+
+  const EditInfo({
+    Key? key,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.country,
+    required this.phoneNo,
+    required this.dob,
+    required this.gender,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _EditInfoState();
@@ -34,6 +52,14 @@ class _EditInfoState extends ConsumerState<EditInfo> {
     number = number;
   }
 
+  String _handlePhoneNumber() {
+    if (widget.phoneNo[3].length == 3) {
+      return widget.phoneNo.substring(3);
+    } else {
+      return widget.phoneNo.substring(3);
+    }
+  }
+
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
   final formKey = GlobalKey<FormState>();
   final fieldFocusNode = FocusNode();
@@ -43,16 +69,17 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
-    final fistNameController = useTextEditingController();
-    final lastNameCountroller = useTextEditingController();
-    final emailCountroller = useTextEditingController();
-    final phoneNoCountroller = useTextEditingController();
-    var dobCountroller = useTextEditingController();
-    final countryCountroller = useTextEditingController();
+    final fistNameController = useTextEditingController(text: widget.firstName);
+    final lastNameCountroller = useTextEditingController(text: widget.lastName);
+    final emailCountroller = useTextEditingController(text: widget.email);
+    final phoneNoCountroller =
+        useTextEditingController(text: _handlePhoneNumber());
+    var dobCountroller = useTextEditingController(text: widget.dob);
+    final countryCountroller = useTextEditingController(text: widget.country);
     final stateCountroller = useTextEditingController();
     final cityCountroller = useTextEditingController();
     final addressCountroller = useTextEditingController();
-    final genderCountroller = useTextEditingController();
+    final genderCountroller = useTextEditingController(text: widget.gender);
 
     ref.listen<RequestState>(updateProfileProvider, (T, value) {
       if (value is Success) {
@@ -105,7 +132,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             email: emailCountroller.text,
                             address: addressCountroller.text,
                             gender: genderCountroller.text,
-                            phoneNumber: phoneNoCountroller.text,
+                            phoneNumber: code + phoneNoCountroller.text,
                             dateOfBirth: dobCountroller.text,
                             city: cityCountroller.text,
                             country: countryCountroller.text,
@@ -201,7 +228,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                                           Space(15.w),
                                           Radio<String>(
                                             value: sex,
-                                            groupValue: _radioSelected,
+                                            groupValue: genderCountroller.text,
                                             onChanged: (value) {
                                               setState(() {
                                                 _radioSelected =
@@ -287,7 +314,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                                         .first;
                               },
                               validator: (date) {
-                                if (date == null) return 'Date is required';
+                                // if (date == null) return 'Date is required';
                                 return null;
                               },
                             );

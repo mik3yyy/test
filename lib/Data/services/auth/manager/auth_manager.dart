@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
@@ -133,4 +134,10 @@ class AuthManager extends IAuthManager {
   @override
   Future<SigninOutRes> signOut(String deviceId) async =>
       await _userService.signOut(deviceId);
+
+  @override
+  Future<ConvertCurrencyRes> convertCurrency(String from, String to) async {
+    final currency = await _userService.convertCurrency(from, to);
+    return currency;
+  }
 }

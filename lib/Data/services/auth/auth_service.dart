@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
@@ -137,6 +138,18 @@ class UserService {
     try {
       final response = await _read(dioProvider).get(url);
       final stringList = CurrencyRes.fromJson(response.data);
+      return stringList;
+    } on DioError catch (e) {
+      throw e.error;
+    }
+  }
+
+  //  convert currency
+  Future<ConvertCurrencyRes> convertCurrency(String from, String to) async {
+    final url = '/currencies/convert/$from/$to';
+    try {
+      final response = await _read(dioProvider).get(url);
+      final stringList = ConvertCurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
       throw e.error;

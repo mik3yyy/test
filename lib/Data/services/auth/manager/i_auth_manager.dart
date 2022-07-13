@@ -1,6 +1,7 @@
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
@@ -33,4 +34,5 @@ abstract class IAuthManager {
   Future<bool> referralCode(String refCode);
   Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq);
   Future<SigninOutRes> signOut(String deviceId);
+  Future<ConvertCurrencyRes> convertCurrency(String from, String to);
 }
