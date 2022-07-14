@@ -60,8 +60,6 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
         context.loaderOverlay.hide();
         ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
         Navigator.pop(context);
-        // print(value.value!.data!.url.toString());
-
       }
 
       if (value is Error) {

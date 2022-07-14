@@ -12,6 +12,10 @@ class PreferenceManager {
       prefs.setBool("isFirstLaunch", isFirstLaunch);
   static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? false;
 
+  static set isloggedIn(bool isloggedIn) =>
+      prefs.setBool("isloggedIn", isloggedIn);
+  static bool get isloggedIn => prefs.getBool("isloggedIn") ?? false;
+
   static set revealBalance(bool revealBalance) =>
       prefs.setBool("revealBalance", revealBalance);
   static bool get revealBalance => prefs.getBool("revealBalance") ?? false;
@@ -62,10 +66,12 @@ class PreferenceManager {
     PreferenceManager.authToken = "";
     PreferenceManager.refreshToken = "";
     PreferenceManager.depositRef = "";
+    PreferenceManager.isloggedIn = false;
   }
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
+    PreferenceManager.isloggedIn = false;
     // prefs.clear();
   }
 }

@@ -27,7 +27,7 @@ class ForgotTransactionPin extends HookConsumerWidget {
     final vm = ref.watch(forgotPinProvider);
     final controller = useTextEditingController();
     ref.listen<RequestState>(forgotPinProvider, (T, value) {
-      if (value is Success) {
+      if (value is Success<bool>) {
         context.loaderOverlay.hide();
         pushNewScreen(
           context,
@@ -147,7 +147,7 @@ class ForgotTransactionPin extends HookConsumerWidget {
                                           .read(forgotPinProvider.notifier)
                                           .forgotPin(controller.text);
 
-                                      context.loaderOverlay.show();
+                                      // context.loaderOverlay.show();
                                     }
                                   },
                           ),

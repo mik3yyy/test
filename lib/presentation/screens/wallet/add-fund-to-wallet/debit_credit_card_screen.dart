@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
@@ -22,6 +23,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widg
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/convert_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -40,57 +42,35 @@ class DebitCreditCardScreen extends StatefulHookConsumerWidget {
 class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  // String dollar = "USD";
-  // String pound = "GBP";
-  // String euro = "EUR";
-  // String naira = "NGN";
-  // String kayndrex = "KAYNDREX";
-
-  // TextEditingController depositController = TextEditingController();
-  // TextEditingController currencyController = TextEditingController();
-  // TextEditingController currency = TextEditingController();
-
-  // TextEditingController amountController = TextEditingController();
-  // TextEditingController firstDigit = TextEditingController();
-  // TextEditingController secondDigit = TextEditingController();
-
-  // void handleValidation() {
-  //   if(depositController.text.isEmpty){
-  //        AppSnackBar.showInfoSnackBar(context, message: "Please select deposit currency");
-
-  //   }
-  //   if (currencyController.text.isEmpty) {
-  //     AppSnackBar.showInfoSnackBar(context,
-  //         message: "Please choose currency");
-  //   }
-  //   if (currency.text.isEmpty) {
-  //     AppSnackBar.showInfoSnackBar(context,
-  //         message: "Please choose deposit currency");
-  //   }
-  //   if (amountController.text.isEmpty) {
-  //     AppSnackBar.showInfoSnackBar(context,
-  //         message: "Please enter amount");
-  //   }
-  //   if (firstDigit.text.isEmpty) {
-  //     AppSnackBar.showInfoSnackBar(context,
-  //         message: "Please choose a card to proceed");
-  //   }
-
-  // }
-
   @override
   Widget build(BuildContext context) {
     final fundWallet = ref.watch(fundWalletProvider);
     final depositController = useTextEditingController();
     final currencyController = useTextEditingController();
-    final fromCurrency = useTextEditingController();
-    final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
     final toExchangeCurrency = useTextEditingController();
 
     final amountController = useTextEditingController();
     final firstDigit = useTextEditingController();
     final secondDigit = useTextEditingController();
+
+    final fromCurrency = useTextEditingController();
+    final toCurrency = useTextEditingController();
+
+    final rate = useState("0.0");
+    // final toExchangeCurrency = useTextEditingController(text: rate.value);
+    final from = useState("0.0");
+    final convert = ref.watch(conversionProvider);
+
+    ref.listen<RequestState>(conversionProvider, (previous, value) {
+      if (value is Success<ConvertCurrencyRes>) {
+        rate.value = value.value!.data.rates.rate.toString();
+      }
+
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
+      }
+    });
 
     ref.listen<RequestState>(fundWalletProvider, (prev, value) {
       if (value is Success<FundWalletRes>) {
@@ -296,8 +276,8 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                 header: Container(
                                   padding: EdgeInsets.only(
                                       left: 19.w,
-                                      top: 14.w,
-                                      bottom: 14.w,
+                                      top: 10.w,
+                                      bottom: 10.w,
                                       right: 19.w),
                                   decoration: const BoxDecoration(
                                     color: AppColors.appColor,
@@ -337,32 +317,34 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Space(10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'From',
-                                            style: AppText.body6(
-                                              context,
-                                              AppColors.textColor,
-                                              16.sp,
-                                            ),
-                                          ),
-                                          Text(
-                                            'To',
-                                            style: AppText.body6(
-                                              context,
-                                              AppColors.textColor,
-                                              16.sp,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      // Row(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     Text(
+                                      //       'From',
+                                      //       style: AppText.body6(
+                                      //         context,
+                                      //         AppColors.textColor,
+                                      //         16.sp,
+                                      //       ),
+                                      //     ),
+                                      //     Text(
+                                      //       'To',
+                                      //       style: AppText.body6(
+                                      //         context,
+                                      //         AppColors.textColor,
+                                      //         16.sp,
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                       Space(10.h),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           InkWell(
                                             onTap: () {
@@ -387,6 +369,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                 // textAlign: TextAlign.start,
                                                 controller: fromCurrency,
                                                 obscureText: false,
+
                                                 validator: (value) =>
                                                     validateCurrency(value),
                                                 suffixIcon: const Icon(
@@ -430,44 +413,109 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                               ),
                                             ),
                                           ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Space(10),
+                                              Text("Exchange Rate",
+                                                  style: AppText.body2(context,
+                                                      Colors.black38, 15.sp)),
+                                              const Space(10),
+                                              Text(rate.value,
+                                                  style: AppText.body2(context,
+                                                      Colors.black, 20.sp)),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       Space(14.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: 150.w,
-                                            child: EditForm(
-                                              enabled: true,
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              labelText: 'Enter amount',
+                                      CustomButton(
+                                        buttonText: convert is Loading
+                                            ? 'Processing'
+                                            : 'Get Exchange Rate',
+                                        bgColor: AppColors.appColor,
+                                        textColor: AppColors.whiteColor,
+                                        borderColor:
+                                            AppColors.appColor.withOpacity(0.3),
+                                        buttonWidth:
+                                            MediaQuery.of(context).size.width,
+                                        onPressed: convert is Loading
+                                            ? null
+                                            : () {
+                                                if (fromCurrency.text.isEmpty &&
+                                                    toCurrency.text.isEmpty) {
+                                                  return;
+                                                } else {
+                                                  ref
+                                                      .read(conversionProvider
+                                                          .notifier)
+                                                      .conversion(
+                                                          fromCurrency.text,
+                                                          toCurrency.text);
+                                                }
+                                              },
+                                      ),
+                                      Space(14.h),
+                                      InkWell(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            SizedBox(
+                                              width: 150.w,
+                                              child: EditForm(
+                                                enabled: true,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
+                                                labelText: convert is Loading
+                                                    ? "---"
+                                                    : 'Enter amount',
 
-                                              // textAlign: TextAlign.start,
-                                              controller: fromExchangeCurrency,
-                                              obscureText: false,
-                                              validator: (value) =>
-                                                  validateCurrency(value),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 150.w,
-                                            child: EditForm(
-                                              enabled: true,
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              labelText: 'Enter amount',
+                                                // textAlign: TextAlign.start,
+                                                controller:
+                                                    fromExchangeCurrency,
+                                                obscureText: false,
+                                                validator: (value) => null,
 
-                                              // textAlign: TextAlign.start,
-                                              controller: toExchangeCurrency,
-                                              obscureText: false,
-                                              validator: (value) =>
-                                                  validateCurrency(value),
+                                                onChanged: (value) {
+                                                  final res =
+                                                      (num.tryParse(value) ??
+                                                              0) *
+                                                          (num.tryParse(
+                                                                  rate.value) ??
+                                                              0);
+
+                                                  from.value = res.toString();
+
+                                                  print(res);
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            // Text(
+                                            //   // salesPrice.toString(),
+                                            //   ((num.tryParse(from.value) ?? 0) *
+                                            //           (num.tryParse(rate.value) ??
+                                            //               0))
+                                            //       .toString(),
+                                            //   style: TextStyle(
+                                            //     color: const Color(0xFF2C2C2C),
+                                            //     fontSize: 14.sp,
+                                            //     fontWeight: FontWeight.w700,
+                                            //   ),
+                                            // ),
+                                            Text(
+                                              from.value,
+                                              style: AppText.body2(
+                                                  context, Colors.black, 20.sp),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       Space(18.h),
                                     ],
