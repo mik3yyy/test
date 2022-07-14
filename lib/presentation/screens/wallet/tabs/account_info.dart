@@ -6,15 +6,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/currency_transactions.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/convert_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -29,14 +34,52 @@ class AccounInfoTab extends StatefulHookConsumerWidget {
 
 class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     with AutomaticKeepAliveClientMixin {
+  List<Transactions> bank = [];
+  List<Transactions> filterableBank = [];
+
+  Future<List<Transactions>> filterClients(
+      {required List<Transactions> banks, required String text}) {
+    if (text.isEmpty) {
+      banks = bank;
+      return Future.value(banks);
+    }
+    List<Transactions> result = banks
+        .where((country) =>
+            country.user.accountNumber!.toLowerCase().contains(text))
+        .toList();
+    return Future.value(result);
+  }
+
+  void _filterClients(String text) async {
+    filterableBank = await filterClients(banks: bank, text: text);
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
-    final toExchangeCurrency = useTextEditingController();
+
     final transaction = ref.watch(currencyTransactionProvider(widget.currency));
+    final rate = useState("0.0");
+    // final toExchangeCurrency = useTextEditingController(text: rate.value);
+    final from = useState("0.0");
+    final convert = ref.watch(conversionProvider);
+    final listState = useState("");
+
+    ref.listen<RequestState>(conversionProvider, (previous, value) {
+      if (value is Success<ConvertCurrencyRes>) {
+        rate.value = value.value!.data.rates.rate.toString();
+      }
+
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
+      }
+    });
+
     return Padding(
       padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 15.h),
       child: SizedBox(
@@ -65,6 +108,10 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                           borderRadius: BorderRadius.circular(25.7),
                         ),
                         fillColor: Colors.transparent),
+                    onChanged: (value) {
+                      _filterClients(value);
+                      listState.value = value;
+                    },
                   )),
               Space(10.h),
               ExpandableTheme(
@@ -129,32 +176,34 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Space(10.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'From',
-                                          style: AppText.body6(
-                                            context,
-                                            AppColors.textColor,
-                                            16.sp,
-                                          ),
-                                        ),
-                                        Text(
-                                          'To',
-                                          style: AppText.body6(
-                                            context,
-                                            AppColors.textColor,
-                                            16.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     Text(
+                                    //       'From',
+                                    //       style: AppText.body6(
+                                    //         context,
+                                    //         AppColors.textColor,
+                                    //         16.sp,
+                                    //       ),
+                                    //     ),
+                                    //     Text(
+                                    //       'To',
+                                    //       style: AppText.body6(
+                                    //         context,
+                                    //         AppColors.textColor,
+                                    //         16.sp,
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                     Space(10.h),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         InkWell(
                                           onTap: () {
@@ -178,6 +227,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                               // textAlign: TextAlign.start,
                                               controller: fromCurrency,
                                               obscureText: false,
+
                                               validator: (value) =>
                                                   validateCurrency(value),
                                               suffixIcon: const Icon(
@@ -220,44 +270,119 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                             ),
                                           ),
                                         ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Space(10),
+                                            Text("Exchange Rate",
+                                                style: AppText.body2(context,
+                                                    Colors.black38, 15.sp)),
+                                            const Space(10),
+                                            convert is Loading
+                                                ? const Center(
+                                                    child: SizedBox(
+                                                      height: 18,
+                                                      width: 18,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 4,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Text(rate.value,
+                                                    style: AppText.body2(
+                                                        context,
+                                                        Colors.black,
+                                                        20.sp)),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                     Space(14.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: 150.w,
-                                          child: EditForm(
-                                            enabled: true,
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            labelText: 'Enter amount',
+                                    CustomButton(
+                                      buttonText: convert is Loading
+                                          ? 'Processing'
+                                          : 'Get Exchange Rate',
+                                      bgColor: AppColors.appColor,
+                                      textColor: AppColors.whiteColor,
+                                      borderColor:
+                                          AppColors.appColor.withOpacity(0.3),
+                                      buttonWidth:
+                                          MediaQuery.of(context).size.width,
+                                      onPressed: convert is Loading
+                                          ? null
+                                          : () {
+                                              if (fromCurrency.text.isEmpty &&
+                                                  toCurrency.text.isEmpty) {
+                                                return;
+                                              } else {
+                                                ref
+                                                    .read(conversionProvider
+                                                        .notifier)
+                                                    .conversion(
+                                                        fromCurrency.text,
+                                                        toCurrency.text);
+                                              }
+                                            },
+                                    ),
+                                    Space(14.h),
+                                    InkWell(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(
+                                            width: 150.w,
+                                            child: EditForm(
+                                              enabled: true,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              labelText: convert is Loading
+                                                  ? "---"
+                                                  : 'Enter amount',
 
-                                            // textAlign: TextAlign.start,
-                                            controller: fromExchangeCurrency,
-                                            obscureText: false,
-                                            validator: (value) =>
-                                                validateCurrency(value),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 150.w,
-                                          child: EditForm(
-                                            enabled: true,
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            labelText: 'Enter amount',
+                                              // textAlign: TextAlign.start,
+                                              controller: fromExchangeCurrency,
+                                              obscureText: false,
+                                              validator: (value) => null,
 
-                                            // textAlign: TextAlign.start,
-                                            controller: toExchangeCurrency,
-                                            obscureText: false,
-                                            validator: (value) =>
-                                                validateCurrency(value),
+                                              onChanged: (value) {
+                                                final res =
+                                                    (num.tryParse(value) ?? 0) *
+                                                        (num.tryParse(
+                                                                rate.value) ??
+                                                            0);
+
+                                                from.value = res.toString();
+
+                                                print(res);
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          // Text(
+                                          //   // salesPrice.toString(),
+                                          //   ((num.tryParse(from.value) ?? 0) *
+                                          //           (num.tryParse(rate.value) ??
+                                          //               0))
+                                          //       .toString(),
+                                          //   style: TextStyle(
+                                          //     color: const Color(0xFF2C2C2C),
+                                          //     fontSize: 14.sp,
+                                          //     fontWeight: FontWeight.w700,
+                                          //   ),
+                                          // ),
+                                          Text(
+                                            from.value,
+                                            style: AppText.body2(
+                                                context, Colors.black, 20.sp),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     Space(18.h),
                                   ],
@@ -272,48 +397,77 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                 ),
               ),
               const Space(30),
-              transaction.when(
-                  error: (error, stackTrace) {
-                    return Text(error.toString());
-                  },
-                  loading: () => const Center(
-                        child: CircularProgressIndicator.adaptive(
-                          strokeWidth: 5,
+              listState.value.isNotEmpty
+                  ? RefreshIndicator(
+                      onRefresh: () async {
+                        return ref.refresh(
+                            currencyTransactionProvider(widget.currency));
+                      },
+                      child: SizedBox(
+                        height: 400.h,
+                        child: ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
+                          itemCount: filterableBank.length,
+                          // itemCount: data.data!.transactions.length,
+                          itemBuilder: (context, index) {
+                            final transaction = filterableBank[index];
+                            return CurrencyTransactionBuild(
+                              transactions: transaction,
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(height: 20.h);
+                          },
                         ),
                       ),
-                  data: (data) {
-                    if (data.data.transactions.isEmpty) {
-                      return const Center(
-                        child: Text("You have no transactions"),
-                      );
-                    } else {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          return ref.refresh(
-                              currencyTransactionProvider(widget.currency));
-                        },
-                        child: SizedBox(
-                          height: 400.h,
-                          child: ListView.separated(
-                            physics: const AlwaysScrollableScrollPhysics(
-                                parent: BouncingScrollPhysics()),
-                            itemCount: data.data.transactions.length,
-                            // itemCount: data.data!.transactions.length,
-                            itemBuilder: (context, index) {
-                              final transaction = data.data.transactions[index];
-                              return CurrencyTransactionBuild(
-                                transactions: transaction,
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(height: 20.h);
-                            },
+                    )
+                  : transaction.when(
+                      error: (error, stackTrace) {
+                        return Text(error.toString());
+                      },
+                      loading: () => const Center(
+                            child: CircularProgressIndicator.adaptive(
+                              strokeWidth: 5,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  })
+                      data: (data) {
+                        setState(() {
+                          bank = data.data.transactions;
+                        });
+                        if (data.data.transactions.isEmpty) {
+                          return const Center(
+                            child: Text("You have no transactions"),
+                          );
+                        } else {
+                          return RefreshIndicator(
+                            onRefresh: () async {
+                              return ref.refresh(
+                                  currencyTransactionProvider(widget.currency));
+                            },
+                            child: SizedBox(
+                              height: 400.h,
+                              child: ListView.separated(
+                                physics: const AlwaysScrollableScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
+                                itemCount: data.data.transactions.length,
+                                // itemCount: data.data!.transactions.length,
+                                itemBuilder: (context, index) {
+                                  final transaction =
+                                      data.data.transactions[index];
+                                  return CurrencyTransactionBuild(
+                                    transactions: transaction,
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(height: 20.h);
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                      })
             ],
           ),
         ),

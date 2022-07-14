@@ -4,19 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/custom_paint/custom_paint_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/view_virtual_card.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/convert_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
+import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
@@ -36,7 +41,21 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
-    final toExchangeCurrency = useTextEditingController();
+
+    final rate = useState("0.0");
+    // final toExchangeCurrency = useTextEditingController(text: rate.value);
+    final from = useState("0.0");
+    final convert = ref.watch(conversionProvider);
+
+    ref.listen<RequestState>(conversionProvider, (previous, value) {
+      if (value is Success<ConvertCurrencyRes>) {
+        rate.value = value.value!.data.rates.rate.toString();
+      }
+
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
+      }
+    });
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
@@ -152,8 +171,8 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                               header: Container(
                                 padding: EdgeInsets.only(
                                     left: 19.w,
-                                    top: 14.w,
-                                    bottom: 14.w,
+                                    top: 10.w,
+                                    bottom: 10.w,
                                     right: 19.w),
                                 decoration: const BoxDecoration(
                                   color: AppColors.appColor,
@@ -191,32 +210,34 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Space(10.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'From',
-                                          style: AppText.body6(
-                                            context,
-                                            AppColors.textColor,
-                                            16.sp,
-                                          ),
-                                        ),
-                                        Text(
-                                          'To',
-                                          style: AppText.body6(
-                                            context,
-                                            AppColors.textColor,
-                                            16.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     Text(
+                                    //       'From',
+                                    //       style: AppText.body6(
+                                    //         context,
+                                    //         AppColors.textColor,
+                                    //         16.sp,
+                                    //       ),
+                                    //     ),
+                                    //     Text(
+                                    //       'To',
+                                    //       style: AppText.body6(
+                                    //         context,
+                                    //         AppColors.textColor,
+                                    //         16.sp,
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
                                     Space(10.h),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         InkWell(
                                           onTap: () {
@@ -240,6 +261,7 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                               // textAlign: TextAlign.start,
                                               controller: fromCurrency,
                                               obscureText: false,
+
                                               validator: (value) =>
                                                   validateCurrency(value),
                                               suffixIcon: const Icon(
@@ -282,44 +304,118 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                             ),
                                           ),
                                         ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Space(10),
+                                            Text("Exchange Rate",
+                                                style: AppText.body2(context,
+                                                    Colors.black38, 15.sp)),
+                                            const Space(10),
+                                            Text(rate.value,
+                                                style: AppText.body2(context,
+                                                    Colors.black, 20.sp)),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                     Space(14.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: 150.w,
-                                          child: EditForm(
-                                            enabled: true,
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            labelText: 'Enter amount',
+                                    CustomButton(
+                                      buttonText: convert is Loading
+                                          ? 'Processing'
+                                          : 'Get Exchange Rate',
+                                      bgColor: AppColors.appColor,
+                                      textColor: AppColors.whiteColor,
+                                      borderColor:
+                                          AppColors.appColor.withOpacity(0.3),
+                                      buttonWidth:
+                                          MediaQuery.of(context).size.width,
+                                      onPressed: convert is Loading
+                                          ? null
+                                          : () {
+                                              if (fromCurrency.text.isEmpty &&
+                                                  toCurrency.text.isEmpty) {
+                                                return;
+                                              } else {
+                                                ref
+                                                    .read(conversionProvider
+                                                        .notifier)
+                                                    .conversion(
+                                                        fromCurrency.text,
+                                                        toCurrency.text);
+                                              }
+                                            },
+                                    ),
+                                    Space(14.h),
+                                    InkWell(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          SizedBox(
+                                            width: 150.w,
+                                            child: EditForm(
+                                              enabled: true,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              labelText: convert is Loading
+                                                  ? "---"
+                                                  : 'Enter amount',
 
-                                            // textAlign: TextAlign.start,
-                                            controller: fromExchangeCurrency,
-                                            obscureText: false,
-                                            validator: (value) =>
-                                                validateCurrency(value),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 150.w,
-                                          child: EditForm(
-                                            enabled: true,
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
-                                            labelText: 'Enter amount',
+                                              // textAlign: TextAlign.start,
+                                              controller: fromExchangeCurrency,
+                                              obscureText: false,
+                                              validator: (value) => null,
+                                              onTap: () {
+                                                if (fromCurrency.text.isEmpty &&
+                                                    toCurrency.text.isEmpty) {
+                                                  return;
+                                                } else {
+                                                  ref
+                                                      .read(conversionProvider
+                                                          .notifier)
+                                                      .conversion(
+                                                          fromCurrency.text,
+                                                          toCurrency.text);
+                                                }
+                                              },
+                                              onChanged: (value) {
+                                                final res =
+                                                    (num.tryParse(value) ?? 0) *
+                                                        (num.tryParse(
+                                                                rate.value) ??
+                                                            0);
 
-                                            // textAlign: TextAlign.start,
-                                            controller: toExchangeCurrency,
-                                            obscureText: false,
-                                            validator: (value) =>
-                                                validateCurrency(value),
+                                                from.value = res.toString();
+
+                                                print(res);
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          // Text(
+                                          //   // salesPrice.toString(),
+                                          //   ((num.tryParse(from.value) ?? 0) *
+                                          //           (num.tryParse(rate.value) ??
+                                          //               0))
+                                          //       .toString(),
+                                          //   style: TextStyle(
+                                          //     color: const Color(0xFF2C2C2C),
+                                          //     fontSize: 14.sp,
+                                          //     fontWeight: FontWeight.w700,
+                                          //   ),
+                                          // ),
+                                          Text(
+                                            from.value,
+                                            style: AppText.body2(
+                                                context, Colors.black, 20.sp),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     Space(18.h),
                                   ],

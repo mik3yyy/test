@@ -16,6 +16,7 @@ class EditForm extends StatelessWidget {
       this.prefixIcon,
       this.focusNode,
       // this.textAlign,
+      this.onTap,
       this.enabled,
       this.inputter,
       this.keyboardType,
@@ -36,11 +37,13 @@ class EditForm extends StatelessWidget {
   final void Function()? onEditingComplete;
   final FocusNode? focusNode;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
   final List<TextInputFormatter>? inputter;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        onTap: onTap,
         inputFormatters: inputter,
         enabled: enabled,
         // textAlign: textAlign!,

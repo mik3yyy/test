@@ -162,9 +162,9 @@ class Navigation extends HookConsumerWidget {
               comingSoon: false,
               image: AppImage.logOut,
               onPressed: () {
-                ref
-                    .read(localAuthStateProvider.notifier)
-                    .resetbiometrics(false);
+                // ref
+                //     .read(localAuthStateProvider.notifier)
+                //     .resetbiometrics(false);
 
                 context.navigate(const SigninScreen());
                 PreferenceManager.removeToken();

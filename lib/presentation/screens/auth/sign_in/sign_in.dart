@@ -62,10 +62,13 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
         if (value.value!.data!.user.transactionPinAddedAt == null) {
+          context.loaderOverlay.hide();
           PreferenceManager.isFirstLaunch = true;
+          PreferenceManager.isloggedIn = true;
           context.navigate(const TransactionPinScreen());
         } else {
           PreferenceManager.isFirstLaunch = false;
+          PreferenceManager.isloggedIn = true;
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
           ref.read(getProfileProvider.notifier).getProfile();
 
@@ -86,7 +89,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       if (value.isAuthenticated) {
         context.loaderOverlay.show();
       }
-      if (value is Error) {}
+      if (value.success) {
+        context.loaderOverlay.hide();
+      }
     });
     return LoaderOverlay(
       useDefaultLoading: false,
@@ -190,7 +195,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       children: [
                         CustomButton(
                           buttonWidth: 280.w,
-                          buttonText: 'Sign In',
+                          buttonText:
+                              vm is Loading ? 'authenticating' : 'Sign In',
                           bgColor: AppColors.appColor,
                           borderColor: AppColors.appColor,
                           textColor: Colors.white,
@@ -216,7 +222,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                                     context.loaderOverlay.show();
                                   }
-                                  context.loaderOverlay.show();
                                 },
                         ),
                         localAuth.hasBiometric

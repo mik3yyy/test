@@ -14,44 +14,37 @@ class LocalAuthState extends Equatable {
   final String error;
   final bool hasBiometric;
   final bool isAuthenticated;
-  final bool signInUser;
+  final bool success;
   const LocalAuthState(
       {required this.error,
       required this.hasBiometric,
       required this.isAuthenticated,
-      required this.signInUser});
+      required this.success});
 
   factory LocalAuthState.initial() {
     return const LocalAuthState(
-        error: "",
-        hasBiometric: false,
-        isAuthenticated: false,
-        signInUser: false);
+        error: "", hasBiometric: false, isAuthenticated: false, success: false);
   }
 
   LocalAuthState copyWith({
     final String? error,
     final bool? hasBiometric,
     final bool? isAuthenticated,
-    final bool? signInUser,
+    final bool? success,
   }) {
     return LocalAuthState(
         error: error ?? this.error,
         hasBiometric: hasBiometric ?? this.hasBiometric,
-        signInUser: signInUser ?? this.signInUser,
+        success: success ?? this.success,
         isAuthenticated: isAuthenticated ?? this.isAuthenticated);
   }
 
   @override
-  List<Object?> get props => [
-        error,
-        hasBiometric,
-        isAuthenticated,
-      ];
+  List<Object?> get props => [error, hasBiometric, isAuthenticated, success];
 }
 
 final localAuthStateProvider =
-    StateNotifierProvider<LocalAuthNotifier, LocalAuthState>((ref) {
+    StateNotifierProvider.autoDispose<LocalAuthNotifier, LocalAuthState>((ref) {
   final localAuth = LocalAuthentication();
   return LocalAuthNotifier(localAuth, ref);
 });
@@ -104,14 +97,21 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
             timezone: "Africa/Lagos",
             deviceId: deviceId);
 
-        ref.read(signInProvider.notifier).signIn(signinReq);
+        ref
+            .read(signInProvider.notifier)
+            .signIn(signinReq)
+            .then((value) => value);
+        state = state.copyWith(
+          isAuthenticated: isAuthenticated,
+        );
+
+        Future.delayed(const Duration(seconds: 2), () {
+          state = state.copyWith(success: true);
+        });
       } else {
         throw "Unathenticated. Please try again";
       }
 
-      state = state.copyWith(
-        isAuthenticated: isAuthenticated,
-      );
       return isAuthenticated;
     } on PlatformException catch (e) {
       state = state.copyWith(error: e.message);
