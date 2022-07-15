@@ -31,23 +31,25 @@ class _UploadImageState extends ConsumerState<UploadImage> {
         return ref.refresh(getProfileProvider);
       }
       if (value is Error) {
-        return AppSnackBar.showErrorSnackBar(context,
-            message: value.error.toString());
+        // return AppSnackBar.showErrorSnackBar(context,
+        //     message: value.error.toString());
       }
     });
     return Stack(
       children: [
-        SizedBox(
-            height: 120.h,
-            width: 130.w,
-            child: image is Loading
-                ? const CircularProgressIndicator(
-                    strokeWidth: 4,
-                    color: Colors.white24,
-                  )
-                : const SizedBox.shrink()),
         Padding(
-            padding: const EdgeInsets.only(left: 5, top: 3),
+          padding: const EdgeInsets.only(left: 42, top: 42),
+          child: Transform.scale(
+              scale: 3.3,
+              child: image is Loading
+                  ? const CircularProgressIndicator(
+                      strokeWidth: 1.5,
+                      color: Colors.white24,
+                    )
+                  : const SizedBox.shrink()),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(left: 5, top: 5),
             child: profileImage.isNotEmpty
                 ? CircleAvatar(
                     backgroundColor: Colors.transparent,
