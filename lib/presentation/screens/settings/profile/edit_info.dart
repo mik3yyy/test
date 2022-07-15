@@ -53,8 +53,8 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   }
 
   String _handlePhoneNumber() {
-    if (widget.phoneNo[3].length == 3) {
-      return widget.phoneNo.substring(3);
+    if (widget.phoneNo.substring(0, 4).length == 4) {
+      return widget.phoneNo.substring(4);
     } else {
       return widget.phoneNo.substring(3);
     }
@@ -80,6 +80,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
     final cityCountroller = useTextEditingController();
     final addressCountroller = useTextEditingController();
     final genderCountroller = useTextEditingController(text: widget.gender);
+    String code = _handlePhoneNumber();
 
     ref.listen<RequestState>(updateProfileProvider, (T, value) {
       if (value is Success) {

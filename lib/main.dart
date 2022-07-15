@@ -31,29 +31,28 @@ class MyApp extends HookConsumerWidget {
     //    final _navigatorKey = GlobalKey<NavigatorState>();
     // NavigatorState get _navigator => _navigatorKey.currentState!;
     final sessionConfig = SessionConfig(
-        invalidateSessionForAppLostFocus: const Duration(minutes: 20),
-        invalidateSessionForUserInactiviity: const Duration(minutes: 2));
+        invalidateSessionForAppLostFocus: const Duration(minutes: 2),
+        invalidateSessionForUserInactiviity: const Duration(minutes: 10));
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
       if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
         // handle user  inactive timeout
         if (PreferenceManager.isloggedIn == true) {
           context.navigateReplaceRoot(const SigninScreen());
           PreferenceManager.removeToken();
-          // print("INACTIVE");
-        } else {
+
+          // } else {
           return;
         }
+        print("INACTIVE");
       } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
         // handle user  app lost focus timeout
         if (PreferenceManager.isloggedIn == true) {
           context.navigateReplaceRoot(const SigninScreen());
           PreferenceManager.removeToken();
-          // print("APPFOCUS");
+          print("APPFOCUS");
         } else {
           return;
         }
-
-        // _navigator.push(MaterialPageRoute(builder: (_) => AuthPage()));
       }
     });
     final locale = ref.watch(localeProvider);
