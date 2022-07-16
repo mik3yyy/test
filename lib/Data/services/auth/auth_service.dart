@@ -200,7 +200,6 @@ class UserService {
     try {
       final response =
           await _read(dioProvider).post(url, data: signinReq.toJson());
-      PreferenceManager.appUser = jsonEncode(response.data);
 
       final result = SigninRes.fromJson(response.data);
       return result;

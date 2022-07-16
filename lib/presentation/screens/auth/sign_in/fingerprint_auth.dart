@@ -57,6 +57,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
   Future<bool> hasBiometrics() async {
     try {
       final hasBiometric = await auth.canCheckBiometrics;
+      if (!mounted) return false;
       state = state.copyWith(hasBiometric: hasBiometric);
 
       return hasBiometric;
@@ -73,7 +74,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
     final email = await ref
         .read(credentialProvider.notifier)
         .getCredential(Constants.userEmail);
-    final deviceId = ref.watch(deviceInfoProvider);
+    final device = ref.watch(deviceInfoProvider);
 
     try {
       final isAuthenticated = await auth.authenticate(
@@ -94,8 +95,8 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
         var signinReq = SigninReq(
             emailPhone: email!,
             password: password!,
-            timezone: "Africa/Lagos",
-            deviceId: deviceId);
+            timezone: device.timeZone,
+            deviceId: device.deviceId);
 
         ref
             .read(signInProvider.notifier)

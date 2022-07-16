@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/languages/language_state.dart';
@@ -39,11 +38,10 @@ class MyApp extends HookConsumerWidget {
         if (PreferenceManager.isloggedIn == true) {
           context.navigateReplaceRoot(const SigninScreen());
           PreferenceManager.removeToken();
-
-          // } else {
+          print("INACTIVE");
+        } else {
           return;
         }
-        print("INACTIVE");
       } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
         // handle user  app lost focus timeout
         if (PreferenceManager.isloggedIn == true) {

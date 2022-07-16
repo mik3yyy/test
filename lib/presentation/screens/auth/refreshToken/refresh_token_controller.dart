@@ -57,9 +57,9 @@ class RefreshTokenController extends StateNotifier<RefreshTokenState> {
 
       Timer.periodic(const Duration(minutes: 9), (Timer timer) async {
         final refreshToken = PreferenceManager.refreshToken;
-        final deviceId = ref.watch(deviceInfoProvider);
-        var refreshTokenReq =
-            RefreshTokenReq(refreshToken: refreshToken, deviceId: deviceId);
+        final device = ref.watch(deviceInfoProvider);
+        var refreshTokenReq = RefreshTokenReq(
+            refreshToken: refreshToken, deviceId: device.deviceId);
         if (PreferenceManager.authToken.isNotEmpty) {
           final token =
               await ref.read(authManagerProvider).getAuthTOken(refreshTokenReq);

@@ -200,7 +200,8 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                       enteredAmount.value = false;
                                     }
                                   },
-                                  validator: (value) => validateAmount(value)),
+                                  validator: (value) =>
+                                      withdrawalAmount(value)),
                             ),
                           ],
                         ),

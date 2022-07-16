@@ -25,6 +25,9 @@ class EditInfo extends StatefulHookConsumerWidget {
   final String lastName;
   final String email;
   final String country;
+  final String address;
+  final String state;
+  final String city;
   final String phoneNo;
   final String gender;
   final String dob;
@@ -37,6 +40,9 @@ class EditInfo extends StatefulHookConsumerWidget {
     required this.country,
     required this.phoneNo,
     required this.dob,
+    required this.address,
+    required this.state,
+    required this.city,
     required this.gender,
   }) : super(key: key);
 
@@ -65,7 +71,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   final fieldFocusNode = FocusNode();
   final List<String> _gender = ['male', 'female'];
   String? _radioSelected;
-  String code = "+234";
+  String phoneCode = "+234";
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
@@ -76,16 +82,17 @@ class _EditInfoState extends ConsumerState<EditInfo> {
         useTextEditingController(text: _handlePhoneNumber());
     var dobCountroller = useTextEditingController(text: widget.dob);
     final countryCountroller = useTextEditingController(text: widget.country);
-    final stateCountroller = useTextEditingController();
-    final cityCountroller = useTextEditingController();
-    final addressCountroller = useTextEditingController();
+    final stateCountroller = useTextEditingController(text: widget.state);
+    final cityCountroller = useTextEditingController(text: widget.city);
+    final addressCountroller = useTextEditingController(text: widget.address);
     final genderCountroller = useTextEditingController(text: widget.gender);
-    String code = _handlePhoneNumber();
+    // String trimmedPhoneNo = _handlePhoneNumber();
 
     ref.listen<RequestState>(updateProfileProvider, (T, value) {
       if (value is Success) {
-        Navigator.pop(context);
+        context.loaderOverlay.hide();
         ref.refresh(getProfileProvider);
+        Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,
             message: 'Profile Update Successful');
@@ -133,7 +140,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             email: emailCountroller.text,
                             address: addressCountroller.text,
                             gender: genderCountroller.text,
-                            phoneNumber: code + phoneNoCountroller.text,
+                            phoneNumber: phoneCode + phoneNoCountroller.text,
                             dateOfBirth: dobCountroller.text,
                             city: cityCountroller.text,
                             country: countryCountroller.text,
@@ -142,7 +149,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           ref
                               .read(updateProfileProvider.notifier)
                               .updateProfile(updateProfile);
-                          context.loaderOverlay.show();
+                          // context.loaderOverlay.show();
                         }
                       },
                 child: Text(
@@ -264,10 +271,11 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         ),
                         Space(20.h),
                         InternationalPhoneNumberInput(
+                          validator: (p0) => null,
                           onInputChanged: (PhoneNumber number) {
-                            code = number.dialCode!;
+                            phoneCode = number.dialCode!;
                           },
-                          onInputValidated: (bool value) {},
+                          onInputValidated: (bool value) => true,
                           selectorConfig: const SelectorConfig(
                             selectorType: PhoneInputSelectorType.DROPDOWN,
                             leadingPadding: 0,
@@ -275,7 +283,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             setSelectorButtonAsPrefixIcon: false,
                           ),
                           spaceBetweenSelectorAndTextField: 0,
-                          ignoreBlank: false,
+                          ignoreBlank: true,
                           autoValidateMode: AutovalidateMode.onUserInteraction,
                           selectorTextStyle:
                               const TextStyle(color: Colors.black),
@@ -287,7 +295,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           ),
                           focusNode: fieldFocusNode,
                           keyboardType: const TextInputType.numberWithOptions(
-                              signed: true, decimal: true),
+                              signed: true, decimal: false),
                           inputBorder: InputBorder.none,
                           onSaved: (PhoneNumber number) {},
                         ),
