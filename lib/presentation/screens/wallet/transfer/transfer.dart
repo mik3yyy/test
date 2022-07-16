@@ -74,9 +74,9 @@ class _TransferState extends ConsumerState<Transfer>
                       Text(
                         defaultWallet.maybeWhen(
                             success: (v) =>
-                                "Acc No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
+                                "Kayndrexsphere Account No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
                             orElse: () => ''),
-                        style: AppText.body2(context, Colors.white, 16.sp),
+                        style: AppText.body2(context, Colors.white, 18.sp),
                       ),
                       // Text(
                       //   'Available Balance',
@@ -132,7 +132,7 @@ class _TransferState extends ConsumerState<Transfer>
                         ),
                         tabs: const [
                           Tab(
-                            text: 'Account Info',
+                            text: 'Wallet Info',
                             //     child: Text(
                             //   'Account Info',
                             //   style:

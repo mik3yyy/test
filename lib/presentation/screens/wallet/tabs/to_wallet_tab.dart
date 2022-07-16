@@ -100,12 +100,12 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               ),
               Space(25.h),
               Text(
-                'Select wallet account currency',
+                'Select currency wallet',
                 style: AppText.body2(context, AppColors.appColor, 19.sp),
               ),
               Space(5.h),
               WalletTextField(
-                labelText: 'Select wallet account currency',
+                labelText: 'Select currency wallet',
                 obscureText: false,
                 color: Colors.white,
                 keyboardType: TextInputType.number,

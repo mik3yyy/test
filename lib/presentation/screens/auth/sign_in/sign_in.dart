@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,19 +43,32 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   final fieldFocusNode = FocusNode();
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
 
+  bool isLoading = false;
+  // String _currentTimeZone = "timeZone";
+
+  // Future<void> getTimeZone() async {
+  //   final String currentTimeZone =
+  //       await FlutterNativeTimezone.getLocalTimezone();
+  //   _currentTimeZone = currentTimeZone;
+
+  //   // print(currentTimeZone);
+  // }
+
   @override
   void initState() {
     super.initState();
+
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
 
     ref.read(deviceInfoProvider.notifier).deviceId();
+    ref.read(deviceInfoProvider.notifier).timeZone();
   }
 
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
     final localAuth = ref.watch(localAuthStateProvider);
-    final deviceId = ref.watch(deviceInfoProvider);
+    final device = ref.watch(deviceInfoProvider);
     final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
     final togglePasswords = ref.watch(passwordToggleStateProvider.state);
@@ -71,8 +85,10 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
           PreferenceManager.isloggedIn = true;
           ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
           ref.read(getProfileProvider.notifier).getProfile();
+          isLoading = true;
 
           Future.delayed(const Duration(seconds: 2), () {
+            isLoading = false;
             context.loaderOverlay.hide();
             context.navigate(MainScreen(menuScreenContext: context));
           });
@@ -195,8 +211,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       children: [
                         CustomButton(
                           buttonWidth: 280.w,
-                          buttonText:
-                              vm is Loading ? 'authenticating' : 'Sign In',
+                          buttonText: vm is Loading
+                              ? 'authenticating'
+                              : isLoading
+                                  ? 'authenticating'
+                                  : "Sign in",
                           bgColor: AppColors.appColor,
                           borderColor: AppColors.appColor,
                           textColor: Colors.white,
@@ -209,8 +228,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                     var signinReq = SigninReq(
                                         emailPhone: emailPhoneController.text,
                                         password: passwordController.text,
-                                        timezone: "Africa/Lagos",
-                                        deviceId: deviceId);
+                                        timezone: device.timeZone,
+                                        deviceId: device.deviceId);
                                     ref
                                         .read(credentialProvider.notifier)
                                         .storeCredential(Constants.userPassword,
@@ -219,6 +238,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                     ref
                                         .read(signInProvider.notifier)
                                         .signIn(signinReq);
+                                    // print(device.deviceId);
+                                    // print(device.timeZone);
 
                                     context.loaderOverlay.show();
                                   }

@@ -382,7 +382,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                   Space(8.h),
                   Text(
-                    'Acc No: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
+                    'Kayndrexsphere Account No: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
                     style: AppText.body2(context, AppColors.appColor, 20.sp),
                   ),
                 ],

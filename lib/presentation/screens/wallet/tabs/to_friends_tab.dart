@@ -178,12 +178,12 @@ class FriendsTab extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Make Transfer from your $currencyCode account',
+                    'Make Transfer from your $currencyCode wallet',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
                   ),
                   Space(40.h),
                   Text(
-                    'Enter Kayndrexsphere acc. No',
+                    'Enter Kayndrexsphere account. No',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
                   ),
                   Space(5.h),

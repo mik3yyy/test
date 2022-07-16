@@ -1,51 +1,76 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final deviceInfoProvider =
-    StateNotifierProvider<DeviceIDNotifier, String>((ref) {
+    StateNotifierProvider<DeviceIDNotifier, DeviceState>((ref) {
   final deviceInfo = DeviceInfoPlugin();
   return DeviceIDNotifier(deviceInfo);
 });
 
-class DeviceIDNotifier extends StateNotifier<String> {
+class DeviceState extends Equatable {
+  final String deviceId;
+  final String timeZone;
+  const DeviceState({
+    required this.deviceId,
+    required this.timeZone,
+  });
+
+  factory DeviceState.initial() {
+    return const DeviceState(deviceId: "", timeZone: "");
+  }
+
+  DeviceState copyWith({
+    final String? deviceId,
+    final String? timeZone,
+  }) {
+    return DeviceState(
+        deviceId: deviceId ?? this.deviceId,
+        timeZone: timeZone ?? this.timeZone);
+  }
+
+  @override
+  List<Object?> get props => [deviceId, timeZone];
+}
+
+class DeviceIDNotifier extends StateNotifier<DeviceState> {
   DeviceIDNotifier(
     this.deviceInfo,
-  ) : super("unknown");
+  ) : super(DeviceState.initial());
   final DeviceInfoPlugin deviceInfo;
 
   Future<String> deviceId() async {
     try {
       if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        state = androidInfo.androidId.toString();
+        state = state.copyWith(deviceId: androidInfo.androidId.toString());
+
         return androidInfo.androidId.toString();
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        state = iosInfo.identifierForVendor.toString();
+        state =
+            state.copyWith(deviceId: iosInfo.identifierForVendor.toString());
+
         return iosInfo.identifierForVendor.toString();
       } else {
-        return state;
+        return state.deviceId;
       }
     } catch (e) {
       throw state.toString();
     }
   }
-}
 
-class DeviceID {
-  static Future<String> deviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    String deviceIdentifier = "unknown";
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.androidId.toString();
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor.toString();
-    } else {
-      return deviceIdentifier;
+  Future<String> timeZone() async {
+    try {
+      final String currentTimeZone =
+          await FlutterNativeTimezone.getLocalTimezone();
+      state = state.copyWith(timeZone: currentTimeZone);
+      return currentTimeZone;
+    } catch (e) {
+      throw state.toString();
     }
   }
 }

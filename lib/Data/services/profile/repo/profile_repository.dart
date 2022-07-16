@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
@@ -24,6 +26,7 @@ class ProfileRepository extends IProfileManager {
   @override
   Future<ProfileRes> getPrfileDetails() async {
     final res = await _profileService.getPrfileDetails();
+
     PreferenceManager.defaultWallet =
         res.data.defaultWallet.currencyCode.toString();
     if (res.data.user.profilePicture?.imageUrl != null) {

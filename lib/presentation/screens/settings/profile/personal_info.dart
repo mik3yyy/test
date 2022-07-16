@@ -37,6 +37,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
     final user = locator.get<ProfileRes>();
+
     return GenericWidget(
       appbar: Padding(
         padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
@@ -60,6 +61,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         screen: EditInfo(
                           dob: user.data.user.dateOfBirth.toString(),
                           country: user.data.user.countryName,
+                          state: user.data.user.state.toString(),
+                          city: user.data.user.city.toString(),
+                          address: user.data.user.address.toString(),
                           email: user.data.user.email,
                           firstName: user.data.user.firstName,
                           gender: user.data.user.gender.toString(),
@@ -159,12 +163,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         ),
                         Space(30.h),
                         PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Phone Number',
-                          subTitle: value.data.user.phoneNumber == ""
-                              ? "Unavailable"
-                              : value.data.user.phoneNumber.toString(),
-                        ),
+                            color: Colors.black,
+                            title: 'Phone Number',
+                            subTitle: user.data.user.phoneNumber.toString()),
                         Space(7.h),
                         const Divider(
                           color: Colors.black,

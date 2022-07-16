@@ -84,6 +84,16 @@ String? validateAmount(String? value) {
   return null;
 }
 
+String? withdrawalAmount(String? value) {
+  if (value!.length == 2) {
+    return 'amount must be more than 100 ';
+  }
+  if (value.isEmpty) {
+    return 'please enter an amount';
+  }
+  return null;
+}
+
 String? validateCardName(String? value) {
   if (value!.isEmpty) {
     return 'card holder name is required';
