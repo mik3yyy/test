@@ -48,7 +48,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
     final depositController = useTextEditingController();
     final currencyController = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
-    final toExchangeCurrency = useTextEditingController();
+    // final toExchangeCurrency = useTextEditingController();
 
     final amountController = useTextEditingController();
     final firstDigit = useTextEditingController();
@@ -667,11 +667,13 @@ class _SelectSavedCardsState extends ConsumerState<SelectSavedCards> {
                                       }
 
                                       return data.data.cards.isEmpty
-                                          ? Text("You have no card",
-                                              style: AppText.body2Medium(
-                                                  context,
-                                                  AppColors.textColor,
-                                                  25.sp))
+                                          ? Center(
+                                              child: Text("You have no card",
+                                                  style: AppText.body2Medium(
+                                                      context,
+                                                      AppColors.textColor,
+                                                      25.sp)),
+                                            )
                                           : SizedBox(
                                               height: _listSize(),
                                               child: ListView.builder(

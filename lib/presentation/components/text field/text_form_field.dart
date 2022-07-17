@@ -19,6 +19,7 @@ class TextFormInput extends StatelessWidget {
       this.inputFormatters,
       this.enabled,
       this.textLength,
+      this.readOnly = false,
       required this.capitalization,
       this.focusNode,
       this.keyboardType})
@@ -28,6 +29,7 @@ class TextFormInput extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final bool? enabled;
+  final bool readOnly;
   final Widget? prefixIcon;
 
   final TextInputType? keyboardType;
@@ -47,6 +49,7 @@ class TextFormInput extends StatelessWidget {
         controller: controller,
         cursorColor: Colors.blue,
         focusNode: focusNode,
+        readOnly: readOnly,
         maxLength: textLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         autovalidateMode: autovalidateMode,

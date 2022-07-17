@@ -25,6 +25,11 @@ class PreferenceManager {
       prefs.setString("avatarUrl", avatarUrl);
   static String get avatarUrl => prefs.getString("avatarUrl") ?? '';
 
+  //* DialingCode
+  static set dailingCode(String dailingCode) =>
+      prefs.setString("dailingCode", dailingCode);
+  static String get dailingCode => prefs.getString("dailingCode") ?? '';
+
   //* avatarUrl
   static set defaultWallet(String defaultWallet) =>
       prefs.setString("defaultWallet", defaultWallet);

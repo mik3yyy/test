@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -95,6 +94,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         }
       }
       if (value is Error) {
+        isLoading = false;
         context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
@@ -145,6 +145,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                         labelText: "Email or Phone Number",
                         controller: emailPhoneController,
+                        readOnly: vm is Loading
+                            ? true
+                            : isLoading
+                                ? true
+                                : false,
                         capitalization: TextCapitalization.none,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -159,6 +164,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     //password
                     TextFormInput(
                       labelText: 'Password',
+                      readOnly: vm is Loading
+                          ? true
+                          : isLoading
+                              ? true
+                              : false,
                       controller: passwordController,
                       focusNode: fieldFocusNode,
                       capitalization: TextCapitalization.none,
@@ -192,7 +202,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         InkWell(
-                          onTap: () => context.navigate(ForgotPasswordScreen()),
+                          onTap: vm is Loading
+                              ? null
+                              : isLoading
+                                  ? null
+                                  : () =>
+                                      context.navigate(ForgotPasswordScreen()),
                           child: Text(
                             "Forgot Password?",
                             style: AppText.body4(context, AppColors.appColor),

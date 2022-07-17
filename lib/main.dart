@@ -31,7 +31,7 @@ class MyApp extends HookConsumerWidget {
     // NavigatorState get _navigator => _navigatorKey.currentState!;
     final sessionConfig = SessionConfig(
         invalidateSessionForAppLostFocus: const Duration(minutes: 2),
-        invalidateSessionForUserInactiviity: const Duration(minutes: 10));
+        invalidateSessionForUserInactiviity: const Duration(minutes: 6));
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
       if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
         // handle user  inactive timeout

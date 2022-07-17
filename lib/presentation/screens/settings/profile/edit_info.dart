@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
@@ -51,6 +52,8 @@ class EditInfo extends StatefulHookConsumerWidget {
 }
 
 class _EditInfoState extends ConsumerState<EditInfo> {
+  String phoneCode = "+234";
+  String isoCode = "NG";
   void getPhoneNumber(String phoneNumber) async {
     PhoneNumber number =
         await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
@@ -59,22 +62,49 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   }
 
   String _handlePhoneNumber() {
-    if (widget.phoneNo.substring(0, 4).length == 4) {
-      return widget.phoneNo.substring(4);
+    if (widget.phoneNo.substring(0, 4).length == 3) {
+      return widget.phoneNo.substring(3);
     } else {
       return widget.phoneNo.substring(3);
     }
   }
 
-  PhoneNumber number = PhoneNumber(isoCode: 'NG');
+  seperatePhoneAndDialCode() {
+    for (var country in Countries.allCountries) {
+      if (country.values.contains(widget.country)) {
+        phoneCode = country["dial_code"].toString();
+        isoCode = country["code"].toString();
+        // print(country["dial_code"]);
+      }
+    }
+
+    // if (foundedCountry.isNotEmpty) {
+    //   var dialCode = phoneWithDialCode.value.substring(
+    //     0,
+    //     foundedCountry["dial_code"]!.length,
+    //   );
+    //   var newPhoneNumber = phoneWithDialCode.value.substring(
+    //     foundedCountry["dial_code"]!.length,
+    //   );
+    //   print({dialCode, newPhoneNumber});
+    // }
+  }
+
   final formKey = GlobalKey<FormState>();
   final fieldFocusNode = FocusNode();
   final List<String> _gender = ['male', 'female'];
   String? _radioSelected;
-  String phoneCode = "+234";
+
+  @override
+  void initState() {
+    seperatePhoneAndDialCode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
+    PhoneNumber number = PhoneNumber(isoCode: isoCode);
     final fistNameController = useTextEditingController(text: widget.firstName);
     final lastNameCountroller = useTextEditingController(text: widget.lastName);
     final emailCountroller = useTextEditingController(text: widget.email);
@@ -89,7 +119,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
     // String trimmedPhoneNo = _handlePhoneNumber();
 
     ref.listen<RequestState>(updateProfileProvider, (T, value) {
-      if (value is Success) {
+      if (value is Success<bool>) {
         context.loaderOverlay.hide();
         ref.refresh(getProfileProvider);
         Navigator.pop(context);
@@ -146,10 +176,10 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             country: countryCountroller.text,
                             state: stateCountroller.text,
                           );
+
                           ref
                               .read(updateProfileProvider.notifier)
                               .updateProfile(updateProfile);
-                          // context.loaderOverlay.show();
                         }
                       },
                 child: Text(
