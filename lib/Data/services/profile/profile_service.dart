@@ -47,6 +47,7 @@ class ProfileService {
       PreferenceManager.appUser = jsonEncode(response.data);
 
       final result = ProfileRes.fromJson(response.data);
+      print("PRINTED HERE ${result.data.user.firstName}");
 
       return result;
     } on DioError catch (e) {

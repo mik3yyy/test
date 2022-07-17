@@ -23,6 +23,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';
@@ -81,6 +82,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
+        print("HERE");
+        context.loaderOverlay.hide();
         ref.read(getProfileProvider.notifier).getProfile();
       }
 
@@ -161,137 +164,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                         currency: currency,
                         routeName: "homeScreen",
                       ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     // showModalBottomSheet(
-                      //     //     context: context,
-                      //     //     isScrollControlled: true,
-                      //     //     shape: const RoundedRectangleBorder(
-                      //     //         borderRadius: BorderRadius.vertical(
-                      //     //             top: Radius.circular(20))),
-                      //     //     builder: (context) {
-                      //     //       return Column(
-                      //     //         mainAxisSize: MainAxisSize.min,
-                      //     //         children: [
-                      //     //           const Space(20),
-                      //     //           Text(
-                      //     //             'Set Default Wallet',
-                      //     //             style: AppText.header2(
-                      //     //                 context, AppColors.appColor, 20.sp),
-                      //     //           ),
-                      //     //           const Space(30),
-                      //     //           wallet.when(
-                      //     //               error: (error, stackTrace) =>
-                      //     //                   Text(error.toString()),
-                      //     //               loading: () =>
-                      //     //                   const CircularProgressIndicator
-                      //     //                       .adaptive(),
-                      //     //               idle: () =>
-                      //     //                   const CircularProgressIndicator
-                      //     //                       .adaptive(),
-                      //     //               success: (data) {
-                      //     //                 double _getSized() {
-                      //     //                   if (data!.data!.wallets!.length ==
-                      //     //                       2) {
-                      //     //                     return 200;
-                      //     //                   } else if (data
-                      //     //                           .data!.wallets!.length ==
-                      //     //                       3) {
-                      //     //                     return 250;
-                      //     //                   } else if (data
-                      //     //                           .data!.wallets!.length ==
-                      //     //                       4) {
-                      //     //                     return 350;
-                      //     //                   } else if (data
-                      //     //                           .data!.wallets!.length ==
-                      //     //                       5) {
-                      //     //                     return 400;
-                      //     //                   } else {
-                      //     //                     return 500;
-                      //     //                   }
-                      //     //                 }
-
-                      //     //                 return SizedBox(
-                      //     //                   height: _getSized(),
-                      //     //                   child: ListView.separated(
-                      //     //                     itemCount:
-                      //     //                         data!.data!.wallets!.length,
-                      //     //                     itemBuilder: (context, index) {
-                      //     //                       final walletList =
-                      //     //                           data.data!.wallets![index];
-                      //     //                       return InkWell(
-                      //     //                         onTap: () {
-                      //     //                           print(walletList
-                      //     //                               .currencyCode
-                      //     //                               .toString());
-                      //     //                           ref
-                      //     //                               .read(
-                      //     //                                   setWalletAsDefaultProvider
-                      //     //                                       .notifier)
-                      //     //                               .setWalletAsDefault(
-                      //     //                                   walletList
-                      //     //                                       .currencyCode
-                      //     //                                       .toString());
-                      //     //                           Navigator.pop(context);
-                      //     //                         },
-                      //     //                         child: Container(
-                      //     //                           height: 60.h,
-                      //     //                           width:
-                      //     //                               MediaQuery.of(context)
-                      //     //                                   .size
-                      //     //                                   .width,
-                      //     //                           padding: EdgeInsets.only(
-                      //     //                               left: 20.w,
-                      //     //                               right: 20.w),
-                      //     //                           decoration: BoxDecoration(
-                      //     //                             color:
-                      //     //                                 AppColors.whiteColor,
-                      //     //                             borderRadius:
-                      //     //                                 BorderRadius.circular(
-                      //     //                                     5.r),
-                      //     //                             boxShadow: const [
-                      //     //                               BoxShadow(
-                      //     //                                 color: Color.fromRGBO(
-                      //     //                                     255, 255, 255, 1),
-                      //     //                                 offset: Offset(
-                      //     //                                   2.0,
-                      //     //                                   2.0,
-                      //     //                                 ),
-                      //     //                                 blurRadius: 0.0,
-                      //     //                                 spreadRadius: 2.0,
-                      //     //                               ),
-                      //     //                             ],
-                      //     //                           ),
-                      //     //                           child: Center(
-                      //     //                             child: Text(
-                      //     //                               '${currencyName(walletList.currencyCode.toString())} wallet',
-                      //     //                               style: AppText.header2(
-                      //     //                                   context,
-                      //     //                                   AppColors.appColor,
-                      //     //                                   20.sp),
-                      //     //                             ),
-                      //     //                           ),
-                      //     //                         ),
-                      //     //                       );
-                      //     //                     },
-                      //     //                     separatorBuilder:
-                      //     //                         (context, index) {
-                      //     //                       return const SizedBox(
-                      //     //                         height: 15,
-                      //     //                       );
-                      //     //                     },
-                      //     //                   ),
-                      //     //                 );
-                      //     //               })
-                      //     //         ],
-                      //     //       );
-                      //     //     });
-                      //   },
-                      //   child: const Icon(
-                      //     Icons.keyboard_arrow_down,
-                      //     color: AppColors.appColor,
-                      //   ),
-                      // ),
                       Space(85.w),
                       InkWell(
                         onTap: () {
@@ -382,8 +254,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                   Space(8.h),
                   Text(
-                    'Kayndrexsphere Account No: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
-                    style: AppText.body2(context, AppColors.appColor, 20.sp),
+                    'Kayndrexsphere Account Number: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
+                    style: AppText.body2(context, AppColors.appColor, 17.sp),
                   ),
                 ],
               ),

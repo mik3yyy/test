@@ -99,7 +99,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               Row(
                 children: [
                   Text(
-                    'Use biometric for transactions',
+                    'Enable biometrics for authentication',
                     style: AppText.header2(context, Colors.black, 20.sp),
                   ),
                   const Spacer(),

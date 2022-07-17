@@ -647,7 +647,7 @@ class ItemPickerDialog extends StatefulWidget {
   final List<Map<String, dynamic>>? items;
   final bool enableSearch;
 
-  ItemPickerDialog(
+  const ItemPickerDialog(
     this.title,
     this.items, [
     this.enableSearch = true,

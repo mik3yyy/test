@@ -74,7 +74,7 @@ class _TransferState extends ConsumerState<Transfer>
                       Text(
                         defaultWallet.maybeWhen(
                             success: (v) =>
-                                "Kayndrexsphere Account No: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
+                                "Kayndrexsphere Account Number: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
                             orElse: () => ''),
                         style: AppText.body2(context, Colors.white, 18.sp),
                       ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -34,9 +37,18 @@ class PersonalInfo extends StatefulHookConsumerWidget {
 
 class _PersonalInfoState extends ConsumerState<PersonalInfo> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final vm = ref.watch(getProfileProvider);
     final user = locator.get<ProfileRes>();
+
+    // _checkAlist(){
+    //  Countries.allCountries.any((element) => element.values.contains(value));
+    // }
 
     return GenericWidget(
       appbar: Padding(
@@ -55,28 +67,55 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () {
-                    pushNewScreen(context,
-                        screen: EditInfo(
-                          dob: user.data.user.dateOfBirth.toString(),
-                          country: user.data.user.countryName,
-                          state: user.data.user.state.toString(),
-                          city: user.data.user.city.toString(),
-                          address: user.data.user.address.toString(),
-                          email: user.data.user.email,
-                          firstName: user.data.user.firstName,
-                          gender: user.data.user.gender.toString(),
-                          lastName: user.data.user.lastName,
-                          phoneNo: user.data.user.phoneNumber.toString(),
-                        ),
-                        pageTransitionAnimation: PageTransitionAnimation.fade);
-                  },
-                  child: Text(
-                    'Edit',
-                    style: AppText.body2(context, Colors.white, 20.sp),
-                  ),
-                ),
+                vm.maybeWhen(success: (data) {
+                  return InkWell(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen: EditInfo(
+                            dob: data!.data.user.dateOfBirth.toString(),
+                            country: data.data.user.countryName,
+                            state: data.data.user.state.toString(),
+                            city: data.data.user.city.toString(),
+                            address: data.data.user.address.toString(),
+                            email: data.data.user.email,
+                            firstName: data.data.user.firstName,
+                            gender: user.data.user.gender.toString(),
+                            lastName: data.data.user.lastName,
+                            phoneNo: data.data.user.phoneNumber.toString(),
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.fade);
+                    },
+                    child: Text(
+                      'Edit',
+                      style: AppText.body2(context, Colors.white, 20.sp),
+                    ),
+                  );
+                }, orElse: () {
+                  return InkWell(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen: EditInfo(
+                            dob: user.data.user.dateOfBirth.toString(),
+                            country: user.data.user.countryName,
+                            state: user.data.user.state.toString(),
+                            city: user.data.user.city.toString(),
+                            address: user.data.user.address.toString(),
+                            email: user.data.user.email,
+                            firstName: user.data.user.firstName,
+                            gender: user.data.user.gender.toString(),
+                            lastName: user.data.user.lastName,
+                            phoneNo: user.data.user.phoneNumber.toString(),
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.fade);
+                    },
+                    child: Text(
+                      'Edit',
+                      style: AppText.body2(context, Colors.white, 20.sp),
+                    ),
+                  );
+                })
               ],
             ),
             const UploadImage(
