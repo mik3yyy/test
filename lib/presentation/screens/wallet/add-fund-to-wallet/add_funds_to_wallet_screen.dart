@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/json_asset/json_asset.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:pay/pay.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/add_fund_container_widget.dart';
 
-class AddFundsToWalletScreen extends StatelessWidget {
+class AddFundsToWalletScreen extends StatefulWidget {
   final BuildContext menuScreenContext;
   final Function onScreenHideButtonPressed;
   final bool hideStatus;
@@ -23,10 +27,23 @@ class AddFundsToWalletScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AddFundsToWalletScreen> createState() => _AddFundsToWalletScreenState();
+}
+
+class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
+  void onAppleResult(payment) {}
+  @override
   Widget build(BuildContext context) {
+    const _paymentItems = [
+      PaymentItem(
+        label: 'Total',
+        amount: '99.99',
+        status: PaymentItemStatus.final_price,
+      )
+    ];
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
-      appBar: route == "HomeScreen"
+      appBar: widget.route == "HomeScreen"
           ? AppBar(
               elevation: 0.0,
               backgroundColor: Colors.transparent,
@@ -65,23 +82,62 @@ class AddFundsToWalletScreen extends StatelessWidget {
               onTap: () {
                 pushNewScreen(
                   context, screen: const DebitCreditCardScreen(),
-                  withNavBar: true, // OPTIONAL VALUE. True by default.
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
                   pageTransitionAnimation: PageTransitionAnimation.fade,
                 );
               },
             ),
             Space(10.h),
-            AppFundContainerWidget(
-              image: AppImage.applePay,
-              text: 'Apple Pay',
-              onTap: () {},
-            ),
-            Space(10.h),
-            AppFundContainerWidget(
-              image: AppImage.googlePay,
-              text: 'Google Pay',
-              onTap: () {},
-            ),
+
+            // Space(10.h),
+
+            if (Platform.isIOS) ...[
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: ApplePayButton(
+                    paymentConfigurationAsset:
+                        'default_payment_profile_apple_pay.json',
+                    paymentItems: _paymentItems,
+                    style: ApplePayButtonStyle.black,
+                    type: ApplePayButtonType.inStore,
+                    height: 50,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    margin: const EdgeInsets.only(top: 55.0),
+                    onPaymentResult: onAppleResult,
+                    loadingIndicator: const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  ),
+                ),
+              ),
+            ] else ...[
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  height: MediaQuery.of(context).size.width * 0.20,
+                  child: GooglePayButton(
+                    paymentConfigurationAsset: JsonAssets.gpayAsset,
+                    paymentItems: _paymentItems,
+                    style: GooglePayButtonStyle.white,
+                    type: GooglePayButtonType.pay,
+                    margin: const EdgeInsets.only(top: 15.0),
+                    onPaymentResult: (data) {},
+                    loadingIndicator: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+              ),
+            ]
+
+            // AppFundContainerWidget(
+            //   image: AppImage.googlePay,
+            //   text: 'Google Pay',
+            //   onTap: () {},
+            // ),
           ],
         ),
       ),

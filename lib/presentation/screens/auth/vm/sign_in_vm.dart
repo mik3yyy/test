@@ -4,9 +4,10 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
 
-final signInProvider = StateNotifierProvider<SignInVm, RequestState<SigninRes>>(
-  (ref) => SignInVm(ref),
-);
+final signInProvider =
+    StateNotifierProvider<SignInVm, RequestState<SigninRes>>((ref) {
+  return SignInVm(ref);
+});
 
 class SignInVm extends RequestStateNotifier<SigninRes> {
   final AuthManager _authManager;

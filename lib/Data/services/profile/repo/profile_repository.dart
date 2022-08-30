@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
@@ -7,6 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
+import 'package:kayndrexsphere_mobile/Data/services/profile/repo/user_db_implementation.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 import '../profile_service.dart';
@@ -29,9 +28,12 @@ class ProfileRepository extends IProfileManager {
 
     PreferenceManager.defaultWallet =
         res.data.defaultWallet.currencyCode.toString();
+
     if (res.data.user.profilePicture?.imageUrl != null) {
       SaveImage.download(res.data.user.profilePicture!.imageUrl.toString());
     } else {}
+    //ADD USER PROFILE TO OFFLINE DATABASE
+    UserDB().addUser(res);
     return res;
   }
 

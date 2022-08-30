@@ -6,7 +6,7 @@ import '../../Data/model/profile/res/profile_res.dart';
 
 final locator = GetIt.instance;
 final newUser = jsonDecode(PreferenceManager.appUser);
-final user = newUser;
+// final user = newUser;
 
 Future<void> initialize() async {
   _initUser();

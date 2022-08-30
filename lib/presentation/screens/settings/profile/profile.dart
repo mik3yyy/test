@@ -222,41 +222,44 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const hoverColor = Colors.white;
+    const hoverColor = Colors.white;
     return InkWell(
       onTap: onPressed,
-      // hoverColor: hoverColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Image.asset(
-            image,
-            color: color,
-            height: 20.h,
-            width: 20.w,
-          ),
-          Space(20.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: AppText.header2(context, Colors.black, 19.sp),
-              ),
-              Space(3.h),
-              Text(
-                subTitle,
-                style: AppText.body2(context, Colors.black45, 15.sp),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.black38,
-            size: 15.sp,
-          ),
-        ],
+      hoverColor: hoverColor,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.05,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image.asset(
+              image,
+              color: color,
+              height: 20.h,
+              width: 20.w,
+            ),
+            Space(20.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppText.header2(context, Colors.black, 19.sp),
+                ),
+                Space(3.h),
+                Text(
+                  subTitle,
+                  style: AppText.body2(context, Colors.black45, 15.sp),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black38,
+              size: 15.sp,
+            ),
+          ],
+        ),
       ),
     );
   }

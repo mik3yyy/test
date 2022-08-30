@@ -8,6 +8,10 @@ class PreferenceManager {
   static bool get enableBioMetrics =>
       prefs.getBool("enableBioMetrics") ?? false;
 
+  static set hasBiometrics(bool hasBiometrics) =>
+      prefs.setBool("hasBiometrics", hasBiometrics);
+  static bool get hasBiometrics => prefs.getBool("hasBiometrics") ?? false;
+
   static set isFirstLaunch(bool isFirstLaunch) =>
       prefs.setBool("isFirstLaunch", isFirstLaunch);
   static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? false;

@@ -97,8 +97,7 @@ class _MakeTransferState extends ConsumerState<MakeTransfer>
               SizedBox(height: 30.h),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 484.h,
-                // color: Colors.grey,
+                height: 564.h,
                 child: TabBarView(controller: _tabController, children: [
                   FriendsTab(),
                   const ToWallet(

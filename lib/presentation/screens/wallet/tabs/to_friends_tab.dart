@@ -91,7 +91,7 @@ class FriendsTab extends HookConsumerWidget {
                     ? const SizedBox.shrink()
                     : Container(
                         color: AppColors.appColor.withOpacity(0.1),
-                        height: 190.h,
+                        height: 300.h,
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),

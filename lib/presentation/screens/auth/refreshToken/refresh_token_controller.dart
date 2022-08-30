@@ -61,10 +61,16 @@ class RefreshTokenController extends StateNotifier<RefreshTokenState> {
         var refreshTokenReq = RefreshTokenReq(
             refreshToken: refreshToken, deviceId: device.deviceId);
         if (PreferenceManager.authToken.isNotEmpty) {
-          final token =
-              await ref.read(authManagerProvider).getAuthTOken(refreshTokenReq);
-          PreferenceManager.authToken = token.data!.authToken.toString();
-          PreferenceManager.refreshToken = token.data!.refreshToken.toString();
+          ref
+              .read(authManagerProvider)
+              .getAuthTOken(refreshTokenReq)
+              .then((value) {
+            PreferenceManager.authToken = value.data!.authToken.toString();
+            PreferenceManager.refreshToken =
+                value.data!.refreshToken.toString();
+          }).catchError((e, s) {
+            state = state.copyWith(error: e.toString());
+          });
         } else {
           timer.cancel();
         }
@@ -76,7 +82,6 @@ class RefreshTokenController extends StateNotifier<RefreshTokenState> {
       // return token;
     } catch (e) {
       state = state.copyWith(error: e.toString());
-      print(e);
     }
   }
 }

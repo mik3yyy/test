@@ -359,8 +359,6 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                                             0);
 
                                                 from.value = res.toString();
-
-                                                print(res);
                                               },
                                             ),
                                           ),
@@ -404,7 +402,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                             currencyTransactionProvider(widget.currency));
                       },
                       child: SizedBox(
-                        height: 400.h,
+                        height: 500.h,
                         child: ListView.separated(
                           physics: const AlwaysScrollableScrollPhysics(
                               parent: BouncingScrollPhysics()),
@@ -446,7 +444,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                   currencyTransactionProvider(widget.currency));
                             },
                             child: SizedBox(
-                              height: 400.h,
+                              height: 500.h,
                               child: ListView.separated(
                                 physics: const AlwaysScrollableScrollPhysics(
                                     parent: BouncingScrollPhysics()),

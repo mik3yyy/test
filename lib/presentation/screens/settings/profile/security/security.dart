@@ -117,7 +117,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                               .read(credentialProvider.notifier)
                               .getCredential(Constants.userPassword);
                           ref.read(credentialProvider.notifier).storeCredential(
-                              Constants.userEmail, user.data.user.email);
+                              Constants.userEmail,
+                              user.data.user.email.toString());
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userPassword, password!);
                         } else if (toggle.state == false) {

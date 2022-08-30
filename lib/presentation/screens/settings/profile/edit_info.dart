@@ -1,10 +1,12 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -22,29 +24,11 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class EditInfo extends StatefulHookConsumerWidget {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String country;
-  final String address;
-  final String state;
-  final String city;
-  final String phoneNo;
-  final String gender;
-  final String dob;
+  final ProfileRes userValue;
 
   const EditInfo({
     Key? key,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.country,
-    required this.phoneNo,
-    required this.dob,
-    required this.address,
-    required this.state,
-    required this.city,
-    required this.gender,
+    required this.userValue,
   }) : super(key: key);
 
   @override
@@ -52,42 +36,23 @@ class EditInfo extends StatefulHookConsumerWidget {
 }
 
 class _EditInfoState extends ConsumerState<EditInfo> {
-  String phoneCode = "+234";
-  String isoCode = "NG";
+  String phoneCode = "";
+  String isoCode = "";
   void getPhoneNumber(String phoneNumber) async {
-    PhoneNumber number =
-        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
+    phone.PhoneNumber number =
+        await phone.PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'US');
 
     number = number;
   }
 
-  String _handlePhoneNumber() {
-    if (widget.phoneNo.substring(0, 4).length == 3) {
-      return widget.phoneNo.substring(3);
-    } else {
-      return widget.phoneNo.substring(3);
-    }
-  }
-
   seperatePhoneAndDialCode() {
     for (var country in Countries.allCountries) {
-      if (country.values.contains(widget.country)) {
+      if (country.values.contains(widget.userValue.data.user.countryName)) {
         phoneCode = country["dial_code"].toString();
         isoCode = country["code"].toString();
         // print(country["dial_code"]);
       }
     }
-
-    // if (foundedCountry.isNotEmpty) {
-    //   var dialCode = phoneWithDialCode.value.substring(
-    //     0,
-    //     foundedCountry["dial_code"]!.length,
-    //   );
-    //   var newPhoneNumber = phoneWithDialCode.value.substring(
-    //     foundedCountry["dial_code"]!.length,
-    //   );
-    //   print({dialCode, newPhoneNumber});
-    // }
   }
 
   final formKey = GlobalKey<FormState>();
@@ -104,24 +69,35 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
-    PhoneNumber number = PhoneNumber(isoCode: isoCode);
-    final fistNameController = useTextEditingController(text: widget.firstName);
-    final lastNameCountroller = useTextEditingController(text: widget.lastName);
-    final emailCountroller = useTextEditingController(text: widget.email);
-    final phoneNoCountroller =
-        useTextEditingController(text: _handlePhoneNumber());
-    var dobCountroller = useTextEditingController(text: widget.dob);
-    final countryCountroller = useTextEditingController(text: widget.country);
-    final stateCountroller = useTextEditingController(text: widget.state);
-    final cityCountroller = useTextEditingController(text: widget.city);
-    final addressCountroller = useTextEditingController(text: widget.address);
-    final genderCountroller = useTextEditingController(text: widget.gender);
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    phone.PhoneNumber number = phone.PhoneNumber(isoCode: isoCode);
+    final fistNameController =
+        useTextEditingController(text: widget.userValue.data.user.firstName);
+    final lastNameCountroller =
+        useTextEditingController(text: widget.userValue.data.user.lastName);
+    final emailCountroller =
+        useTextEditingController(text: widget.userValue.data.user.email);
+    final phoneNoCountroller = useTextEditingController(
+        text: widget.userValue.data.user.phoneNumber?.phoneNumber);
+    var dobCountroller = useTextEditingController(
+        text: widget.userValue.data.user.dateOfBirth?.toIso8601String() ?? "");
+    final countryCountroller =
+        useTextEditingController(text: widget.userValue.data.user.countryName);
+    final stateCountroller =
+        useTextEditingController(text: widget.userValue.data.user.state);
+    final cityCountroller =
+        useTextEditingController(text: widget.userValue.data.user.city);
+    final addressCountroller =
+        useTextEditingController(text: widget.userValue.data.user.address);
+    final genderCountroller =
+        useTextEditingController(text: widget.userValue.data.user.gender);
     // String trimmedPhoneNo = _handlePhoneNumber();
 
     ref.listen<RequestState>(updateProfileProvider, (T, value) {
       if (value is Success<bool>) {
         context.loaderOverlay.hide();
         ref.refresh(getProfileProvider);
+        ref.refresh(userProfileProvider);
         Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,
@@ -170,12 +146,16 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             email: emailCountroller.text,
                             address: addressCountroller.text,
                             gender: genderCountroller.text,
-                            phoneNumber: phoneCode + phoneNoCountroller.text,
+                            phoneCode: phoneCode,
+                            phoneNumber: phoneNoCountroller.text,
                             dateOfBirth: dobCountroller.text,
                             city: cityCountroller.text,
                             country: countryCountroller.text,
                             state: stateCountroller.text,
                           );
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
 
                           ref
                               .read(updateProfileProvider.notifier)
@@ -300,14 +280,14 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           validator: (value) => validateEmail(value),
                         ),
                         Space(20.h),
-                        InternationalPhoneNumberInput(
+                        phone.InternationalPhoneNumberInput(
                           validator: (p0) => null,
-                          onInputChanged: (PhoneNumber number) {
+                          onInputChanged: (phone.PhoneNumber number) {
                             phoneCode = number.dialCode!;
                           },
                           onInputValidated: (bool value) => true,
-                          selectorConfig: const SelectorConfig(
-                            selectorType: PhoneInputSelectorType.DROPDOWN,
+                          selectorConfig: const phone.SelectorConfig(
+                            selectorType: phone.PhoneInputSelectorType.DROPDOWN,
                             leadingPadding: 0,
                             trailingSpace: false,
                             setSelectorButtonAsPrefixIcon: false,
@@ -327,7 +307,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           keyboardType: const TextInputType.numberWithOptions(
                               signed: true, decimal: false),
                           inputBorder: InputBorder.none,
-                          onSaved: (PhoneNumber number) {},
+                          // onSaved: (PhoneNumber number) {},
                         ),
                         // EditForm(
                         //     autovalidateMode:
@@ -338,27 +318,46 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         //     obscureText: false,
                         //     validator: (value) => validatePhoneNumber(value)),
                         Space(20.h),
-                        Builder(
-                          builder: (ctx) {
-                            final now = DateTime.now();
-                            return DateFormField(
-                              hint: 'Date of Birth',
-                              context: context,
-                              defaultPickerDate: DateTime(now.year - 16),
-                              maxDateTime: DateTime(now.year - 16),
-                              onChanged: (date) {
-                                dobCountroller.text =
-                                    (DateFormat('MM-dd-yyyy').format(date))
-                                        .split(" ")
-                                        .first;
-                              },
-                              validator: (date) {
-                                // if (date == null) return 'Date is required';
-                                return null;
-                              },
-                            );
+                        DateTimePicker(
+                          controller: dobCountroller,
+                          type: DateTimePickerType.date,
+                          dateMask: 'MM-dd-yyyy',
+
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          // icon: Icon(Icons.event),
+                          dateLabelText: 'Date of Birth',
+
+                          onChanged: (val) => debugPrint(val),
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return "update your Date of Birth";
+                            }
+
+                            return null;
                           },
                         ),
+                        // Builder(
+                        //   builder: (ctx) {
+                        //     final now = DateTime.now();
+                        //     return DateFormField(
+                        //       hint: 'Date of Birth',
+                        //       context: context,
+                        //       defaultPickerDate: DateTime(now.year - 16),
+                        //       maxDateTime: DateTime(now.year - 16),
+                        //       onChanged: (date) {
+                        //         dobCountroller.text =
+                        //             (DateFormat('MM-dd-yyyy').format(date))
+                        //                 .split(" ")
+                        //                 .first;
+                        //       },
+                        //       validator: (date) {
+                        //         // if (date == null) return 'Date is required';
+                        //         return null;
+                        //       },
+                        //     );
+                        //   },
+                        // ),
                       ],
                     ),
                   ),
@@ -433,7 +432,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         obscureText: false,
                         validator: (value) => validateAddress(value)),
                   ),
-                  Space(150.h),
+                  Space(50.h),
                 ],
               ),
             ),

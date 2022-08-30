@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/device_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 
@@ -59,6 +60,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
       final hasBiometric = await auth.canCheckBiometrics;
       if (!mounted) return false;
       state = state.copyWith(hasBiometric: hasBiometric);
+      PreferenceManager.hasBiometrics = hasBiometric;
 
       return hasBiometric;
     } on PlatformException catch (e) {
@@ -98,13 +100,11 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
             timezone: device.timeZone,
             deviceId: device.deviceId);
 
-        ref
-            .read(signInProvider.notifier)
-            .signIn(signinReq)
-            .then((value) => value);
-        state = state.copyWith(
-          isAuthenticated: isAuthenticated,
-        );
+        ref.read(signInProvider.notifier).signIn(signinReq).then((value) {
+          state = state.copyWith(
+            isAuthenticated: isAuthenticated,
+          );
+        });
 
         Future.delayed(const Duration(seconds: 2), () {
           state = state.copyWith(success: true);

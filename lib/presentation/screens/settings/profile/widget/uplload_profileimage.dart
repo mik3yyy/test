@@ -82,7 +82,8 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.transparent,
                     radius: 60.w,
-                    backgroundImage: const AssetImage("images/person.png"),
+                    backgroundImage:
+                        const AssetImage("assets/images/person.png"),
                     child: Stack(children: [
                       widget.hasIcon
                           ? InkWell(

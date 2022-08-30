@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,7 +5,6 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,10 +42,8 @@ class ProfileService {
     try {
       final response = await _read(dioProvider).get(url,
           options: Options(headers: {"Authentication": "Bearer $token"}));
-      PreferenceManager.appUser = jsonEncode(response.data);
 
       final result = ProfileRes.fromJson(response.data);
-      print("PRINTED HERE ${result.data.user.firstName}");
 
       return result;
     } on DioError catch (e) {
