@@ -66,7 +66,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
-    final localAuth = ref.watch(localAuthStateProvider);
     final device = ref.watch(deviceInfoProvider);
     final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
@@ -76,14 +75,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       if (value is Success<SigninRes>) {
         if (value.value!.data!.user.transactionPinAddedAt == null) {
           context.loaderOverlay.hide();
-          PreferenceManager.isFirstLaunch = true;
-          PreferenceManager.isloggedIn = true;
           context.navigate(const TransactionPinScreen());
         } else {
           PreferenceManager.isFirstLaunch = false;
-          PreferenceManager.isloggedIn = true;
-          ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
-          ref.read(getProfileProvider.notifier).getProfile();
+          ref.refresh(getAccountDetailsProvider);
+          ref.refresh(getProfileProvider);
+          ref.refresh(userProfileProvider);
           isLoading = true;
 
           Future.delayed(const Duration(seconds: 2), () {
@@ -220,7 +217,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     Space(160.h),
 
                     Row(
-                      mainAxisAlignment: localAuth.hasBiometric
+                      mainAxisAlignment: PreferenceManager.hasBiometrics
                           ? MainAxisAlignment.spaceBetween
                           : MainAxisAlignment.center,
                       children: [
@@ -245,6 +242,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                         password: passwordController.text,
                                         timezone: device.timeZone,
                                         deviceId: device.deviceId);
+
                                     ref
                                         .read(credentialProvider.notifier)
                                         .storeCredential(Constants.userPassword,
@@ -260,7 +258,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                   }
                                 },
                         ),
-                        localAuth.hasBiometric
+                        PreferenceManager.hasBiometrics
                             ? GestureDetector(
                                 onTap: () async {
                                   if (PreferenceManager.enableBioMetrics ==
@@ -281,7 +279,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                   ),
                                   child: const Image(
                                     image: AssetImage(
-                                      "images/fingerprint-3.png",
+                                      "assets/images/fingerprint-3.png",
                                     ),
                                     color: AppColors.whiteColor,
                                   ),

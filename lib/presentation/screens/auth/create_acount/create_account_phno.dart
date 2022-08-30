@@ -247,7 +247,7 @@ class CreatePhoneAccount extends HookConsumerWidget {
                         Text('Already have an account? ',
                             style: AppText.body4(context, AppColors.hintColor)),
                         InkWell(
-                          onTap: () => context.navigate(SigninScreen()),
+                          onTap: () => context.navigate(const SigninScreen()),
                           child: Text(
                             ' Sign In',
                             style: AppText.body4(context, AppColors.appColor),

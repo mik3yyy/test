@@ -91,86 +91,82 @@ class _TransferState extends ConsumerState<Transfer>
             ],
           ),
         ),
-        bgColor: AppColors.whiteColor,
+        bgColor: AppColors.appBgColor,
         child: SizedBox(
-          height: 770.h,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 25.h),
-                  child: Container(
-                      padding: EdgeInsets.only(left: 0.w, right: 0.w),
-                      height: 50.h,
-                      width: MediaQuery.of(context).size.width,
-                      // color: Colors.black,
-                      child: TabBar(
-                        isScrollable: false,
-                        controller: _tabController,
-                        // unselectedLabelColor: Colors.white,
+          height: 760.h,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 25.h),
+                child: Container(
+                    padding: EdgeInsets.only(left: 0.w, right: 0.w),
+                    height: 50.h,
+                    width: MediaQuery.of(context).size.width,
+                    // color: Colors.black,
+                    child: TabBar(
+                      isScrollable: false,
+                      controller: _tabController,
+                      // unselectedLabelColor: Colors.white,
 
-                        labelColor: AppColors.appColor,
-                        labelStyle:
-                            AppText.body2(context, AppColors.appColor, 19.sp),
-                        unselectedLabelStyle:
-                            AppText.body2(context, Colors.black45, 19.sp),
-                        unselectedLabelColor: Colors.black26,
-                        labelPadding: EdgeInsets.zero,
-                        indicatorPadding: EdgeInsets.zero,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.r),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(
-                                  0, 7), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        tabs: const [
-                          Tab(
-                            text: 'Wallet Info',
-                            //     child: Text(
-                            //   'Account Info',
-                            //   style:
-                            //       AppText.body2(context, AppColors.appColor, 19.sp),
-                            // )
-                          ),
-                          Tab(
-                            text: 'Make Transfer',
-                            //     child: Text(
-                            //   'Make Transfer',
-                            //   style:
-                            //       AppText.body2(context, AppColors.appColor, 19.sp),
-                            // )
+                      labelColor: AppColors.appColor,
+                      labelStyle:
+                          AppText.body2(context, AppColors.appColor, 19.sp),
+                      unselectedLabelStyle:
+                          AppText.body2(context, Colors.black45, 19.sp),
+                      unselectedLabelColor: Colors.black26,
+                      labelPadding: EdgeInsets.zero,
+                      indicatorPadding: EdgeInsets.zero,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25.r),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 7), // changes position of shadow
                           ),
                         ],
-                      )),
+                      ),
+                      tabs: const [
+                        Tab(
+                          text: 'Wallet Info',
+                          //     child: Text(
+                          //   'Account Info',
+                          //   style:
+                          //       AppText.body2(context, AppColors.appColor, 19.sp),
+                          // )
+                        ),
+                        Tab(
+                          text: 'Make Transfer',
+                          //     child: Text(
+                          //   'Make Transfer',
+                          //   style:
+                          //       AppText.body2(context, AppColors.appColor, 19.sp),
+                          // )
+                        ),
+                      ],
+                    )),
+              ),
+              SizedBox(height: 30.h),
+              Expanded(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  // height: 783.h,
+                  // color: Colors.blue,
+                  child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: [
+                        AccounInfoTab(
+                          currency: currency,
+                        ),
+                        const MakeTransfer()
+                      ]),
                 ),
-                SizedBox(height: 30.h),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 583.h,
-                      // color: Colors.grey,
-                      child: TabBarView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: _tabController,
-                          children: [
-                            AccounInfoTab(
-                              currency: currency,
-                            ),
-                            const MakeTransfer()
-                          ]),
-                    ),
-                  ],
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ));
   }

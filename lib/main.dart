@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/database/hive_setup.dart';
 import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
@@ -16,6 +17,7 @@ import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
+  await DataBase.init();
   await PreferenceManager.init();
 
   runApp(const ProviderScope(child: MyApp()));
@@ -31,7 +33,7 @@ class MyApp extends HookConsumerWidget {
     // NavigatorState get _navigator => _navigatorKey.currentState!;
     final sessionConfig = SessionConfig(
         invalidateSessionForAppLostFocus: const Duration(minutes: 2),
-        invalidateSessionForUserInactiviity: const Duration(minutes: 6));
+        invalidateSessionForUserInactiviity: const Duration(minutes: 12));
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
       if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
         // handle user  inactive timeout

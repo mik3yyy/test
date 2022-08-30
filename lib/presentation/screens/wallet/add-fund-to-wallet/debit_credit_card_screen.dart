@@ -492,8 +492,6 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                               0);
 
                                                   from.value = res.toString();
-
-                                                  print(res);
                                                 },
                                               ),
                                             ),

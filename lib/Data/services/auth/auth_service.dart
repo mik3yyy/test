@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -11,6 +12,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
+import 'package:kayndrexsphere_mobile/Data/services/wallet/wallet_service.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
@@ -35,6 +37,20 @@ class UserService {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read(dioProvider).interceptors.add(RetryInterceptor(
+          dio: _read(dioProvider),
+          logPrint: print, // specify log function (optional)
+          retries: 3, // retry count (optional)
+          retryDelays: const [
+            // set delays between retries (optional)
+            Duration(seconds: 2), // wait 1 sec before first retry
+            Duration(seconds: 2), // wait 2 sec before second retry
+            Duration(
+                seconds:
+                    2), // wait 3 sec before third retry // wait 3 sec before third retry
+          ],
+        ));
   }
 
   // create account

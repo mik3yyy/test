@@ -295,6 +295,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.6"
+  dio_smart_retry:
+    dependency: "direct main"
+    description:
+      name: dio_smart_retry
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.2"
   dotted_border:
     dependency: "direct main"
     description:
@@ -532,6 +539,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  hive:
+    dependency: "direct main"
+    description:
+      name: hive
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
+  hive_flutter:
+    dependency: "direct main"
+    description:
+      name: hive_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  hive_generator:
+    dependency: "direct dev"
+    description:
+      name: hive_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.3"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -840,6 +868,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  pay:
+    dependency: "direct main"
+    description:
+      name: pay
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.10"
+  pay_android:
+    dependency: transitive
+    description:
+      name: pay_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
+  pay_ios:
+    dependency: transitive
+    description:
+      name: pay_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
+  pay_platform_interface:
+    dependency: transitive
+    description:
+      name: pay_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   pedantic:
     dependency: transitive
     description:
@@ -1027,6 +1083,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  source_helper:
+    dependency: transitive
+    description:
+      name: source_helper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.2"
   source_span:
     dependency: transitive
     description:

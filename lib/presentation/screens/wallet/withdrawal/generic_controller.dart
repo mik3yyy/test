@@ -233,7 +233,7 @@ class GenericController extends StateNotifier<GenericState> {
   void getNotification() async {
     try {
       state = state.copyWith(notificationloading: true);
-      print("LOADING STATUS ${state.loading}");
+
       ref
           .read(notificationServiceManagerProvider)
           .getNotification()

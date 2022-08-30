@@ -20,7 +20,7 @@ class SuccessScreen extends StatelessWidget {
           children: [
             const Image(
               image: AssetImage(
-                "images/image-4.png",
+                "assets/images/image-4.png",
               ),
               width: 300,
               height: 300,

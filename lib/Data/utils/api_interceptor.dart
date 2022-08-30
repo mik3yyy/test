@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 class ApiInterceptor extends Interceptor {
@@ -20,16 +21,15 @@ class ApiInterceptor extends Interceptor {
       options.headers.remove('requireToken');
     }
 
-    print("Headers:");
-    options.headers.forEach((k, v) => print('$k: $v'));
-    if (options.queryParameters != null) {
-      print("queryParameters:");
-      options.queryParameters.forEach((k, v) => print('$k: $v'));
-    }
+    debugPrint("Headers:");
+    options.headers.forEach((k, v) => debugPrint('$k: $v'));
+    debugPrint("queryParameters:");
+    options.queryParameters.forEach((k, v) => debugPrint('$k: $v'));
     if (options.data != null) {
-      print("Body: ${options.data}");
+      debugPrint("Body: ${options.data}");
     }
-    print(
+    debugPrint(
+        // ignore: unnecessary_null_comparison
         "--> END ${options.method != null ? options.method.toUpperCase() : 'METHOD'}");
 
     // options.headers.addAll({"X-Api-Key": "${Globals.xAPIKey}"});
@@ -40,10 +40,10 @@ class ApiInterceptor extends Interceptor {
 
 @override
 Future onResponse(Response response, ResponseInterceptorHandler handler) async {
-  print("Headers:");
-  response.headers.forEach((k, v) => print('$k: $v'));
-  print("Response: ${response.data}");
-  print("<-- END HTTP");
+  debugPrint("Headers:");
+  response.headers.forEach((k, v) => debugPrint('$k: $v'));
+  debugPrint("Response: ${response.data}");
+  debugPrint("<-- END HTTP");
   // }
   return handler.next(response);
 }

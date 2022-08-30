@@ -82,9 +82,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        print("HERE");
         context.loaderOverlay.hide();
-        ref.read(getProfileProvider.notifier).getProfile();
+        ref.read(getProfileProvider);
       }
 
       if (value is Error) {
@@ -269,7 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         0xfff9f9f9,
       ),
       child: SizedBox(
-        height: 500,
+        height: MediaQuery.of(context).size.height * 0.65,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 0.h),
@@ -306,7 +305,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 context,
                                 screen: const Transfer(),
                                 withNavBar:
-                                    true, // OPTIONAL VALUE. True by default.
+                                    false, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
@@ -348,7 +347,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               pushNewScreen(
                                 context, screen: const WithdrawalMethodScreen(),
                                 withNavBar:
-                                    true, // OPTIONAL VALUE. True by default.
+                                    false, // OPTIONAL VALUE. True by default.
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.fade,
                               );
@@ -369,11 +368,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             const Spacer(),
                             GestureDetector(
                               onTap: () {
+                                // context
+                                //     .navigate(const ViewAllTransactionScreen());
                                 pushNewScreen(
                                   context,
                                   screen: const ViewAllTransactionScreen(),
                                   withNavBar:
-                                      true, // OPTIONAL VALUE. True by default.
+                                      false, // OPTIONAL VALUE. True by default.
                                   pageTransitionAnimation:
                                       PageTransitionAnimation.fade,
                                 );

@@ -17,6 +17,7 @@ class UpdateProfileReq {
     this.gender,
     this.email,
     this.phoneNumber,
+    this.phoneCode,
     this.dateOfBirth,
     this.country,
     this.state,
@@ -29,6 +30,7 @@ class UpdateProfileReq {
   String? gender;
   String? email;
   String? phoneNumber;
+  String? phoneCode;
   String? dateOfBirth;
   String? country;
   String? state;
@@ -42,6 +44,7 @@ class UpdateProfileReq {
         gender: json["gender"],
         email: json["email"],
         phoneNumber: json["phone_number"],
+        phoneCode: json["phone_code"],
         dateOfBirth: json["date_of_birth"],
         country: json["country"],
         state: json["state"],
@@ -55,6 +58,7 @@ class UpdateProfileReq {
         "gender": gender,
         "email": email,
         "phone_number": phoneNumber,
+        "phone_code": phoneCode,
         "date_of_birth": dateOfBirth,
         "country": country,
         "state": state,

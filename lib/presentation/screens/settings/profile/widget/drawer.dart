@@ -10,7 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/notification/notifica
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/safepay/safepay_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -35,36 +34,34 @@ class Navigation extends HookConsumerWidget {
               comingSoon: false,
               image: AppImage.myProfile,
               onPressed: () {
+                // context.navigate(const MyProfile());
                 pushNewScreen(context,
+                    withNavBar: false,
                     screen: const MyProfile(),
                     pageTransitionAnimation: PageTransitionAnimation.fade);
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               title: 'My Prop',
               comingSoon: false,
               image: AppImage.myProp,
               onPressed: () {
+                // context.navigate(const PropScreen());
                 pushNewScreen(
                   context,
+                  withNavBar: false,
                   screen: const PropScreen(),
                   pageTransitionAnimation: PageTransitionAnimation.fade,
                 );
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               comingSoon: false,
@@ -76,51 +73,51 @@ class Navigation extends HookConsumerWidget {
                   ref
                       .read(genericController.notifier)
                       .withdrawalNotificationRequest();
+                  // context.navigate(const NotificationScreen());
+
                   pushNewScreen(
                     context,
+                    withNavBar: false,
                     screen: const NotificationScreen(),
                     pageTransitionAnimation: PageTransitionAnimation.fade,
                   );
                 } else {
+                  // context.navigate(const NotificationScreen());
                   pushNewScreen(
                     context,
+                    withNavBar: false,
                     screen: const NotificationScreen(),
                     pageTransitionAnimation: PageTransitionAnimation.fade,
                   );
                 }
-
+                // context.navigate(const NotificationScreen());
                 pushNewScreen(
                   context,
+                  withNavBar: false,
                   screen: const NotificationScreen(),
                   pageTransitionAnimation: PageTransitionAnimation.fade,
                 );
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               title: 'Safepay',
-              comingSoon: false,
+              comingSoon: true,
               image: AppImage.mySafePay,
               onPressed: () {
-                pushNewScreen(
-                  context,
-                  screen: const SafePayScreen(),
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
-                );
+                // pushNewScreen(
+                //   context,
+                //   screen: const SafePayScreen(),
+                //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                // );
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               title: 'Refer a friend',
@@ -132,29 +129,25 @@ class Navigation extends HookConsumerWidget {
                 //     pageTransitionAnimation: PageTransitionAnimation.fade);
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               comingSoon: false,
               title: 'FAQ',
               image: AppImage.faq,
               onPressed: () {
+                // context.navigate(const FaqScreen());
                 pushNewScreen(context,
+                    withNavBar: false,
                     screen: const FaqScreen(),
                     pageTransitionAnimation: PageTransitionAnimation.fade);
               },
             ),
-            Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
-            Space(30.h),
             DrawerList(
               color: Colors.black,
               title: 'log out',
@@ -164,15 +157,13 @@ class Navigation extends HookConsumerWidget {
                 // ref
                 //     .read(localAuthStateProvider.notifier)
                 //     .resetbiometrics(false);
-
-                context.navigate(const SigninScreen());
                 PreferenceManager.removeToken();
+                context.navigateReplaceRoot(const SigninScreen());
               },
             ),
             Space(10.h),
-            Divider(
+            const Divider(
               thickness: 1,
-              height: 20.h,
             ),
             Space(100.h),
           ],
@@ -199,36 +190,49 @@ class DrawerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // const hoverColor = Colors.white;
+    const hoverColor = Colors.red;
     return InkWell(
       onTap: onPressed,
-      // hoverColor: hoverColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Image.asset(
-            image,
-            color: color,
-            height: 30.h,
-            width: 25.w,
+      hoverColor: hoverColor,
+      // overlayColor: MaterialStateProperty.resolveWith<Color?>(
+      //   (Set<MaterialState> states) {
+      //     if (states.contains(MaterialState.pressed)) {
+      //       return Colors.redAccent;
+      //     } //<-- SEE HERE
+      //     return null; // Defer to the widget's default.
+      //   },
+      // ),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.062,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image.asset(
+                image,
+                color: color,
+                height: 30.h,
+                width: 25.w,
+              ),
+              Space(20.w),
+              Text(
+                title,
+                style: AppText.body2(context, Colors.black, 19.sp),
+              ),
+              const Spacer(),
+              comingSoon
+                  ? Text(
+                      "Coming soon",
+                      style: AppText.body2(context, Colors.black, 15.sp),
+                    )
+                  : Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.black,
+                      size: 15.sp,
+                    ),
+            ],
           ),
-          Space(20.w),
-          Text(
-            title,
-            style: AppText.body2(context, Colors.black, 19.sp),
-          ),
-          const Spacer(),
-          comingSoon
-              ? Text(
-                  "Coming soon",
-                  style: AppText.body2(context, Colors.black, 15.sp),
-                )
-              : Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black,
-                  size: 15.sp,
-                ),
-        ],
+        ),
       ),
     );
   }

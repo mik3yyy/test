@@ -5,7 +5,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
-import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ViewAllTransactionScreen extends HookConsumerWidget {
   const ViewAllTransactionScreen({Key? key}) : super(key: key);
@@ -69,7 +68,7 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
                         },
                       ),
                     ),
-                    const Space(60)
+                    // const Space(60)
                   ],
                 );
               }

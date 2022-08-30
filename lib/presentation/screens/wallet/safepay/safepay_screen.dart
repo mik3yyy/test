@@ -392,8 +392,6 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                                             0);
 
                                                 from.value = res.toString();
-
-                                                print(res);
                                               },
                                             ),
                                           ),

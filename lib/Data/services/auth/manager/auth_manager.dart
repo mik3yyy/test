@@ -86,8 +86,12 @@ class AuthManager extends IAuthManager {
   Future<SigninRes> signIn(SigninReq signinReq) async {
     final res = await _userService.signIn(signinReq);
 
-    PreferenceManager.authToken = res.data!.tokens!.authToken!;
-    PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+    if (res.data != null) {
+      PreferenceManager.isFirstLaunch = true;
+      PreferenceManager.isloggedIn = true;
+      PreferenceManager.authToken = res.data!.tokens!.authToken!;
+      PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+    }
 
     return res;
   }

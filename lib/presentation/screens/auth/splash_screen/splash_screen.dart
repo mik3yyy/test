@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
       splash: Transform.scale(
         scale: 2,
         child: Image(
-          image: const AssetImage("images/logo.png"),
+          image: const AssetImage("assets/images/logo.png"),
           width: 400.w,
           height: 400.h,
         ),

@@ -168,7 +168,6 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                                   final banks = bank[index];
                                   return InkWell(
                                     onTap: () {
-                                      print(widget.currencyCode);
                                       if (widget.routeName == "createWallet") {
                                         ref
                                             .read(createWalletProvider.notifier)

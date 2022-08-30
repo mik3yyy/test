@@ -1,22 +1,21 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:kayndrexsphere_mobile/Data/database/user_database.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
+
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../../../Data/model/profile/res/profile_res.dart';
 import '../../../components/app text theme/app_text_theme.dart';
+import 'widget/profile_methods.dart';
 import 'widget/personal_info.dart';
 
 enum Gender {
@@ -43,133 +42,72 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(getProfileProvider);
-    final user = locator.get<ProfileRes>();
-
-    // _checkAlist(){
-    //  Countries.allCountries.any((element) => element.values.contains(value));
-    // }
+    final userValue = ref.watch(userProfileProvider).value;
 
     return GenericWidget(
-      appbar: Padding(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
-        child: Column(
-          children: [
-            Space(20.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: (() => Navigator.pop(context)),
-                  child: const Icon(
-                    Icons.arrow_back_ios_outlined,
-                    color: Colors.white,
+        appbar: Padding(
+          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          child: Column(
+            children: [
+              Space(5.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: (() => Navigator.pop(context)),
+                    child: const Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                vm.maybeWhen(success: (data) {
-                  return InkWell(
-                    onTap: () {
-                      pushNewScreen(context,
-                          screen: EditInfo(
-                            dob: data!.data.user.dateOfBirth.toString(),
-                            country: data.data.user.countryName,
-                            state: data.data.user.state.toString(),
-                            city: data.data.user.city.toString(),
-                            address: data.data.user.address.toString(),
-                            email: data.data.user.email,
-                            firstName: data.data.user.firstName,
-                            gender: user.data.user.gender.toString(),
-                            lastName: data.data.user.lastName,
-                            phoneNo: data.data.user.phoneNumber.toString(),
-                          ),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.fade);
-                    },
-                    child: Text(
-                      'Edit',
-                      style: AppText.body2(context, Colors.white, 20.sp),
-                    ),
-                  );
-                }, orElse: () {
-                  return InkWell(
-                    onTap: () {
-                      pushNewScreen(context,
-                          screen: EditInfo(
-                            dob: user.data.user.dateOfBirth.toString(),
-                            country: user.data.user.countryName,
-                            state: user.data.user.state.toString(),
-                            city: user.data.user.city.toString(),
-                            address: user.data.user.address.toString(),
-                            email: user.data.user.email,
-                            firstName: user.data.user.firstName,
-                            gender: user.data.user.gender.toString(),
-                            lastName: user.data.user.lastName,
-                            phoneNo: user.data.user.phoneNumber.toString(),
-                          ),
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.fade);
-                    },
-                    child: Text(
-                      'Edit',
-                      style: AppText.body2(context, Colors.white, 20.sp),
-                    ),
-                  );
-                })
-              ],
-            ),
-            const UploadImage(
-              hasIcon: true,
-            ),
-            Space(10.h),
-            Text(
-              user.data.user.firstName + " " + user.data.user.lastName,
-              style: AppText.body2(context, Colors.white, 25.sp),
-            ),
-            Space(5.h),
-          ],
+                  const Spacer(),
+                  TextButton(
+                      child: Text(
+                        'Edit',
+                        style: AppText.body2(context, Colors.white, 20.sp),
+                      ),
+                      onPressed: () {
+                        pushNewScreen(context,
+                            screen: EditInfo(
+                              userValue: userValue!,
+                            ),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.fade);
+                      }),
+                ],
+              ),
+              const UploadImage(
+                hasIcon: true,
+              ),
+              Space(10.h),
+              Text(
+                userName(userValue?.data.user.firstName,
+                    userValue?.data.user.lastName),
+                style: AppText.body2(context, Colors.white, 25.sp),
+              ),
+              Space(5.h),
+            ],
+          ),
         ),
-      ),
-      bgColor: AppColors.whiteColor,
-      child: SizedBox(
-        height: 660.h,
-        child: Padding(
-          padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
-          child: SingleChildScrollView(
+        bgColor: AppColors.whiteColor,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.68,
+          child: Padding(
+            padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 50.h),
+            child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics()),
-              child: vm.when(
-                  error: (error, stackTrace) =>
-                      Center(child: Text(error.toString())),
-                  idle: () =>
-                      const Center(child: CircularProgressIndicator.adaptive()),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator.adaptive()),
-                  success: (value) {
-                    String _date() {
-                      final date = value!.data.user.dateOfBirth;
-
-                      if (date == null) {
-                        return "Unavailable";
-                      } else {
-                        DateTime parseDate =
-                            DateFormat("yyyy-MM-dd").parse(date.toString());
-                        var inputDate = DateTime.parse(parseDate.toString());
-                        var outputFormat = DateFormat('MM/dd/yyyy');
-                        var dob = outputFormat.format(inputDate);
-                        return dob;
-                      }
-                    }
+              child: ValueListenableBuilder<Box>(
+                  valueListenable: Hive.box<UserDataBase>("user").listenable(),
+                  builder: (context, box, _) {
+                    final user = box.values.toList().cast<UserDataBase>().first;
 
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'First Name',
-                          subTitle: value!.data.user.firstName == ""
-                              ? "Unavailable"
-                              : value.data.user.firstName,
+                          subTitle: user.firstName.toString(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -180,9 +118,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Last Name',
-                          subTitle: value.data.user.lastName == ""
-                              ? "Unavailable"
-                              : value.data.user.lastName,
+                          subTitle: user.lastName.toString(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -193,7 +129,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Email',
-                          subTitle: value.data.user.email.toString(),
+                          subTitle: user.email.toString(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -204,7 +140,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                             color: Colors.black,
                             title: 'Phone Number',
-                            subTitle: user.data.user.phoneNumber.toString()),
+                            subTitle: user.phoneNumer.toString()),
                         Space(7.h),
                         const Divider(
                           color: Colors.black,
@@ -214,12 +150,9 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                             color: Colors.black,
                             title: 'Date of Birth',
-                            subTitle: _date()
+                            subTitle: date(user.dateOfBirth)
                             // ? "Unavailable"
-                            // : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
-                            //     value.data!.user!.dateOfBirth)!
 
-                            //     ),
                             ),
 
                         Space(7.h),
@@ -237,9 +170,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Gender',
-                          subTitle: value.data.user.gender.toString() == ""
-                              ? "Unavailable"
-                              : value.data.user.gender.toString(),
+                          subTitle: user.gender.toString(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -256,9 +187,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Address',
-                          subTitle: value.data.user.address.toString() == ""
-                              ? "Unavailable"
-                              : value.data.user.address.toString(),
+                          subTitle: user.address.toString(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -269,20 +198,160 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Country',
-                          subTitle: value.data.user.countryName.toString(),
+                          subTitle: user.country.toString(),
                         ),
                         Space(7.h),
                         const Divider(
                           color: Colors.black,
                           thickness: 0.4,
                         ),
-                        Space(80.h),
+                        Space(60.h),
                       ],
                     );
-                  })),
-        ),
-      ),
-    );
+                  }),
+
+              // vm.when(
+              //     error: (error, stackTrace) =>
+              //         Center(child: Text(error.toString())),
+              //     idle: () =>
+              //         const Center(child: CircularProgressIndicator.adaptive()),
+              //     loading: () =>
+              //         const Center(child: CircularProgressIndicator.adaptive()),
+              //     success: (value) {
+              //       String _date() {
+              //         final date = value!.data.user.dateOfBirth;
+
+              //         if (date == null) {
+              //           return "unavailable";
+              //         } else {
+              //           DateTime parseDate =
+              //               DateFormat("yyyy-MM-dd").parse(date.toString());
+              //           var inputDate = DateTime.parse(parseDate.toString());
+              //           var outputFormat = DateFormat('MM/dd/yyyy');
+              //           var dob = outputFormat.format(inputDate);
+              //           return dob;
+              //         }
+              //       }
+
+              //       return Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'First Name',
+              //             subTitle: value!.data.user.firstName.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'Last Name',
+              //             subTitle: value.data.user.lastName.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'Email',
+              //             subTitle: value.data.user.email.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //               color: Colors.black,
+              //               title: 'Phone Number',
+              //               subTitle: value.data.user.phoneNumber!.phoneNumber
+              //                   .toString()),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //               color: Colors.black,
+              //               title: 'Date of Birth',
+              //               subTitle: _date()
+              //               // ? "Unavailable"
+              //               // : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
+              //               //     value.data!.user!.dateOfBirth)!
+
+              //               //     ),
+              //               ),
+
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+
+              //           ///
+              //           ///
+              //           ///
+              //           ///
+              //           ///
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'Gender',
+              //             subTitle: value.data.user.gender.toString() == ""
+              //                 ? "Unavailable"
+              //                 : value.data.user.gender.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+
+              //           ///
+              //           ///
+              //           ///
+              //           ///
+
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'Address',
+              //             subTitle: value.data.user.address.toString() == ""
+              //                 ? "Unavailable"
+              //                 : value.data.user.address.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(30.h),
+              //           PersonalInfoCard(
+              //             color: Colors.black,
+              //             title: 'Country',
+              //             subTitle: value.data.user.countryName.toString(),
+              //           ),
+              //           Space(7.h),
+              //           const Divider(
+              //             color: Colors.black,
+              //             thickness: 0.4,
+              //           ),
+              //           Space(80.h),
+              //         ],
+              //       );
+              //     })),
+            ),
+          ),
+        ));
   }
 }
 
