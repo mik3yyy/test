@@ -68,21 +68,13 @@ class Navigation extends HookConsumerWidget {
               title: 'Notification',
               image: AppImage.myNotification,
               onPressed: () {
+                ///CHECK IF AUTODISPOSE WORKS
                 if (controller.notification.isEmpty) {
                   ref.read(genericController.notifier).getNotification();
                   ref
                       .read(genericController.notifier)
                       .withdrawalNotificationRequest();
-                  // context.navigate(const NotificationScreen());
-
-                  pushNewScreen(
-                    context,
-                    withNavBar: false,
-                    screen: const NotificationScreen(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade,
-                  );
                 } else {
-                  // context.navigate(const NotificationScreen());
                   pushNewScreen(
                     context,
                     withNavBar: false,
@@ -90,13 +82,6 @@ class Navigation extends HookConsumerWidget {
                     pageTransitionAnimation: PageTransitionAnimation.fade,
                   );
                 }
-                // context.navigate(const NotificationScreen());
-                pushNewScreen(
-                  context,
-                  withNavBar: false,
-                  screen: const NotificationScreen(),
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
-                );
               },
             ),
             const Divider(

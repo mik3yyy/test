@@ -13,6 +13,9 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/country.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/language.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -27,8 +30,10 @@ class CurrencyScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(setCurrencyProvider);
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final currencyController = useTextEditingController();
     final countryController = useTextEditingController();
+    final countryCodeController = useTextEditingController();
     final languageController = useTextEditingController();
 
     ref.listen<RequestState>(setCurrencyProvider, (T, value) {
@@ -74,10 +79,16 @@ class CurrencyScreen extends HookConsumerWidget {
                     // country
                     InkWell(
                       onTap: () {
-                        countryBuild(
-                          context,
-                          countryController,
-                        );
+                        pushNewScreen(context,
+                            screen: SelectCountryScreen(
+                                countryName: countryController,
+                                countryCode: countryCodeController),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.slideRight);
+                        // countryBuild(
+                        //   context,
+                        //   countryController,
+                        // );
                       },
                       child: TextFormInput(
                         enabled: false,
@@ -103,7 +114,15 @@ class CurrencyScreen extends HookConsumerWidget {
                     // currency
                     GestureDetector(
                       onTap: () {
-                        currencyBuild(context, currencyController);
+                        // context.navigate()
+                        pushNewScreen(context,
+                            screen: SelectCurrencyScreen(
+                              currencyCode: currencyController,
+                              routeName: 'addFunds',
+                            ),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.slideRight);
+                        // currencyBuild(context, currencyController);
                       },
                       child: TextFormInput(
                         enabled: false,

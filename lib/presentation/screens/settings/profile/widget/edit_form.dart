@@ -17,6 +17,7 @@ class EditForm extends StatelessWidget {
       this.focusNode,
       // this.textAlign,
       this.onTap,
+      this.readOnly = false,
       this.enabled,
       this.inputter,
       this.keyboardType,
@@ -28,6 +29,7 @@ class EditForm extends StatelessWidget {
   final bool obscureText;
   final Widget? suffixIcon;
   final bool? enabled;
+  final bool readOnly;
   final Widget? prefixIcon;
   // final TextAlign? textAlign;
   final TextInputType? keyboardType;
@@ -46,6 +48,7 @@ class EditForm extends StatelessWidget {
         onTap: onTap,
         inputFormatters: inputter,
         enabled: enabled,
+        readOnly: readOnly,
         // textAlign: textAlign!,
         controller: controller,
         cursorColor: Colors.blue,

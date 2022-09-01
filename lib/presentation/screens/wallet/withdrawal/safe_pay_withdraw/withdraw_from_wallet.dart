@@ -135,21 +135,6 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                         obscureText: false,
                         validator: (value) => validateState(value)),
 
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       'Add to beneficiaries',
-                    //       style: AppText.header2(context, Colors.black, 20.sp),
-                    //     ),
-                    //     const Spacer(),
-                    //     Switch.adaptive(
-                    //         activeColor: Colors.greenAccent,
-                    //         value: toggle.state,
-                    //         onChanged: (value) {
-                    //           toggle.state = !toggle.state;
-                    //         }),
-                    //   ],
-                    // ),
                     Space(30.h),
                     Container(
                       height: 80.h,

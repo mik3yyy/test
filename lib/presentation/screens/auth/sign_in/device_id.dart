@@ -42,33 +42,34 @@ class DeviceIDNotifier extends StateNotifier<DeviceState> {
   ) : super(DeviceState.initial());
   final DeviceInfoPlugin deviceInfo;
 
-  Future<String> deviceId() async {
+  void deviceId() {
     try {
       if (Platform.isAndroid) {
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        state = state.copyWith(deviceId: androidInfo.androidId.toString());
+        deviceInfo.androidInfo.then((value) {
+          state = state.copyWith(deviceId: value.androidId.toString());
+        });
 
-        return androidInfo.androidId.toString();
+        // return androidInfo.androidId.toString();
       } else if (Platform.isIOS) {
-        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        state =
-            state.copyWith(deviceId: iosInfo.identifierForVendor.toString());
+        deviceInfo.iosInfo.then((value) {
+          state =
+              state.copyWith(deviceId: value.identifierForVendor.toString());
+        });
 
-        return iosInfo.identifierForVendor.toString();
+        // return iosInfo.identifierForVendor.toString();
       } else {
-        return state.deviceId;
+        return;
       }
     } catch (e) {
       throw state.toString();
     }
   }
 
-  Future<String> timeZone() async {
+  void timeZone() {
     try {
-      final String currentTimeZone =
-          await FlutterNativeTimezone.getLocalTimezone();
-      state = state.copyWith(timeZone: currentTimeZone);
-      return currentTimeZone;
+      FlutterNativeTimezone.getLocalTimezone().then((value) {
+        state = state.copyWith(timeZone: value);
+      });
     } catch (e) {
       throw state.toString();
     }

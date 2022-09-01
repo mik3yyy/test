@@ -12,6 +12,7 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../make_payment/fund_wallet/fund_wallet_req.dart';
 import '../../make_payment/fund_wallet/fund_wallet_res.dart';
+import '../../make_payment/fund_wallet/web_res.dart';
 
 final cardServiceProvider = Provider<CardService>((ref) {
   return CardService((ref.read), ref);
@@ -93,12 +94,12 @@ class CardService {
     }
   }
 
-  Future<FundWalletRes> fundWallet(FundWalletReq fundWalletReq) async {
-    const url = '/payments/deposits/card/initiate';
+  Future<StripeWebRes> fundWallet(FundWalletReq fundWalletReq) async {
+    const url = '/payments/deposits/new/initiate-web';
     try {
       final response =
           await _read(dioProvider).post(url, data: fundWalletReq.toJson());
-      final result = FundWalletRes.fromJson(response.data);
+      final result = StripeWebRes.fromJson(response.data);
 
       return result;
     } on DioError catch (e) {

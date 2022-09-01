@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
@@ -17,14 +17,7 @@ import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
 
 class ToWallet extends StatefulHookConsumerWidget {
-  // final List<Wallet>? wallet;
-  const ToWallet(
-      {
-
-      // required this.wallet,
-
-      Key? key})
-      : super(key: key);
+  const ToWallet({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ToWalletState();
@@ -34,20 +27,17 @@ class _ToWalletState extends ConsumerState<ToWallet> {
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
   final formKey = GlobalKey<FormState>();
 
-  String? selectedItem = 'Euro';
   @override
   Widget build(BuildContext context) {
-    final defaultWallet = ref.watch(getUserProfileProvider);
+    final defaultWallet = ref.watch(userProfileProvider).value;
+    FocusScopeNode currentFocus = FocusScope.of(context);
     // final defaultWallet = ref.watch(signInProvider);
     final vm = ref.watch(transferToWalletProvider);
     final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
-    // final fistNameController = useTextEditingController();
+
     final amountController = useTextEditingController();
     final toCurrencyController = useTextEditingController();
     final transactionPinController = useTextEditingController();
-
-    final currencyCode = defaultWallet.maybeWhen(
-        success: (v) => v!.data.defaultWallet.currencyCode!, orElse: () => '');
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Success) {
@@ -56,7 +46,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
             context, 'Funds transferred successfully');
         //Refreshing user account details, so the new balance can reflect on the screen
 
-        ref.refresh(getUserProfileProvider);
+        ref.refresh(userProfileProvider);
       }
       if (value is Error) {
         // context.loaderOverlay.hide();
@@ -74,7 +64,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
             children: [
               Center(
                 child: Text(
-                  'Transfer from $currencyCode wallet to other wallets',
+                  'Transfer from ${defaultWallet?.data.defaultWallet.currencyCode} wallet to other wallets',
                   style: AppText.body2(context, Colors.black, 19.sp),
                 ),
               ),
@@ -189,7 +179,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               ),
               Space(20.h),
               CustomButton(
-                buttonText: 'Transfer',
+                buttonText: vm is Loading ? "Processing" : 'Transfer',
                 bgColor: AppColors.appColor,
                 borderColor: AppColors.appColor,
                 textColor: Colors.white,
@@ -197,10 +187,13 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                     ? null
                     : () {
                         if (formKey.currentState!.validate()) {
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                           ref
                               .read(transferToWalletProvider.notifier)
                               .transferToWallet(
-                                currencyCode,
+                                defaultWallet!.data.defaultWallet.currencyCode!,
                                 toCurrencyController.text,
                                 int.parse(amountController.text),
                                 transactionPinController.text,
@@ -221,115 +214,6 @@ class _ToWalletState extends ConsumerState<ToWallet> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ToWalletTab extends HookConsumerWidget {
-  ToWalletTab({Key? key}) : super(key: key);
-
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
-  @override
-  Widget build(BuildContext context, ref) {
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Space(10.h),
-          Center(
-            child: Text(
-              'Transfer from dollar wallet to other wallets',
-              style: AppText.body2(context, Colors.grey[400]!, 17.sp),
-            ),
-          ),
-          Space(25.h),
-          Text(
-            'Enter amount',
-            style: AppText.body2(context, AppColors.appColor, 19.sp),
-          ),
-          Space(5.h),
-          const WalletTextField(
-            labelText: 'Click to type',
-            obscureText: false,
-            color: Colors.white,
-            readOnly: false,
-          ),
-          Space(25.h),
-          Text(
-            'Select wallet account currency',
-            style: AppText.body2(context, AppColors.appColor, 19.sp),
-          ),
-          Space(5.h),
-          const WalletTextField(
-            labelText: 'Select currency',
-            obscureText: false,
-            color: Colors.white,
-            readOnly: false,
-          ),
-          Space(25.h),
-          Center(
-            child: Text(
-              'Enter password',
-              style: AppText.header3(context, AppColors.appColor, 20.sp),
-            ),
-          ),
-          Space(5.h),
-          Center(
-            child: Text(
-              'For security reasons, please enter your password',
-              style: AppText.body2(context, AppColors.appColor, 16.sp),
-            ),
-          ),
-          Space(5.h),
-          WalletTextField(
-            labelText: '',
-            obscureText: true,
-            readOnly: false,
-            color: Colors.white,
-            suffixIcon: GestureDetector(
-              onTap: () {
-                togglePassword.state = !togglePassword.state;
-              },
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 0.h),
-                child: Icon(
-                  togglePassword.state
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  color: AppColors.appColor,
-                ),
-              ),
-            ),
-          ),
-          Space(10.h),
-          CustomButton(
-              buttonText: 'Transfer',
-              bgColor: AppColors.appColor,
-              borderColor: AppColors.appColor,
-              textColor: Colors.white,
-              onPressed: () {
-                // pushNewScreen(
-                //   context,
-                //   screen: const ViewAllWallet(),
-                //   withNavBar: true, // OPTIONAL VALUE. True by default.
-                //   pageTransitionAnimation: PageTransitionAnimation.fade,
-                // );
-                // context.navigate(AvailableBalance()
-
-                // );
-              },
-              buttonWidth: MediaQuery.of(context).size.width),
-          Space(7.h),
-          Center(
-            child: Text(
-              'Cancel',
-              style: AppText.header3(context, AppColors.appColor, 20.sp),
-            ),
-          ),
-          Space(20.h),
-        ],
       ),
     );
   }

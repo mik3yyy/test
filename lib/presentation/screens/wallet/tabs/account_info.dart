@@ -45,7 +45,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     }
     List<Transactions> result = banks
         .where((country) =>
-            country.user.accountNumber!.toLowerCase().contains(text))
+            country.user!.accountNumber!.toLowerCase().contains(text))
         .toList();
     return Future.value(result);
   }
@@ -65,7 +65,6 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
 
     final transaction = ref.watch(currencyTransactionProvider(widget.currency));
     final rate = useState("0.0");
-    // final toExchangeCurrency = useTextEditingController(text: rate.value);
     final from = useState("0.0");
     final convert = ref.watch(conversionProvider);
     final listState = useState("");
@@ -175,29 +174,6 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Space(10.h),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceBetween,
-                                    //   children: [
-                                    //     Text(
-                                    //       'From',
-                                    //       style: AppText.body6(
-                                    //         context,
-                                    //         AppColors.textColor,
-                                    //         16.sp,
-                                    //       ),
-                                    //     ),
-                                    //     Text(
-                                    //       'To',
-                                    //       style: AppText.body6(
-                                    //         context,
-                                    //         AppColors.textColor,
-                                    //         16.sp,
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
                                     Space(10.h),
                                     Row(
                                       mainAxisAlignment:
@@ -424,8 +400,13 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                       error: (error, stackTrace) {
                         return Text(error.toString());
                       },
-                      loading: () => const Center(
-                            child: CircularProgressIndicator.adaptive(
+                      loading: () => Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.13,
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.3),
+                            child: const CircularProgressIndicator.adaptive(
                               strokeWidth: 5,
                             ),
                           ),
@@ -522,7 +503,7 @@ class CurrencyTransactionBuild extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (transactions.direction == Direction.debit) ...[
+                if (transactions.direction == "debit") ...[
                   Row(
                     children: [
                       Text(
@@ -555,7 +536,7 @@ class CurrencyTransactionBuild extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      transactions.user.firstName.toString(),
+                      transactions.user!.firstName.toString(),
                       style: AppText.body2(context, Colors.black, 18.sp),
                     ),
                     const Spacer(),

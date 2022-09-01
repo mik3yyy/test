@@ -4,20 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/web_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
@@ -27,7 +31,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/convert_cur
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-import '../../../../Data/services/payment/make_payment/fund_wallet/fund_wallet_res.dart';
 import '../../../components/app image/app_image.dart';
 import '../../settings/profile/transaction_information/view_model/get_card_vm.dart';
 
@@ -45,14 +48,17 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
   @override
   Widget build(BuildContext context) {
     final fundWallet = ref.watch(fundWalletProvider);
-    final depositController = useTextEditingController();
+    final userData = ref.watch(userProfileProvider).value;
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    final depositController = useTextEditingController(
+        text: userData?.data.defaultWallet.currencyCode);
     final currencyController = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
     // final toExchangeCurrency = useTextEditingController();
 
     final amountController = useTextEditingController();
-    final firstDigit = useTextEditingController();
-    final secondDigit = useTextEditingController();
+    // final firstDigit = useTextEditingController();
+    // final secondDigit = useTextEditingController();
 
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
@@ -73,19 +79,21 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
     });
 
     ref.listen<RequestState>(fundWalletProvider, (prev, value) {
-      if (value is Success<FundWalletRes>) {
-        context.loaderOverlay.hide();
-        // print(value.value!.data!.url.toString());
+      if (value is Loading<StripeWebRes>) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
+      if (value is Success<StripeWebRes>) {
         pushNewScreen(context,
             screen: CardWebView(
-              url: value.value!.link!.data!.link.toString(),
+              url: value.value!.url,
               successMsg: 'Wallet Funded',
               webViewRoute: WebViewRoute.fundCard,
             ));
       }
 
       if (value is Error) {
-        context.loaderOverlay.hide();
         AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
       }
     });
@@ -153,23 +161,33 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                         PageTransitionAnimation.slideRight);
                               },
                               child: SizedBox(
-                                width: 130,
+                                width: MediaQuery.of(context).size.width * 0.42,
                                 child: EditForm(
-                                    enabled: false,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    labelText: 'currency',
-                                    keyboardType: TextInputType.text,
-                                    // textAlign: TextAlign.start,
-                                    controller: currencyController,
-                                    obscureText: false,
-                                    suffixIcon: const Icon(
-                                      CupertinoIcons.chevron_down,
-                                      color: Color(0xffA8A8A8),
-                                      size: 15,
-                                    ),
-                                    validator: (value) =>
-                                        validateCountry(value)),
+                                  readOnly: true,
+                                  enabled: true,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  labelText: 'wallet currency',
+                                  keyboardType: TextInputType.text,
+                                  // textAlign: TextAlign.start,
+                                  controller: depositController,
+                                  obscureText: false,
+                                  suffixIcon: const Icon(
+                                    CupertinoIcons.chevron_down,
+                                    color: Color(0xffA8A8A8),
+                                    size: 15,
+                                  ),
+                                  validator: (value) => validateCountry(value),
+                                  onTap: () {
+                                    pushNewScreen(context,
+                                        screen: SelectCurrencyScreen(
+                                          currencyCode: depositController,
+                                          routeName: 'addFunds',
+                                        ),
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.slideRight);
+                                  },
+                                ),
                               ),
                             ),
                             // SizedBox(
@@ -190,7 +208,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                             const Spacer(),
                             SizedBox(
                               // width: MediaQuery.of(context).size.width - 150.w,
-                              width: 200.w,
+                              width: MediaQuery.of(context).size.width * 0.42,
                               child: EditForm(
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -204,42 +222,42 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                             ),
                           ],
                         ),
-                        Space(40.h),
-                        SelectSavedCards(
-                          firstDigit: firstDigit,
-                          secondDigit: secondDigit,
-                        ),
-                        const Divider(
-                          color: Colors.black,
-                        ),
-                        Space(10.h),
+                        // Space(40.h),
+                        // SelectSavedCards(
+                        //   firstDigit: firstDigit,
+                        //   secondDigit: secondDigit,
+                        // ),
+                        // const Divider(
+                        //   color: Colors.black,
+                        // ),
+                        // Space(10.h),
 
-                        InkWell(
-                          onTap: () {
-                            pushNewScreen(context,
-                                screen: SelectCurrencyScreen(
-                                  currencyCode: depositController,
-                                  routeName: 'addFunds',
-                                ),
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.slideRight);
-                          },
-                          child: EditForm(
-                              enabled: false,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              labelText: 'Deposit currency',
-                              keyboardType: TextInputType.text,
-                              // textAlign: TextAlign.start,
-                              controller: depositController,
-                              obscureText: false,
-                              suffixIcon: const Icon(
-                                CupertinoIcons.chevron_down,
-                                color: Color(0xffA8A8A8),
-                                size: 15,
-                              ),
-                              validator: (value) => validateCountry(value)),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     pushNewScreen(context,
+                        //         screen: SelectCurrencyScreen(
+                        //           currencyCode: depositController,
+                        //           routeName: 'addFunds',
+                        //         ),
+                        //         pageTransitionAnimation:
+                        //             PageTransitionAnimation.slideRight);
+                        //   },
+                        //   child: EditForm(
+                        //       enabled: false,
+                        //       autovalidateMode:
+                        //           AutovalidateMode.onUserInteraction,
+                        //       labelText: 'Deposit currency',
+                        //       keyboardType: TextInputType.text,
+                        //       // textAlign: TextAlign.start,
+                        //       controller: depositController,
+                        //       obscureText: false,
+                        //       suffixIcon: const Icon(
+                        //         CupertinoIcons.chevron_down,
+                        //         color: Color(0xffA8A8A8),
+                        //         size: 15,
+                        //       ),
+                        //       validator: (value) => validateCountry(value)),
+                        // ),
                         // SelectCurrency(
                         //     text: "Deposit currency",
                         //     dollar: dollar,
@@ -538,23 +556,19 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                     buttonWidth: MediaQuery.of(context).size.width,
                     onPressed: fundWallet is Loading
                         ? null
-                        : () {
+                        : () async {
                             if (formKey.currentState!.validate()) {
-                              if (firstDigit.text.isEmpty) {
-                                AppSnackBar.showInfoSnackBar(context,
-                                    message: "choose a card");
-                              } else {
-                                var fundWalletReq = FundWalletReq(
-                                    amount: int.parse(amountController.text),
-                                    depositCurrencyCode: depositController.text,
-                                    walletCurrencyCode:
-                                        currencyController.text);
-
-                                ref
-                                    .read(fundWalletProvider.notifier)
-                                    .fundWallet(fundWalletReq);
-                                context.loaderOverlay.show();
+                              var fundWalletReq = FundWalletReq(
+                                amount: int.parse(amountController.text),
+                                walletCurrencyCode: depositController.text,
+                              );
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
                               }
+
+                              ref
+                                  .read(fundWalletProvider.notifier)
+                                  .fundWallet(fundWalletReq);
                             }
                           },
                   ),

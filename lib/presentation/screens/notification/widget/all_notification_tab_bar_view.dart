@@ -25,7 +25,6 @@ class _AllNotificationTabBarViewState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // final notification = ref.watch(getNotificationProvider);
     final data = ref.watch(genericController);
     return RefreshIndicator(
       onRefresh: () async {

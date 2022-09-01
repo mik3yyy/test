@@ -36,10 +36,9 @@ class _TransferState extends ConsumerState<Transfer>
   @override
   @override
   Widget build(BuildContext context) {
-    final defaultWallet = ref.watch(getProfileProvider);
-    final accountNo = ref.watch(signInProvider);
+    final userData = ref.watch(userProfileProvider);
+    final accountNum = ref.watch(userProfileProvider).value;
     var formatter = NumberFormat("#,##0.00");
-    final currency = PreferenceManager.defaultWallet;
 
     return GenericWidget(
         appbar: Padding(
@@ -63,24 +62,24 @@ class _TransferState extends ConsumerState<Transfer>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        defaultWallet.maybeWhen(
-                            success: (v) =>
-                                "${v!.data.defaultWallet.currencyCode!} ${formatter.format(v.data.defaultWallet.balance)} ",
-                            orElse: () => ''),
-                        style: AppText.header1(context, Colors.white, 25.sp),
-                      ),
+                      userData.maybeWhen(data: (data) {
+                        return Text(
+                          "${data.data.defaultWallet.currencyCode} ${formatter.format(data.data.defaultWallet.balance)} ",
+                          style: AppText.header1(context, Colors.white, 25.sp),
+                        );
+                      }, orElse: () {
+                        return Text(
+                          "-----",
+                          style: AppText.header1(context, Colors.white, 25.sp),
+                        );
+                      }),
+
                       Space(10.h),
                       Text(
-                        defaultWallet.maybeWhen(
-                            success: (v) =>
-                                "Kayndrexsphere Account Number: ${accountNo.maybeMap(success: (v) => v.value!.data!.user.accountNumber, orElse: () => '')}",
-                            orElse: () => ''),
+                        "Kayndrexsphere Account Number: ${accountNum?.data.user.accountNumber}",
                         style: AppText.body2(context, Colors.white, 18.sp),
                       ),
-                      // Text(
-                      //   'Available Balance',
-                      //   style: AppText.body2(context, Colors.white, 16.sp),
+
                       // ),
                     ],
                   ),
@@ -132,19 +131,9 @@ class _TransferState extends ConsumerState<Transfer>
                       tabs: const [
                         Tab(
                           text: 'Wallet Info',
-                          //     child: Text(
-                          //   'Account Info',
-                          //   style:
-                          //       AppText.body2(context, AppColors.appColor, 19.sp),
-                          // )
                         ),
                         Tab(
                           text: 'Make Transfer',
-                          //     child: Text(
-                          //   'Make Transfer',
-                          //   style:
-                          //       AppText.body2(context, AppColors.appColor, 19.sp),
-                          // )
                         ),
                       ],
                     )),
@@ -160,7 +149,7 @@ class _TransferState extends ConsumerState<Transfer>
                       controller: _tabController,
                       children: [
                         AccounInfoTab(
-                          currency: currency,
+                          currency: PreferenceManager.defaultWallet,
                         ),
                         const MakeTransfer()
                       ]),
