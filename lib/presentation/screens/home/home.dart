@@ -17,6 +17,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/availa
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -74,7 +75,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
-    final defaultWallet = ref.watch(getProfileProvider);
+    final defaultWallet = ref.watch(userProfileProvider);
     // final wallet = ref.watch(getAccountDetailsProvider);
     var formatter = NumberFormat("#,##0.00");
     final currency = useTextEditingController();
@@ -82,8 +83,10 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        context.loaderOverlay.hide();
-        ref.read(getProfileProvider);
+        ref.refresh(userProfileProvider);
+
+        ref.refresh(currencyTransactionProvider(
+            value.value!.data!.wallet!.currencyCode!));
       }
 
       if (value is Error) {
@@ -146,9 +149,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      defaultWallet.maybeWhen(success: (data) {
+                      defaultWallet.maybeWhen(data: (data) {
                         return Text(
-                          '${currencyName(data!.data.defaultWallet.currencyCode.toString())} wallet',
+                          '${currencyName(data.data.defaultWallet.currencyCode.toString())} wallet',
                           style: AppText.header2(
                               context, AppColors.appColor, 18.sp),
                         );
@@ -185,57 +188,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                       Space(20.w)
                     ],
                   ),
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-
-                  //     SizedBox(
-                  //       width: 100.w,
-                  //       child: DropdownButton<String>(
-                  //           underline: const SizedBox.shrink(),
-                  //           value: setValue,
-                  //           isExpanded: true,
-                  //           dropdownColor: Colors.white,
-                  //           icon: const Icon(
-                  //             Icons.keyboard_arrow_down,
-                  //             color: AppColors.appColor,
-                  //           ),
-                  //           items: currency.map(buildItem).toList(),
-                  //           // items: walletList.maybeWhen(success: (v) => v!.data!.wallets!.toList(), orElse: () => []),
-                  //           onChanged: (value) {
-                  //             setState(() {
-                  //               setValue = value!;
-                  //             });
-                  //             //  setCurrencyCode(setValue);
-                  //             ref
-                  //                 .read(setWalletAsDefaultProvider.notifier)
-                  //                 .setWalletAsDefault(
-                  //                     setCurrencyCode(setValue));
-                  //           }),
-                  //     ),
-                  //     Space(85.w),
-                  //     InkWell(
-                  //       onTap: () {
-                  //         toggleAmount.state = !toggleAmount.state;
-                  //       },
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(2.0),
-                  //         child: Icon(
-                  //           toggleAmount.state
-                  //               ? Icons.visibility_off
-                  //               : Icons.visibility,
-                  //           color: toggleAmount.state
-                  //               ? AppColors.appColor
-                  //               : Colors.grey.shade400,
-                  //           size: 20,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Space(20.w)
-                  //   ],
-                  // ),
-
                   const Space(15),
                   PreferenceManager.revealBalance
                       ? Text(
@@ -245,8 +197,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                         )
                       : Text(
                           defaultWallet.maybeWhen(
-                              success: (v) =>
-                                  '${currencySymbol(v!.data.defaultWallet.currencyCode.toString())} ${formatter.format(v.data.defaultWallet.balance)}',
+                              data: (v) =>
+                                  '${currencySymbol(v.data.defaultWallet.currencyCode.toString())} ${formatter.format(v.data.defaultWallet.balance)}',
                               orElse: () => '----'),
                           style: AppText.header1(
                               context, AppColors.appColor, 40.sp),
@@ -399,8 +351,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             strokeWidth: 5,
                           ),
                         ),
-                    loading: () => const Center(
-                          child: CircularProgressIndicator.adaptive(
+                    loading: () => Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.1,
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.3),
+                          child: const CircularProgressIndicator.adaptive(
                             strokeWidth: 5,
                           ),
                         ),

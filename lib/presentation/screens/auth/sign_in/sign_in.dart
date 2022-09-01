@@ -43,15 +43,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
 
   bool isLoading = false;
-  // String _currentTimeZone = "timeZone";
-
-  // Future<void> getTimeZone() async {
-  //   final String currentTimeZone =
-  //       await FlutterNativeTimezone.getLocalTimezone();
-  //   _currentTimeZone = currentTimeZone;
-
-  //   // print(currentTimeZone);
-  // }
 
   @override
   void initState() {
@@ -81,10 +72,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
           ref.refresh(getAccountDetailsProvider);
           ref.refresh(getProfileProvider);
           ref.refresh(userProfileProvider);
-          isLoading = true;
 
           Future.delayed(const Duration(seconds: 2), () {
-            isLoading = false;
+            setState(() {
+              isLoading = false;
+            });
+
             context.loaderOverlay.hide();
             context.navigate(MainScreen(menuScreenContext: context));
           });
@@ -142,11 +135,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                         labelText: "Email or Phone Number",
                         controller: emailPhoneController,
-                        readOnly: vm is Loading
-                            ? true
-                            : isLoading
-                                ? true
-                                : false,
                         capitalization: TextCapitalization.none,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -161,11 +149,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     //password
                     TextFormInput(
                       labelText: 'Password',
-                      readOnly: vm is Loading
-                          ? true
-                          : isLoading
-                              ? true
-                              : false,
                       controller: passwordController,
                       focusNode: fieldFocusNode,
                       capitalization: TextCapitalization.none,
@@ -201,10 +184,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         InkWell(
                           onTap: vm is Loading
                               ? null
-                              : isLoading
-                                  ? null
-                                  : () =>
-                                      context.navigate(ForgotPasswordScreen()),
+                              : () => context.navigate(ForgotPasswordScreen()),
                           child: Text(
                             "Forgot Password?",
                             style: AppText.body4(context, AppColors.appColor),
@@ -242,6 +222,10 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                         password: passwordController.text,
                                         timezone: device.timeZone,
                                         deviceId: device.deviceId);
+
+                                    setState(() {
+                                      isLoading = true;
+                                    });
 
                                     ref
                                         .read(credentialProvider.notifier)

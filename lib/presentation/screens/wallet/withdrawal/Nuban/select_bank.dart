@@ -49,7 +49,7 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          'Select Country',
+          'Select Bank',
           style: AppText.header2(context, Colors.black, 20.sp),
         ),
         leading: InkWell(

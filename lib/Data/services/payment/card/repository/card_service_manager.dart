@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_re
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/web_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 final cardServiceManagerProvider = Provider((ref) {
@@ -28,7 +29,7 @@ class CardServiceManager extends CardRepository {
   Future<GetCardRes> getSavedCard() async => await _cardService.getSavedCard();
 
   @override
-  Future<FundWalletRes> fundWallet(FundWalletReq fundWalletReq) async =>
+  Future<StripeWebRes> fundWallet(FundWalletReq fundWalletReq) async =>
       await _cardService.fundWallet(fundWalletReq);
 
   @override

@@ -12,23 +12,23 @@ String fundWalletReqToJson(FundWalletReq data) => json.encode(data.toJson());
 class FundWalletReq {
   FundWalletReq({
     required this.amount,
-    required this.depositCurrencyCode,
+    // required this.depositCurrencyCode,
     required this.walletCurrencyCode,
   });
 
   int amount;
-  String depositCurrencyCode;
+  // String depositCurrencyCode;
   String walletCurrencyCode;
 
   factory FundWalletReq.fromJson(Map<String, dynamic> json) => FundWalletReq(
         amount: json["amount"],
-        depositCurrencyCode: json["deposit_currency_code"],
         walletCurrencyCode: json["wallet_currency_code"],
+        // walletCurrencyCode: json["wallet_currency_code"],
       );
 
   Map<String, dynamic> toJson() => {
         "amount": amount,
-        "deposit_currency_code": depositCurrencyCode,
+        // "deposit_currency_code": depositCurrencyCode,
         "wallet_currency_code": walletCurrencyCode,
       };
 }

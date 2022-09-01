@@ -52,54 +52,21 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             const UploadImage(
               hasIcon: false,
             ),
-            // profileImage.isNotEmpty
-            //     ? CircleAvatar(
-            //         backgroundColor: Colors.transparent,
-            //         foregroundColor: Colors.transparent,
-            //         radius: 60.w,
-            //         backgroundImage: FileImage(File(profileImage)))
-            //     : CircleAvatar(
-            //         backgroundColor: Colors.transparent,
-            //         foregroundColor: Colors.transparent,
-            //         radius: 60.w,
-            //         child:
-            //             Image.asset("images/person.png", color: Colors.white),
-            //       )
-
             Space(10.h),
             Text(
               vm.maybeWhen(
                   success: (v) =>
                       '${v!.data.user.firstName} ${v.data.user.lastName}',
                   orElse: () => ''),
-              // firstName.inCaps + " " + secondName.inCaps,
               style: AppText.body2(context, Colors.white, 25.sp),
             ),
             Space(5.h),
-            // vm.when(error: (Object error, StackTrace stackTrace) {
-            //   return Center(
-            //     child: Text(error.toString()),
-            //   );
-            // }, loading: () {
-            //   return const CircularProgressIndicator();
-            // }, idle: () {
-            //   return const CircularProgressIndicator();
-            // }, success: (value) {
-            //   final firstName = value!.data!.user!.firstName!.split(" ")[0];
-            //   final secondName = value.data!.user!.lastName!.split(" ")[0];
-
-            // return Text(
-            //   firstName.inCaps + " " + secondName.inCaps,
-            //   style: AppText.body2(context, Colors.white, 25.sp),
-            // );
-            // })
-            // const WalletOptionList()
           ],
         ),
       ),
       bgColor: AppColors.whiteColor,
       child: SizedBox(
-        height: 660.h,
+        height: MediaQuery.of(context).size.height * 0.69,
         child: Padding(
           padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 55.h),
           child: SingleChildScrollView(

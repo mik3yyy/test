@@ -219,24 +219,13 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                           child: CircularProgressIndicator.adaptive()),
                       success: (data) {
                         walletCount.value = data!.data!.wallets!.length;
-                        double _getSized() {
-                          if (walletCount.value == 2) {
-                            return 200;
-                          } else if (walletCount.value == 3) {
-                            return 250;
-                          } else if (walletCount.value == 4) {
-                            return 350;
-                          } else {
-                            return 400;
-                          }
-                        }
 
                         return RefreshIndicator(
                           onRefresh: () async {
                             return ref.refresh(getAccountDetailsProvider);
                           },
                           child: SizedBox(
-                            height: 350,
+                            height: MediaQuery.of(context).size.height * 0.44,
                             child: ListView.separated(
                               physics: const AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
@@ -320,17 +309,6 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                               ),
                               pageTransitionAnimation:
                                   PageTransitionAnimation.slideRight);
-                          // pushNewScreen(
-                          //   context,
-                          //   screen: const SelectWalletToCreate(),
-                          //   withNavBar:
-                          //       true, // OPTIONAL VALUE. True by default.
-                          //   pageTransitionAnimation:
-                          //       PageTransitionAnimation.fade,
-                          // );
-                          // context.navigate(AvailableBalance()
-
-                          // );
                         },
                         buttonWidth: 320),
                   ),

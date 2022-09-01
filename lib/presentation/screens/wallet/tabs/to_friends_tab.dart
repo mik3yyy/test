@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/verify_acc
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/user_saved_beneficary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/verify_acct_no_vm.dart';
@@ -26,21 +27,17 @@ class FriendsTab extends HookConsumerWidget {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, ref) {
-    final defaultWallet = ref.watch(getUserProfileProvider);
+    final defaultWallet = ref.watch(userProfileProvider).value;
     final acctNoVm = ref.watch(verifyAcctNoProvider);
     final beneficiaryVm = ref.watch(usersavedWalletBeneficirayProvider);
     final vm = ref.watch(transferToWalletProvider);
     final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
     final accountNoController = useTextEditingController();
+    final currencyController = useTextEditingController(
+        text: defaultWallet?.data.defaultWallet.currencyCode);
     final friendNameController = useTextEditingController();
     final amountController = useTextEditingController();
     final pinController = useTextEditingController();
-
-    // 89551533
-    // 62239195
-
-    final currencyCode = defaultWallet.maybeWhen(
-        success: (v) => v!.data.defaultWallet.currencyCode!, orElse: () => '');
 
     ref.listen<RequestState>(verifyAcctNoProvider, (T, value) {
       if (value is Success<VerifyAcctNoRes>) {
@@ -50,9 +47,7 @@ class FriendsTab extends HookConsumerWidget {
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
-        // message: value.error.toString());
-        // return AppSnackBar.showErrorSnackBar(context,
-        //     message: "Couldn't fetch account details, try again");
+
         // // message: value.error.toString());
 
       }
@@ -67,9 +62,6 @@ class FriendsTab extends HookConsumerWidget {
 
         ref.refresh(getUserProfileProvider);
         ref.refresh(usersavedWalletBeneficirayProvider);
-        // amountController.clear();
-        // accountNoController.clear();
-        // pinController.clear();
 
         // return AppSnackBar.showSuccessSnackBar(context,
         //     message: 'Transfer Succesfully');
@@ -178,7 +170,7 @@ class FriendsTab extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Make transfer from your $currencyCode wallet',
+                    'Make transfer from your ${defaultWallet!.data.defaultWallet.currencyCode} wallet',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
                   ),
                   Space(40.h),
@@ -260,7 +252,8 @@ class FriendsTab extends HookConsumerWidget {
                   ),
                   Space(5.h),
                   WalletTextField(
-                    labelText: currencyCode,
+                    controller: currencyController,
+                    labelText: defaultWallet.data.defaultWallet.currencyCode,
                     obscureText: false,
                     color: AppColors.appColor.withOpacity(0.05),
                     readOnly: true,
@@ -285,7 +278,7 @@ class FriendsTab extends HookConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'For security reasons',
+                              'For security reaso',
                               style:
                                   AppText.header2(context, Colors.black, 20.sp),
                             ),
@@ -375,7 +368,7 @@ class FriendsTab extends HookConsumerWidget {
                                     .read(transferToWalletProvider.notifier)
                                     .transferToAnotherUser(
                                       accountNoController.text,
-                                      currencyCode,
+                                      currencyController.text,
                                       int.parse(amountController.text),
                                       pinController.text,
                                       savedAsBenefeciaryChecked,

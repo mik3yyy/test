@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
@@ -18,7 +19,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_country.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -40,16 +41,15 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   final transactionPinStateProvider = StateProvider<bool>((ref) => true);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     final accountName = ref.watch(getBankDetailsProvider);
     final nuban = ref.watch(nubanWithdrawalProvider);
     final savedBeneficiary = ref.watch(genericController);
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
-    // final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final descriptionController = useTextEditingController();
     final bankAccountController = useTextEditingController(
         text: savedBeneficiary.passBeneficiary.accountNumber);
@@ -59,6 +59,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     final errorState = useState("");
     final amount = useState(0);
     final enteredAmount = useState(false);
+    var formatter = NumberFormat("#,##0.00");
     final recipientAccountName =
         useState(savedBeneficiary.passBeneficiary.accountName);
 
@@ -164,12 +165,19 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                         ),
                                       ),
                                   success: (data) {
-                                    amount.value = data!
-                                        .data!.wallets![1].balance!
-                                        .toInt();
+                                    data!.data!.wallets!.any(((element) {
+                                      if (element.currency!.name ==
+                                          "Nigerian Naira") {
+                                        amount.value = element.balance!.toInt();
+
+                                        return true;
+                                      } else {
+                                        return false;
+                                      }
+                                    }));
 
                                     return Text(
-                                      "NGN ${data.data!.wallets![1].balance.toString()}",
+                                      "NGN ${formatter.format(amount.value)}",
                                       style: AppText.body2Bold(
                                           context, Colors.black, 23.sp),
                                     );
@@ -235,9 +243,22 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         //* Select bank
                         //
                         //*
-                        Stack(
-                          children: [
-                            InkWell(
+                        EditForm(
+                          // readOnly: true,
+                          enabled: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          labelText: 'Select bank',
+                          keyboardType: TextInputType.text,
+                          // textAlign: TextAlign.start,
+                          controller: bankController,
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.only(left: 40),
+                            child: GestureDetector(
+                              child: const Icon(
+                                CupertinoIcons.chevron_down,
+                                color: Color(0xffA8A8A8),
+                                size: 15,
+                              ),
                               onTap: () {
                                 pushNewScreen(context,
                                     screen: SelectBankScreen(
@@ -246,30 +267,20 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                     ),
                                     pageTransitionAnimation:
                                         PageTransitionAnimation.slideRight);
-                                // countryBuild(context, countryController);
                               },
-                              child: EditForm(
-                                  enabled: false,
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  labelText: 'Select bank',
-                                  keyboardType: TextInputType.text,
-                                  // textAlign: TextAlign.start,
-                                  controller: bankController,
-                                  obscureText: false,
-                                  validator: (value) => validateCountry(value)),
                             ),
-                            Positioned(
-                              left: 375.w,
-                              right: 0,
-                              bottom: 17.h,
-                              child: const Icon(
-                                CupertinoIcons.chevron_down,
-                                color: Color(0xffA8A8A8),
-                                size: 15,
-                              ),
-                            ),
-                          ],
+                          ),
+                          obscureText: false,
+                          validator: (value) => validateCountry(value),
+                          onTap: () {
+                            pushNewScreen(context,
+                                screen: SelectBankScreen(
+                                  bankCode: bankCodeController,
+                                  bankName: bankController,
+                                ),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.slideRight);
+                          },
                         ),
                         // SelectBank(
                         //   bankController: bankController,
@@ -451,14 +462,16 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                     : () {
                                         if ((formKey.currentState!
                                             .validate())) {
-                                          fieldFocusNode.unfocus();
                                           if (enteredAmount.value == true) {
                                             context.loaderOverlay.hide();
                                             AppDialog.showErrorMessageDialog(
                                                 context,
                                                 "Withdrawal amount cannot be more than available amount");
                                           } else {
-                                            fieldFocusNode.unfocus();
+                                            if (!currentFocus.hasPrimaryFocus) {
+                                              currentFocus.unfocus();
+                                            }
+
                                             var nubanReq = NubanReq(
                                                 accountName:
                                                     recipientAccountName.value,

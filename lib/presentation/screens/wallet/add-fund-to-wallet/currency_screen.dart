@@ -191,8 +191,8 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                                       child: Center(
                                           child: Text(
                                         banks.name.toString(),
-                                        style: AppText.body2(
-                                            context, Colors.black, 18),
+                                        style: AppText.header2(
+                                            context, AppColors.appColor, 20.sp),
                                       )),
                                     ),
                                   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/database/hive_setup.dart';
 import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
@@ -9,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/sp
 import 'package:kayndrexsphere_mobile/presentation/screens/languages/language_state.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
+import 'Data/constant/constant.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/app_session/session_config.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
@@ -16,6 +18,9 @@ import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = Constants.stripePublishableKey;
+  // Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  await Stripe.instance.applySettings();
   await initialize();
   await DataBase.init();
   await PreferenceManager.init();
