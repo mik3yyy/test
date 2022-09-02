@@ -66,19 +66,11 @@ class CreateAccountScreen extends HookConsumerWidget {
                 padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: const Icon(Icons.arrow_back_ios_new)),
-                        Space(92.w),
-                        Text(
-                          "Create Account!",
-                          style: AppText.header3(
-                              context, AppColors.appColor, 20.sp),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    Text(
+                      "Create Account!",
+                      style:
+                          AppText.header3(context, AppColors.appColor, 20.sp),
+                      textAlign: TextAlign.center,
                     ),
                     Space(15.h),
                     Text(

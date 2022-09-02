@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -112,7 +112,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 _current == 1 || _current == 0 ? Space(150.h) : Space(56.w),
                 _current == 2
                     ? GestureDetector(
-                        onTap: () => context.navigate(const ChooseAccount()),
+                        onTap: () => context.navigate(CreateAccountScreen()),
                         child: Text(
                           "Continue",
                           style: AppText.label(context, AppColors.appColor),
@@ -171,7 +171,7 @@ class ImageWidget extends HookConsumerWidget {
                 ),
                 const Spacer(),
                 InkWell(
-                  onTap: () => context.navigate(const ChooseAccount()),
+                  onTap: () => context.navigate(CreateAccountScreen()),
                   child: Text(
                     "Skip",
                     // AppLocalizations.of(context)!.text("Skip"),

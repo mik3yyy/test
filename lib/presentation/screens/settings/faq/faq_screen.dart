@@ -92,7 +92,7 @@ class FaqScreen extends StatelessWidget {
               //   validator: (String? value) {},
               // ),
             ),
-            Space(120.h),
+            Space(0.h),
           ],
         ),
       ),
@@ -104,7 +104,7 @@ class FaqScreen extends StatelessWidget {
           top: 20.h,
         ),
         child: SizedBox(
-          height: 630.h,
+          height: 660.h,
           child: Column(
             children: [
               GestureDetector(

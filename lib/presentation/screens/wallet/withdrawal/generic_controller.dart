@@ -70,8 +70,11 @@ class GenericState extends Equatable {
         tabState: 0,
         success: false,
         error: "",
-        passBeneficiary:
-            PassBeneficiary(accountName: "", accountNumber: "", bankCode: ""),
+        passBeneficiary: PassBeneficiary(
+          accountName: "",
+          accountNumber: "",
+          bankCode: "",
+        ),
         notificationloading: false);
   }
 

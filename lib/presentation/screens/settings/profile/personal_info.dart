@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/database/user_database.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
@@ -80,8 +81,8 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
               ),
               Space(10.h),
               Text(
-                userName(userValue?.data.user.firstName,
-                    userValue?.data.user.lastName),
+                userName(userValue?.data.user.firstName!.capitalize(),
+                    userValue?.data.user.lastName!.capitalize()),
                 style: AppText.body2(context, Colors.white, 25.sp),
               ),
               Space(5.h),
@@ -106,7 +107,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'First Name',
-                          subTitle: user.firstName.toString(),
+                          subTitle: user.firstName.toString().capitalize(),
                         ),
                         Space(7.h),
                         const Divider(
@@ -117,7 +118,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                         PersonalInfoCard(
                           color: Colors.black,
                           title: 'Last Name',
-                          subTitle: user.lastName.toString(),
+                          subTitle: user.lastName.toString().capitalize(),
                         ),
                         Space(7.h),
                         const Divider(

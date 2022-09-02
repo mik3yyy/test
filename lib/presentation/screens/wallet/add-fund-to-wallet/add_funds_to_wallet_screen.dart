@@ -58,7 +58,12 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
             )
           : AppBar(
               automaticallyImplyLeading: false,
-              backgroundColor: AppColors.appBgColor,
+              backgroundColor: Colors.transparent,
+              title: Text(
+                'Portfolio',
+                style: AppText.header2(context, Colors.black, 20.sp),
+              ),
+              centerTitle: true,
               elevation: 0,
             ),
       body: SafeArea(

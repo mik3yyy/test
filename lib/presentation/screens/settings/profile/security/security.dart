@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/secu
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/enable_transaction_pin_modal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/global/transaction_pin_toggle.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/transaction_pin.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -34,7 +35,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = locator.get<ProfileRes>();
+    final user = ref.watch(userProfileProvider);
+    // final user = locator.get<ProfileRes>();
     final toggle = ref.watch(toggleStateProvider.state);
     final togglePin = ref.watch(togglePinStateProvider.state);
     final setPin = ref.watch(setPinStateProvider.state);
@@ -125,7 +127,13 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                               .getCredential(Constants.userPassword);
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userEmail,
-                              user.data.user.email.toString());
+                              user.maybeWhen(data: (data) {
+                                return data.data.user.email.toString();
+                              }, orElse: () {
+                                return "";
+                              })
+                              // user.data.user.email.toString()
+                              );
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userPassword, password!);
                         } else if (toggle.state == false) {
