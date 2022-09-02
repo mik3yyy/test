@@ -24,7 +24,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';

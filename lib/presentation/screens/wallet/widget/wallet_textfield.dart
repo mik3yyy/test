@@ -15,9 +15,10 @@ class WalletTextField extends StatelessWidget {
       required this.obscureText,
       this.suffixIcon,
       this.prefixIcon,
+      this.onTap,
       this.maxLines,
       this.enabled,
-      this.readOnly,
+      this.readOnly = false,
       this.initialValue,
       required this.color,
       this.expands,
@@ -34,6 +35,7 @@ class WalletTextField extends StatelessWidget {
   final TextEditingController? controller;
   final AutovalidateMode? autovalidateMode;
   final String? Function(String?)? validator;
+  final void Function()? onTap;
   final int? maxLines;
   final int? minLines;
   final bool? expands;
@@ -53,6 +55,7 @@ class WalletTextField extends StatelessWidget {
         enabled: enabled,
         readOnly: readOnly!,
         onChanged: onChanged,
+        onTap: onTap,
         initialValue: initialValue,
         // maxLines: maxLines,
         // minLines: minLines,

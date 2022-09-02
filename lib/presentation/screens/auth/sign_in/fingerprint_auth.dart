@@ -120,6 +120,37 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
     }
   }
 
+  //* AUTHENTICATE TRANSACTION PIN
+
+  Future<String> authenticateTransaction() async {
+    try {
+      final isAuthenticated = await auth.authenticate(
+        localizedReason: "Verify your account with your Finger print",
+        authMessages: <AuthMessages>[
+          const AndroidAuthMessages(
+            biometricHint: 'Finger print authentication is required!',
+            cancelButton: 'No thanks',
+          ),
+        ],
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: false,
+        ),
+      );
+      if (isAuthenticated) {
+        final pin = await ref
+            .read(credentialProvider.notifier)
+            .getCredential(Constants.transactionPin);
+        return pin.toString();
+      } else {
+        return "Could not be Authenticated. Try again";
+      }
+    } on PlatformException catch (e) {
+      state = state.copyWith(error: e.message);
+      throw e.toString();
+    }
+  }
+
   //* reset biometric value when user signs out
 
   void resetbiometrics(bool value) {

@@ -10,8 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/country.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/language.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';

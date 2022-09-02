@@ -26,7 +26,7 @@ class MyProfile extends StatefulHookConsumerWidget {
 class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(getProfileProvider);
+    final vm = ref.watch(userProfileProvider);
     // final profileImage = PreferenceManager.avatarUrl;
 
     return GenericWidget(
@@ -55,8 +55,8 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             Space(10.h),
             Text(
               vm.maybeWhen(
-                  success: (v) =>
-                      '${v!.data.user.firstName} ${v.data.user.lastName}',
+                  data: (v) =>
+                      '${v.data.user.firstName} ${v.data.user.lastName}',
                   orElse: () => ''),
               style: AppText.body2(context, Colors.white, 25.sp),
             ),

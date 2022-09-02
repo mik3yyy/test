@@ -53,7 +53,7 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 // final index = navigation.url.toString().lastIndexOf('=');
                 // final reference =
                 //     navigation.url.toString().substring(index + 1);
-                // ref.read(getCardProvider.notifier).getCard();
+
                 ref.refresh(getAccountDetailsProvider);
                 Navigator.pop(context);
                 AppDialog.showSuccessMessageDialog(context, widget.successMsg);

@@ -268,7 +268,6 @@ class GenericController extends StateNotifier<GenericState> {
   }
 
   void withdrawalNotificationRequest() async {
-    print(state.loading);
     try {
       state = state.copyWith(loading: true);
       ref
