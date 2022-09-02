@@ -110,9 +110,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
               height: 40.h,
               width: MediaQuery.of(context).size.width,
               color: AppColors.appColor.withOpacity(0.1),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 7.5, horizontal: 20),
+              child: Center(
                 child: Text(
                   'Let\'s view your currency wallets',
                   style: AppText.body2Medium(context, Colors.black54, 20.sp),

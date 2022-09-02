@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
@@ -56,7 +57,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
             Text(
               vm.maybeWhen(
                   data: (v) =>
-                      '${v.data.user.firstName} ${v.data.user.lastName}',
+                      '${v.data.user.firstName!.capitalize()} ${v.data.user.lastName!.capitalize()}',
                   orElse: () => ''),
               style: AppText.body2(context, Colors.white, 25.sp),
             ),

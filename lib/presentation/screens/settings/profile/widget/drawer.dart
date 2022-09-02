@@ -69,7 +69,7 @@ class Navigation extends HookConsumerWidget {
               image: AppImage.myNotification,
               onPressed: () {
                 ///CHECK IF AUTODISPOSE WORKS
-                if (controller.notification.isEmpty) {
+                if (controller.notification.isNotEmpty) {
                   ref.read(genericController.notifier).getNotification();
                   ref
                       .read(genericController.notifier)

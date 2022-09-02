@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -69,10 +70,10 @@ class _EditInfoState extends ConsumerState<EditInfo> {
     final vm = ref.watch(updateProfileProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
     phone.PhoneNumber number = phone.PhoneNumber(isoCode: isoCode);
-    final fistNameController =
-        useTextEditingController(text: widget.userValue.data.user.firstName);
-    final lastNameCountroller =
-        useTextEditingController(text: widget.userValue.data.user.lastName);
+    final fistNameController = useTextEditingController(
+        text: widget.userValue.data.user.firstName!.capitalize());
+    final lastNameCountroller = useTextEditingController(
+        text: widget.userValue.data.user.lastName!.capitalize());
     final emailCountroller =
         useTextEditingController(text: widget.userValue.data.user.email);
     final phoneNoCountroller = useTextEditingController(
