@@ -11,7 +11,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../../make_payment/fund_wallet/fund_wallet_req.dart';
-import '../../make_payment/fund_wallet/fund_wallet_res.dart';
 import '../../make_payment/fund_wallet/web_res.dart';
 
 final cardServiceProvider = Provider<CardService>((ref) {

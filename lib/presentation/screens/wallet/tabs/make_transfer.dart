@@ -99,8 +99,9 @@ class _MakeTransferState extends ConsumerState<MakeTransfer>
                 width: MediaQuery.of(context).size.width,
                 height: 564.h,
                 child: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
-                    children: [FriendsTab(), const ToWallet()]),
+                    children: const [FriendsTab(), ToWallet()]),
               )
             ],
           ),

@@ -8,6 +8,11 @@ class PreferenceManager {
   static bool get enableBioMetrics =>
       prefs.getBool("enableBioMetrics") ?? false;
 
+  static set enableTransactionBioMetrics(bool enableTransactionBioMetrics) =>
+      prefs.setBool("enableTransactionBioMetrics", enableTransactionBioMetrics);
+  static bool get enableTransactionBioMetrics =>
+      prefs.getBool("enableTransactionBioMetrics") ?? false;
+
   static set hasBiometrics(bool hasBiometrics) =>
       prefs.setBool("hasBiometrics", hasBiometrics);
   static bool get hasBiometrics => prefs.getBool("hasBiometrics") ?? false;
@@ -81,6 +86,8 @@ class PreferenceManager {
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
     PreferenceManager.isloggedIn = false;
+    // PreferenceManager.enableBioMetrics = false;
+    // PreferenceManager.enableTransactionBioMetrics = false;
     // prefs.clear();
   }
 }

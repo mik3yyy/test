@@ -8,6 +8,8 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/change_password.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/enable_transaction_pin_modal.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/global/transaction_pin_toggle.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
@@ -27,12 +29,15 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
   final toggleStateProvider = StateProvider<bool>((ref) {
     return false;
   });
+
+  bool valueChanged = false;
+
   @override
   Widget build(BuildContext context) {
     final user = locator.get<ProfileRes>();
-
-    final bio = PreferenceManager.enableBioMetrics;
     final toggle = ref.watch(toggleStateProvider.state);
+    final togglePin = ref.watch(togglePinStateProvider.state);
+    final setPin = ref.watch(setPinStateProvider.state);
 
     return Scaffold(
       appBar: AppBar(
@@ -96,6 +101,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                 thickness: 0.4,
               ),
               Space(30.h),
+
+              ///ENABLE BIOMETRIC FOR AUTHENTICATION
               Row(
                 children: [
                   Text(
@@ -105,7 +112,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                   const Spacer(),
                   Switch.adaptive(
                       activeColor: Colors.greenAccent,
-                      value: bio,
+                      value: PreferenceManager.enableBioMetrics,
                       onChanged: (value) async {
                         toggle.state = !toggle.state;
                         PreferenceManager.enableBioMetrics = toggle.state;
@@ -130,6 +137,63 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       }),
                 ],
               ),
+
+              ///ENABLE BIOMETRIC FOR TRANSACTIONS
+              Row(
+                children: [
+                  Text(
+                    'Enable biometrics for Transactions',
+                    style: AppText.header2(context, Colors.black, 20.sp),
+                  ),
+                  const Spacer(),
+                  Switch.adaptive(
+                      activeColor: Colors.greenAccent,
+                      value: PreferenceManager.enableTransactionBioMetrics,
+                      onChanged: (value) async {
+                        togglePin.state = !togglePin.state;
+                        // PreferenceManager.enableTransactionBioMetrics =
+                        //     togglePin.state;
+
+                        if (togglePin.state) {
+                          showModalBottomSheet(
+                              context: context,
+                              isDismissible: true,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20))),
+                              builder: (context) {
+                                return EnableTransactionPin(
+                                  isEnable: PreferenceManager
+                                      .enableTransactionBioMetrics,
+                                );
+                              }).whenComplete(() {
+                            if (setPin.state) {
+                              setState(() {
+                                PreferenceManager.enableTransactionBioMetrics =
+                                    true;
+                                togglePin.state = true;
+                              });
+                            } else {
+                              setState(() {
+                                PreferenceManager.enableTransactionBioMetrics =
+                                    false;
+                                togglePin.state = false;
+                              });
+                            }
+                          });
+                        } else if (togglePin.state == false) {
+                          setState(() {
+                            // ref
+                            //     .read(credentialProvider.notifier)
+                            //     .deleteCredential(Constants.transactionPin);
+                            PreferenceManager.enableTransactionBioMetrics =
+                                false;
+                          });
+                        }
+                      }),
+                ],
+              ),
             ],
           ),
         ),
@@ -137,94 +201,3 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     );
   }
 }
-
-
-
-// class SecurityScreen extends StatelessWidget {
-//   const SecurityScreen({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.transparent,
-//         title: Text(
-//           'Security',
-//           style: AppText.header2(context, Colors.black, 20.sp),
-//         ),
-//         leading: InkWell(
-//           onTap: (() => Navigator.pop(context)),
-//           child: const Icon(
-//             Icons.arrow_back_ios_outlined,
-//             color: Colors.black,
-//           ),
-//         ),
-//         centerTitle: true,
-//         automaticallyImplyLeading: false,
-//         elevation: 0,
-//       ),
-//       body: SafeArea(
-//         child: Padding(
-//           padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-//           child: Column(
-//             children: [
-//               Space(20.h),
-//               ProfileCard(
-//                 color: Colors.black,
-//                 title: 'Password',
-//                 subTitle: 'Change your already existing password',
-//                 image: AppImage.password,
-//                 onPressed: () {
-//                   pushNewScreen(
-//                     context,
-//                     screen: ChangePassword(),
-//                     pageTransitionAnimation: PageTransitionAnimation.fade,
-//                   );
-//                 },
-//               ),
-//               Space(10.h),
-//               const Divider(
-//                 color: Colors.black,
-//                 thickness: 0.4,
-//               ),
-//               Space(20.h),
-//               ProfileCard(
-//                 color: Colors.black,
-//                 title: 'Transaction PIN',
-//                 subTitle: 'Add or Reset your transaction PIN',
-//                 image: AppImage.transactionPin,
-//                 onPressed: () {
-//                   pushNewScreen(
-//                     context,
-//                     screen: const ChangeTransactionPin(),
-//                     pageTransitionAnimation: PageTransitionAnimation.fade,
-//                   );
-//                 },
-//               ),
-//               Space(10.h),
-//               const Divider(
-//                 color: Colors.black,
-//                 thickness: 0.4,
-//               ),
-//                Row(
-//                 children: [
-//                   Text(
-//                     'Add to beneficiaries',
-//                     style: AppText.header2(context, Colors.black, 20.sp),
-//                   ),
-//                   const Spacer(),
-//                   Switch.adaptive(
-//                       activeColor: Colors.greenAccent,
-//                       value: toggle.state,
-//                       onChanged: (value) {
-//                         toggle.state = !toggle.state;
-//                       }),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

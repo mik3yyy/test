@@ -67,22 +67,15 @@ class CredentialsNotifier extends StateNotifier<String> {
     return value;
   }
 
-  // Future<String?> getEmailCredential(String key) async {
-  //   final value = await storage.read(
-  //       key: key,
-  //       aOptions: const AndroidOptions(
-  //         encryptedSharedPreferences: true,
-  //       ),
-  //       iOptions:
-  //           const IOSOptions(accessibility: IOSAccessibility.first_unlock));
-  //   state = state.copyWith(storeEmail: value, success: true);
-  //   Future.delayed(const Duration(seconds: 2), () {
-  //     state = state.copyWith(success: false);
-  //   });
-  //   print(state.storeEmail);
-
-  //   return value;
-  // }
+  void deleteCredential(String key) async {
+    await storage.delete(
+        key: key,
+        aOptions: const AndroidOptions(
+          encryptedSharedPreferences: true,
+        ),
+        iOptions:
+            const IOSOptions(accessibility: IOSAccessibility.first_unlock));
+  }
 
   void clear() async {
     await storage.deleteAll();

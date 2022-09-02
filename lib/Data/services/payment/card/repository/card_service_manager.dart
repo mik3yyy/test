@@ -4,7 +4,6 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/repository/card
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/fund_wallet_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/make_payment/fund_wallet/web_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';

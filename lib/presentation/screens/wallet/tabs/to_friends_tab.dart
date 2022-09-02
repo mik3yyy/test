@@ -6,38 +6,46 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/verify_acct_no_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/user_saved_beneficary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/verify_acct_no_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
 
-class FriendsTab extends HookConsumerWidget {
-  FriendsTab({Key? key}) : super(key: key);
+class FriendsTab extends StatefulHookConsumerWidget {
+  const FriendsTab({Key? key}) : super(key: key);
 
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
-  final formKey = GlobalKey<FormState>();
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _FriendsTabState();
+}
+
+class _FriendsTabState extends ConsumerState<FriendsTab> {
+  // final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
     final defaultWallet = ref.watch(userProfileProvider).value;
     final acctNoVm = ref.watch(verifyAcctNoProvider);
     final beneficiaryVm = ref.watch(usersavedWalletBeneficirayProvider);
     final vm = ref.watch(transferToWalletProvider);
-    final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
+    // final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
     final accountNoController = useTextEditingController();
     final currencyController = useTextEditingController(
         text: defaultWallet?.data.defaultWallet.currencyCode);
     final friendNameController = useTextEditingController();
     final amountController = useTextEditingController();
-    final pinController = useTextEditingController();
+    // final pinController = useTextEditingController();
 
     ref.listen<RequestState>(verifyAcctNoProvider, (T, value) {
       if (value is Success<VerifyAcctNoRes>) {
@@ -54,6 +62,12 @@ class FriendsTab extends HookConsumerWidget {
     });
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
+      if (value is Loading) {
+        print("Loading");
+        context.loaderOverlay.show();
+      } else {
+        context.loaderOverlay.hide();
+      }
       if (value is Success) {
         // context.loaderOverlay.hide();
         AppDialog.showSuccessMessageDialog(
@@ -73,7 +87,7 @@ class FriendsTab extends HookConsumerWidget {
     });
     return SingleChildScrollView(
       child: Form(
-        key: formKey,
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -207,7 +221,7 @@ class FriendsTab extends HookConsumerWidget {
                             .verifyAcctNo(accountNoController.text);
                       } else if (value.length > 8) {
                         return;
-                      } else {
+                      } else if (value.length < 8) {
                         return;
                       }
                     },
@@ -260,73 +274,73 @@ class FriendsTab extends HookConsumerWidget {
                   ),
                   Space(10.h),
                   const SaveBeneficiaryCheckBox(),
-                  Space(35.h),
-                  Container(
-                    height: 80.h,
-                    width: MediaQuery.of(context).size.width,
-                    color: AppColors.appColor.withOpacity(0.05),
-                    child: Row(
-                      children: [
-                        Space(20.w),
-                        const Icon(
-                          Icons.security,
-                          size: 30,
-                        ),
-                        Space(15.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'For security reaso',
-                              style:
-                                  AppText.header2(context, Colors.black, 20.sp),
-                            ),
-                            const Space(2),
-                            Text(
-                              'Enter transaction PIN',
-                              style: AppText.body2Bold(
-                                  context, Colors.black, 23.sp),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Space(20.h),
-                  EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'Enter Transaction Pin',
-                    keyboardType: TextInputType.number,
-                    // textAlign: TextAlign.start,
-                    controller: pinController,
-                    obscureText: transactionPinToggle.state,
-                    // validator: (value) => validatePassword(value),
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return 'Transaction pin is required';
-                      }
-                      return null;
-                    },
-                    suffixIcon: SizedBox(
-                      width: 55.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          transactionPinToggle.state =
-                              !transactionPinToggle.state;
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 0.h),
-                          child: Icon(
-                            transactionPinToggle.state
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color: Colors.grey.shade300,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Space(35.h),
+                  // Container(
+                  //   height: 80.h,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   color: AppColors.appColor.withOpacity(0.05),
+                  //   child: Row(
+                  //     children: [
+                  //       Space(20.w),
+                  //       const Icon(
+                  //         Icons.security,
+                  //         size: 30,
+                  //       ),
+                  //       Space(15.w),
+                  //       Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Text(
+                  //             'For security reaso',
+                  //             style:
+                  //                 AppText.header2(context, Colors.black, 20.sp),
+                  //           ),
+                  //           const Space(2),
+                  //           Text(
+                  //             'Enter transaction PIN',
+                  //             style: AppText.body2Bold(
+                  //                 context, Colors.black, 23.sp),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Space(20.h),
+                  // EditForm(
+                  //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  //   labelText: 'Enter Transaction Pin',
+                  //   keyboardType: TextInputType.number,
+                  //   // textAlign: TextAlign.start,
+                  //   controller: pinController,
+                  //   obscureText: transactionPinToggle.state,
+                  //   // validator: (value) => validatePassword(value),
+                  //   validator: (String? value) {
+                  //     if (value!.isEmpty) {
+                  //       return 'Transaction pin is required';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   suffixIcon: SizedBox(
+                  //     width: 55.w,
+                  //     child: GestureDetector(
+                  //       onTap: () {
+                  //         transactionPinToggle.state =
+                  //             !transactionPinToggle.state;
+                  //       },
+                  //       child: Padding(
+                  //         padding: EdgeInsets.only(bottom: 0.h),
+                  //         child: Icon(
+                  //           transactionPinToggle.state
+                  //               ? Icons.visibility_off_outlined
+                  //               : Icons.visibility_outlined,
+                  //           color: Colors.grey.shade300,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   // EditForm(
                   //   autovalidateMode: AutovalidateMode.onUserInteraction,
                   //   labelText: 'Enter Transaction Pin',
@@ -363,17 +377,58 @@ class FriendsTab extends HookConsumerWidget {
                       onPressed: vm is Loading
                           ? null
                           : () {
-                              if (formKey.currentState!.validate()) {
-                                ref
-                                    .read(transferToWalletProvider.notifier)
-                                    .transferToAnotherUser(
-                                      accountNoController.text,
-                                      currencyController.text,
-                                      int.parse(amountController.text),
-                                      pinController.text,
-                                      savedAsBenefeciaryChecked,
-                                    );
-                                context.loaderOverlay.show();
+                              if (_formKey.currentState!.validate()) {
+                                // ref
+                                //     .read(transferToWalletProvider.notifier)
+                                //     .transferToAnotherUser(
+                                //       accountNoController.text,
+                                //       currencyController.text,
+                                //       int.parse(amountController.text),
+                                //       "",
+                                //       savedAsBenefeciaryChecked,
+                                //     );
+
+                                if (PreferenceManager
+                                    .enableTransactionBioMetrics) {
+                                  // print(object)
+
+                                  ref
+                                      .read(localAuthStateProvider.notifier)
+                                      .authenticateTransaction()
+                                      .then((value) {
+                                    ref
+                                        .read(transferToWalletProvider.notifier)
+                                        .transferToAnotherUser(
+                                          accountNoController.text,
+                                          currencyController.text,
+                                          int.parse(amountController.text),
+                                          value,
+                                          savedAsBenefeciaryChecked,
+                                        );
+                                  });
+                                } else {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      isDismissible: true,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(20))),
+                                      builder: (context) {
+                                        return PinModalSheet(
+                                          routeName: ModalRouteName.toFriend,
+                                          fromCurrency:
+                                              accountNoController.text,
+                                          toCurrency: currencyController.text,
+                                          transferAmount:
+                                              int.parse(amountController.text),
+                                          saveBeneficiary:
+                                              savedAsBenefeciaryChecked,
+                                        );
+                                      });
+                                }
+
+                                // context.loaderOverlay.show();
                               }
                             },
                       buttonWidth: MediaQuery.of(context).size.width),
@@ -395,6 +450,16 @@ class FriendsTab extends HookConsumerWidget {
     );
   }
 }
+
+// class FriendsTab extends HookConsumerWidget {
+//   FriendsTab({Key? key}) : super(key: key);
+
+//   // final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+//   final _formKey = GlobalKey<FormState>(debugLabel: 'resendKey');
+//   @override
+//   Widget build(BuildContext context, ref) {
+//     }
+// }
 
 class SaveBeneficiaryCheckBox extends StatefulWidget {
   const SaveBeneficiaryCheckBox({Key? key}) : super(key: key);

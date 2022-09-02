@@ -70,7 +70,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         } else {
           PreferenceManager.isFirstLaunch = false;
           ref.refresh(getAccountDetailsProvider);
-          ref.refresh(getProfileProvider);
+          // ref.refresh(getProfileProvider);
           ref.refresh(userProfileProvider);
 
           Future.delayed(const Duration(seconds: 2), () {
@@ -204,9 +204,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         CustomButton(
                           buttonWidth: 280.w,
                           buttonText: vm is Loading
-                              ? 'authenticating'
+                              ? 'Authenticating'
                               : isLoading
-                                  ? 'authenticating'
+                                  ? 'Authenticating'
                                   : "Sign in",
                           bgColor: AppColors.appColor,
                           borderColor: AppColors.appColor,

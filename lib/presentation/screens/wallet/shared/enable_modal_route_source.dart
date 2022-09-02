@@ -1,0 +1,1 @@
+enum ModalRouteName { toFriend, toWallet }
