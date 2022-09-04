@@ -5,12 +5,11 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -19,7 +18,6 @@ class Navigation extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final controller = ref.watch(genericController);
     final padding = EdgeInsets.only(left: 30.w, right: 30.w);
 
     return SizedBox(
@@ -69,19 +67,13 @@ class Navigation extends HookConsumerWidget {
               image: AppImage.myNotification,
               onPressed: () {
                 ///CHECK IF AUTODISPOSE WORKS
-                if (controller.notification.isNotEmpty) {
-                  ref.read(genericController.notifier).getNotification();
-                  ref
-                      .read(genericController.notifier)
-                      .withdrawalNotificationRequest();
-                } else {
-                  pushNewScreen(
-                    context,
-                    withNavBar: false,
-                    screen: const NotificationScreen(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade,
-                  );
-                }
+
+                pushNewScreen(
+                  context,
+                  withNavBar: false,
+                  screen: const NotificationScreen(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                );
               },
             ),
             const Divider(

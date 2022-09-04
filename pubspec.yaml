@@ -73,6 +73,7 @@ dependencies:
   hive: ^2.0.6
   hive_flutter: ^1.1.0
   flutter_stripe: ^4.0.0
+  adaptive_dialog: ^1.6.3
   
 
 

@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 import '../widget/wallet_view_widget.dart';
@@ -146,12 +145,7 @@ class _TransferState extends ConsumerState<Transfer>
                   child: TabBarView(
                       physics: const NeverScrollableScrollPhysics(),
                       controller: _tabController,
-                      children: [
-                        AccounInfoTab(
-                          currency: PreferenceManager.defaultWallet,
-                        ),
-                        const MakeTransfer()
-                      ]),
+                      children: const [AccounInfoTab(), MakeTransfer()]),
                 ),
               )
             ],

@@ -10,7 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/format_currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -66,7 +66,7 @@ currencyName(String currency) {
 class _AvailableWalletState extends ConsumerState<AvailableWallet> {
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(getProfileProvider);
+    final vm = ref.watch(userProfileProvider);
     final wallet = ref.watch(getAccountDetailsProvider);
     final walletCount = useState(0);
     final currency = useTextEditingController();
@@ -129,7 +129,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                   ),
                   const Space(10),
                   vm.when(
-                      success: (data) {
+                      data: (data) {
                         return Container(
                           height: 80.h,
                           width: MediaQuery.of(context).size.width,
@@ -158,7 +158,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${currencyName(data!.data.defaultWallet.currencyCode.toString())} wallet',
+                                    '${currencyName(data.data.defaultWallet.currencyCode.toString())} wallet',
                                     style: AppText.header2(
                                         context, AppColors.appColor, 18.sp),
                                   ),
@@ -187,13 +187,9 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                           height: 20.w,
                           width: 20.w,
                           child: const CircularProgressIndicator.adaptive()),
-                      idle: () => SizedBox(
-                          height: 20.w,
-                          width: 20.w,
-                          child: const CircularProgressIndicator.adaptive()),
-                      error: (Object error, StackTrace stackTrace) {
+                      error: (e, s) {
                         return Text(
-                          error.toString(),
+                          e.toString(),
                           style: AppText.header2(
                               context, AppColors.appColor, 20.sp),
                         );
@@ -444,7 +440,6 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                                 padding:
                                     EdgeInsets.only(left: 30.w, right: 30.w),
                                 child: Text(
-                                  //TODO: To change the font when add_fund_ui is merged
                                   'Make wallet default',
                                   style: AppText.body5(
                                     context,

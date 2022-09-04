@@ -12,23 +12,25 @@ class BankRes {
   BankRes({
     this.message,
     this.status,
-    this.data,
+    required this.data,
   });
 
   String? message;
   String? status;
-  List<Datum>? data;
+  List<Datum> data;
 
   factory BankRes.fromJson(Map<String, dynamic> json) => BankRes(
         message: json["message"],
         status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 
@@ -36,12 +38,12 @@ class Datum {
   Datum({
     this.id,
     this.code,
-    this.name,
+    required this.name,
   });
 
   int? id;
   String? code;
-  String? name;
+  String name;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],

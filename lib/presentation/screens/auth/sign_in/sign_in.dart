@@ -58,6 +58,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
     final device = ref.watch(deviceInfoProvider);
+
     final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
     final togglePasswords = ref.watch(passwordToggleStateProvider.state);
@@ -70,7 +71,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         } else {
           PreferenceManager.isFirstLaunch = false;
           ref.refresh(getAccountDetailsProvider);
-          // ref.refresh(getProfileProvider);
           ref.refresh(userProfileProvider);
 
           Future.delayed(const Duration(seconds: 2), () {
@@ -227,10 +227,13 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                       isLoading = true;
                                     });
 
-                                    ref
-                                        .read(credentialProvider.notifier)
-                                        .storeCredential(Constants.userPassword,
-                                            passwordController.text);
+                                    if (PreferenceManager.isFirstLaunch) {
+                                      ref
+                                          .read(credentialProvider.notifier)
+                                          .storeCredential(
+                                              Constants.userPassword,
+                                              passwordController.text);
+                                    }
 
                                     ref
                                         .read(signInProvider.notifier)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -76,12 +77,13 @@ class MyApp extends HookConsumerWidget {
               primarySwatch: Colors.blue),
           locale: locale,
           supportedLocales: L10n.all,
-          // localizationsDelegates: const [
-          //   AppLocalizations.delegate, // Add this line
-          //   GlobalMaterialLocalizations.delegate,
-          //   GlobalWidgetsLocalizations.delegate,
-          //   GlobalCupertinoLocalizations.delegate,
-          // ],
+          localizationsDelegates: const [
+            GlobalCupertinoLocalizations.delegate,
+            // AppLocalizations.delegate, // Add this line
+            // GlobalMaterialLocalizations.delegate,
+            // GlobalWidgetsLocalizations.delegate,
+            // GlobalCupertinoLocalizations.delegate,
+          ],
 
           // theme: theme,
           // home: const HomePage(),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
@@ -21,30 +19,34 @@ class SelectBankScreen extends StatefulHookConsumerWidget {
 }
 
 class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
-  List<Datum> bank = [];
-  List<Datum> filterableBank = [];
+  // List<Datum> bank = [];
+  // List<Datum> filterableBank = [];
 
-  Future<List<Datum>> filterClients(
-      {required List<Datum> banks, required String text}) {
-    if (text.isEmpty) {
-      banks = bank;
-      return Future.value(banks);
-    }
-    List<Datum> result = banks
-        .where((country) => country.name!.toLowerCase().contains(text))
-        .toList();
-    return Future.value(result);
-  }
+  // Future<List<Datum>> filterClients(
+  //     {required List<Datum> banks, required String text}) {
+  //   if (text.isEmpty) {
+  //     banks = bank;
+  //     return Future.value(banks);
+  //   }
+  //   List<Datum> result = banks
+  //       .where((country) =>
+  //           country.name.toLowerCase().contains(text.toLowerCase()))
+  //       .toList();
+  //   return Future.value(result);
+  // }
 
-  void _filterClients(String text) async {
-    filterableBank = await filterClients(banks: bank, text: text);
-    setState(() {});
-  }
+  // void _filterClients(String text) async {
+  //   filterableBank = await filterClients(banks: bank, text: text);
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final country = ref.watch(getBankProvider);
-    final listState = useState("");
+    // THIS IS USED TO CHECK FOR THE LOADING AND ERROR STATE FROM THE SERVER
+    final remoteBankList = ref.watch(bankListSearchProvider);
+    // THIS RETURNS A SUCCESSFUL VALUE
+    final bank = ref.watch(searchInputProvider);
+    // final listState = useState("");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -71,94 +73,57 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
               SearchBox(
                 hintText: "Search Bank",
                 onTextEntered: (value) {
-                  _filterClients(value);
-                  listState.value = value;
+                  ref.read(bankSearchQueryStateProvider.notifier).state = value;
+                  // _filterClients(value);
+                  // listState.value = value;
                 },
               ),
               const Space(30),
-              listState.value.isNotEmpty
-                  ? Expanded(
-                      child: ListView.separated(
-                          itemCount: filterableBank.length,
-                          itemBuilder: (context, index) {
-                            final bank = filterableBank[index];
-                            return InkWell(
-                              onTap: () {
-                                setState(() {
-                                  widget.bankName.text = bank.name.toString();
-                                  widget.bankCode.text = bank.code.toString();
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 0.5, color: Colors.black26)),
-                                child: Center(
-                                    child: Text(
-                                  bank.name.toString(),
-                                  style:
-                                      AppText.body2(context, Colors.black, 18),
-                                )),
-                              ),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(
-                              height: 10,
-                            );
-                          }),
-                    )
-                  : country.when(
-                      error: (e, s) => Text(e.toString()),
-                      idle: () => const CircularProgressIndicator.adaptive(
-                            strokeWidth: 6,
-                          ),
-                      loading: () => const CircularProgressIndicator.adaptive(
-                            strokeWidth: 6,
-                          ),
-                      success: (data) {
-                        setState(() {
-                          bank = data!.data!;
-                        });
-
-                        return Expanded(
-                          child: ListView.separated(
-                              itemCount: bank.length,
-                              itemBuilder: (context, index) {
-                                final banks = bank[index];
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      widget.bankName.text =
-                                          banks.name.toString();
-                                      widget.bankCode.text =
-                                          banks.code.toString();
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.5, color: Colors.black26)),
-                                    child: Center(
-                                        child: Text(
-                                      banks.name.toString(),
-                                      style: AppText.body2(
-                                          context, Colors.black, 18),
-                                    )),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(
-                                  height: 10,
-                                );
-                              }),
-                        );
-                      })
+              remoteBankList.when(
+                  data: (_) {
+                    //CHECK IF THE BANK PROVIDER IS NULL
+                    if (bank.value == null) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      return Expanded(
+                        child: ListView.separated(
+                            itemCount: bank.value!.length,
+                            itemBuilder: (context, index) {
+                              final banks = bank.value![index];
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    widget.bankName.text =
+                                        banks.name.toString();
+                                    widget.bankCode.text =
+                                        banks.code.toString();
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 0.5, color: Colors.black26)),
+                                  child: Center(
+                                      child: Text(
+                                    banks.name.toString(),
+                                    style: AppText.body2(
+                                        context, Colors.black, 18),
+                                  )),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(
+                                height: 10,
+                              );
+                            }),
+                      );
+                    }
+                  },
+                  loading: () => const CircularProgressIndicator(),
+                  error: (e, s) => Text(e.toString()))
             ],
           ),
         ),

@@ -70,6 +70,7 @@ class RefreshTokenController extends StateNotifier<RefreshTokenState> {
             PreferenceManager.refreshToken =
                 value.data!.refreshToken.toString();
           }).catchError((e, s) {
+            if (mounted) return;
             state = state.copyWith(error: e.toString());
           });
         } else {

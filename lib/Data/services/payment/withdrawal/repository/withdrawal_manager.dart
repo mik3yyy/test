@@ -23,6 +23,10 @@ class WithdrawalManager extends IRepository {
   @override
   Future<BankRes> fetchBank() async {
     final bankres = await withdrawalService.fetchBank();
+
+    // bankres
+    //     .where((country) => country.name!.toLowerCase().contains(text.toLowerCase()))
+    //     .toList();
     return bankres;
   }
 
