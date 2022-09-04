@@ -162,7 +162,7 @@ class SecurityDisplayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       height: 80.h,
       width: MediaQuery.of(context).size.width,
       color: AppColors.appColor.withOpacity(0.05),

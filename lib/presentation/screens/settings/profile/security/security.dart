@@ -1,10 +1,10 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/change_password.dart';
@@ -120,8 +120,10 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                         PreferenceManager.enableBioMetrics = toggle.state;
 
                         if (toggle.state == true) {
-                          AppSnackBar.showMessage(context,
-                              "Please restart the app for this changes");
+                          showOkAlertDialog(
+                            context: context,
+                            message: 'Please restart the app for this changes',
+                          );
                           final password = await ref
                               .read(credentialProvider.notifier)
                               .getCredential(Constants.userPassword);
@@ -137,9 +139,14 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userPassword, password!);
                         } else if (toggle.state == false) {
-                          AppSnackBar.showMessage(context,
-                              "Please restart the app for this changes");
-                          ref.read(credentialProvider.notifier).clear();
+                          showOkAlertDialog(
+                            context: context,
+                            message: 'Please restart the app for this changes',
+                          );
+
+                          ref
+                              .read(credentialProvider.notifier)
+                              .deleteCredential(Constants.userPassword);
                           // print("false");
                         }
                       }),

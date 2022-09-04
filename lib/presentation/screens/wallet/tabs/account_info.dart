@@ -15,7 +15,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
@@ -25,8 +25,9 @@ import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dar
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class AccounInfoTab extends StatefulHookConsumerWidget {
-  final String currency;
-  const AccounInfoTab({Key? key, required this.currency}) : super(key: key);
+  const AccounInfoTab({
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AccounInfoTabState();
@@ -34,27 +35,27 @@ class AccounInfoTab extends StatefulHookConsumerWidget {
 
 class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     with AutomaticKeepAliveClientMixin {
-  List<Transactions> bank = [];
-  List<Transactions> filterableBank = [];
+  // List<Transactions> bank = [];
+  // List<Transactions> filterableBank = [];
 
-  Future<List<Transactions>> filterClients(
-      {required List<Transactions> banks, required String text}) {
-    if (text.isEmpty) {
-      banks = bank;
-      return Future.value(banks);
-    }
-    List<Transactions> result = banks
-        .where((country) =>
-            country.user!.accountNumber!.toLowerCase().contains(text))
-        .toList();
-    return Future.value(result);
-  }
+  // Future<List<Transactions>> filterClients(
+  //     {required List<Transactions> banks, required String text}) {
+  //   if (text.isEmpty) {
+  //     banks = bank;
+  //     return Future.value(banks);
+  //   }
+  //   List<Transactions> result = banks
+  //       .where((country) =>
+  //           country.user!.accountNumber!.toLowerCase().contains(text))
+  //       .toList();
+  //   return Future.value(result);
+  // }
 
-  void _filterClients(String text) async {
-    filterableBank = await filterClients(banks: bank, text: text);
+  // void _filterClients(String text) async {
+  //   filterableBank = await filterClients(banks: bank, text: text);
 
-    setState(() {});
-  }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +64,12 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
 
-    final transaction = ref.watch(currencyTransactionProvider(widget.currency));
+    final remoteTransaction = ref.watch(remoteTransactionListProvider);
+    final transaction = ref.watch(transactionsearchInputProvider);
     final rate = useState("0.0");
     final from = useState("0.0");
     final convert = ref.watch(conversionProvider);
-    final listState = useState("");
+    // final listState = useState("");
 
     ref.listen<RequestState>(conversionProvider, (previous, value) {
       if (value is Success<ConvertCurrencyRes>) {
@@ -108,8 +110,12 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                         ),
                         fillColor: Colors.transparent),
                     onChanged: (value) {
-                      _filterClients(value);
-                      listState.value = value;
+                      // _filterClients(value);
+                      // listState.value = value;
+
+                      ref
+                          .read(transactionSearchQueryStateProvider.notifier)
+                          .state = value;
                     },
                   )),
               Space(10.h),
@@ -371,82 +377,65 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                 ),
               ),
               const Space(30),
-              listState.value.isNotEmpty
-                  ? RefreshIndicator(
-                      onRefresh: () async {
-                        return ref.refresh(
-                            currencyTransactionProvider(widget.currency));
-                      },
-                      child: SizedBox(
-                        height: 500.h,
-                        child: ListView.separated(
-                          physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics()),
-                          itemCount: filterableBank.length,
-                          // itemCount: data.data!.transactions.length,
-                          itemBuilder: (context, index) {
-                            final transaction = filterableBank[index];
-                            return CurrencyTransactionBuild(
-                              transactions: transaction,
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(height: 20.h);
-                          },
+              remoteTransaction.when(
+                  error: (error, stackTrace) {
+                    return Text(error.toString());
+                  },
+                  loading: () => Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.13,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.3),
+                        child: const CircularProgressIndicator.adaptive(
+                          strokeWidth: 5,
                         ),
                       ),
-                    )
-                  : transaction.when(
-                      error: (error, stackTrace) {
-                        return Text(error.toString());
-                      },
-                      loading: () => Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.13,
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.3),
-                            child: const CircularProgressIndicator.adaptive(
-                              strokeWidth: 5,
-                            ),
-                          ),
-                      data: (data) {
-                        setState(() {
-                          bank = data.data.transactions;
-                        });
-                        if (data.data.transactions.isEmpty) {
-                          return const Center(
-                            child: Text("You have no transactions"),
-                          );
-                        } else {
-                          return RefreshIndicator(
-                            onRefresh: () async {
-                              return ref.refresh(
-                                  currencyTransactionProvider(widget.currency));
+                  data: (data) {
+                    if (transaction.value == null) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.13,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.3),
+                        child: const CircularProgressIndicator.adaptive(
+                          strokeWidth: 5,
+                        ),
+                      );
+                    } else if (data.data.transactions.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.13,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.3),
+                        child: const Text("No Transactions"),
+                      );
+                    } else {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          return ref.refresh(remoteTransactionListProvider);
+                        },
+                        child: SizedBox(
+                          height: 500.h,
+                          child: ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
+                            itemCount: transaction.value!.length,
+                            // itemCount: data.data!.transactions.length,
+                            itemBuilder: (context, index) {
+                              final value = transaction.value![index];
+                              return CurrencyTransactionBuild(
+                                transactions: value,
+                              );
                             },
-                            child: SizedBox(
-                              height: 500.h,
-                              child: ListView.separated(
-                                physics: const AlwaysScrollableScrollPhysics(
-                                    parent: BouncingScrollPhysics()),
-                                itemCount: data.data.transactions.length,
-                                // itemCount: data.data!.transactions.length,
-                                itemBuilder: (context, index) {
-                                  final transaction =
-                                      data.data.transactions[index];
-                                  return CurrencyTransactionBuild(
-                                    transactions: transaction,
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
-                                  return SizedBox(height: 20.h);
-                                },
-                              ),
-                            ),
-                          );
-                        }
-                      })
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(height: 20.h);
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  })
             ],
           ),
         ),

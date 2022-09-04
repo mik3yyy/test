@@ -40,7 +40,7 @@ final credentialProvider =
 });
 
 class CredentialsNotifier extends StateNotifier<String> {
-  CredentialsNotifier(this.storage) : super("unkKnown");
+  CredentialsNotifier(this.storage) : super("");
 
   final FlutterSecureStorage storage;
 
@@ -63,6 +63,7 @@ class CredentialsNotifier extends StateNotifier<String> {
         ),
         iOptions:
             const IOSOptions(accessibility: IOSAccessibility.first_unlock));
+    state = value!;
 
     return value;
   }

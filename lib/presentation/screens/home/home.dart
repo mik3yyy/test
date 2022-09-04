@@ -29,7 +29,7 @@ import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';
 import '../settings/profile/vm/get_profile_vm.dart';
 import '../wallet/transfer/transfer.dart';
-import 'widgets/bottomNav/persistent-tab-view.dart';
+import 'widgets/bottomNav/persistent_tab_view.dart';
 
 class HomePage extends StatefulHookConsumerWidget {
   final BuildContext menuScreenContext;
@@ -47,7 +47,8 @@ class HomePage extends StatefulHookConsumerWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final toggleAmountProvider = StateProvider<bool>((ref) => true);
+  final toggleAmountProvider =
+      StateProvider<bool>((ref) => PreferenceManager.revealBalance);
   final currency = [
     "Dollar",
     "Pounds",
@@ -62,11 +63,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
 
     ref.read(refreshControllerProvider.notifier).refreshToken();
-
-    // ref.read(genericController.notifier).getAbaBeneficiaries();
-    // ref.read(genericController.notifier).getIbanBeneficiaries();
-    // ref.read(genericController.notifier).getNotification();
-    // ref.read(genericController.notifier).withdrawalNotificationRequest();
   }
 
   @override
@@ -252,6 +248,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                             firstColor: AppColors.appColor.withOpacity(0.65),
                             secondColor: AppColors.appColor,
                             onPressed: () {
+                              ref
+                                      .watch(defaultTransactionStateProvider
+                                          .notifier)
+                                      .state =
+                                  defaultWallet
+                                      .value!.data.defaultWallet.currencyCode
+                                      .toString();
                               pushNewScreen(
                                 context,
                                 screen: const Transfer(),
@@ -344,7 +347,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
                 Space(30.h),
                 transactions.when(
-                    error: (error, stackTrace) => Text(error.toString()),
+                    error: (error, stackTrace) => Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * 0.1,
+                          ),
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              backgroundColor: Colors.grey.shade500,
+                              onSurface: Colors.grey,
+                            ),
+                            onPressed: () {
+                              ref.refresh(walletTransactionProvider);
+                            },
+                            icon: const Icon(Icons.restart_alt),
+                            label: const Text('Retry'),
+                          ),
+                        ),
                     idle: () => const Center(
                           child: CircularProgressIndicator.adaptive(
                             strokeWidth: 5,

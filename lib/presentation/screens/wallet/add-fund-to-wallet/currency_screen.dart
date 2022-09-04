@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
@@ -30,30 +28,31 @@ class SelectCurrencyScreen extends StatefulHookConsumerWidget {
 }
 
 class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
-  List<Currency> bank = [];
-  List<Currency> filterableBank = [];
+  // List<Currency> bank = [];
+  // List<Currency> filterableBank = [];
 
-  Future<List<Currency>> filterClients(
-      {required List<Currency> banks, required String text}) {
-    if (text.isEmpty) {
-      banks = bank;
-      return Future.value(banks);
-    }
-    List<Currency> result = banks
-        .where((country) => country.name!.toLowerCase().contains(text))
-        .toList();
-    return Future.value(result);
-  }
+  // Future<List<Currency>> filterClients(
+  //     {required List<Currency> banks, required String text}) {
+  //   if (text.isEmpty) {
+  //     banks = bank;
+  //     return Future.value(banks);
+  //   }
+  //   List<Currency> result = banks
+  //       .where((country) => country.name!.toLowerCase().contains(text))
+  //       .toList();
+  //   return Future.value(result);
+  // }
 
-  void _filterClients(String text) async {
-    filterableBank = await filterClients(banks: bank, text: text);
-    setState(() {});
-  }
+  // void _filterClients(String text) async {
+  //   filterableBank = await filterClients(banks: bank, text: text);
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final currency = ref.watch(getCurrencyProvider);
-    final listState = useState("");
+    final remoteCurrency = ref.watch(remoteCurrencyProvider);
+    final currency = ref.watch(searchInputProvider);
+    // final listState = useState("");
 
     ref.listen<RequestState>(createWalletProvider, (prev, value) {
       if (value is Success<CreateWalletRes>) {
@@ -102,108 +101,62 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                 SearchBox(
                   hintText: "Search",
                   onTextEntered: (value) {
-                    _filterClients(value);
-                    listState.value = value;
+                    ref.read(currencySearchQueryStateProvider.notifier).state =
+                        value;
                   },
                 ),
                 const Space(30),
-                listState.value.isNotEmpty
-                    ? Expanded(
-                        child: ListView.separated(
-                            itemCount: filterableBank.length,
-                            itemBuilder: (context, index) {
-                              final bank = filterableBank[index];
-                              return InkWell(
-                                onTap: () {
-                                  if (widget.routeName == "createWallet") {
-                                    ref
-                                        .read(createWalletProvider.notifier)
-                                        .createWallet(bank.code.toString());
-                                    context.loaderOverlay.show();
-                                  } else {
-                                    setState(() {
-                                      widget.currencyCode.text =
-                                          bank.code.toString();
-                                    });
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: Container(
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.5, color: Colors.black26)),
-                                  child: Center(
-                                      child: Text(
-                                    bank.name.toString(),
-                                    style: AppText.body2(
-                                        context, Colors.black, 18),
-                                  )),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                height: 10,
-                              );
-                            }),
-                      )
-                    : currency.when(
-                        error: (e, s) => Text(e.toString()),
-                        idle: () => const CircularProgressIndicator.adaptive(
-                              strokeWidth: 6,
-                            ),
-                        loading: () => const CircularProgressIndicator.adaptive(
-                              strokeWidth: 6,
-                            ),
-                        success: (data) {
-                          setState(() {
-                            bank = data!.data.currencies;
-                          });
-
-                          return Expanded(
-                            child: ListView.separated(
-                                itemCount: bank.length,
-                                itemBuilder: (context, index) {
-                                  final banks = bank[index];
-                                  return InkWell(
-                                    onTap: () {
-                                      if (widget.routeName == "createWallet") {
-                                        ref
-                                            .read(createWalletProvider.notifier)
-                                            .createWallet(
-                                                banks.code.toString());
-                                        context.loaderOverlay.show();
-                                      } else {
-                                        setState(() {
-                                          widget.currencyCode.text =
-                                              banks.code.toString();
-                                        });
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.5,
-                                              color: Colors.black26)),
-                                      child: Center(
-                                          child: Text(
-                                        banks.name.toString(),
-                                        style: AppText.header2(
-                                            context, AppColors.appColor, 20.sp),
-                                      )),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const SizedBox(
-                                    height: 10,
-                                  );
-                                }),
-                          );
-                        })
+                remoteCurrency.when(
+                    error: (e, s) => Text(e.toString()),
+                    loading: () => const CircularProgressIndicator.adaptive(
+                          strokeWidth: 6,
+                        ),
+                    data: (data) {
+                      if (currency.value == null) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return Expanded(
+                          child: ListView.separated(
+                              itemCount: currency.value!.length,
+                              itemBuilder: (context, index) {
+                                final banks = currency.value![index];
+                                return InkWell(
+                                  onTap: () {
+                                    if (widget.routeName == "createWallet") {
+                                      ref
+                                          .read(createWalletProvider.notifier)
+                                          .createWallet(banks.code.toString());
+                                      context.loaderOverlay.show();
+                                    } else {
+                                      setState(() {
+                                        widget.currencyCode.text =
+                                            banks.code.toString();
+                                      });
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.5, color: Colors.black26)),
+                                    child: Center(
+                                        child: Text(
+                                      banks.name.toString(),
+                                      style: AppText.header2(
+                                          context, AppColors.appColor, 20.sp),
+                                    )),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 10,
+                                );
+                              }),
+                        );
+                      }
+                    })
               ],
             ),
           ),

@@ -17,6 +17,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 70,
         backgroundColor: Colors.transparent,
@@ -28,7 +29,13 @@ class SettingScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
-      body: const Navigation(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: const [
+            Navigation(),
+          ],
+        ),
+      ),
     );
   }
 }

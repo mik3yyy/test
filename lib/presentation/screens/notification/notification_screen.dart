@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/request_withdrawal_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/widget/notifcaton_tab_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
@@ -46,17 +48,6 @@ class NotificationScreen extends HookConsumerWidget {
                       'Notifications',
                       style: AppText.body2(context, AppColors.appColor, 20.sp),
                     ),
-
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     pushNewScreen(
-                    //       context,
-                    //       screen: const NotificationSettingScreen(),
-                    //       pageTransitionAnimation: PageTransitionAnimation.fade,
-                    //     );
-                    //   },
-                    //   child: Image.asset(AppImage.notificationSettingIcon),
-                    // ),
                   ],
                 ),
               ),
@@ -88,11 +79,13 @@ class NotificationScreen extends HookConsumerWidget {
                 ),
                 onChanged: (value) {
                   if (tab.tabState == 0) {
-                    ref.read(genericController.notifier).filteredNots(value);
+                    ref
+                        .read(allnotificationSearchQueryProvider.notifier)
+                        .state = value;
                   } else {
                     ref
-                        .read(genericController.notifier)
-                        .filteredWithdrawalReq(value);
+                        .read(notificationReqSearchQueryProvider.notifier)
+                        .state = value;
                   }
                 },
               ),

@@ -52,11 +52,11 @@ class Data {
 
 class Currency {
   Currency({
-    this.name,
+    required this.name,
     this.code,
   });
 
-  String? name;
+  String name;
   String? code;
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(

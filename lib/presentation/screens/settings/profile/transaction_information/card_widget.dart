@@ -244,7 +244,9 @@ class MaskedTextController extends TextEditingController {
 
   late Map<String, RegExp> translator;
 
+  // ignore: prefer_function_declarations_over_variables
   Function afterChange = (String previous, String next) {};
+  // ignore: prefer_function_declarations_over_variables
   Function beforeChange = (String previous, String next) {
     return true;
   };

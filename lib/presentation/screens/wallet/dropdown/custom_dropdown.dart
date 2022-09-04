@@ -647,6 +647,7 @@ class ItemPickerDialog extends StatefulWidget {
   final List<Map<String, dynamic>>? items;
   final bool enableSearch;
 
+  // ignore: use_key_in_widget_constructors
   const ItemPickerDialog(
     this.title,
     this.items, [
@@ -785,6 +786,7 @@ class _ItemPickerDialogState extends State<ItemPickerDialog> {
 class ListItem extends StatelessWidget {
   final List<Map<String, dynamic>> _lItens;
 
+  // ignore: use_key_in_widget_constructors, prefer_const_constructors_in_immutables
   ListItem(this._lItens);
 
   @override
