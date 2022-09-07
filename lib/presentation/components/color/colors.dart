@@ -35,4 +35,7 @@ class AppColors {
   static const Color lightAppColor = Color(0xFF9BB8FF);
 
   static const Color appBgColor = Color(0xfff8f9fb);
+  static const Color arrowLeftColor = Color(0xff130F26);
+  static const Color genericWidgetBgColor = Color(0xFFF9F9F9);
+  static const Color redColor = Color(0xFFEA001B);
 }

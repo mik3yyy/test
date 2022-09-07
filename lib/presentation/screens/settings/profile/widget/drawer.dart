@@ -125,7 +125,7 @@ class Navigation extends HookConsumerWidget {
               onPressed: () {
                 // context.navigate(const FaqScreen());
                 pushNewScreen(context,
-                    withNavBar: false,
+                    withNavBar: true,
                     screen: const FaqScreen(),
                     pageTransitionAnimation: PageTransitionAnimation.fade);
               },
