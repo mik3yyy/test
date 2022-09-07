@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class AllNotificationTabBarView extends StatefulHookConsumerWidget {
@@ -25,121 +25,72 @@ class _AllNotificationTabBarViewState
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final data = ref.watch(genericController);
-    return RefreshIndicator(
-      onRefresh: () async {
-        // ref.refresh(getNotificationProvider);
-        ref.read(genericController.notifier).getNotification();
-      },
-      child: data.notificationloading
-          ? const Center(
+    final remoteNotification = ref.watch(remoteNotificationListProvider);
+    final notification = ref.watch(notificationSearchInputProvider);
+
+    return remoteNotification.when(
+        data: (data) {
+          if (notification.value == null) {
+            return const Center(
               child: CircularProgressIndicator(),
-            )
-          : data.notification.isEmpty
-              ? const Center(
-                  child: Text("You have no Notification"),
-                )
-              : SizedBox(
-                  height: 450.h,
-                  child: Scrollbar(
-                    isAlwaysShown: true,
+            );
+          } else if (data.data.notifications.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.13,
+                  horizontal: MediaQuery.of(context).size.width * 0.3),
+              child: const Text("No Notifications"),
+            );
+          } else {
+            return RefreshIndicator(
+              onRefresh: () async {
+                // ref.refresh(getNotificationProvider);
+                ref.refresh(remoteNotificationListProvider);
+              },
+              child: SizedBox(
+                height: 450.h,
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  controller: _scrollController,
+                  child: ListView.separated(
                     controller: _scrollController,
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics(),
-                      ),
-                      itemCount: data.notification.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final msg = data.notification[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 32.0),
-                          child: AllNotificationBuild(
-                            notificationIcon:
-                                Image.asset(AppImage.successNotificationIcon),
-                            notificationMsg: msg.data!.message.toString(),
-                            notificationTime: msg.timeAgo.toString(),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Padding(
-                          padding: EdgeInsets.only(right: 12.0),
-                          child: Divider(
-                            color: AppColors.notificationDividerColor,
-                            thickness: 1.5,
-                            height: 20,
-                            // indent: 5.0,
-                          ),
-                        );
-                      },
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
                     ),
+                    itemCount: notification.value!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final msg = notification.value![index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 32.0),
+                        child: AllNotificationBuild(
+                          notificationIcon:
+                              Image.asset(AppImage.successNotificationIcon),
+                          notificationMsg: msg.data!.message.toString(),
+                          notificationTime: msg.timeAgo.toString(),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Padding(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: Divider(
+                          color: AppColors.notificationDividerColor,
+                          thickness: 1.5,
+                          height: 20,
+                          // indent: 5.0,
+                        ),
+                      );
+                    },
                   ),
                 ),
-    );
-
-    // notification.when(
-    //     error: (error, stackTrace) => Text(error.toString()),
-    //     idle: () => const CircularProgressIndicator.adaptive(),
-    //     loading: () => const Center(
-    //         child: SizedBox(
-    //             height: 25,
-    //             width: 25,
-    //             child: CircularProgressIndicator.adaptive())),
-    //     success: (data) {
-    //       if (data!.data.notifications.isEmpty) {
-    //         return Text(
-    //           "You have notification",
-    //           style: AppText.body3(
-    //             context,
-    //             AppColors.appColor,
-    //           ),
-    //         );
-    //       } else {
-    //         return RefreshIndicator(
-    //           onRefresh: () async {
-    //             ref.refresh(getNotificationProvider);
-    //           },
-    //           child: SizedBox(
-    //             height: 450.h,
-    //             child: Scrollbar(
-    //               isAlwaysShown: true,
-    //               controller: _scrollController,
-    //               child: ListView.separated(
-    //                 controller: _scrollController,
-    //                 physics: const AlwaysScrollableScrollPhysics(
-    //                   parent: BouncingScrollPhysics(),
-    //                 ),
-    //                 itemCount: data.data.notifications.length,
-    //                 itemBuilder: (BuildContext context, int index) {
-    //                   final msg = data.data.notifications[index];
-    //                   return Padding(
-    //                     padding: const EdgeInsets.only(right: 32.0),
-    //                     child: AllNotificationBuild(
-    //                       notificationIcon:
-    //                           Image.asset(AppImage.successNotificationIcon),
-    //                       notificationMsg: msg.data!.message.toString(),
-    //                       notificationTime: msg.timeAgo.toString(),
-    //                     ),
-    //                   );
-    //                 },
-    //                 separatorBuilder: (BuildContext context, int index) {
-    //                   return const Padding(
-    //                     padding: EdgeInsets.only(right: 12.0),
-    //                     child: Divider(
-    //                       color: AppColors.notificationDividerColor,
-    //                       thickness: 1.5,
-    //                       height: 20,
-    //                       // indent: 5.0,
-    //                     ),
-    //                   );
-    //                 },
-    //               ),
-    //             ),
-    //           ),
-    //         );
-    //       }
-    //     });
+              ),
+            );
+          }
+        },
+        loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+        error: (e, s) => Text(e.toString()));
   }
 
   @override

@@ -10,7 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/sha
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../home/widgets/bottomNav/persistent-tab-view.dart';
+import '../../home/widgets/bottomNav/persistent_tab_view.dart';
 import 'widget/withdrawal_method_widget.dart';
 
 class WithdrawalMethodScreen extends StatefulHookConsumerWidget {

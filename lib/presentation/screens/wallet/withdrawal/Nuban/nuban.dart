@@ -11,13 +11,11 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/ban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
@@ -67,7 +65,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
         ref.refresh(getAccountDetailsProvider);
-        ref.read(getNotificationProvider.notifier).getNotification();
         AppDialog.showSuccessMessageDialog(context, value.value!.message!);
       }
 
@@ -517,323 +514,323 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   }
 }
 
-class SelectBank extends StatefulHookConsumerWidget {
-  final TextEditingController bankController;
-  final TextEditingController bankCode;
-  const SelectBank(
-      {Key? key, required this.bankController, required this.bankCode})
-      : super(key: key);
+// class SelectBank extends StatefulHookConsumerWidget {
+//   final TextEditingController bankController;
+//   final TextEditingController bankCode;
+//   const SelectBank(
+//       {Key? key, required this.bankController, required this.bankCode})
+//       : super(key: key);
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SelectBankState();
-}
+//   @override
+//   ConsumerState<ConsumerStatefulWidget> createState() => _SelectBankState();
+// }
 
-class _SelectBankState extends ConsumerState<SelectBank> {
-  @override
-  Widget build(BuildContext context) {
-    final bankRes = ref.watch(getBankProvider);
-    return Stack(
-      children: [
-        InkWell(
-          onTap: () {
-            showCupertinoModalPopup(
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 25.w, right: 25.w),
-                    child: CupertinoActionSheet(
-                      actions: [
-                        Container(
-                          color: Colors.white,
-                          child: CupertinoActionSheetAction(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                              child: Center(
-                                child: Text(
-                                  "Select Bank",
-                                  style: AppText.body2(
-                                      context, Colors.black, 20.sp),
-                                ),
-                              ),
-                            ),
-                            isDefaultAction: true,
-                            onPressed: () {
-                              // widget.bankController.text = gtBank;
-                              // Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        SizedBox(
-                            height: 500,
-                            child: bankRes.when(
-                              idle: () => const CircularProgressIndicator(),
-                              loading: () => const CircularProgressIndicator(),
-                              error: (e, s) => Text(e.toString()),
-                              success: (data) {
-                                return SizedBox(
-                                  height: 500,
-                                  child: ListView.separated(
-                                    itemCount: data!.data!.length,
-                                    itemBuilder: (context, index) {
-                                      final bank = data.data![index];
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 5.w, right: 5.w),
-                                        child: Container(
-                                          color: Colors.white,
-                                          child: CupertinoActionSheetAction(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 30.w, right: 30.w),
-                                              child: Center(
-                                                child: Text(
-                                                  bank.name.toString(),
-                                                  style: AppText.body2(context,
-                                                      Colors.black, 17.sp),
-                                                ),
-                                              ),
-                                            ),
-                                            isDefaultAction: true,
-                                            onPressed: () {
-                                              widget.bankController.text =
-                                                  bank.name!;
-                                              widget.bankCode.text = bank.code!;
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context, int index) {
-                                      return const SizedBox(
-                                        height: 5,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            )),
-                      ],
-                      // actions: [
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             gtBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDefaultAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = gtBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      // ],
+// class _SelectBankState extends ConsumerState<SelectBank> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final bankRes = ref.watch(searchInputProvider);
+//     return Stack(
+//       children: [
+//         InkWell(
+//           onTap: () {
+//             showCupertinoModalPopup(
+//                 context: context,
+//                 builder: (context) {
+//                   return Padding(
+//                     padding: EdgeInsets.only(left: 25.w, right: 25.w),
+//                     child: CupertinoActionSheet(
+//                       actions: [
+//                         Container(
+//                           color: Colors.white,
+//                           child: CupertinoActionSheetAction(
+//                             child: Padding(
+//                               padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                               child: Center(
+//                                 child: Text(
+//                                   "Select Bank",
+//                                   style: AppText.body2(
+//                                       context, Colors.black, 20.sp),
+//                                 ),
+//                               ),
+//                             ),
+//                             isDefaultAction: true,
+//                             onPressed: () {
+//                               // widget.bankController.text = gtBank;
+//                               // Navigator.pop(context);
+//                             },
+//                           ),
+//                         ),
+//                         const SizedBox(
+//                           height: 5,
+//                         ),
+//                         SizedBox(
+//                             height: 500,
+//                             child: bankRes.when(
+//                               // idle: () => const CircularProgressIndicator(),
+//                               loading: () => const CircularProgressIndicator(),
+//                               error: (e, s) => Text(e.toString()),
+//                               data: (data) {
+//                                 return SizedBox(
+//                                   height: 500,
+//                                   child: ListView.separated(
+//                                     itemCount: data.data!.length,
+//                                     itemBuilder: (context, index) {
+//                                       final bank = data.data![index];
+//                                       return Padding(
+//                                         padding: EdgeInsets.only(
+//                                             left: 5.w, right: 5.w),
+//                                         child: Container(
+//                                           color: Colors.white,
+//                                           child: CupertinoActionSheetAction(
+//                                             child: Padding(
+//                                               padding: EdgeInsets.only(
+//                                                   left: 30.w, right: 30.w),
+//                                               child: Center(
+//                                                 child: Text(
+//                                                   bank.name.toString(),
+//                                                   style: AppText.body2(context,
+//                                                       Colors.black, 17.sp),
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                             isDefaultAction: true,
+//                                             onPressed: () {
+//                                               widget.bankController.text =
+//                                                   bank.name!;
+//                                               widget.bankCode.text = bank.code!;
+//                                               Navigator.pop(context);
+//                                             },
+//                                           ),
+//                                         ),
+//                                       );
+//                                     },
+//                                     separatorBuilder:
+//                                         (BuildContext context, int index) {
+//                                       return const SizedBox(
+//                                         height: 5,
+//                                       );
+//                                     },
+//                                   ),
+//                                 );
+//                               },
+//                             )),
+//                       ],
+//                       // actions: [
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             gtBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDefaultAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = gtBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       // ],
 
-                      // actions: <Widget>[
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             gtBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDefaultAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = gtBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             uba,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = uba;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             accessbankDiamond,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = accessbankDiamond;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             accessBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = accessBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             zenithBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = zenithBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             stanbicBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = stanbicBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             sterlingBank,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = sterlingBank;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      //   Container(
-                      //     color: Colors.white,
-                      //     child: CupertinoActionSheetAction(
-                      //       child: Padding(
-                      //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                      //         child: Center(
-                      //           child: Text(
-                      //             fidelity,
-                      //             style: AppText.body2(
-                      //                 context, Colors.black, 20.sp),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       isDestructiveAction: true,
-                      //       onPressed: () {
-                      //         widget.bankController.text = fidelity;
-                      //         Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //   ),
-                      // ],
-                      cancelButton: CupertinoActionSheetAction(
-                        child: const Text("Close"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  );
-                });
-          },
-          child: EditForm(
-              enabled: false,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              labelText: 'Select bank name of recipient',
+//                       // actions: <Widget>[
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             gtBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDefaultAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = gtBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             uba,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = uba;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             accessbankDiamond,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = accessbankDiamond;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             accessBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = accessBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             zenithBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = zenithBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             stanbicBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = stanbicBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             sterlingBank,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = sterlingBank;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       //   Container(
+//                       //     color: Colors.white,
+//                       //     child: CupertinoActionSheetAction(
+//                       //       child: Padding(
+//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
+//                       //         child: Center(
+//                       //           child: Text(
+//                       //             fidelity,
+//                       //             style: AppText.body2(
+//                       //                 context, Colors.black, 20.sp),
+//                       //           ),
+//                       //         ),
+//                       //       ),
+//                       //       isDestructiveAction: true,
+//                       //       onPressed: () {
+//                       //         widget.bankController.text = fidelity;
+//                       //         Navigator.pop(context);
+//                       //       },
+//                       //     ),
+//                       //   ),
+//                       // ],
+//                       cancelButton: CupertinoActionSheetAction(
+//                         child: const Text("Close"),
+//                         onPressed: () {
+//                           Navigator.pop(context);
+//                         },
+//                       ),
+//                     ),
+//                   );
+//                 });
+//           },
+//           child: EditForm(
+//               enabled: false,
+//               autovalidateMode: AutovalidateMode.onUserInteraction,
+//               labelText: 'Select bank name of recipient',
 
-              // textAlign: TextAlign.start,
-              controller: widget.bankController,
-              obscureText: false,
-              validator: (value) => validateCountry(value)),
-        ),
-        Positioned(
-          left: 375.w,
-          right: 0,
-          bottom: 17.h,
-          child: const Icon(
-            CupertinoIcons.chevron_down,
-            color: Color(0xffA8A8A8),
-            size: 15,
-          ),
-        ),
-      ],
-    );
-  }
-}
+//               // textAlign: TextAlign.start,
+//               controller: widget.bankController,
+//               obscureText: false,
+//               validator: (value) => validateCountry(value)),
+//         ),
+//         Positioned(
+//           left: 375.w,
+//           right: 0,
+//           bottom: 17.h,
+//           child: const Icon(
+//             CupertinoIcons.chevron_down,
+//             color: Color(0xffA8A8A8),
+//             size: 15,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';
 import '../../../components/app text theme/app_text_theme.dart';
-import '../../home/widgets/bottomNav/persistent-tab-view.dart';
+import '../../home/widgets/bottomNav/persistent_tab_view.dart';
 import '../widget/wallet_view_widget.dart';
 
 class FundVirtualCard extends StatefulHookConsumerWidget {

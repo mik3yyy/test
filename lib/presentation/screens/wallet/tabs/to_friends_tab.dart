@@ -475,7 +475,6 @@ class _SaveBeneficiaryCheckBoxState extends State<SaveBeneficiaryCheckBox> {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-        //TODO: To save beneficiary
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
         controlAffinity: ListTileControlAffinity.leading,

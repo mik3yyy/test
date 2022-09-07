@@ -11,7 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/language.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent-tab-view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -28,7 +28,7 @@ class CurrencyScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(setCurrencyProvider);
-    FocusScopeNode currentFocus = FocusScope.of(context);
+
     final currencyController = useTextEditingController();
     final countryController = useTextEditingController();
     final countryCodeController = useTextEditingController();
