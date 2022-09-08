@@ -207,6 +207,20 @@ String? validateCCV(String? value) {
   return null;
 }
 
+String? validateIdType(String? value) {
+  if (value!.isEmpty) {
+    return 'Add ID type';
+  }
+  return null;
+}
+
+String? validateIdNo(String? value) {
+  if (value!.isEmpty) {
+    return 'Add ID Number';
+  }
+  return null;
+}
+
 String? validateExpiryDate(String? value) {
   if (value!.isEmpty) {
     return 'add expiry date';

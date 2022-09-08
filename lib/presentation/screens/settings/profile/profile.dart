@@ -98,7 +98,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                   image: AppImage.uploadId,
                   onPressed: () {
                     pushNewScreen(context,
-                        screen: UploadID(),
+                        screen: const UploadId(),
                         pageTransitionAnimation: PageTransitionAnimation.fade);
                   },
                 ),
