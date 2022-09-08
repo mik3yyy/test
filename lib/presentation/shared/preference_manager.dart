@@ -34,6 +34,9 @@ class PreferenceManager {
       prefs.setString("avatarUrl", avatarUrl);
   static String get avatarUrl => prefs.getString("avatarUrl") ?? '';
 
+  static set idUrl(String idUrl) => prefs.setString("avatarUrl", idUrl);
+  static String get idUrl => prefs.getString("idUrl") ?? '';
+
   //* DialingCode
   static set dailingCode(String dailingCode) =>
       prefs.setString("dailingCode", dailingCode);

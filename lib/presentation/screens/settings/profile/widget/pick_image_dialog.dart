@@ -20,7 +20,7 @@ class PickImageDialog {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.r))),
                 content: SizedBox(
-                    height: 180.h,
+                    height: 150.h,
                     width: 20.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

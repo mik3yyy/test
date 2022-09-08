@@ -16,4 +16,5 @@ abstract class IProfileManager {
   // Future upLoadProfilePic(String filePath);
   // Future<bool> uploadPP(String imageUrl);
   Future<bool> updateProfilePic({required String path});
+  Future<bool> updateId(String filePath, String idType, String idNo);
 }

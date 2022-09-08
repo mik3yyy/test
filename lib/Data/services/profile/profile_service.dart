@@ -182,7 +182,37 @@ class ProfileService {
 
     FormData formData = FormData.fromMap({
       "profile_picture": await MultipartFile.fromFile(file.path,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+    });
+    try {
+      final response = await _read(dioProvider).post(url,
+          data: formData, options: Options(headers: {"requireToken": true}));
+      // final result = ProfileRes.fromJson(response.data);
+      return response.data != null;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != '') {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        // print(Constants.errorMessage);
+        // throw Constants.errorMessage;
+        throw e.error;
+      }
+    }
+  }
+
+  Future<bool> updateId(String filePath, String idType, String idNo) async {
+    const url = '/profile/add-id';
+
+    File file = File(filePath);
+    final mimeTypeData =
+        lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
+
+    FormData formData = FormData.fromMap({
+      "file_front": await MultipartFile.fromFile(file.path,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "id_no": idNo,
+      "id_type": idType
     });
     try {
       final response = await _read(dioProvider).post(url,

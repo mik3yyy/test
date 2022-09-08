@@ -81,6 +81,13 @@ class ProfileRepository extends IProfileManager {
     return res;
   }
 
+// upload Id
+  @override
+  Future<bool> updateId(String filePath, String idType, String idNo) async {
+    final res = await _profileService.updateId(filePath, idType, idNo);
+    return res;
+  }
+
   // @override
   // Future upLoadProfilePic(String filePath) async {
   //   final res = await _profileService.upLoadProfilePic(filePath);

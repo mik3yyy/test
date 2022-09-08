@@ -10,7 +10,8 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class VerifyScreen extends HookConsumerWidget {
-  const VerifyScreen({Key? key}) : super(key: key);
+  bool isloading;
+  VerifyScreen({Key? key, required this.isloading}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -22,11 +23,14 @@ class VerifyScreen extends HookConsumerWidget {
             children: [
               Space(200.h),
               //* replace the container with a loading indicator here
-              Container(
-                color: Colors.green,
-                height: 50,
-                width: 100,
-              ),
+
+              isloading == true
+                  ? const CircularProgressIndicator()
+                  : Container(
+                      color: Colors.green,
+                      height: 50,
+                      width: 100,
+                    ),
               Space(150.h),
               Text(
                 'Just a moment',
