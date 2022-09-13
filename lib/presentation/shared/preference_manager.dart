@@ -89,6 +89,7 @@ class PreferenceManager {
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
     PreferenceManager.isloggedIn = false;
+    PreferenceManager.authToken = "";
     // PreferenceManager.enableBioMetrics = false;
     // PreferenceManager.enableTransactionBioMetrics = false;
     // prefs.clear();

@@ -30,7 +30,7 @@ class SearchBox extends StatelessWidget {
             prefixIcon: const Icon(
               Icons.search,
               size: 24,
-              color: Colors.green,
+              color: AppColors.appColor,
             )));
   }
 }

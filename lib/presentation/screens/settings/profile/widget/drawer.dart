@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/notification/notifica
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/statement_of_acct.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -90,6 +91,20 @@ class Navigation extends HookConsumerWidget {
                 //   screen: const SafePayScreen(),
                 //   pageTransitionAnimation: PageTransitionAnimation.fade,
                 // );
+              },
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            DrawerList(
+              color: Colors.black,
+              title: 'Statement of account',
+              comingSoon: false,
+              image: AppImage.referAFriend,
+              onPressed: () {
+                pushNewScreen(context,
+                    screen: const StatementOfAcctScreen(),
+                    pageTransitionAnimation: PageTransitionAnimation.fade);
               },
             ),
             const Divider(

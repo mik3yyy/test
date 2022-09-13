@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -10,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
@@ -36,20 +36,19 @@ class UserService {
     _read(dioProvider).interceptors.add(ApiInterceptor());
     _read(dioProvider).interceptors.add(ErrorInterceptor());
     _read(dioProvider).interceptors.add(PrettyDioLogger());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
-    _read(dioProvider).interceptors.add(RetryInterceptor(
-          dio: _read(dioProvider),
-          logPrint: print, // specify log function (optional)
-          retries: 3, // retry count (optional)
-          retryDelays: const [
-            // set delays between retries (optional)
-            Duration(seconds: 2), // wait 1 sec before first retry
-            Duration(seconds: 2), // wait 2 sec before second retry
-            Duration(
-                seconds:
-                    2), // wait 3 sec before third retry // wait 3 sec before third retry
-          ],
-        ));
+    // _read(dioProvider).interceptors.add(RetryInterceptor(
+    //       dio: _read(dioProvider),
+    //       logPrint: print, // specify log function (optional)
+    //       retries: 3, // retry count (optional)
+    //       retryDelays: const [
+    //         // set delays between retries (optional)
+    //         Duration(seconds: 2), // wait 1 sec before first retry
+    //         Duration(seconds: 2), // wait 2 sec before second retry
+    //         Duration(
+    //             seconds:
+    //                 2), // wait 3 sec before third retry // wait 3 sec before third retry
+    //       ],
+    //     ));
   }
 
   // create account
@@ -178,6 +177,23 @@ class UserService {
       return stringList;
     } on DioError catch (e) {
       throw e.error;
+    }
+  }
+
+  //  STATEMENT OF ACCOUNT
+  Future<StatementOfAccount> statementOfAccount() async {
+    const url = '/misc/statement-of-account';
+    try {
+      final response = await _read(dioProvider).post(url);
+      final result = StatementOfAccount.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
     }
   }
 

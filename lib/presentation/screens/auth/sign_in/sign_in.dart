@@ -14,11 +14,10 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/ch
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_success_event.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -37,10 +36,7 @@ class SigninScreen extends StatefulHookConsumerWidget {
 }
 
 class _SigninScreenState extends ConsumerState<SigninScreen> {
-  SigninRes? signinRes;
   final formKey = GlobalKey<FormState>();
-  final fieldFocusNode = FocusNode();
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
 
   bool isLoading = false;
 
@@ -58,21 +54,18 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
     final device = ref.watch(deviceInfoProvider);
-
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
-    final togglePasswords = ref.watch(passwordToggleStateProvider.state);
 
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
+        //REFRESH THE PROVIDERS
+        ref.refresh(providers);
         if (value.value!.data!.user.transactionPinAddedAt == null) {
           context.loaderOverlay.hide();
           context.navigate(const TransactionPinScreen());
         } else {
-          PreferenceManager.isFirstLaunch = false;
-          ref.refresh(getAccountDetailsProvider);
-          ref.refresh(userProfileProvider);
-
           Future.delayed(const Duration(seconds: 2), () {
             setState(() {
               isLoading = false;
@@ -150,7 +143,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                       labelText: 'Password',
                       controller: passwordController,
-                      focusNode: fieldFocusNode,
+
                       capitalization: TextCapitalization.none,
                       validator: (String? value) {
                         if (value!.length < 8) {
@@ -161,21 +154,21 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         }
                         return null;
                       },
-                      obscureText: togglePasswords.state,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          togglePasswords.state = !togglePasswords.state;
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 0.h),
-                          child: Icon(
-                            togglePasswords.state
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: AppColors.appColor,
-                          ),
-                        ),
-                      ),
+                      obscureText: true,
+                      // suffixIcon: GestureDetector(
+                      //   onTap: () {
+                      //     togglePasswords.state = !togglePasswords.state;
+                      //   },
+                      //   child: Padding(
+                      //     padding: EdgeInsets.only(bottom: 0.h),
+                      //     child: Icon(
+                      //       togglePasswords.state
+                      //           ? Icons.visibility_off
+                      //           : Icons.visibility,
+                      //       color: AppColors.appColor,
+                      //     ),
+                      //   ),
+                      // ),
                     ),
                     Space(32.h),
                     Row(
@@ -215,7 +208,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                               ? null
                               : () async {
                                   if (formKey.currentState!.validate()) {
-                                    fieldFocusNode.unfocus();
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
 
                                     var signinReq = SigninReq(
                                         emailPhone: emailPhoneController.text,
@@ -238,8 +233,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                     ref
                                         .read(signInProvider.notifier)
                                         .signIn(signinReq);
-                                    // print(device.deviceId);
-                                    // print(device.timeZone);
 
                                     context.loaderOverlay.show();
                                   }

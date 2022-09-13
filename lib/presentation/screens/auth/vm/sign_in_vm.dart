@@ -5,7 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
 
 final signInProvider =
-    StateNotifierProvider<SignInVm, RequestState<SigninRes>>((ref) {
+    StateNotifierProvider.autoDispose<SignInVm, RequestState<SigninRes>>((ref) {
   return SignInVm(ref);
 });
 

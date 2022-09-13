@@ -163,16 +163,8 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                                               strokeWidth: 4,
                                             ),
                                           ),
-                                      idle: () => const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator
-                                                .adaptive(
-                                              strokeWidth: 3,
-                                            ),
-                                          ),
-                                      success: (data) {
-                                        data!.data!.wallets!.any(((element) {
+                                      data: (data) {
+                                        data.data!.wallets!.any(((element) {
                                           if (element.currency!.name ==
                                               "US Dollar") {
                                             amount.value =

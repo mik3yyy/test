@@ -63,7 +63,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Loading) {
-        print("Loading");
         context.loaderOverlay.show();
       } else {
         context.loaderOverlay.hide();

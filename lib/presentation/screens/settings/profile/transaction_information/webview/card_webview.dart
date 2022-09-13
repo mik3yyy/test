@@ -55,6 +55,7 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 //     navigation.url.toString().substring(index + 1);
 
                 ref.refresh(getAccountDetailsProvider);
+                ref.refresh(walletTransactionProvider);
                 Navigator.pop(context);
                 AppDialog.showSuccessMessageDialog(context, widget.successMsg);
               }
