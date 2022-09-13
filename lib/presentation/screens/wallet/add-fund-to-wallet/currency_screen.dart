@@ -57,7 +57,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
     ref.listen<RequestState>(createWalletProvider, (prev, value) {
       if (value is Success<CreateWalletRes>) {
         context.loaderOverlay.hide();
-        ref.read(getAccountDetailsProvider.notifier).getAccountDetails();
+        ref.refresh(getAccountDetailsProvider);
         Navigator.pop(context);
       }
 

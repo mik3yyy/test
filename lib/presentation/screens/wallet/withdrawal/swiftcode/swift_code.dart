@@ -250,23 +250,16 @@ class _SepaViewState extends ConsumerState<SepaView> {
                                   strokeWidth: 4,
                                 ),
                               ),
-                          idle: () => const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator.adaptive(
-                                  strokeWidth: 3,
-                                ),
-                              ),
-                          success: (data) {
+                          data: (data) {
                             String getCurrency() {
                               if (selectedCurrency.value == "Naira") {
                                 amount.value =
-                                    data!.data!.wallets![1].balance!.toInt();
+                                    data.data!.wallets![1].balance!.toInt();
 
                                 return "NGN ${data.data!.wallets![1].balance.toString()}";
                               }
                               if (selectedCurrency.value == "Dollar") {
-                                data!.data!.wallets!.any(((element) {
+                                data.data!.wallets!.any(((element) {
                                   if (element.currency!.name == "US Dollar") {
                                     amount.value = element.balance!.toInt();
 
@@ -278,7 +271,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
                                 return "\$ ${amount.value}";
                               }
                               if (selectedCurrency.value == "Euro") {
-                                data!.data!.wallets!.any(((element) {
+                                data.data!.wallets!.any(((element) {
                                   if (element.currency!.code == "EUR") {
                                     amount.value = element.balance!.toInt();
 
@@ -291,7 +284,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
                               }
 
                               if (selectedCurrency.value == "Pound") {
-                                data!.data!.wallets!.any(((element) {
+                                data.data!.wallets!.any(((element) {
                                   if (element.currency!.code == "GBP") {
                                     amount.value = element.balance!.toInt();
 
@@ -303,7 +296,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
                                 return "£ ${amount.value}";
                               }
                               if (selectedCurrency.value == "Kayndrex") {
-                                return "${data!.data!.wallets![0].currency!.symbol.toString()} ${data.data!.wallets![0].balance.toString()}";
+                                return "${data.data!.wallets![0].currency!.symbol.toString()} ${data.data!.wallets![0].balance.toString()}";
                               } else {
                                 return "";
                               }

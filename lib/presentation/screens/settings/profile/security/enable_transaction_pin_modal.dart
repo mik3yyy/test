@@ -12,8 +12,9 @@ import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keybo
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class EnableTransactionPin extends StatefulHookConsumerWidget {
-  bool isEnable;
-  EnableTransactionPin({Key? key, this.isEnable = false}) : super(key: key);
+  final bool isEnable;
+  const EnableTransactionPin({Key? key, this.isEnable = false})
+      : super(key: key);
 
   @override
   _EnableTransactionPinState createState() => _EnableTransactionPinState();

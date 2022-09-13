@@ -50,10 +50,9 @@ class _SelectWalletListState extends ConsumerState<SelectWalletList> {
                   wallet.when(
                       error: (error, stackTrace) => Text(error.toString()),
                       loading: () => const CircularProgressIndicator.adaptive(),
-                      idle: () => const CircularProgressIndicator.adaptive(),
-                      success: (data) {
+                      data: (data) {
                         double _getSized() {
-                          if (data!.data!.wallets!.length == 2) {
+                          if (data.data!.wallets!.length == 2) {
                             return 200;
                           } else if (data.data!.wallets!.length == 3) {
                             return 250;
@@ -69,7 +68,7 @@ class _SelectWalletListState extends ConsumerState<SelectWalletList> {
                         return SizedBox(
                           height: _getSized(),
                           child: ListView.separated(
-                            itemCount: data!.data!.wallets!.length,
+                            itemCount: data.data!.wallets!.length,
                             itemBuilder: (context, index) {
                               final walletList = data.data!.wallets![index];
                               return InkWell(

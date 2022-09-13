@@ -1,0 +1,8 @@
+{
+    "editor.experimental.stickyScroll.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "workbench.colorCustomizations": {},
+    "editor.fontWeight": "normal"
+}

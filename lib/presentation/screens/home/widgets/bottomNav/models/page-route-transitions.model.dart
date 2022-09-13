@@ -3,15 +3,24 @@ part of persistent_bottom_nav_bar;
 enum PageTransitionAnimation {
   cupertino,
   slideRight,
+  slideLeft,
   scale,
   rotate,
   sizeUp,
   fade,
   scaleRotate,
+
   slideUp
 }
 
 Widget _slideRightRoute(BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget? child) =>
+    SlideTransition(
+        position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+            .animate(animation),
+        child: child);
+
+Widget _slideLeftRoute(BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget? child) =>
     SlideTransition(
         position: Tween<Offset>(begin: const Offset(-1, 0), end: Offset.zero)
@@ -131,6 +140,8 @@ Widget _getAnimation(
       return _scaleRotate(context, animation, secondaryAnimation, child);
     case PageTransitionAnimation.slideUp:
       return _slideUp(context, animation, secondaryAnimation, child);
+    case PageTransitionAnimation.slideLeft:
+      return _slideLeftRoute(context, animation, secondaryAnimation, child);
   }
   return Container();
 }

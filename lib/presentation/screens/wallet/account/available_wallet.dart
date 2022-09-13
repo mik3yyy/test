@@ -209,10 +209,8 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                       error: (error, stackTrace) => Text(error.toString()),
                       loading: () => const Center(
                           child: CircularProgressIndicator.adaptive()),
-                      idle: () => const Center(
-                          child: CircularProgressIndicator.adaptive()),
-                      success: (data) {
-                        walletCount.value = data!.data!.wallets!.length;
+                      data: (data) {
+                        walletCount.value = data.data!.wallets!.length;
 
                         return RefreshIndicator(
                           onRefresh: () async {

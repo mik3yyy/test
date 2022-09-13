@@ -71,7 +71,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
     final defaultWallet = ref.watch(userProfileProvider);
-    // final wallet = ref.watch(getAccountDetailsProvider);
     var formatter = NumberFormat("#,##0.00");
     final currency = useTextEditingController();
     final newUser = PreferenceManager.isFirstLaunch;

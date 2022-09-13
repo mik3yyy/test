@@ -8,14 +8,12 @@ class ApiInterceptor extends Interceptor {
       RequestOptions options, RequestInterceptorHandler handler) async {
     final token = PreferenceManager.authToken;
 
-    // final token = StorageUtil.getString(Constants.token);
-
     // print(options.headers);
-    if (options.headers.isEmpty) {
+    if (options.headers.isNotEmpty) {
       options.headers.addAll({"Authentication": "Bearer $token"});
       // remove the auxilliary header
       // options.headers.remove({"Authentication": "Bearer $token"});
-    } else if (options.headers.isNotEmpty) {
+    } else if (options.headers.isEmpty) {
       options.headers.addAll({"Authentication": "Bearer $token"});
     } else {
       options.headers.remove('requireToken');
