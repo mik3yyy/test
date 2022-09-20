@@ -91,6 +91,7 @@ class AppImage {
   static const transactionPin = "assets/images/transaction_pin.png";
   static const resetTransactionPin = "assets/images/reset_transaction_pin.png";
   static const setPassword = "assets/images/password_icon.png";
+  static const noPostYetImg = "assets/images/no_post_yet.png";
 
   //
   //

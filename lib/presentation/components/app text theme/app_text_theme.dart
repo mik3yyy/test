@@ -144,6 +144,16 @@ class AppText {
         );
   }
 
+  //TextSTyle for contact name text
+  static TextStyle robotoStyle(BuildContext context, Color color,
+      double fontSize, FontWeight fontWeight) {
+    return Theme.of(context).textTheme.labelSmall!.copyWith(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontFamily: 'Roboto',
+        color: color);
+  }
+
   // //TextSTyle for contact name text
   // static TextStyle body5(BuildContext context, Color color) {
   //   return Theme.of(context).textTheme.labelSmall!.copyWith(

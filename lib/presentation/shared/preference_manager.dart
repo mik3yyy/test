@@ -75,6 +75,15 @@ class PreferenceManager {
   static set password(String password) => prefs.setString("password", password);
   static String get password => prefs.getString("password") ?? '';
 
+  //* reaction to post
+  static set isPostLike(bool isLiked) => prefs.setBool("isPostLike", isLiked);
+  static bool get isPostLike => prefs.getBool("isPostLike") ?? false;
+
+  //* reaction to post
+  static set isPostUnLike(bool isUnLiked) =>
+      prefs.setBool("isPostUnLike", isUnLiked);
+  static bool get isPostUnLike => prefs.getBool("isPostUnLike") ?? false;
+
   static void clear() {
     prefs.clear();
   }
