@@ -70,7 +70,10 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
       if (value is Success) {
         // context.loaderOverlay.hide();
         AppDialog.showSuccessMessageDialog(
-            context, 'Funds transferred successfully');
+          context,
+          'Funds transferred successfully',
+          onpressed: () => Navigator.pop(context),
+        );
         //Refreshing user account details, so the new balance can reflect on the screen
 
         ref.refresh(getUserProfileProvider);

@@ -57,7 +57,11 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 ref.refresh(getAccountDetailsProvider);
                 ref.refresh(walletTransactionProvider);
                 Navigator.pop(context);
-                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+                AppDialog.showSuccessMessageDialog(
+                  context,
+                  widget.successMsg,
+                  onpressed: () => Navigator.pop(context),
+                );
               }
               break;
             case WebViewRoute.addCard:
@@ -69,7 +73,11 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
 
                 Navigator.pop(context);
                 ref.refresh(walletTransactionProvider);
-                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+                AppDialog.showSuccessMessageDialog(
+                  context,
+                  widget.successMsg,
+                  onpressed: () => Navigator.pop(context),
+                );
 
                 //Veriy Payment Endpoint Function
                 // ref
@@ -90,7 +98,11 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 Navigator.pop(context);
                 Navigator.pop(context);
 
-                AppDialog.showSuccessMessageDialog(context, widget.successMsg);
+                AppDialog.showSuccessMessageDialog(
+                  context,
+                  widget.successMsg,
+                  onpressed: () => Navigator.pop(context),
+                );
 
                 //Veriy Payment Endpoint Function
                 // ref

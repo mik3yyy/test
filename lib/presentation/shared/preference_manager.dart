@@ -47,6 +47,11 @@ class PreferenceManager {
       prefs.setString("defaultWallet", defaultWallet);
   static String get defaultWallet => prefs.getString("defaultWallet") ?? '';
 
+  //* Error message
+  static set errorMessage(String errorMessage) =>
+      prefs.setString("errorMessage", errorMessage);
+  static String get errorMessage => prefs.getString("errorMessage") ?? '';
+
   //* auth token
   static set authToken(String authToken) =>
       prefs.setString("authToken", authToken);

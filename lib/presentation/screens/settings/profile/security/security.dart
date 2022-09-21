@@ -1,5 +1,6 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
@@ -33,7 +34,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProfileProvider);
+    final user = ref.watch(userProfileProvider).value;
     // final user = locator.get<ProfileRes>();
     final toggle = ref.watch(toggleStateProvider.state);
     final togglePin = ref.watch(togglePinStateProvider.state);
@@ -41,6 +42,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: Text(
           'Security',
@@ -106,8 +108,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               Row(
                 children: [
                   Text(
-                    'Enable biometrics for authentication',
-                    style: AppText.header2(context, Colors.black, 20.sp),
+                    'Biometric for Login',
+                    style: AppText.header2(context, Colors.black, 19.sp),
                   ),
                   const Spacer(),
                   Switch.adaptive(
@@ -127,11 +129,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                               .getCredential(Constants.userPassword);
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userEmail,
-                              user.maybeWhen(data: (data) {
-                                return data.data.user.email.toString();
-                              }, orElse: () {
-                                return "";
-                              })
+                              user == null ? "" : user.data.user.email!
+
                               // user.data.user.email.toString()
                               );
                           ref.read(credentialProvider.notifier).storeCredential(
@@ -155,8 +154,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               Row(
                 children: [
                   Text(
-                    'Enable biometrics for Transactions',
-                    style: AppText.header2(context, Colors.black, 20.sp),
+                    'Biometric for Transactions',
+                    style: AppText.header2(context, Colors.black, 18.sp),
                   ),
                   const Spacer(),
                   Switch.adaptive(
@@ -197,9 +196,9 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                           });
                         } else if (togglePin.state == false) {
                           setState(() {
-                            // ref
-                            //     .read(credentialProvider.notifier)
-                            //     .deleteCredential(Constants.transactionPin);
+                            ref
+                                .read(credentialProvider.notifier)
+                                .deleteCredential(Constants.transactionPin);
                             PreferenceManager.enableTransactionBioMetrics =
                                 false;
                           });

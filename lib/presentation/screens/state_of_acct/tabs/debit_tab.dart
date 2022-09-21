@@ -42,7 +42,16 @@ class DebitTabView extends HookConsumerWidget {
                 );
               }
             },
-            error: (e, s) => Text(e.toString()),
+            error: (e, s) {
+              return Center(
+                child: TextButton.icon(
+                    onPressed: () {
+                      ref.refresh(remoteStatement);
+                    },
+                    icon: const Icon(Icons.replay),
+                    label: const Text("Retry")),
+              );
+            },
             loading: () => const Center(child: CircularProgressIndicator())));
   }
 }

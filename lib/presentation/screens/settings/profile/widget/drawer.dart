@@ -35,9 +35,9 @@ class Navigation extends HookConsumerWidget {
               onPressed: () {
                 // context.navigate(const MyProfile());
                 pushNewScreen(context,
-                    withNavBar: false,
+                    withNavBar: true,
                     screen: const MyProfile(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade);
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
             ),
             const Divider(
@@ -52,9 +52,9 @@ class Navigation extends HookConsumerWidget {
                 // context.navigate(const PropScreen());
                 pushNewScreen(
                   context,
-                  withNavBar: false,
+                  withNavBar: true,
                   screen: const PropScreen(),
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
               },
             ),
@@ -73,7 +73,7 @@ class Navigation extends HookConsumerWidget {
                   context,
                   withNavBar: false,
                   screen: const NotificationScreen(),
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
               },
             ),
@@ -132,9 +132,9 @@ class Navigation extends HookConsumerWidget {
               onPressed: () {
                 // context.navigate(const FaqScreen());
                 pushNewScreen(context,
-                    withNavBar: true,
+                    withNavBar: false,
                     screen: const FaqScreen(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade);
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
             ),
             const Divider(

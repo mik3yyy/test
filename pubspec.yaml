@@ -57,7 +57,7 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   shared_preferences: ^2.0.7
   url_launcher: ^6.0.20
-  webview_flutter: ^2.1.2
+  webview_flutter: ^2.0.14
   cached_network_image: ^3.2.0
   image_picker: ^0.8.5
   mime: ^1.0.2
@@ -74,6 +74,7 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_stripe: ^4.0.0
   adaptive_dialog: ^1.6.3
+  event_bus: ^2.0.0
   
 
 

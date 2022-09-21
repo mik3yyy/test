@@ -11,7 +11,6 @@ import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dar
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ViewSinglePostScreen extends StatefulHookConsumerWidget {
-  //TODO: To implement search functionality for the forum
   final String postId;
   const ViewSinglePostScreen({required this.postId, Key? key})
       : super(key: key);

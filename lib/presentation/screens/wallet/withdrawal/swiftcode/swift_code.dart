@@ -211,7 +211,11 @@ class _SepaViewState extends ConsumerState<SepaView> {
     ref.listen<RequestState>(sepaWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
         ref.refresh(getAccountDetailsProvider);
-        AppDialog.showSuccessMessageDialog(context, value.value!.message!);
+        AppDialog.showSuccessMessageDialog(
+          context,
+          value.value!.message!,
+          onpressed: () => Navigator.pop(context),
+        );
       }
 
       if (value is Error) {

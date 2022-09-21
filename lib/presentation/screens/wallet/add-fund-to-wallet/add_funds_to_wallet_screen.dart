@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -46,6 +47,7 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
       appBar: widget.route == "HomeScreen"
           ? AppBar(
               elevation: 0.0,
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
               backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
               leading: GestureDetector(
@@ -57,6 +59,7 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
               ),
             )
           : AppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.dark,
               automaticallyImplyLeading: false,
               backgroundColor: Colors.transparent,
               title: Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/drawer.dart';
@@ -20,6 +21,7 @@ class SettingScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         toolbarHeight: 70,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: Text(
           'Settings',

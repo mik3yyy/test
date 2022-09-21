@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,6 +37,7 @@ class _TransactionInformationScreenState
     final getCard = ref.watch(getCardProvider);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: Text(
           'Transaction Information',
@@ -148,7 +150,7 @@ class _TransactionInformationScreenState
                           return data!.data.cards.isEmpty
                               ? Text("You have no card",
                                   style: AppText.body2Medium(
-                                      context, AppColors.textColor, 25.sp))
+                                      context, AppColors.textColor, 19.sp))
                               : RefreshIndicator(
                                   onRefresh: () async {
                                     return ref

@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/get_top_post_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/single_post_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/repo/forum_repo.dart';

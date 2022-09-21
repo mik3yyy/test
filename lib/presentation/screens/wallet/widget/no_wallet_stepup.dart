@@ -76,7 +76,6 @@ class NoWalletSetUpWidget extends StatelessWidget {
         child2: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //TODO: To change the sized of import the image from figma
             Image.asset(
               AppImage.bottomIcon2,
             ),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/pick_image_dialog.dart';
@@ -69,7 +70,6 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 18.0,
-                                  // backgroundColor: AppColors.primaryColor.withOpacity(0.7),
                                   child: Icon(Icons.camera_alt_outlined,
                                       size: 18, color: Colors.white),
                                 ),
@@ -82,8 +82,7 @@ class _UploadImageState extends ConsumerState<UploadImage> {
                     backgroundColor: Colors.transparent,
                     foregroundColor: Colors.transparent,
                     radius: 60.w,
-                    backgroundImage:
-                        const AssetImage("assets/images/person.png"),
+                    backgroundImage: const AssetImage(AppImage.profile),
                     child: Stack(children: [
                       widget.hasIcon
                           ? InkWell(

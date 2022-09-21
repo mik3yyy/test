@@ -86,67 +86,6 @@ class _RequestNotificationTabBarViewState
         loading: () => const Center(
               child: CircularProgressIndicator(),
             ));
-
-    // request.when(
-    //     error: (error, stackTrace) => Text(error.toString()),
-    //     idle: () => const Center(
-    //           child: CircularProgressIndicator.adaptive(),
-    //         ),
-    //     loading: () => const Center(
-    //           child: CircularProgressIndicator.adaptive(),
-    //         ),
-    //     success: (data) {
-    //       if (data!.data.withdrawals.isEmpty) {
-    //         return Center(
-    //           child: Text(
-    //             "You have notification",
-    //             style: AppText.body3(
-    //               context,
-    //               AppColors.appColor,
-    //             ),
-    //           ),
-    //         );
-    //       } else {
-    //         return RefreshIndicator(
-    //           onRefresh: () async {
-    //             ref.refresh(getWithdrawalNotificationProvider);
-    //           },
-    //           child: SizedBox(
-    //             height: 450.h,
-    //             child: Scrollbar(
-    //               //TODO: To fix the scroll, it's not showing
-    //               isAlwaysShown: true,
-    //               controller: _scrollController,
-    //               child: ListView.separated(
-    //                 controller: _scrollController,
-    //                 physics: const AlwaysScrollableScrollPhysics(
-    //                   parent: BouncingScrollPhysics(),
-    //                 ),
-    //                 itemCount: data.data.withdrawals.length,
-    //                 itemBuilder: (BuildContext context, int index) {
-    //                   final notification = data.data.withdrawals[index];
-
-    //                   return Padding(
-    //                     padding: const EdgeInsets.only(right: 32.0),
-    //                     child: AllNotificationBuild(
-    //                       data: notification,
-    //                     ),
-    //                   );
-    //                 },
-    //                 separatorBuilder: (BuildContext context, int index) {
-    //                   return const Divider(
-    //                     color: AppColors.notificationDividerColor,
-    //                     thickness: 1.5,
-    //                     height: 20,
-    //                     // indent: 5.0,
-    //                   );
-    //                 },
-    //               ),
-    //             ),
-    //           ),
-    //         );
-    //       }
-    //     });
   }
 
   @override

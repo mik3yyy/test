@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -94,6 +95,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                         labelText: 'First Name',
                         keyboardType: TextInputType.name,
                         capitalization: TextCapitalization.words,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                        ],
                         controller: fistNameController,
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -109,6 +113,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                         keyboardType: TextInputType.name,
                         labelText: 'Last Name',
                         controller: lastNameController,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                        ],
                         capitalization: TextCapitalization.words,
                         validator: (String? value) {
                           if (value!.isEmpty) {
@@ -125,6 +132,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                         labelText: 'Email',
                         controller: emailPhoneController,
                         focusNode: fieldFocusNode,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                        ],
                         capitalization: TextCapitalization.none,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -208,6 +218,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                               }
                             },
                     ),
+                    const Space(20),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

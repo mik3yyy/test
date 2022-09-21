@@ -28,26 +28,6 @@ class SelectCurrencyScreen extends StatefulHookConsumerWidget {
 }
 
 class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
-  // List<Currency> bank = [];
-  // List<Currency> filterableBank = [];
-
-  // Future<List<Currency>> filterClients(
-  //     {required List<Currency> banks, required String text}) {
-  //   if (text.isEmpty) {
-  //     banks = bank;
-  //     return Future.value(banks);
-  //   }
-  //   List<Currency> result = banks
-  //       .where((country) => country.name!.toLowerCase().contains(text))
-  //       .toList();
-  //   return Future.value(result);
-  // }
-
-  // void _filterClients(String text) async {
-  //   filterableBank = await filterClients(banks: bank, text: text);
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     final remoteCurrency = ref.watch(remoteCurrencyProvider);
@@ -107,7 +87,16 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                 ),
                 const Space(30),
                 remoteCurrency.when(
-                    error: (e, s) => Text(e.toString()),
+                    error: (e, s) {
+                      return Center(
+                        child: TextButton.icon(
+                            label: const Text('Retry'),
+                            icon: const Icon(Icons.replay),
+                            onPressed: () {
+                              ref.refresh(remoteCurrencyProvider);
+                            }),
+                      );
+                    },
                     loading: () => const CircularProgressIndicator.adaptive(
                           strokeWidth: 6,
                         ),

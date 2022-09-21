@@ -59,7 +59,11 @@ class _IbanViewState extends ConsumerState<IbanView> {
       if (value is Success<WithdrawRes>) {
         ref.refresh(getAccountDetailsProvider);
 
-        AppDialog.showSuccessMessageDialog(context, value.value!.message!);
+        AppDialog.showSuccessMessageDialog(
+          context,
+          value.value!.message!,
+          onpressed: () => Navigator.pop(context),
+        );
       }
 
       if (value is Error) {

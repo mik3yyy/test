@@ -44,8 +44,7 @@ class _StatementOfAcctScreenState extends State<StatementOfAcctScreen> {
               onPressed: () {
                 pushNewScreen(context,
                     screen: const EWalletAccountHistory(),
-                    pageTransitionAnimation:
-                        PageTransitionAnimation.slideRight);
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
             ),
             const Space(40),
@@ -73,12 +72,11 @@ class AccountHistoryButton extends StatelessWidget {
       height: 60,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        child:
-            Text(text, style: AppText.header2(context, Colors.black54, 25.sp)),
+        child: Text(text, style: AppText.body2(context, Colors.black54, 25.sp)),
         style: TextButton.styleFrom(
           primary: Colors.white,
-          backgroundColor: Colors.grey.shade300,
-          onSurface: Colors.grey,
+          backgroundColor: Colors.grey.shade200,
+          onSurface: Colors.grey.shade200,
         ),
         onPressed: onPressed,
       ),
