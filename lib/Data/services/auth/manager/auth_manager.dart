@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
@@ -149,4 +150,9 @@ class AuthManager extends IAuthManager {
   @override
   Future<StatementOfAccount> statementOfAccount() async =>
       await _userService.statementOfAccount();
+
+  @override
+  Future<DeactivateAccountRes> deactivateAccount(
+          String password, String reason) async =>
+      await _userService.deactivateAccount(password, reason);
 }

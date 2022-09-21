@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
@@ -67,12 +68,15 @@ class UserService {
           "email_phone": emailPhone
         },
       );
+
       final result = response.data = true;
+
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
         Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+
+        throw result.status!;
       } else {
         throw e.error;
       }
@@ -357,6 +361,24 @@ class UserService {
       final response =
           await _read(dioProvider).post(url, data: {"device_id": deviceId});
       final result = SigninOutRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<DeactivateAccountRes> deactivateAccount(
+      String password, String reason) async {
+    const url = '/auth/deactivate-account';
+    try {
+      final response = await _read(dioProvider)
+          .post(url, data: {"password": password, "reason": reason});
+      final result = DeactivateAccountRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

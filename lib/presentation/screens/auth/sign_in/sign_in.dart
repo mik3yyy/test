@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,8 +11,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/choose_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_success_event.dart';
@@ -126,9 +127,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                     //email
                     TextFormInput(
-                        labelText: "Email or Phone Number",
+                        labelText: " Enter Email ",
                         controller: emailPhoneController,
                         capitalization: TextCapitalization.none,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                        ],
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Email address or Phone Number is required";
@@ -143,6 +147,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                     TextFormInput(
                       labelText: 'Password',
                       controller: passwordController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                      ],
 
                       capitalization: TextCapitalization.none,
                       validator: (String? value) {
@@ -275,7 +282,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         Text('Don’t have an account? ',
                             style: AppText.body4(context, AppColors.hintColor)),
                         InkWell(
-                          onTap: () => context.navigate(const ChooseAccount()),
+                          onTap: () => context.navigate(CreateAccountScreen()),
                           child: Text(
                             ' Sign up',
                             style: AppText.body4(context, AppColors.appColor),

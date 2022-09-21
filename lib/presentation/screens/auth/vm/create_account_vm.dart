@@ -12,7 +12,7 @@ class CreateAccountVm extends RequestStateNotifier<bool> {
 
   CreateAccountVm(Ref ref) : _authManager = ref.read(authManagerProvider);
 
-  Future<RequestState<bool>> createAccount(
+  void createAccount(
     String firstName,
     String lastName,
     String emailPhone,

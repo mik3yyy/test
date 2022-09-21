@@ -16,7 +16,7 @@ String? validatePassword(String? value) {
     return 'Password must at least be 8 characters';
   }
   if (value.isEmpty) {
-    return 'Invalid password';
+    return 'provide password';
   }
   return null;
 }

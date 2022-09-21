@@ -1,3 +1,4 @@
+import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
@@ -37,4 +38,6 @@ abstract class IAuthManager {
   Future<SigninOutRes> signOut(String deviceId);
   Future<ConvertCurrencyRes> convertCurrency(String from, String to);
   Future<StatementOfAccount> statementOfAccount();
+  Future<DeactivateAccountRes> deactivateAccount(
+      String password, String reason);
 }

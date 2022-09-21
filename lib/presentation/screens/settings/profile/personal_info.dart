@@ -8,9 +8,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/uplload_profileimage.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -44,314 +43,190 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
   Widget build(BuildContext context) {
     final userValue = ref.watch(userProfileProvider).value;
 
-    return GenericWidget(
-        appbar: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
-          child: Column(
-            children: [
-              Space(5.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: AppColors.appColor,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            const Space(10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
                 children: [
-                  InkWell(
-                    onTap: (() => Navigator.pop(context)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                      child: Text(
-                        'Edit',
-                        style: AppText.body2(context, Colors.white, 20.sp),
+                  Space(5.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: (() => Navigator.pop(context)),
+                        child: const Icon(
+                          Icons.arrow_back_ios_outlined,
+                          color: Colors.white,
+                        ),
                       ),
-                      onPressed: () {
-                        pushNewScreen(context,
-                            screen: EditInfo(
-                              userValue: userValue!,
-                            ),
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade);
-                      }),
+                      const Spacer(),
+                      TextButton(
+                          child: Text(
+                            'Edit',
+                            style: AppText.body2(context, Colors.white, 20.sp),
+                          ),
+                          onPressed: () {
+                            pushNewScreen(context,
+                                screen: EditInfo(
+                                  userValue: userValue!,
+                                ),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.fade);
+                          }),
+                    ],
+                  ),
+                  const ProfileImage(
+                    ignoreClick: false,
+                    hasIcon: true,
+                  ),
+                  Space(10.h),
+                  Text(
+                    userName(userValue?.data.user.firstName!.capitalize(),
+                        userValue?.data.user.lastName!.capitalize()),
+                    style: AppText.body2(context, Colors.white, 25.sp),
+                  ),
+                  Space(5.h),
                 ],
               ),
-              const UploadImage(
-                hasIcon: true,
+            ),
+            Expanded(
+                child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(45.r)),
               ),
-              Space(10.h),
-              Text(
-                userName(userValue?.data.user.firstName!.capitalize(),
-                    userValue?.data.user.lastName!.capitalize()),
-                style: AppText.body2(context, Colors.white, 25.sp),
-              ),
-              Space(5.h),
-            ],
-          ),
-        ),
-        bgColor: AppColors.whiteColor,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.68,
-          child: Padding(
-            padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 50.h),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics()),
-              child: ValueListenableBuilder<Box>(
-                  valueListenable: Hive.box<UserDataBase>("user").listenable(),
-                  builder: (context, box, _) {
-                    final user = box.values.toList().cast<UserDataBase>().first;
+              child: Padding(
+                padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 50.h),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics()),
+                  child: ValueListenableBuilder<Box>(
+                      valueListenable:
+                          Hive.box<UserDataBase>("user").listenable(),
+                      builder: (context, box, _) {
+                        final user =
+                            box.values.toList().cast<UserDataBase>().first;
 
-                    return Column(
-                      children: [
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'First Name',
-                          subTitle: user.firstName.toString().capitalize(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(30.h),
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Last Name',
-                          subTitle: user.lastName.toString().capitalize(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(30.h),
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Email',
-                          subTitle: user.email.toString(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(30.h),
-                        PersonalInfoCard(
-                            color: Colors.black,
-                            title: 'Phone Number',
-                            subTitle: user.phoneNumer.toString()),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(30.h),
-                        PersonalInfoCard(
-                            color: Colors.black,
-                            title: 'Date of Birth',
-                            subTitle: date(user.dateOfBirth)
-                            // ? "Unavailable"
+                        return Column(
+                          children: [
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'First Name',
+                              subTitle: user.firstName.toString().capitalize(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(30.h),
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'Last Name',
+                              subTitle: user.lastName.toString().capitalize(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(30.h),
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'Email',
+                              subTitle: user.email.toString(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(30.h),
+                            PersonalInfoCard(
+                                color: Colors.black,
+                                title: 'Phone Number',
+                                subTitle: user.phoneNumer.toString()),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(30.h),
+                            PersonalInfoCard(
+                                color: Colors.black,
+                                title: 'Date of Birth',
+                                subTitle: date(user.dateOfBirth)
+                                // ? "Unavailable"
 
+                                ),
+
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
                             ),
 
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
+                            ///
+                            ///
+                            ///
+                            ///
+                            ///
+                            Space(30.h),
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'Gender',
+                              subTitle: user.gender.toString(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
 
-                        ///
-                        ///
-                        ///
-                        ///
-                        ///
-                        Space(30.h),
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Gender',
-                          subTitle: user.gender.toString(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
+                            ///
+                            ///
+                            ///
+                            ///
 
-                        ///
-                        ///
-                        ///
-                        ///
-
-                        Space(30.h),
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Address',
-                          subTitle: user.address.toString(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(30.h),
-                        PersonalInfoCard(
-                          color: Colors.black,
-                          title: 'Country',
-                          subTitle: user.country.toString(),
-                        ),
-                        Space(7.h),
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 0.4,
-                        ),
-                        Space(60.h),
-                      ],
-                    );
-                  }),
-
-              // vm.when(
-              //     error: (error, stackTrace) =>
-              //         Center(child: Text(error.toString())),
-              //     idle: () =>
-              //         const Center(child: CircularProgressIndicator.adaptive()),
-              //     loading: () =>
-              //         const Center(child: CircularProgressIndicator.adaptive()),
-              //     success: (value) {
-              //       String _date() {
-              //         final date = value!.data.user.dateOfBirth;
-
-              //         if (date == null) {
-              //           return "unavailable";
-              //         } else {
-              //           DateTime parseDate =
-              //               DateFormat("yyyy-MM-dd").parse(date.toString());
-              //           var inputDate = DateTime.parse(parseDate.toString());
-              //           var outputFormat = DateFormat('MM/dd/yyyy');
-              //           var dob = outputFormat.format(inputDate);
-              //           return dob;
-              //         }
-              //       }
-
-              //       return Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'First Name',
-              //             subTitle: value!.data.user.firstName.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'Last Name',
-              //             subTitle: value.data.user.lastName.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'Email',
-              //             subTitle: value.data.user.email.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //               color: Colors.black,
-              //               title: 'Phone Number',
-              //               subTitle: value.data.user.phoneNumber!.phoneNumber
-              //                   .toString()),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //               color: Colors.black,
-              //               title: 'Date of Birth',
-              //               subTitle: _date()
-              //               // ? "Unavailable"
-              //               // : DateFormat(' d, MMM yyyy').format(DateTime.tryParse(
-              //               //     value.data!.user!.dateOfBirth)!
-
-              //               //     ),
-              //               ),
-
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-
-              //           ///
-              //           ///
-              //           ///
-              //           ///
-              //           ///
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'Gender',
-              //             subTitle: value.data.user.gender.toString() == ""
-              //                 ? "Unavailable"
-              //                 : value.data.user.gender.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-
-              //           ///
-              //           ///
-              //           ///
-              //           ///
-
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'Address',
-              //             subTitle: value.data.user.address.toString() == ""
-              //                 ? "Unavailable"
-              //                 : value.data.user.address.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(30.h),
-              //           PersonalInfoCard(
-              //             color: Colors.black,
-              //             title: 'Country',
-              //             subTitle: value.data.user.countryName.toString(),
-              //           ),
-              //           Space(7.h),
-              //           const Divider(
-              //             color: Colors.black,
-              //             thickness: 0.4,
-              //           ),
-              //           Space(80.h),
-              //         ],
-              //       );
-              //     })),
-            ),
-          ),
-        ));
+                            Space(30.h),
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'Address',
+                              subTitle: user.address.toString(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(30.h),
+                            PersonalInfoCard(
+                              color: Colors.black,
+                              title: 'Country',
+                              subTitle: user.country.toString(),
+                            ),
+                            Space(7.h),
+                            const Divider(
+                              color: Colors.black,
+                              thickness: 0.4,
+                            ),
+                            Space(60.h),
+                          ],
+                        );
+                      }),
+                ),
+              ),
+            ))
+          ],
+        ),
+      ),
+    );
   }
 }
 

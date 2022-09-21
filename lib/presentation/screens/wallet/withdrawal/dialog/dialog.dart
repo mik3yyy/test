@@ -56,7 +56,8 @@ class AppDialog {
         });
   }
 
-  static void showSuccessMessageDialog(BuildContext context, String message) {
+  static void showSuccessMessageDialog(BuildContext context, String message,
+      {required VoidCallback onpressed}) {
     showCupertinoModalPopup(
         context: context,
         builder: (context) {
@@ -93,9 +94,7 @@ class AppDialog {
               ],
               cancelButton: CupertinoActionSheetAction(
                 child: const Text("Close"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: onpressed,
               ),
             ),
           );

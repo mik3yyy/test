@@ -57,7 +57,11 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
     ref.listen<RequestState>(abaWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
-        AppDialog.showSuccessMessageDialog(context, value.value!.message!);
+        AppDialog.showSuccessMessageDialog(
+          context,
+          value.value!.message!,
+          onpressed: () => Navigator.pop(context),
+        );
       }
 
       if (value is Error) {

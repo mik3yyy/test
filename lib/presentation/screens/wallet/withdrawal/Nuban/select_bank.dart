@@ -123,7 +123,16 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
                     }
                   },
                   loading: () => const CircularProgressIndicator(),
-                  error: (e, s) => Text(e.toString()))
+                  error: (e, s) {
+                    return Center(
+                      child: TextButton.icon(
+                          label: const Text('Retry'),
+                          icon: const Icon(Icons.replay),
+                          onPressed: () {
+                            ref.refresh(bankListSearchProvider);
+                          }),
+                    );
+                  })
             ],
           ),
         ),

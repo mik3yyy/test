@@ -42,16 +42,16 @@ class _AllNotificationTabBarViewState
               child: const Text("No Notifications"),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                // ref.refresh(getNotificationProvider);
-                ref.refresh(remoteNotificationListProvider);
-              },
-              child: SizedBox(
-                height: 450.h,
-                child: Scrollbar(
-                  isAlwaysShown: true,
-                  controller: _scrollController,
+            return SizedBox(
+              height: 500.h,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    // ref.refresh(getNotificationProvider);
+                    ref.refresh(remoteNotificationListProvider);
+                  },
                   child: ListView.separated(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(
