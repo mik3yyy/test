@@ -84,12 +84,13 @@ class _TransactionInformationScreenState
                         ),
                         Container(
                           height: 70.h,
-                          width: 325,
+                          width: 300,
                           // width: MediaQuery.of(context).size.width,
                           color: AppColors.appColor.withOpacity(0.1),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 7.5, horizontal: 20),
+                              vertical: 7.5,
+                            ),
                             child: Center(
                               child: Text(
                                 'You can add a maximum of 3 cards',

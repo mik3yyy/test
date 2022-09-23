@@ -13,8 +13,7 @@ class TransactionPinVm extends RequestStateNotifier<bool> {
 
   TransactionPinVm(Ref ref) : _authManager = ref.read(authManagerProvider);
 
-  Future<RequestState<bool>> transactionPin(
-          String transactionPin, String confirmTransactionPin) =>
+  void transactionPin(String transactionPin, String confirmTransactionPin) =>
       makeRequest(() =>
           _authManager.transactionPin(transactionPin, confirmTransactionPin));
 }

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -14,6 +13,7 @@ import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -29,7 +29,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     receiveTimeout: 100000,
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
-    baseUrl: Constants.apiBaseUrl)));
+    baseUrl: AppConfig.coreBaseUrl)));
 
 class UserService {
   final Reader _read;

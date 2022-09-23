@@ -35,28 +35,6 @@ class AccounInfoTab extends StatefulHookConsumerWidget {
 
 class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     with AutomaticKeepAliveClientMixin {
-  // List<Transactions> bank = [];
-  // List<Transactions> filterableBank = [];
-
-  // Future<List<Transactions>> filterClients(
-  //     {required List<Transactions> banks, required String text}) {
-  //   if (text.isEmpty) {
-  //     banks = bank;
-  //     return Future.value(banks);
-  //   }
-  //   List<Transactions> result = banks
-  //       .where((country) =>
-  //           country.user!.accountNumber!.toLowerCase().contains(text))
-  //       .toList();
-  //   return Future.value(result);
-  // }
-
-  // void _filterClients(String text) async {
-  //   filterableBank = await filterClients(banks: bank, text: text);
-
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -406,7 +384,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                         padding: EdgeInsets.symmetric(
                             vertical: MediaQuery.of(context).size.height * 0.13,
                             horizontal:
-                                MediaQuery.of(context).size.width * 0.3),
+                                MediaQuery.of(context).size.width * 0.2),
                         child: const Text("No Transactions"),
                       );
                     } else {

@@ -31,7 +31,8 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
       return Future.value(countrys);
     }
     List<Country> result = countrys
-        .where((country) => country.name!.toLowerCase().contains(text))
+        .where((country) =>
+            country.name!.toLowerCase().contains(text.toLowerCase()))
         .toList();
     return Future.value(result);
   }

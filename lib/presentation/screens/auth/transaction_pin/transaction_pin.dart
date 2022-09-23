@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/card_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_success_event.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -29,28 +29,24 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
   final fieldFocusNode = FocusNode();
-  final TextEditingController pinController =
-      MaskedTextController(mask: '0000');
-  final TextEditingController confirmPinController =
-      MaskedTextController(mask: '0000');
 
-  @override
-  void dispose() {
-    pinController.dispose();
-    confirmPinController.dispose();
-    super.dispose();
-  }
+  bool togglePin = true;
+  bool toggleConfirmPin = true;
 
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(transactionPinProvider);
-
-    final togglePin = ref.watch(pinToggleStateProvider.state);
-    final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
+    final pinController = useTextEditingController();
+    final confirmPinController = useTextEditingController();
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
-      if (value is Success) {
-        context.loaderOverlay.hide();
-        successAlart(context, "Your Transaction Pin has been set", "Continue");
+      if (value is Success<bool>) {
+        if (value.value == true) {
+          ref.refresh(providers);
+          context.loaderOverlay.hide();
+
+          successAlart(
+              context, "Your Transaction Pin has been set", "Continue");
+        }
       }
 
       if (value is Error) {
@@ -97,7 +93,7 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                       labelText: 'Enter Transaction Pin',
                       capitalization: TextCapitalization.none,
                       textLength: 4,
-                      inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                      // inputFormatters: [LengthLimitingTextInputFormatter(4)],
                       controller: pinController,
                       validator: (String? value) {
                         if (value!.isEmpty) {
@@ -108,17 +104,15 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                         }
                         return null;
                       },
-                      obscureText: togglePin.state,
+                      obscureText: togglePin,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          togglePin.state = !togglePin.state;
+                          togglePin = !togglePin;
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            togglePin.state
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            togglePin ? Icons.visibility_off : Icons.visibility,
                             color: AppColors.appColor,
                           ),
                         ),
@@ -144,15 +138,15 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                         // validator has to return something :)
                         return null;
                       },
-                      obscureText: toggleConfirmPin.state,
+                      obscureText: toggleConfirmPin,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          toggleConfirmPin.state = !toggleConfirmPin.state;
+                          toggleConfirmPin = !toggleConfirmPin;
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            toggleConfirmPin.state
+                            toggleConfirmPin
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: AppColors.appColor,

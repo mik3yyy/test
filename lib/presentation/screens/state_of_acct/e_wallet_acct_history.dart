@@ -65,7 +65,7 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
               Stack(
                 children: [
                   Container(
-                    height: 51,
+                    height: MediaQuery.of(context).size.height * 0.06,
                     margin: EdgeInsets.only(left: 9.w, right: 9.w),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(28.r),

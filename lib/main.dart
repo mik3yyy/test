@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/database/hive_setup.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_state.dart';
 import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
 import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
@@ -13,9 +14,10 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/sess
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/languages/language_state.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/initialize_core/init_app_core.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/user_provider.dart';
-import 'Data/constant/constant.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 
@@ -24,14 +26,42 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = Constants.stripePublishableKey;
-  // Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
-  await Stripe.instance.applySettings();
-  await initialize();
-  await DataBase.init();
-  await PreferenceManager.init();
 
-  runApp(const ProviderScope(child: MyApp()));
+  await SentryFlutter.init(
+    (options) {
+      options.enableNativeCrashHandling = true;
+      options.attachStacktrace = true;
+      options.enableNativeCrashHandling = true;
+      options.dsn =
+          'https://bb4405e0a65e4af1b4eec99ce2129983@o1231006.ingest.sentry.io/6726566';
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+      options.environment = Environment.staging.toString();
+    },
+    appRunner: () => runApp(const ProviderScope(child: MyApp())),
+  );
+
+  // runZonedGuarded(() {
+  //   WidgetsFlutterBinding.ensureInitialized();
+
+  //   FlutterError.onError = (FlutterErrorDetails errorDetails) {
+  //     sentry.captureException(
+  //       errorDetails.exception,
+  //       stackTrace: errorDetails.stack,
+  //     );
+  //   };
+
+  //   runApp(MyApp());
+  // }, (Object error, StackTrace stackTrace) {
+  //   sentry.captureException(
+  //     error,
+  //     stackTrace: stackTrace,
+  //   );
+  // });
+
+  await initialize();
+  await initializeCore(environment: Environment.staging);
 }
 
 class MyApp extends HookConsumerWidget {
@@ -65,6 +95,9 @@ class MyApp extends HookConsumerWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           navigatorKey: navigator.key,
+          navigatorObservers: [
+            SentryNavigatorObserver(),
+          ],
           title: 'Flutter Demo',
           theme: ThemeData(
               scaffoldBackgroundColor: const Color(0xFFFFFFFF),
