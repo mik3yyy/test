@@ -147,7 +147,7 @@ class _UploadIdState extends ConsumerState<UploadId> {
                           image: DecorationImage(
                               image: FileImage(File(provider)))),
                     ),
-                    Space(50.h),
+                    Space(40.h),
                     CustomButton(
                         buttonText: 'verify',
                         bgColor: AppColors.appColor,
@@ -230,7 +230,7 @@ class _UploadIdState extends ConsumerState<UploadId> {
                         ),
                       ),
                     ),
-                    Space(450.h),
+                    Space(200.h),
                     CustomButton(
                         buttonText: 'verify',
                         bgColor: AppColors.appColor,

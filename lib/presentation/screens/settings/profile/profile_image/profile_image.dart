@@ -46,7 +46,7 @@ class ProfileImage extends HookConsumerWidget {
                 : SizedBox(
                     height: height,
                     width: width,
-                    child: user.value!.data.user.profilePicture == null
+                    child: user.value?.data.user.profilePicture == null
                         ? SizedBox(
                             height: 50,
                             width: 50,

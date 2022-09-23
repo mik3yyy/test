@@ -107,6 +107,7 @@ class ResetTransactionPin extends HookConsumerWidget {
                             keyboardType: TextInputType.number,
                             capitalization: TextCapitalization.none,
                             labelText: 'Old PIN',
+                            textLength: 4,
                             controller: oldPasswordController,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -140,6 +141,7 @@ class ResetTransactionPin extends HookConsumerWidget {
                             keyboardType: TextInputType.number,
                             capitalization: TextCapitalization.none,
                             labelText: 'New PIN',
+                            textLength: 4,
                             controller: controller,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -174,6 +176,7 @@ class ResetTransactionPin extends HookConsumerWidget {
                             capitalization: TextCapitalization.none,
                             labelText: 'Re-enter new PIN',
                             controller: confirmController,
+                            textLength: 4,
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {

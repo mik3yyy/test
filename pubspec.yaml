@@ -75,6 +75,8 @@ dependencies:
   flutter_stripe: ^4.0.0
   adaptive_dialog: ^1.6.3
   event_bus: ^2.0.0
+  sentry_flutter: ^6.10.0
+  # envied: ^0.2.3
   
 
 
