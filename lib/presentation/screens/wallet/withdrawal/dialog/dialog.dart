@@ -75,7 +75,7 @@ class AppDialog {
                       const Icon(
                         Icons.check_circle_outline_rounded,
                         color: Colors.greenAccent,
-                        size: 100,
+                        size: 70,
                       ),
                       Space(20.h),
                       Container(

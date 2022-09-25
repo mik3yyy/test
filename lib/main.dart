@@ -26,6 +26,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initialize();
+  await initializeCore(environment: Environment.production);
 
   await SentryFlutter.init(
     (options) {
@@ -59,9 +61,6 @@ Future<void> main() async {
   //     stackTrace: stackTrace,
   //   );
   // });
-
-  await initialize();
-  await initializeCore(environment: Environment.staging);
 }
 
 class MyApp extends HookConsumerWidget {
@@ -126,8 +125,4 @@ class MyApp extends HookConsumerWidget {
       ),
     );
   }
-}
-
-class SessionExpiredEvent {
-  SessionExpiredEvent();
 }

@@ -154,8 +154,9 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                               pushNewScreen(
                                 context,
                                 screen: const SecurityScreen(),
+                                withNavBar: false,
                                 pageTransitionAnimation:
-                                    PageTransitionAnimation.fade,
+                                    PageTransitionAnimation.cupertino,
                               );
                             },
                           ),

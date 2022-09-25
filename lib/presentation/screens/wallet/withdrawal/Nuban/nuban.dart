@@ -13,9 +13,11 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawa
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
@@ -66,6 +68,8 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
         ref.refresh(getAccountDetailsProvider);
+        ref.refresh(userProfileProvider);
+        ref.refresh(walletTransactionProvider);
         AppDialog.showSuccessMessageDialog(
           context,
           value.value!.message!,
@@ -339,7 +343,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                   child: Text(
                                     data.data.accountName.toString(),
                                     style: AppText.body2(
-                                        context, Colors.greenAccent, 18.sp),
+                                        context, Colors.green, 18.sp),
                                   ),
                                 );
                               })

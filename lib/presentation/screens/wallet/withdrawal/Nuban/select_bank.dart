@@ -19,33 +19,12 @@ class SelectBankScreen extends StatefulHookConsumerWidget {
 }
 
 class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
-  // List<Datum> bank = [];
-  // List<Datum> filterableBank = [];
-
-  // Future<List<Datum>> filterClients(
-  //     {required List<Datum> banks, required String text}) {
-  //   if (text.isEmpty) {
-  //     banks = bank;
-  //     return Future.value(banks);
-  //   }
-  //   List<Datum> result = banks
-  //       .where((country) =>
-  //           country.name.toLowerCase().contains(text.toLowerCase()))
-  //       .toList();
-  //   return Future.value(result);
-  // }
-
-  // void _filterClients(String text) async {
-  //   filterableBank = await filterClients(banks: bank, text: text);
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     // THIS IS USED TO CHECK FOR THE LOADING AND ERROR STATE FROM THE SERVER
     final remoteBankList = ref.watch(bankListSearchProvider);
     // THIS RETURNS A SUCCESSFUL VALUE
-    final bank = ref.watch(searchInputProvider);
+    final bank = ref.watch(bankInputProvider);
     // final listState = useState("");
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +88,7 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
                                       child: Text(
                                     banks.name.toString(),
                                     style: AppText.body2(
-                                        context, Colors.black, 18),
+                                        context, Colors.black, 16),
                                   )),
                                 ),
                               );

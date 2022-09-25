@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/req/create_post_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/get_top_post_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/single_post_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -17,7 +17,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     receiveTimeout: 100000,
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
-    baseUrl: Constants.apiBaseUrl)));
+    baseUrl: AppConfig.coreBaseUrl)));
 
 class ForumService {
   final Reader _read;

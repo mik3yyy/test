@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
@@ -55,12 +57,15 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 //     navigation.url.toString().substring(index + 1);
 
                 ref.refresh(getAccountDetailsProvider);
+                ref.refresh(userProfileProvider);
                 ref.refresh(walletTransactionProvider);
                 Navigator.pop(context);
                 AppDialog.showSuccessMessageDialog(
                   context,
                   widget.successMsg,
-                  onpressed: () => Navigator.pop(context),
+                  onpressed: () {
+                    navigator.key.currentContext?.popView();
+                  },
                 );
               }
               break;

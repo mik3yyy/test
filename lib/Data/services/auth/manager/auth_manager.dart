@@ -111,6 +111,7 @@ class AuthManager extends IAuthManager {
       String password, String confirmPassword) async {
     final res = await _userService.resetPassword(
         emailPhone, otpCode, password, confirmPassword);
+    PreferenceManager.isFirstLaunch = true;
     return res;
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/e_wallet_acct_history.dart';
@@ -18,6 +19,7 @@ class _StatementOfAcctScreenState extends State<StatementOfAcctScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: Text(
           'Statements',
@@ -72,11 +74,11 @@ class AccountHistoryButton extends StatelessWidget {
       height: 60,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        child: Text(text, style: AppText.body2(context, Colors.black54, 25.sp)),
+        child: Text(text, style: AppText.body2(context, Colors.black54, 22.sp)),
         style: TextButton.styleFrom(
           primary: Colors.white,
-          backgroundColor: Colors.grey.shade200,
-          onSurface: Colors.grey.shade200,
+          backgroundColor: Colors.grey.shade100,
+          onSurface: Colors.grey.shade100,
         ),
         onPressed: onPressed,
       ),

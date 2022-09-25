@@ -15,14 +15,14 @@ class WithdrawMethod extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: 90,
+        height: 80,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(left: 20.w, top: 40.h),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(10.r)),
         child: Text(
           method,
-          style: AppText.body2Bold(context, Colors.black54, 22.sp),
+          style: AppText.body2Bold(context, Colors.black54, 20.sp),
         ),
       ),
     );

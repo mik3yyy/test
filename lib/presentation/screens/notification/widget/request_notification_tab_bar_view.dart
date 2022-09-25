@@ -36,12 +36,7 @@ class _RequestNotificationTabBarViewState
               child: CircularProgressIndicator(),
             );
           } else if (data.data.withdrawals.isEmpty) {
-            return Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.13,
-                  horizontal: MediaQuery.of(context).size.width * 0.3),
-              child: const Text("No Notifications"),
-            );
+            return const Center(child: Text("No Notifications"));
           } else {
             return RefreshIndicator(
               onRefresh: () async {
@@ -82,7 +77,16 @@ class _RequestNotificationTabBarViewState
             );
           }
         },
-        error: (e, s) => Text(e.toString()),
+        error: (e, s) {
+          return Center(
+            child: TextButton.icon(
+                onPressed: () {
+                  ref.refresh(remoteReqNotificationListProvider);
+                },
+                icon: const Icon(Icons.replay),
+                label: const Text("Retry")),
+          );
+        },
         loading: () => const Center(
               child: CircularProgressIndicator(),
             ));

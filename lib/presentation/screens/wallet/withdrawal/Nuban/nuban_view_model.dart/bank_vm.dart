@@ -4,7 +4,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repositor
 
 // USED IN THE TEXT FORM FIELD TO SEARCH THE LIST OF BANKS
 final bankSearchQueryStateProvider = StateProvider.autoDispose<String>((ref) {
-  return 'david';
+  return '';
 });
 
 // USED TO GET THE LIST OF BANKS FROM THE SERVER.
@@ -25,7 +25,7 @@ final productSearchResultProvider =
 });
 
 //FILTER THE STORED RESULT --- THIS IS USED IN THE UI
-final searchInputProvider = FutureProvider.autoDispose((ref) {
+final bankInputProvider = FutureProvider.autoDispose((ref) {
   // USED THE STATE PROVIDER FOR THE SEARCH QUERY METHOD
   final searchQuery = ref.watch(bankSearchQueryStateProvider);
 
@@ -33,7 +33,6 @@ final searchInputProvider = FutureProvider.autoDispose((ref) {
   //USED THE BANK LIST RESULT COMING FROM THE SERVER TO CHECK IF IT RETURNS NULL OR NOT
 
   if (listSearch != null) {
-    // RETURN SUCCESSFULL RETURN FROM THE SERVER
     return ref.watch(productSearchResultProvider(searchQuery).future);
   } else {
     // RETURN AN EMPTY LIST IF ITS NULL

@@ -67,9 +67,9 @@ class DebitStatementCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 70,
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          color: Colors.grey.shade300,
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
+          color: Colors.grey.shade100,
           child: Row(
             children: [
               Column(
