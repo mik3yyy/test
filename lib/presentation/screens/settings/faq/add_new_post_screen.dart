@@ -53,6 +53,7 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
         context.loaderOverlay.hide();
         Navigator.of(context).pop();
         ref.refresh(allPost);
+        ref.refresh(topPost);
         return AppSnackBar.showSuccessSnackBar(context,
             message: value.value!.message!);
       }

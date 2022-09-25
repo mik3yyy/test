@@ -140,7 +140,16 @@ class _TransactionInformationScreenState
                     ),
                     Space(30.h),
                     getCard.when(
-                        error: (error, stackTrace) => Text(error.toString()),
+                        error: (error, stackTrace) {
+                          return Center(
+                            child: TextButton.icon(
+                                onPressed: () {
+                                  ref.refresh(getCardProvider);
+                                },
+                                icon: const Icon(Icons.replay),
+                                label: const Text("Retry")),
+                          );
+                        },
                         idle: () => const Center(
                               child: CircularProgressIndicator(),
                             ),

@@ -66,16 +66,17 @@ class StatementListCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 70,
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          color: Colors.grey.shade300,
+          // height: 70,
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
+          color: Colors.grey.shade100,
           child: Row(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Space(13),
-                  Text(statement.description.toString()),
+                  Text(statement.direction.toString()),
                   const Space(5),
                   Text(
                     getStatus(statement.entity!.status.toString()),

@@ -77,7 +77,6 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
             padding: const EdgeInsets.only(left: 23, right: 23),
             child: Column(
               children: [
-                const Space(20),
                 SearchBox(
                   hintText: "Search",
                   onTextEntered: (value) {

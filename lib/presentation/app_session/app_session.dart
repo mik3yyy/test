@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_config.dart';
@@ -14,7 +15,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       if (PreferenceManager.isloggedIn == true) {
         navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         PreferenceManager.removeToken();
-        print("INACTIVE");
+        debugPrint("INACTIVE");
       } else {
         return;
       }
@@ -23,7 +24,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       if (PreferenceManager.isloggedIn == true) {
         navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         PreferenceManager.removeToken();
-        print("APPFOCUS");
+        debugPrint("APPFOCUS");
       } else {
         return;
       }

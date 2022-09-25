@@ -41,8 +41,8 @@ Future<dynamic> successAlart(
             ),
             Space(24.h),
             GestureDetector(
-              onTap: () =>
-                  context.navigate(MainScreen(menuScreenContext: context)),
+              onTap: () => navigator.key.currentContext!
+                  .navigate(MainScreen(menuScreenContext: context)),
               child: CustomButton(
                 buttonText: buttonText,
                 bgColor: AppColors.appColor,

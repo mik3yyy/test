@@ -73,7 +73,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
             });
 
             context.loaderOverlay.hide();
-            context.navigate(MainScreen(menuScreenContext: context));
+            navigator.key.currentContext!
+                .navigate(MainScreen(menuScreenContext: context));
           });
         }
       }
@@ -101,196 +102,202 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
           size: 50.0,
         ),
       ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
-                child: Column(
-                  children: [
-                    Text(
-                      "Welcome Back!",
-                      style:
-                          AppText.header3(context, AppColors.appColor, 20.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                    Space(12.h),
-                    Text(
-                      "Continue to Sign in",
-                      style:
-                          AppText.header2(context, AppColors.appColor, 20.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                    Space(180.h),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: Scaffold(
+          body: SafeArea(
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Welcome Back!",
+                        style:
+                            AppText.header3(context, AppColors.appColor, 20.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                      Space(12.h),
+                      Text(
+                        "Continue to Sign in",
+                        style:
+                            AppText.header2(context, AppColors.appColor, 20.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                      Space(180.h),
 
-                    //email
-                    TextFormInput(
-                        labelText: " Enter Email ",
-                        controller: emailPhoneController,
-                        capitalization: TextCapitalization.none,
+                      //email
+                      TextFormInput(
+                          labelText: " Enter Email ",
+                          controller: emailPhoneController,
+                          capitalization: TextCapitalization.none,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                          ],
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Email address or Phone Number is required";
+                            }
+
+                            return null;
+                          },
+                          obscureText: false),
+                      Space(32.h),
+
+                      //password
+                      TextFormInput(
+                        labelText: 'Password',
+                        controller: passwordController,
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(RegExp('[ ]'))
                         ],
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Email address or Phone Number is required";
-                          }
 
+                        capitalization: TextCapitalization.none,
+                        validator: (String? value) {
+                          if (value!.length < 8) {
+                            return 'Password must at least be 8 characters';
+                          }
+                          if (value.isEmpty) {
+                            return 'Invalid password';
+                          }
                           return null;
                         },
-                        obscureText: false),
-                    Space(32.h),
-
-                    //password
-                    TextFormInput(
-                      labelText: 'Password',
-                      controller: passwordController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(RegExp('[ ]'))
-                      ],
-
-                      capitalization: TextCapitalization.none,
-                      validator: (String? value) {
-                        if (value!.length < 8) {
-                          return 'Password must at least be 8 characters';
-                        }
-                        if (value.isEmpty) {
-                          return 'Invalid password';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      // suffixIcon: GestureDetector(
-                      //   onTap: () {
-                      //     togglePasswords.state = !togglePasswords.state;
-                      //   },
-                      //   child: Padding(
-                      //     padding: EdgeInsets.only(bottom: 0.h),
-                      //     child: Icon(
-                      //       togglePasswords.state
-                      //           ? Icons.visibility_off
-                      //           : Icons.visibility,
-                      //       color: AppColors.appColor,
-                      //     ),
-                      //   ),
-                      // ),
-                    ),
-                    Space(32.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: vm is Loading
-                              ? null
-                              : () => context.navigate(ForgotPasswordScreen()),
-                          child: Text(
-                            "Forgot Password?",
-                            style: AppText.body4(context, AppColors.appColor),
-                            textAlign: TextAlign.center,
+                        obscureText: true,
+                        // suffixIcon: GestureDetector(
+                        //   onTap: () {
+                        //     togglePasswords.state = !togglePasswords.state;
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.only(bottom: 0.h),
+                        //     child: Icon(
+                        //       togglePasswords.state
+                        //           ? Icons.visibility_off
+                        //           : Icons.visibility,
+                        //       color: AppColors.appColor,
+                        //     ),
+                        //   ),
+                        // ),
+                      ),
+                      Space(32.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: vm is Loading
+                                ? null
+                                : () =>
+                                    context.navigate(ForgotPasswordScreen()),
+                            child: Text(
+                              "Forgot Password?",
+                              style: AppText.body4(context, AppColors.appColor),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
 
-                    Space(160.h),
+                      Space(160.h),
 
-                    Row(
-                      mainAxisAlignment: PreferenceManager.hasBiometrics
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          buttonWidth: 280.w,
-                          buttonText: vm is Loading
-                              ? 'Authenticating'
-                              : isLoading
-                                  ? 'Authenticating'
-                                  : "Sign in",
-                          bgColor: AppColors.appColor,
-                          borderColor: AppColors.appColor,
-                          textColor: Colors.white,
-                          onPressed: vm is Loading
-                              ? null
-                              : () async {
-                                  if (formKey.currentState!.validate()) {
-                                    if (!currentFocus.hasPrimaryFocus) {
-                                      currentFocus.unfocus();
-                                    }
+                      Row(
+                        mainAxisAlignment: PreferenceManager.hasBiometrics
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.center,
+                        children: [
+                          CustomButton(
+                            buttonWidth: 280.w,
+                            buttonText: vm is Loading
+                                ? 'Authenticating'
+                                : isLoading
+                                    ? 'Authenticating'
+                                    : "Sign in",
+                            bgColor: AppColors.appColor,
+                            borderColor: AppColors.appColor,
+                            textColor: Colors.white,
+                            onPressed: vm is Loading
+                                ? null
+                                : () async {
+                                    if (formKey.currentState!.validate()) {
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
 
-                                    var signinReq = SigninReq(
-                                        emailPhone: emailPhoneController.text,
-                                        password: passwordController.text,
-                                        timezone: device.timeZone,
-                                        deviceId: device.deviceId);
+                                      var signinReq = SigninReq(
+                                          emailPhone: emailPhoneController.text,
+                                          password: passwordController.text,
+                                          timezone: device.timeZone,
+                                          deviceId: device.deviceId);
 
-                                    setState(() {
-                                      isLoading = true;
-                                    });
+                                      setState(() {
+                                        isLoading = true;
+                                      });
 
-                                    if (PreferenceManager.isFirstLaunch) {
+                                      if (PreferenceManager.isFirstLaunch) {
+                                        ref
+                                            .read(credentialProvider.notifier)
+                                            .storeCredential(
+                                                Constants.userPassword,
+                                                passwordController.text);
+                                      }
+
                                       ref
-                                          .read(credentialProvider.notifier)
-                                          .storeCredential(
-                                              Constants.userPassword,
-                                              passwordController.text);
+                                          .read(signInProvider.notifier)
+                                          .signIn(signinReq);
+
+                                      context.loaderOverlay.show();
                                     }
-
-                                    ref
-                                        .read(signInProvider.notifier)
-                                        .signIn(signinReq);
-
-                                    context.loaderOverlay.show();
-                                  }
-                                },
-                        ),
-                        PreferenceManager.hasBiometrics
-                            ? GestureDetector(
-                                onTap: () async {
-                                  if (PreferenceManager.enableBioMetrics ==
-                                      true) {
-                                    ref
-                                        .read(localAuthStateProvider.notifier)
-                                        .authenticate();
-                                  } else {
-                                    return;
-                                  }
-                                },
-                                child: Container(
-                                  height: 55.h,
-                                  width: 80.w,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.appColor,
-                                    borderRadius: BorderRadius.circular(6.r),
-                                  ),
-                                  child: const Image(
-                                    image: AssetImage(
-                                      "assets/images/fingerprint-3.png",
-                                    ),
-                                    color: AppColors.whiteColor,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink()
-                      ],
-                    ),
-                    Space(20.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Don’t have an account? ',
-                            style: AppText.body4(context, AppColors.hintColor)),
-                        InkWell(
-                          onTap: () => context.navigate(CreateAccountScreen()),
-                          child: Text(
-                            ' Sign up',
-                            style: AppText.body4(context, AppColors.appColor),
+                                  },
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          PreferenceManager.hasBiometrics
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    if (PreferenceManager.enableBioMetrics ==
+                                        true) {
+                                      ref
+                                          .read(localAuthStateProvider.notifier)
+                                          .authenticate();
+                                    } else {
+                                      return;
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 55.h,
+                                    width: 80.w,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.appColor,
+                                      borderRadius: BorderRadius.circular(6.r),
+                                    ),
+                                    child: const Image(
+                                      image: AssetImage(
+                                        "assets/images/fingerprint-3.png",
+                                      ),
+                                      color: AppColors.whiteColor,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox.shrink()
+                        ],
+                      ),
+                      Space(20.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Don’t have an account? ',
+                              style:
+                                  AppText.body4(context, AppColors.hintColor)),
+                          InkWell(
+                            onTap: () =>
+                                context.navigate(CreateAccountScreen()),
+                            child: Text(
+                              ' Sign up',
+                              style: AppText.body4(context, AppColors.appColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

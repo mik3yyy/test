@@ -301,6 +301,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                 currencyCode: currency,
                                 routeName: 'createWallet',
                               ),
+                              withNavBar: false,
                               pageTransitionAnimation:
                                   PageTransitionAnimation.slideRight);
                         },

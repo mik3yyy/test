@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -63,119 +64,124 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
           size: 50.0,
         ),
       ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Form(
-            key: formKey,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(
-                      "Set your PIN",
-                      style:
-                          AppText.header3(context, AppColors.appColor, 20.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                    Space(19.h),
-                    Text(
-                      "Confirm all transactions using this PIN",
-                      style:
-                          AppText.header2(context, AppColors.appColor, 20.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                    Space(70.h),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: Scaffold(
+          body: SafeArea(
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Set your PIN",
+                        style:
+                            AppText.header3(context, AppColors.appColor, 20.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                      Space(19.h),
+                      Text(
+                        "Confirm all transactions using this PIN",
+                        style:
+                            AppText.header2(context, AppColors.appColor, 20.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                      Space(70.h),
 
-                    // pin
-                    TextFormInput(
-                      keyboardType: TextInputType.number,
-                      labelText: 'Enter Transaction Pin',
-                      capitalization: TextCapitalization.none,
-                      textLength: 4,
-                      // inputFormatters: [LengthLimitingTextInputFormatter(4)],
-                      controller: pinController,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return "Transaction pin is requied";
-                        }
-                        if (value.length > 4) {
-                          return 'Transaction pin must not be more than 4 numbers';
-                        }
-                        return null;
-                      },
-                      obscureText: togglePin,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          togglePin = !togglePin;
+                      // pin
+                      TextFormInput(
+                        keyboardType: TextInputType.number,
+                        labelText: 'Enter Transaction Pin',
+                        capitalization: TextCapitalization.none,
+                        textLength: 4,
+                        // inputFormatters: [LengthLimitingTextInputFormatter(4)],
+                        controller: pinController,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Transaction pin is requied";
+                          }
+                          if (value.length > 4) {
+                            return 'Transaction pin must not be more than 4 numbers';
+                          }
+                          return null;
                         },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 0.h),
-                          child: Icon(
-                            togglePin ? Icons.visibility_off : Icons.visibility,
-                            color: AppColors.appColor,
+                        obscureText: togglePin,
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            togglePin = !togglePin;
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 0.h),
+                            child: Icon(
+                              togglePin
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: AppColors.appColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Space(42.h),
+                      Space(42.h),
 
-                    //confirm pin
-                    TextFormInput(
-                      keyboardType: TextInputType.number,
-                      capitalization: TextCapitalization.none,
-                      labelText: 'Re-Enter Transaction PIN',
-                      controller: confirmPinController,
-                      focusNode: fieldFocusNode,
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Confirm transaction pin is required';
-                        } else if (pinController.text !=
-                            confirmPinController.text) {
-                          return 'Transaction pin doesn\'t match';
-                        }
+                      //confirm pin
+                      TextFormInput(
+                        keyboardType: TextInputType.number,
+                        capitalization: TextCapitalization.none,
+                        labelText: 'Re-Enter Transaction PIN',
+                        controller: confirmPinController,
+                        focusNode: fieldFocusNode,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'Confirm transaction pin is required';
+                          } else if (pinController.text !=
+                              confirmPinController.text) {
+                            return 'Transaction pin doesn\'t match';
+                          }
 
-                        // validator has to return something :)
-                        return null;
-                      },
-                      obscureText: toggleConfirmPin,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          toggleConfirmPin = !toggleConfirmPin;
+                          // validator has to return something :)
+                          return null;
                         },
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 0.h),
-                          child: Icon(
-                            toggleConfirmPin
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: AppColors.appColor,
+                        obscureText: toggleConfirmPin,
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            toggleConfirmPin = !toggleConfirmPin;
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 0.h),
+                            child: Icon(
+                              toggleConfirmPin
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: AppColors.appColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Space(300),
+                      const Space(300),
 
-                    CustomButton(
-                      buttonWidth: double.infinity,
-                      buttonText: vm is Loading ? "Please wait" : 'Set PIN',
-                      bgColor: AppColors.appColor,
-                      borderColor: AppColors.appColor,
-                      textColor: Colors.white,
-                      onPressed: vm is Loading
-                          ? null
-                          : () async {
-                              if (formKey.currentState!.validate()) {
-                                fieldFocusNode.unfocus();
-                                ref
-                                    .read(transactionPinProvider.notifier)
-                                    .transactionPin(pinController.text,
-                                        confirmPinController.text);
-                                context.loaderOverlay.show();
-                              }
-                            },
-                    ),
-                  ],
+                      CustomButton(
+                        buttonWidth: double.infinity,
+                        buttonText: vm is Loading ? "Please wait" : 'Set PIN',
+                        bgColor: AppColors.appColor,
+                        borderColor: AppColors.appColor,
+                        textColor: Colors.white,
+                        onPressed: vm is Loading
+                            ? null
+                            : () async {
+                                if (formKey.currentState!.validate()) {
+                                  fieldFocusNode.unfocus();
+                                  ref
+                                      .read(transactionPinProvider.notifier)
+                                      .transactionPin(pinController.text,
+                                          confirmPinController.text);
+                                  context.loaderOverlay.show();
+                                }
+                              },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -112,7 +112,8 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 _current == 1 || _current == 0 ? Space(150.h) : Space(56.w),
                 _current == 2
                     ? GestureDetector(
-                        onTap: () => context.navigate(CreateAccountScreen()),
+                        onTap: () => navigator.key.currentContext!
+                            .navigate(CreateAccountScreen()),
                         child: Text(
                           "Continue",
                           style: AppText.label(context, AppColors.appColor),

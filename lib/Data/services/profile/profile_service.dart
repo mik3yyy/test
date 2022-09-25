@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +24,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     receiveTimeout: 100000,
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
-    baseUrl: Constants.apiBaseUrl)));
+    baseUrl: AppConfig.coreBaseUrl)));
 
 class ProfileService {
   final Reader _read;

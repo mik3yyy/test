@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Aba/aba_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
@@ -11,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/ban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/sepa/sepa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
@@ -23,7 +23,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     receiveTimeout: 100000,
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
-    baseUrl: Constants.apiBaseUrl)));
+    baseUrl: AppConfig.coreBaseUrl)));
 
 class WithdrawalService {
   final Reader _read;

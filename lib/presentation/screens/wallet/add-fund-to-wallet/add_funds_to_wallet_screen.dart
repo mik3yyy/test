@@ -5,11 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/json_asset/json_asset.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-import 'package:pay/pay.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import 'widget/add_fund_container_widget.dart';
@@ -35,13 +33,13 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
   void onAppleResult(payment) {}
   @override
   Widget build(BuildContext context) {
-    const _paymentItems = [
-      PaymentItem(
-        label: 'Total',
-        amount: '99.99',
-        status: PaymentItemStatus.final_price,
-      )
-    ];
+    // const _paymentItems = [
+    //   PaymentItem(
+    //     label: 'Total',
+    //     amount: '99.99',
+    //     status: PaymentItemStatus.final_price,
+    //   )
+    // ];
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: widget.route == "HomeScreen"
@@ -100,45 +98,45 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
             // Space(10.h),
 
             if (Platform.isIOS) ...[
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 50,
-                  child: ApplePayButton(
-                    paymentConfigurationAsset:
-                        'default_payment_profile_apple_pay.json',
-                    paymentItems: _paymentItems,
-                    style: ApplePayButtonStyle.black,
-                    type: ApplePayButtonType.inStore,
-                    height: 50,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    margin: const EdgeInsets.only(top: 55.0),
-                    onPaymentResult: onAppleResult,
-                    loadingIndicator: const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: SizedBox(
+              //     width: MediaQuery.of(context).size.width - 50,
+              //     child: ApplePayButton(
+              //       paymentConfigurationAsset:
+              //           'default_payment_profile_apple_pay.json',
+              //       paymentItems: _paymentItems,
+              //       style: ApplePayButtonStyle.black,
+              //       type: ApplePayButtonType.inStore,
+              //       height: 50,
+              //       onPressed: () {
+              //         Navigator.pop(context);
+              //       },
+              //       margin: const EdgeInsets.only(top: 55.0),
+              //       onPaymentResult: onAppleResult,
+              //       loadingIndicator: const Center(
+              //         child: CircularProgressIndicator.adaptive(),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ] else ...[
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 50,
-                  height: MediaQuery.of(context).size.width * 0.20,
-                  child: GooglePayButton(
-                    paymentConfigurationAsset: JsonAssets.gpayAsset,
-                    paymentItems: _paymentItems,
-                    style: GooglePayButtonStyle.white,
-                    type: GooglePayButtonType.pay,
-                    margin: const EdgeInsets.only(top: 15.0),
-                    onPaymentResult: (data) {},
-                    loadingIndicator: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: SizedBox(
+              //     width: MediaQuery.of(context).size.width - 50,
+              //     height: MediaQuery.of(context).size.width * 0.20,
+              //     child: GooglePayButton(
+              //       paymentConfigurationAsset: JsonAssets.gpayAsset,
+              //       paymentItems: _paymentItems,
+              //       style: GooglePayButtonStyle.white,
+              //       type: GooglePayButtonType.pay,
+              //       margin: const EdgeInsets.only(top: 15.0),
+              //       onPaymentResult: (data) {},
+              //       loadingIndicator: const Center(
+              //         child: CircularProgressIndicator(),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ]
 
             // AppFundContainerWidget(

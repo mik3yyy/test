@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_use_beneficiary_model.dart';
@@ -33,6 +34,7 @@ class _BeneficiaryScreenState extends ConsumerState<BeneficiaryScreen> {
     // final vm = ref.watch(withdrawalController);
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: Text(
           'NUBAN',
@@ -105,7 +107,6 @@ class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
                           child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 20),
-                              height: 70,
                               color: Colors.grey.shade100,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +114,7 @@ class _NubanBenficiaryState extends ConsumerState<NubanBenficiary> {
                                   Text(
                                     receipients.accountName.toString(),
                                     style: AppText.body2Medium(
-                                        context, Colors.black54, 20),
+                                        context, Colors.black54, 12),
                                   ),
                                   const Space(5),
                                   Text(
