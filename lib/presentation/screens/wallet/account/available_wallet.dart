@@ -36,34 +36,6 @@ class AvailableWallet extends StatefulHookConsumerWidget {
   ConsumerState<AvailableWallet> createState() => _AvailableWalletState();
 }
 
-currencySymbol(String currency) {
-  if (currency == "NGN") {
-    return 'N';
-  } else if (currency == "USD") {
-    return '\$';
-  } else if (currency == "GBP") {
-    return '£';
-  } else if (currency == "EUR") {
-    return '€';
-  } else {
-    return 'KDRX';
-  }
-}
-
-currencyName(String currency) {
-  if (currency == "NGN") {
-    return 'Naira';
-  } else if (currency == "USD") {
-    return 'Dollar';
-  } else if (currency == "GBP") {
-    return 'Pounds';
-  } else if (currency == "EUR") {
-    return 'Euro';
-  } else {
-    return 'KDRX';
-  }
-}
-
 class _AvailableWalletState extends ConsumerState<AvailableWallet> {
   @override
   Widget build(BuildContext context) {
@@ -160,13 +132,13 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${currencyName(data.data.defaultWallet.currencyCode.toString())} wallet',
+                                    '${data.data.defaultWallet.currencyCode.toString()} wallet',
                                     style: AppText.header2(
                                         context, AppColors.appColor, 18.sp),
                                   ),
                                   Space(10.h),
                                   Text(
-                                    '${currencySymbol(data.data.defaultWallet.currencyCode.toString())} ${formatCurrency(data.data.defaultWallet.balance.toString())}',
+                                    '${data.data.defaultWallet.currencyCode.toString()} ${formatCurrency(data.data.defaultWallet.balance.toString())}',
                                     style: AppText.header2(
                                         context, AppColors.appColor, 20.sp),
                                   ),
@@ -257,13 +229,13 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            '${currencyName(walletList.currencyCode.toString())} wallet',
+                                            '${walletList.currencyCode.toString()} wallet',
                                             style: AppText.header2(context,
                                                 AppColors.appColor, 18.sp),
                                           ),
                                           Space(10.h),
                                           Text(
-                                            '${currencySymbol(walletList.currencyCode.toString())} ${formatCurrency(walletList.balance.toString())}',
+                                            '${walletList.currencyCode.toString()} ${formatCurrency(walletList.balance.toString())}',
                                             style: AppText.header2(context,
                                                 AppColors.appColor, 20.sp),
                                           ),
@@ -376,10 +348,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                           ),
                         ),
                         isDefaultAction: true,
-                        onPressed: () {
-                          // currencyController.text = dollar;
-                          // Navigator.pop(context);
-                        },
+                        onPressed: () {},
                       ),
                     ),
                     //View Wallet
@@ -512,9 +481,12 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
               );
             });
       },
-      child: SizedBox(
+      child: Container(
+        color: Colors.transparent,
         height: 50,
+        width: 50,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Icon(
               Icons.circle_outlined,

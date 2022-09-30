@@ -385,7 +385,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                             vertical: MediaQuery.of(context).size.height * 0.13,
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.2),
-                        child: const Text("No Transactions"),
+                        child: const Text("No transaction History"),
                       );
                     } else {
                       return RefreshIndicator(

@@ -12,7 +12,9 @@ import '../../../components/color/value.dart';
 Future<dynamic> successAlart(
     BuildContext context, String text, String buttonText) {
   return showDialog(
+    barrierDismissible: false,
     useSafeArea: false,
+    barrierColor: Colors.black12,
     context: context,
     builder: (BuildContext context) => AlertDialog(
         content: Padding(

@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/beneficiary_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/safe_pay_withdraw/select_beneficiary.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/shared/route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -74,13 +73,13 @@ class _WithdrawalMethodScreenState
               child: Column(
                 children: [
                   WithdrawMethod(
-                      method: "Safe Transfer",
+                      method: "Safe Transfer coming soon",
                       onPressed: () {
-                        pushNewScreen(
-                          context, screen: const SelectBeneficiary(),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
+                        // pushNewScreen(
+                        //   context, screen: const SelectBeneficiary(),
+                        //   withNavBar: true, // OPTIONAL VALUE. True by default.
+                        //   pageTransitionAnimation: PageTransitionAnimation.fade,
+                        // );
                       }),
                   Space(20.h),
                   WithdrawMethod(

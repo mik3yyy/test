@@ -1,5 +1,6 @@
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 
 import '../../../model/profile/req/update_profile_req.dart';
 import '../../../model/profile/res/profile_res.dart';
@@ -16,5 +17,5 @@ abstract class IProfileManager {
   // Future upLoadProfilePic(String filePath);
   // Future<bool> uploadPP(String imageUrl);
   Future<bool> updateProfilePic({required String path});
-  Future<bool> updateId(String filePath, String idType, String idNo);
+  Future<UploadIdRes> updateId(String filePath, String idType, String idNo);
 }

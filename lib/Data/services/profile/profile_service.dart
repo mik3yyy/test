@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -202,7 +203,8 @@ class ProfileService {
     }
   }
 
-  Future<bool> updateId(String filePath, String idType, String idNo) async {
+  Future<UploadIdRes> updateId(
+      String filePath, String idType, String idNo) async {
     const url = '/profile/add-id';
 
     File file = File(filePath);
@@ -219,7 +221,7 @@ class ProfileService {
       final response = await _read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
       // final result = ProfileRes.fromJson(response.data);
-      return response.data != null;
+      return UploadIdRes.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != '') {
         Failure result = Failure.fromJson(e.response!.data);

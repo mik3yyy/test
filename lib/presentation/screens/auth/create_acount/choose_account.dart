@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account_phno.dart';
-
 import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/color/value.dart';
 import '../../../utils/widget_spacer.dart';
@@ -32,11 +30,11 @@ class ChooseAccount extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               Space(120.h),
-              AccountRow(
-                icon: Icons.phone,
-                text: "Sign up with phone number",
-                ontap: () => context.navigate(CreatePhoneAccount()),
-              ),
+              // AccountRow(
+              //   icon: Icons.phone,
+              //   text: "Sign up with phone number",
+              //   ontap: () => context.navigate(CreatePhoneAccount()),
+              // ),
               Space(50.h),
               AccountRow(
                 ontap: () => context.navigate(CreateAccountScreen()),

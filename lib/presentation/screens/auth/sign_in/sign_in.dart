@@ -55,9 +55,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
     final device = ref.watch(deviceInfoProvider);
-    FocusScopeNode currentFocus = FocusScope.of(context);
     final emailPhoneController = useTextEditingController(text: widget.email);
     final passwordController = useTextEditingController();
+    FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
@@ -232,14 +232,15 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                       setState(() {
                                         isLoading = true;
                                       });
+                                      ref
+                                          .read(credentialProvider.notifier)
+                                          .storeCredential(
+                                              Constants.userPassword,
+                                              passwordController.text);
 
-                                      if (PreferenceManager.isFirstLaunch) {
-                                        ref
-                                            .read(credentialProvider.notifier)
-                                            .storeCredential(
-                                                Constants.userPassword,
-                                                passwordController.text);
-                                      }
+                                      // if (PreferenceManager.isFirstLaunch) {
+
+                                      // }
 
                                       ref
                                           .read(signInProvider.notifier)

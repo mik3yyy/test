@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/available_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -79,10 +78,6 @@ class _SelectWalletListState extends ConsumerState<SelectWalletList> {
 
                                     Navigator.pop(context);
                                   } else {
-                                    // ref
-                                    //     .read(genericController.notifier)
-                                    //     .addDefault(
-                                    //         walletList.currencyCode.toString());
                                     PreferenceManager.defaultWallet =
                                         walletList.currencyCode.toString();
                                     ref
@@ -115,7 +110,7 @@ class _SelectWalletListState extends ConsumerState<SelectWalletList> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      '${currencyName(walletList.currencyCode.toString())} wallet',
+                                      '${walletList.currencyCode.toString()} wallet',
                                       style: AppText.header2(
                                           context, AppColors.appColor, 20.sp),
                                     ),

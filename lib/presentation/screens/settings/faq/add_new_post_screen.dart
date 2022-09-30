@@ -170,7 +170,7 @@ class ForumTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      padding: EdgeInsets.only(top: 12.r, left: 12.r),
+      padding: EdgeInsets.only(top: 12.r, left: 12.w, right: 12.w),
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         border: Border(
@@ -184,7 +184,7 @@ class ForumTextFormField extends StatelessWidget {
         controller: controller,
         maxLines: maxLines,
         decoration: InputDecoration(
-          hintText: 'Add post text',
+          hintText: 'Post title',
           hintStyle: AppText.robotoStyle(
             context,
             AppColors.textColor,

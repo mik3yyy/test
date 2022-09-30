@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/credit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/debit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/view_all.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../components/app text theme/app_text_theme.dart';
@@ -56,13 +55,14 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
           child: Column(
             children: [
               const Space(20),
-              SearchBox(
-                hintText: "Search date (dd/mm/yyyy)",
-                onTextEntered: (value) {
-                  // ref.read(currencySearchQueryStateProvider.notifier).state =
-                  //     value;
-                },
-              ),
+              //** FIX THIS LATER ON */
+              // SearchBox(
+              //   hintText: "Search date (dd/mm/yyyy)",
+              //   onTextEntered: (value) {
+              //     // ref.read(currencySearchQueryStateProvider.notifier).state =
+              //     //     value;
+              //   },
+              // ),
               const Space(30),
               Stack(
                 children: [
@@ -71,7 +71,7 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
                     margin: EdgeInsets.only(left: 9.w, right: 9.w),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(28.r),
-                        color: Colors.grey.shade300),
+                        color: Colors.grey.shade200),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 2.h),
