@@ -308,22 +308,14 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           inputBorder: InputBorder.none,
                           // onSaved: (PhoneNumber number) {},
                         ),
-                        // EditForm(
-                        //     autovalidateMode:
-                        //         AutovalidateMode.onUserInteraction,
-                        //     labelText: 'Phone Number',
-                        //     keyboardType: TextInputType.number,
-                        //     controller: phoneNoCountroller,
-                        //     obscureText: false,
-                        //     validator: (value) => validatePhoneNumber(value)),
                         Space(20.h),
                         DateTimePicker(
                           controller: dobCountroller,
                           type: DateTimePickerType.date,
                           dateMask: 'MM-dd-yyyy',
 
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(3100),
                           // icon: Icon(Icons.event),
                           dateLabelText: 'Date of Birth',
 
@@ -336,27 +328,6 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             return null;
                           },
                         ),
-                        // Builder(
-                        //   builder: (ctx) {
-                        //     final now = DateTime.now();
-                        //     return DateFormField(
-                        //       hint: 'Date of Birth',
-                        //       context: context,
-                        //       defaultPickerDate: DateTime(now.year - 16),
-                        //       maxDateTime: DateTime(now.year - 16),
-                        //       onChanged: (date) {
-                        //         dobCountroller.text =
-                        //             (DateFormat('MM-dd-yyyy').format(date))
-                        //                 .split(" ")
-                        //                 .first;
-                        //       },
-                        //       validator: (date) {
-                        //         // if (date == null) return 'Date is required';
-                        //         return null;
-                        //       },
-                        //     );
-                        //   },
-                        // ),
                       ],
                     ),
                   ),

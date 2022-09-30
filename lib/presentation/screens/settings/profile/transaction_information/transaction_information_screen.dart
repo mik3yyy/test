@@ -75,32 +75,12 @@ class _TransactionInformationScreenState
                 padding: EdgeInsets.only(left: 23.w, right: 23.w, top: 30.h),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 70.h,
-                          width: 20,
-                          color: AppColors.appColor.withOpacity(0.2),
-                        ),
-                        Container(
-                          height: 70.h,
-                          width: 300,
-                          // width: MediaQuery.of(context).size.width,
-                          color: AppColors.appColor.withOpacity(0.1),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 7.5,
-                            ),
-                            child: Center(
-                              child: Text(
-                                'You can add a maximum of 3 cards',
-                                style: AppText.body2Medium(
-                                    context, Colors.black54, 20.sp),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    Center(
+                      child: Text(
+                        'You can add a maximum of 3 cards',
+                        style:
+                            AppText.body2Medium(context, Colors.black54, 20.sp),
+                      ),
                     ),
                     Space(30.h),
                     InkWell(

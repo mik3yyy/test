@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_success_event.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -42,11 +43,12 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
       if (value is Success<bool>) {
         if (value.value == true) {
-          ref.refresh(providers);
           context.loaderOverlay.hide();
 
           successAlart(
               context, "Your Transaction Pin has been set", "Continue");
+          ref.refresh(getAccountDetailsProvider);
+          ref.refresh(userProfileProvider);
         }
       }
 

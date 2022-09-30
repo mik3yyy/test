@@ -3,6 +3,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/user_db_implementation.dart';
@@ -83,7 +84,8 @@ class ProfileRepository extends IProfileManager {
 
 // upload Id
   @override
-  Future<bool> updateId(String filePath, String idType, String idNo) async {
+  Future<UploadIdRes> updateId(
+      String filePath, String idType, String idNo) async {
     final res = await _profileService.updateId(filePath, idType, idNo);
     return res;
   }

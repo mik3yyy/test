@@ -33,7 +33,6 @@ class Navigation extends HookConsumerWidget {
               comingSoon: false,
               image: AppImage.myProfile,
               onPressed: () {
-                // context.navigate(const MyProfile());
                 pushNewScreen(context,
                     withNavBar: true,
                     screen: const MyProfile(),

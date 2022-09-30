@@ -14,13 +14,13 @@ import 'package:kayndrexsphere_mobile/presentation/components/extension/string_e
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/available_wallet.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -150,7 +150,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           children: [
                             defaultWallet.maybeWhen(data: (data) {
                               return Text(
-                                '${currencyName(data.data.defaultWallet.currencyCode.toString())} wallet',
+                                '${data.data.defaultWallet.currencyCode.toString()} wallet',
                                 style: AppText.header2(
                                     context, AppColors.appColor, 18.sp),
                               );
@@ -198,7 +198,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             : Text(
                                 defaultWallet.maybeWhen(
                                     data: (v) =>
-                                        '${currencySymbol(v.data.defaultWallet.currencyCode.toString())} ${formatter.format(v.data.defaultWallet.balance)}',
+                                        '${v.data.defaultWallet.currencyCode.toString()} ${formatter.format(v.data.defaultWallet.balance)}',
                                     orElse: () => '----'),
                                 style: AppText.header1(
                                     context, AppColors.appColor, 40.sp),
@@ -404,7 +404,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               success: (data) {
                                 if (data!.data!.transactions.isEmpty) {
                                   return const Center(
-                                    child: Text("You have no transactions"),
+                                    child: Text("No transaction History"),
                                   );
                                 } else {
                                   return RefreshIndicator(
@@ -528,6 +528,7 @@ class TransactionBuild extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime date = transactions.createdAt!;
     String dateCreated = DateFormat(' d, MMM yyyy').format(date);
+    String formattedTime = DateFormat('kk:mm:a').format(date);
     var formatter = NumberFormat("#,##0.00");
     String currencyCode() {
       if (transactions.currencyCode == CurrencyCode.eur) {
@@ -546,86 +547,109 @@ class TransactionBuild extends StatelessWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: const Offset(0, 2), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 60.h,
-            width: 60.w,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Colors.orange.withOpacity(0.3)),
-            child: Center(
-              child: SvgPicture.asset(
-                AppImage.transferIcon,
-                height: 20.h,
-                width: 20.w,
+    String direction() {
+      if (transactions.direction == Direction.credit) {
+        return "Credit";
+      } else {
+        return 'Debit';
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        AppDialog.showDetailsDialog(
+          context,
+          transactionType: direction(),
+          status: "",
+          accountName: transactions.user!.firstName.toString(),
+          accountNo: transactions.user!.accountNumber.toString(),
+          amount: "${currencyCode()} ${formatter.format(transactions.amount)}",
+          date: "$dateCreated,  $formattedTime",
+          reference: transactions.transactionRef.toString(),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: const Offset(0, 2), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 60.h,
+              width: 60.w,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.orange.withOpacity(0.3)),
+              child: Center(
+                child: SvgPicture.asset(
+                  AppImage.transferIcon,
+                  height: 20.h,
+                  width: 20.w,
+                ),
               ),
             ),
-          ),
-          Space(10.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (transactions.direction == Direction.debit) ...[
-                  Row(
-                    children: [
-                      Text(
-                        'Debit',
-                        style: AppText.body2(context, Colors.red, 18.sp),
-                      ),
-                      const Spacer(),
-                      Text(
-                        "${currencyCode()} ${formatter.format(transactions.amount)}",
-                        style: AppText.body2(context, Colors.red, 18.sp),
-                      ),
-                    ],
-                  ),
-                ] else ...[
-                  Row(
-                    children: [
-                      Text(
-                        "Credit",
-                        style: AppText.body2(context, Colors.green, 18.sp),
-                      ),
-                      const Spacer(),
-                      Text(
-                        "${currencyCode()} ${formatter.format(transactions.amount)}",
-                        style: AppText.body2(context, Colors.green, 18.sp),
-                      ),
-                    ],
-                  ),
-                ],
-                Space(10.h),
-                Row(
-                  children: [
-                    Text(
-                      transactions.user!.firstName.toString(),
-                      style: AppText.body2(context, Colors.black, 18.sp),
+            Space(10.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (transactions.direction == Direction.debit) ...[
+                    Row(
+                      children: [
+                        Text(
+                          'Debit',
+                          style: AppText.body2(context, Colors.red, 18.sp),
+                        ),
+                        const Spacer(),
+                        Text(
+                          "${currencyCode()} ${formatter.format(transactions.amount)}",
+                          style: AppText.body2(context, Colors.red, 18.sp),
+                        ),
+                      ],
                     ),
-                    const Spacer(),
-                    Text(
-                      dateCreated,
-                      style: AppText.body2(context, Colors.black, 18.sp),
+                  ] else ...[
+                    Row(
+                      children: [
+                        Text(
+                          "Credit",
+                          style: AppText.body2(context, Colors.green, 18.sp),
+                        ),
+                        const Spacer(),
+                        Text(
+                          "${currencyCode()} ${formatter.format(transactions.amount)}",
+                          style: AppText.body2(context, Colors.green, 18.sp),
+                        ),
+                      ],
                     ),
                   ],
-                )
-              ],
-            ),
-          )
-        ],
+                  Space(10.h),
+                  Row(
+                    children: [
+                      Text(
+                        transactions.user!.firstName.toString(),
+                        style: AppText.body2(context, Colors.black, 18.sp),
+                      ),
+                      const Spacer(),
+                      Text(
+                        dateCreated,
+                        style: AppText.body2(context, Colors.black, 18.sp),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

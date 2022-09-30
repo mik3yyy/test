@@ -21,17 +21,3 @@ final fetchSinglePost = FutureProvider.autoDispose
 
   return await fetchSinglePostRepository.fetchSinglePost(postId);
 });
-// finPostVm =
-//     StateNotifierProvider.autoDispose<GetPostVM, RequestState<GetPostsRes>>(
-//   (ref) => GetPostVM(ref),
-// );
-
-// class GetPostVM extends RequestStateNotifier<GetPostsRes> {
-//   final ForumRepo _forumRepo;
-
-//   GetPostVM(Ref ref) : _forumRepo = ref.read(forumManagerProvider) {
-//     getTop10Posts();
-//   }
-
-//   void getTop10Posts() => makeRequest(() => _forumRepo.getTop10Posts());
-// }

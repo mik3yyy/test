@@ -1,3 +1,4 @@
+// import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,6 +128,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                           final password = await ref
                               .read(credentialProvider.notifier)
                               .getCredential(Constants.userPassword);
+                          print(password);
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userEmail,
                               user == null ? "" : user.data.user.email!
@@ -141,9 +143,9 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                             message: 'Please restart the app for this changes',
                           );
 
-                          ref
-                              .read(credentialProvider.notifier)
-                              .deleteCredential(Constants.userPassword);
+                          // ref
+                          //     .read(credentialProvider.notifier)
+                          //     .deleteCredential(Constants.userPassword);
                           // print("false");
                         }
                       }),

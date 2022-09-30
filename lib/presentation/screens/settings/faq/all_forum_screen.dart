@@ -83,9 +83,6 @@ class AllForumScreen extends HookConsumerWidget {
                               shrinkWrap: true,
                               itemCount: postSearchInput.value!.length,
                               itemBuilder: (context, index) {
-                                // DateTime date = data.data!.posts![index].createdAt!;
-                                // String dateCreated =
-                                //     DateFormat(' d, MMM yyyy').format(date);
                                 final post = postSearchInput.value![index];
                                 return InkWell(
                                   onTap: () {

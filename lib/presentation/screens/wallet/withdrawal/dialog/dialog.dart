@@ -101,6 +101,102 @@ class AppDialog {
         });
   }
 
+  static void showDetailsDialog(
+    BuildContext context, {
+    required String transactionType,
+    required String accountNo,
+    required String accountName,
+    required String amount,
+    required String reference,
+    required String status,
+    required String date,
+  }) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(left: 20.w, right: 20.w),
+            child: CupertinoActionSheet(
+              actions: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 30.w, right: 5.w, top: 30.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            "assets/images/logo_foreground.png",
+                            scale: 20,
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            "Transaction Detail",
+                            style:
+                                AppText.body2Bold(context, Colors.black, 20.sp),
+                          ),
+                        ),
+                        Space(40.h),
+                        Text(
+                          "Transaction type : $transactionType",
+                          style: AppText.body2(context, Colors.black, 18.sp),
+                        ),
+                        if (accountNo.isEmpty) ...[
+                          const SizedBox.shrink()
+                        ] else ...[
+                          Space(25.h),
+                          Text(
+                            "Credit account : $accountNo",
+                            style: AppText.body2(context, Colors.black, 18.sp),
+                          ),
+                          Space(25.h),
+                          Text(
+                            "Payment from : $accountName",
+                            style: AppText.body2(context, Colors.black, 18.sp),
+                          ),
+                        ],
+                        Space(25.h),
+                        Text(
+                          "Amount : $amount",
+                          style: AppText.body2(context, Colors.black, 18.sp),
+                        ),
+                        if (status.isEmpty) ...[
+                          const SizedBox.shrink()
+                        ] else ...[
+                          Space(25.h),
+                          Text(
+                            "Status : $status",
+                            style: AppText.body2(context, Colors.black, 18.sp),
+                          ),
+                        ],
+                        Space(25.h),
+                        Text(
+                          "Reference : $reference",
+                          style: AppText.body2(context, Colors.black, 18.sp),
+                        ),
+                        Space(20.h),
+                        Text(
+                          "Date : $date",
+                          style: AppText.body2(context, Colors.black, 18.sp),
+                        ),
+                        Space(40.h),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: const Text("Close"),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          );
+        });
+  }
+
   static void showErrorMessageDialog(BuildContext context, String message) {
     showCupertinoModalPopup(
         context: context,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
@@ -28,12 +27,21 @@ class DeactivateAccount extends StatefulHookConsumerWidget {
 
 class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
   final formKey = GlobalKey<FormState>();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
   bool obscure = true;
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    reasonController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final deactivate = ref.watch(deactivateAccountProvider);
-    final passwordController = useTextEditingController();
-    final reasonController = useTextEditingController();
 
     ref.listen<RequestState>(deactivateAccountProvider, (_, state) {
       if (state is Loading) {
@@ -139,12 +147,13 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
                       ? null
                       : () {
                           if (formKey.currentState!.validate()) {
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
                             ref
                                 .read(deactivateAccountProvider.notifier)
                                 .deactivateAccount(passwordController.text,
                                     reasonController.text);
-
-                            // context.loaderOverlay.show();
                           }
                         },
                   buttonWidth: MediaQuery.of(context).size.width,
