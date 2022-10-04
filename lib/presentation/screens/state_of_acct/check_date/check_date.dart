@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 String timeAgoSinceDate(String dateString, {bool numericDates = true}) {
   DateTime date = DateTime.parse(dateString);
   final date2 = DateTime.now();
@@ -31,4 +33,11 @@ String timeAgoSinceDate(String dateString, {bool numericDates = true}) {
     return (numericDates) ? '1 year ago' : 'Last year';
   }
   return '${(difference.inDays / 365).floor()} years ago';
+}
+
+String formatDate(String value) {
+  final format = DateTime.parse(value);
+
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  return formatter.format(format);
 }

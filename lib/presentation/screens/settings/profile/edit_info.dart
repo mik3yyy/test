@@ -8,6 +8,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
@@ -119,17 +120,8 @@ class _EditInfoState extends ConsumerState<EditInfo> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(
-            'Edit Account',
-            style: AppText.header2(context, Colors.black, 20.sp),
-          ),
-          leading: InkWell(
-            onTap: (() => Navigator.pop(context)),
-            child: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
+          title: const AppBarTitle(title: "Edit Account", color: Colors.black),
+          leading: const BackButton(color: Colors.black),
           actions: [
             Padding(
               padding: EdgeInsets.only(top: 20.h, right: 20.w),

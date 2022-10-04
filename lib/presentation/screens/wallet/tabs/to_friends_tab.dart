@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/verify_acc
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
@@ -372,7 +373,7 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   // ),
                   Space(20.h),
                   CustomButton(
-                      buttonText: 'Transfer',
+                      buttonText: buttonText(context, "Transfer"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

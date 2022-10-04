@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/add_card_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/get_card_vm.dart';
@@ -39,17 +40,9 @@ class _TransactionInformationScreenState
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'Transaction Information',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            color: Colors.black,
-          ),
-        ),
+        title: const AppBarTitle(
+            title: "Transaction Information", color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,

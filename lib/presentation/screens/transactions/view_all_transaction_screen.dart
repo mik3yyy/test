@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 
@@ -14,18 +14,12 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
     final transactionsVm = ref.watch(walletTransactionProvider);
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: AppColors.textColor,
-          ),
+        leading: const BackButton(
+          color: Colors.black,
         ),
         centerTitle: true,
-        title: Text(
-          'All Transactions',
-          style: AppText.header3(context, AppColors.textColor, 20.sp),
-        ),
+        title:
+            const AppBarTitle(title: "All Transactions", color: Colors.black),
         elevation: 0,
         backgroundColor: AppColors.whiteColor,
       ),

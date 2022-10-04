@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/beneficiary_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/shared/route_name.dart';
@@ -34,21 +35,13 @@ class _WithdrawalMethodScreenState
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: AppBar(
+        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'Withdrawal',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            color: Colors.black,
-          ),
-        ),
+        centerTitle: true,
         automaticallyImplyLeading: false,
-        elevation: 0,
+        leading: const BackButton(color: Colors.black),
+        title: const AppBarTitle(title: 'Withdraw', color: Colors.black),
       ),
       body: SafeArea(
         child: Column(

@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/resend_otp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/verify_account_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
@@ -187,7 +188,9 @@ class _PinOTPScreenState extends ConsumerState<PinOTPScreen> {
                       padding: EdgeInsets.only(left: 20.w, right: 20.w),
                       child: CustomButton(
                         buttonWidth: double.infinity,
-                        buttonText: vm is Loading ? "Verifying..." : "Proceed",
+                        buttonText: vm is Loading
+                            ? loading()
+                            : buttonText(context, "Proceed"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,
                         textColor: Colors.white,

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
@@ -36,7 +37,6 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProfileProvider).value;
-    // final user = locator.get<ProfileRes>();
     final toggle = ref.watch(toggleStateProvider.state);
     final togglePin = ref.watch(togglePinStateProvider.state);
     final setPin = ref.watch(setPinStateProvider.state);
@@ -45,17 +45,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'Security',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            color: Colors.black,
-          ),
-        ),
+        title: const AppBarTitle(title: "Security", color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -128,7 +119,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                           final password = await ref
                               .read(credentialProvider.notifier)
                               .getCredential(Constants.userPassword);
-                          print(password);
+
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userEmail,
                               user == null ? "" : user.data.user.email!

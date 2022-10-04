@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
@@ -200,7 +201,7 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                     ),
                     Space(20.h),
                     CustomButton(
-                        buttonText: 'Transfer',
+                        buttonText: buttonText(context, "Transfer"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,
                         textColor: Colors.white,

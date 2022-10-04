@@ -32,7 +32,7 @@ class SuccessScreen extends StatelessWidget {
             Space(170.h),
             CustomButton(
               buttonWidth: double.infinity,
-              buttonText: 'Sign In',
+              buttonText: buttonText(context, "Done"),
               bgColor: AppColors.appColor,
               borderColor: AppColors.appColor,
               textColor: Colors.white,

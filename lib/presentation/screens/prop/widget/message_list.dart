@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/chat_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/message_model.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -52,7 +50,7 @@ class MessageList extends StatelessWidget {
                 Space(12.w),
                 GestureDetector(
                   onTap: () {
-                    context.navigate(ChatScreen(user: chat.sender));
+                    // context.navigate(ChatScreen(user: chat.sender));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

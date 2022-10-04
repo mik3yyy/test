@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/language.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
@@ -170,7 +171,9 @@ class CurrencyScreen extends HookConsumerWidget {
                     Space(190.h),
                     CustomButton(
                       buttonWidth: 244.w,
-                      buttonText: vm is Loading ? "Proceeding..." : "Proceed",
+                      buttonText: vm is Loading
+                          ? loading()
+                          : buttonText(context, "Process"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

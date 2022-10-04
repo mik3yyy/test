@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
@@ -180,7 +181,9 @@ class _AddressAuthenicationState extends ConsumerState<AddressAuthenication> {
                     ),
                     const Space(70),
                     CustomButton(
-                        buttonText: authorize.loading ? 'Processing' : 'Next',
+                        buttonText: authorize.loading
+                            ? loading()
+                            : buttonText(context, "Next"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,
                         textColor: Colors.white,

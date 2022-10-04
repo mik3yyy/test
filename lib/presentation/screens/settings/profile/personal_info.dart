@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,6 +46,28 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
     return Scaffold(
       backgroundColor: AppColors.appColor,
+      appBar: AppBar(
+        elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        leading: const BackButton(color: Colors.white),
+        actions: [
+          TextButton(
+              child: Text(
+                'Edit',
+                style: AppText.body2(context, Colors.white, 20.sp),
+              ),
+              onPressed: () {
+                pushNewScreen(context,
+                    screen: EditInfo(
+                      userValue: userValue!,
+                    ),
+                    pageTransitionAnimation: PageTransitionAnimation.fade);
+              }),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -55,32 +78,32 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
               child: Column(
                 children: [
                   Space(5.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: (() => Navigator.pop(context)),
-                        child: const Icon(
-                          Icons.arrow_back_ios_outlined,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Spacer(),
-                      TextButton(
-                          child: Text(
-                            'Edit',
-                            style: AppText.body2(context, Colors.white, 20.sp),
-                          ),
-                          onPressed: () {
-                            pushNewScreen(context,
-                                screen: EditInfo(
-                                  userValue: userValue!,
-                                ),
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.fade);
-                          }),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     InkWell(
+                  //       onTap: (() => Navigator.pop(context)),
+                  //       child: const Icon(
+                  //         Icons.arrow_back_ios_outlined,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //     const Spacer(),
+                  //     TextButton(
+                  //         child: Text(
+                  //           'Edit',
+                  //           style: AppText.body2(context, Colors.white, 20.sp),
+                  //         ),
+                  //         onPressed: () {
+                  //           pushNewScreen(context,
+                  //               screen: EditInfo(
+                  //                 userValue: userValue!,
+                  //               ),
+                  //               pageTransitionAnimation:
+                  //                   PageTransitionAnimation.fade);
+                  //         }),
+                  //   ],
+                  // ),
                   const ProfileImage(
                     ignoreClick: false,
                     hasIcon: true,

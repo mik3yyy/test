@@ -72,13 +72,7 @@ class _TransferState extends ConsumerState<Transfer>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: (() => Navigator.pop(context)),
-                          child: const Icon(
-                            Icons.arrow_back_ios_outlined,
-                            color: Colors.white,
-                          ),
-                        ),
+                        const BackButton(color: Colors.white),
                         Space(15.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

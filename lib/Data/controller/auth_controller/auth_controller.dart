@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/auth_controller/auth_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
 
 enum AuthenticationStatus {
   unknown,
@@ -12,14 +11,13 @@ enum AuthenticationStatus {
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, AuthState>((ref) {
-  final authRepository = ref.watch(authManagerProvider);
+  // final authRepository = ref.watch(authManagerProvider);
 
-  return AuthController(authRepository);
+  return AuthController();
 });
 
 class AuthController extends StateNotifier<AuthState> {
-  final AuthManager _authManager;
-  AuthController(this._authManager, [AuthState? state])
+  AuthController([AuthState? state])
       : super(state ?? const AuthUnauthenticated()) {
     auth(AuthenticationStatus.unknown);
   }

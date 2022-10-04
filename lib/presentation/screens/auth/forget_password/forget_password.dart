@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forgot_password_otp.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/forgot_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -91,13 +92,13 @@ class ForgotPasswordScreen extends HookConsumerWidget {
 
                     // phone number or email
                     TextFormInput(
-                      labelText: 'Email Address or Phone Number',
+                      labelText: 'Email Address',
                       capitalization: TextCapitalization.none,
                       controller: controller,
                       focusNode: fieldFocusNode,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Email address or Phone Number is required";
+                          return "Email address is required";
                         }
                         // if (!RegExp(
                         //         "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
@@ -113,7 +114,9 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                     Space(260.h),
                     CustomButton(
                       buttonWidth: double.infinity,
-                      buttonText: vm is Loading ? "Sending OTP..." : "Send",
+                      buttonText: vm is Loading
+                          ? loading()
+                          : buttonText(context, "Send"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

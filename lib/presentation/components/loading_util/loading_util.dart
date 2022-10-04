@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/success_modal_view.dart';
 
 class ScreenView {
   static void showLoadingView(BuildContext context) {
@@ -48,16 +49,15 @@ class ScreenView {
   //       textLabel: textLabel));
   // }
 
-  // static void showErrorDialog(
-  //   BuildContext context,
-  //   String message, {
-  //   String buttonText = "Try again",
-  //   VoidCallback? buttonClicked,
-  // }) {
-  //   HapticFeedback.mediumImpact();
-  //   Navigator.of(context).push(MzErrorDialog(message,
-  //       buttonClicked: buttonClicked, buttonText: buttonText));
-  // }
+  static void showPinSuccessDialog(
+    BuildContext context,
+    String message, {
+    String buttonText = "Continue",
+    VoidCallback? buttonClicked,
+  }) {
+    Navigator.of(context).push(SuccessDialog(message,
+        buttonClicked: buttonClicked, buttonText: buttonText));
+  }
 
   // static void showDialog(BuildContext context, Route dialog) {
   //   HapticFeedback.mediumImpact();

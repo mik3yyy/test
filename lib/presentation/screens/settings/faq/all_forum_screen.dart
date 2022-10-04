@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/add_new_post_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/view_single_post_screen.dart';
@@ -186,7 +187,7 @@ class AllForumScreen extends HookConsumerWidget {
                                 PageTransitionAnimation.fade,
                           );
                         },
-                        buttonText: 'Add a Post',
+                        buttonText: buttonText(context, "Add a Post"),
                         bgColor: AppColors.appColor,
                         textColor: AppColors.whiteColor,
                         buttonWidth: MediaQuery.of(context).size.width,

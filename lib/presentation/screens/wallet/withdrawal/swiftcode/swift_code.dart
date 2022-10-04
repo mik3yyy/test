@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/sepa/sepa
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
@@ -671,8 +672,9 @@ class _SepaViewState extends ConsumerState<SepaView> {
           // ),
           Space(20.h),
           CustomButton(
-              buttonText:
-                  sepa is Loading ? "Processing ..." : 'Withdraw to bank',
+              buttonText: sepa is Loading
+                  ? loading()
+                  : buttonText(context, "Withdraw to Bank"),
               bgColor: AppColors.appColor,
               borderColor: AppColors.appColor,
               textColor: Colors.white,

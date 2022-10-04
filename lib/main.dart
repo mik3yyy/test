@@ -25,9 +25,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeCore(environment: Environment.production);
+  await initializeCore(environment: Environment.staging);
   await initSentry(
-      environment: Environment.production,
+      environment: Environment.staging,
       runApp: () => runApp(const ProviderScope(child: MyApp())));
 }
 
@@ -39,7 +39,7 @@ class MyApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appSession = ref.watch(appSessionConfigProvider);
     //* Agba refactor this code biko
-    eventBus.on<ErrorState>().listen((event) async {
+    eventBus.on<UnAuthenticated>().listen((event) async {
       final result = await showOkAlertDialog(
         context: navigator.key.currentContext!,
         title: 'Expired session',

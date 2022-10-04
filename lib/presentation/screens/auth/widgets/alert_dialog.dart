@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
-import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
@@ -42,17 +39,17 @@ Future<dynamic> successAlart(
               style: AppText.body4(context, AppColors.appColor),
             ),
             Space(24.h),
-            GestureDetector(
-              onTap: () => navigator.key.currentContext!
-                  .navigate(MainScreen(menuScreenContext: context)),
-              child: CustomButton(
-                buttonText: buttonText,
-                bgColor: AppColors.appColor,
-                textColor: AppColors.whiteColor,
-                buttonWidth: double.infinity,
-                borderColor: AppColors.appColor,
-              ),
-            )
+            // GestureDetector(
+            //   onTap: () => navigator.key.currentContext!
+            //       .navigate(MainScreen(menuScreenContext: context)),
+            //   child: CustomButton(
+            //     buttonText: buttonText(context, "Sign in"),
+            //     bgColor: AppColors.appColor,
+            //     textColor: AppColors.whiteColor,
+            //     buttonWidth: double.infinity,
+            //     borderColor: AppColors.appColor,
+            //   ),
+            // )
           ],
         ),
       ),

@@ -1,11 +1,23 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/check_date/check_date.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/statement_acct_range_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/credit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/debit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/view_all.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/vm/get_range/get_range_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../components/app text theme/app_text_theme.dart';
@@ -30,21 +42,34 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
 
   @override
   Widget build(BuildContext context) {
+    final startDate = useTextEditingController();
+    final endDate = useTextEditingController();
+    final range = ref.watch(accountRangeProvider);
+
+    ref.listen<RequestState>(accountRangeProvider, (prev, value) {
+      if (value is Loading<StatementOfAccount>) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
+      if (value is Success<StatementOfAccount>) {
+        pushNewScreen(context,
+            screen: StatementRangeAccount(
+              statement: value.value!.data,
+            ));
+      }
+
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'E-Wallet Account History',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
+        title: const AppBarTitle(
+            title: "E-Wallet Account History", color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -53,17 +78,69 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
         child: Padding(
           padding: const EdgeInsets.only(left: 23, right: 23),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Space(20),
-              //** FIX THIS LATER ON */
-              // SearchBox(
-              //   hintText: "Search date (dd/mm/yyyy)",
-              //   onTextEntered: (value) {
-              //     // ref.read(currencySearchQueryStateProvider.notifier).state =
-              //     //     value;
-              //   },
-              // ),
-              const Space(30),
+              Row(
+                children: [
+                  Text(
+                    'Select Range',
+                    style: AppText.header2(context, Colors.black, 20.sp),
+                  ),
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: TextButton(
+                        onPressed: () {
+                          if ((startDate.text.isEmpty) ||
+                              (endDate.text.isEmpty)) {
+                            return;
+                          } else {
+                            var statementReq = StatementReq(
+                                fromDate: formatDate(startDate.text),
+                                toDate: formatDate(endDate.text));
+                            ref
+                                .read(accountRangeProvider.notifier)
+                                .getRange(statementReq);
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: AppColors.appColor,
+                          onSurface: AppColors.appColor,
+                        ),
+                        child: range is Loading
+                            ? const SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ))
+                            : Text(
+                                'Get range',
+                                style: AppText.header2(
+                                    context, Colors.white, 15.sp),
+                              )),
+                  ),
+                ],
+              ),
+              const Space(20),
+              Row(
+                children: [
+                  KYDatePicker(
+                    controller: startDate,
+                    hint: "Start date",
+                    onTextEntered: (String value) {},
+                  ),
+                  const Spacer(),
+                  KYDatePicker(
+                    controller: endDate,
+                    hint: "End date",
+                    onTextEntered: (String value) {},
+                  ),
+                ],
+              ),
+              const Space(20),
               Stack(
                 children: [
                   Container(
@@ -133,6 +210,57 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class KYDatePicker extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  // final FocusNode focusNode;
+  final ValueChanged<String> onTextEntered;
+  const KYDatePicker(
+      {Key? key,
+      required this.controller,
+      required this.hint,
+      required this.onTextEntered})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.42,
+      child: DateTimePicker(
+        controller: controller,
+        type: DateTimePickerType.date,
+        dateMask: 'dd-MM-yyyy',
+        firstDate: DateTime(1900),
+        lastDate: DateTime(3100),
+        decoration: InputDecoration(
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(3),
+          ),
+          focusColor: AppColors.appBgColor,
+          filled: true,
+          fillColor: AppColors.appBgColor,
+          hintText: hint,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText2
+              ?.copyWith(color: Colors.grey),
+          border: InputBorder.none,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+        ),
+        onChanged: onTextEntered,
+        validator: (val) {
+          // if (val!.isEmpty) {
+          //   return "select date";
+          // }
+
+          return null;
+        },
       ),
     );
   }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../app text theme/app_text_theme.dart';
-
 class CustomButton extends StatelessWidget {
-  final String buttonText;
+  final Widget buttonText;
   final Color bgColor;
   final Color? borderColor;
   final Color textColor;
@@ -39,10 +37,7 @@ class CustomButton extends StatelessWidget {
         ),
         onPressed: onPressed,
         child: Center(
-          child: Text(
-            buttonText,
-            style: AppText.header1(context, Colors.white, 20.sp),
-          ),
+          child: buttonText,
         ),
       ),
     );

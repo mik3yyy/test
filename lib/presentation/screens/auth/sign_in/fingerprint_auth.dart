@@ -58,8 +58,8 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
   Future<bool> hasBiometrics() async {
     try {
       final hasBiometric = await auth.canCheckBiometrics;
-      final List<BiometricType> availableBiometrics =
-          await auth.getAvailableBiometrics();
+      // final  availableBiometrics =
+      //     await auth.getAvailableBiometrics();
 
       if (!mounted) return false;
       // print(hasBiometric);

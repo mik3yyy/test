@@ -5,6 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -16,7 +20,6 @@ import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
 import '../../../components/text field/text_form_field.dart';
 import '../vm/set_transaction_pin_vm.dart';
-import '../widgets/alert_dialog.dart';
 
 class TransactionPinScreen extends StatefulHookConsumerWidget {
   const TransactionPinScreen({Key? key}) : super(key: key);
@@ -42,13 +45,17 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
     final confirmPinController = useTextEditingController();
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
       if (value is Success<bool>) {
+        ref.refresh(getAccountDetailsProvider);
+        ref.refresh(userProfileProvider);
         if (value.value == true) {
           context.loaderOverlay.hide();
-
-          successAlart(
-              context, "Your Transaction Pin has been set", "Continue");
-          ref.refresh(getAccountDetailsProvider);
-          ref.refresh(userProfileProvider);
+          ScreenView.showPinSuccessDialog(
+              context, "Your Transaction Pin has been set",
+              buttonText: "Continue", buttonClicked: () {
+            Navigator.pop(context);
+            navigator.key.currentContext!
+                .navigate(MainScreen(menuScreenContext: context));
+          });
         }
       }
 
@@ -165,7 +172,9 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
 
                       CustomButton(
                         buttonWidth: double.infinity,
-                        buttonText: vm is Loading ? "Please wait" : 'Set PIN',
+                        buttonText: vm is Loading
+                            ? loading()
+                            : buttonText(context, "Set Pin"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,
                         textColor: Colors.white,

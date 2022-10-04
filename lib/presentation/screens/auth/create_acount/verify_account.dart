@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_password.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/verify_account_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -160,7 +161,9 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     Space(160.h),
                     CustomButton(
                       buttonWidth: 244.w,
-                      buttonText: vm is Loading ? "Verifying..." : "Proceed",
+                      buttonText: vm is Loading
+                          ? loading()
+                          : buttonText(context, "Process"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

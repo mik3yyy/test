@@ -4,6 +4,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/invite%20friend/widget/contact_list_build.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_custom_text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -38,7 +39,7 @@ class ShareWithPhoneContactScreen extends StatelessWidget {
                 ),
                 CustomButton(
                   borderColor: AppColors.whiteColor,
-                  buttonText: 'Invite',
+                  buttonText: buttonText(context, "Invite"),
                   bgColor: Colors.transparent,
                   textColor: AppColors.whiteColor,
                   buttonWidth: 66.w,

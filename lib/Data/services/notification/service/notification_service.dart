@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/res/get_notification.dart';
@@ -18,13 +19,26 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 
+final cacheProvider =
+    Provider((ref) => MemCacheStore(maxSize: 10485760, maxEntrySize: 1048576));
+final cacheOptions = Provider((ref) => CacheOptions(
+      store: ref.watch(cacheProvider),
+      hitCacheOnErrorExcept: [],
+      priority: CachePriority.normal,
+      maxStale: const Duration(days: 2),
+      // for offline behaviour
+    ));
+
 class NotificationService {
   final Reader _read;
   final Ref ref;
   NotificationService(this._read, this.ref) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      PrettyDioLogger(),
+      DioCacheInterceptor(options: ref.watch(cacheOptions)),
+    ]);
   }
 
   // get Notification
@@ -32,9 +46,13 @@ class NotificationService {
     const url = '/notifications';
 
     try {
-      final response = await _read(dioProvider).get(
-        url,
-      );
+      final response = await _read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions());
       final result = GetNotification.fromJson(response.data);
 
       return result;
@@ -52,9 +70,13 @@ class NotificationService {
     const url = '/payments/withdrawals';
 
     try {
-      final response = await _read(dioProvider).get(
-        url,
-      );
+      final response = await _read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions());
       final result = GetWithdrawalReq.fromJson(response.data);
 
       return result;

@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/pin_otp.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/forgot_pin_vm.dart';
@@ -108,13 +109,13 @@ class ForgotTransactionPin extends HookConsumerWidget {
                       child: Column(
                         children: [
                           TextFormInput(
-                            labelText: 'Email Address or Phone Number',
+                            labelText: 'Email Address',
                             controller: controller,
                             capitalization: TextCapitalization.none,
                             focusNode: fieldFocusNode,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Email address or phone number is required";
+                                return "Email address is required";
                               }
                               // if (!RegExp(
                               //         "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
@@ -129,8 +130,9 @@ class ForgotTransactionPin extends HookConsumerWidget {
                           Space(260.h),
                           CustomButton(
                             buttonWidth: double.infinity,
-                            buttonText:
-                                vm is Loading ? "Sending OTP..." : "Send",
+                            buttonText: vm is Loading
+                                ? loading()
+                                : buttonText(context, "Send"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
@@ -146,8 +148,6 @@ class ForgotTransactionPin extends HookConsumerWidget {
                                       ref
                                           .read(forgotPinProvider.notifier)
                                           .forgotPin(controller.text);
-
-                                      // context.loaderOverlay.show();
                                     }
                                   },
                           ),

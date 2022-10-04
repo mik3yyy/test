@@ -9,7 +9,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deac
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/transaction_information_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/upload_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -34,29 +33,20 @@ class _MyProfileState extends ConsumerState<MyProfile> {
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
           backgroundColor: AppColors.appColor,
+          appBar: AppBar(
+            elevation: 0.0,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            leading: const BackButton(color: Colors.white),
+          ),
           body: SafeArea(
             bottom: false,
             child: Column(
               children: [
-                const Space(10),
                 Column(
                   children: [
-                    Space(20.h),
-                    Row(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Space(15),
-                        InkWell(
-                          onTap: (() => Navigator.pop(context)),
-                          child: const Icon(
-                            Icons.arrow_back_ios_outlined,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Space(15.w),
-                      ],
-                    ),
                     const ProfileImage(
                       hasIcon: false,
                       ignoreClick: false,
@@ -122,28 +112,28 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                             color: Colors.black,
                             thickness: 0.4,
                           ),
-                          Space(30.h),
-                          ProfileCard(
-                            color: Colors.black,
-                            title: 'Transaction information',
-                            subTitle:
-                                'Edit your saved bank /card details Security',
-                            image: AppImage.transaction,
-                            onPressed: () {
-                              pushNewScreen(
-                                context,
-                                withNavBar: false,
-                                screen: const TransactionInformationScreen(),
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
-                              );
-                            },
-                          ),
-                          Space(10.h),
-                          const Divider(
-                            color: Colors.black,
-                            thickness: 0.4,
-                          ),
+                          // Space(30.h),
+                          // ProfileCard(
+                          //   color: Colors.black,
+                          //   title: 'Transaction information',
+                          //   subTitle:
+                          //       'Edit your saved bank /card details Security',
+                          //   image: AppImage.transaction,
+                          //   onPressed: () {
+                          //     pushNewScreen(
+                          //       context,
+                          //       withNavBar: false,
+                          //       screen: const TransactionInformationScreen(),
+                          //       pageTransitionAnimation:
+                          //           PageTransitionAnimation.cupertino,
+                          //     );
+                          //   },
+                          // ),
+                          // Space(10.h),
+                          // const Divider(
+                          //   color: Colors.black,
+                          //   thickness: 0.4,
+                          // ),
                           Space(30.h),
                           ProfileCard(
                             color: Colors.black,

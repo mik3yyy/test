@@ -208,10 +208,10 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           CustomButton(
                             buttonWidth: 280.w,
                             buttonText: vm is Loading
-                                ? 'Authenticating'
+                                ? loading()
                                 : isLoading
-                                    ? 'Authenticating'
-                                    : "Sign in",
+                                    ? loading()
+                                    : buttonText(context, "Sign in"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
@@ -307,4 +307,21 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       ),
     );
   }
+}
+
+Widget buttonText(BuildContext context, String text) {
+  return Text(
+    text,
+    style: AppText.header1(context, Colors.white, 20.sp),
+  );
+}
+
+Widget loading() {
+  return const SizedBox(
+    height: 20,
+    width: 20,
+    child: CircularProgressIndicator(
+      color: Colors.white,
+    ),
+  );
 }
