@@ -173,7 +173,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                     Space(150.h),
                     CustomButton(
                       buttonWidth: double.infinity,
-                      buttonText: 'Continue',
+                      buttonText: buttonText(context, "Continue"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,

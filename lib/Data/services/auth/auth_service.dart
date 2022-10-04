@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -9,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
@@ -22,7 +24,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../model/auth/res/failure_res.dart';
 
 final userServiceProvider = Provider<UserService>((ref) {
-  return UserService((ref.read));
+  return UserService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -30,13 +32,27 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
+final cacheProvider =
+    Provider((ref) => MemCacheStore(maxSize: 10485760, maxEntrySize: 1048576));
+final cacheOptions = Provider((ref) => CacheOptions(
+      store: ref.watch(cacheProvider),
+      hitCacheOnErrorExcept: [],
+      priority: CachePriority.normal,
+      maxStale: const Duration(days: 2),
+      // for offline behaviour
+    ));
 
 class UserService {
   final Reader _read;
-  UserService(this._read) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+  final Ref ref;
+  UserService(this._read, this.ref) {
+    _read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      PrettyDioLogger(),
+      DioCacheInterceptor(options: ref.watch(cacheOptions)),
+    ]);
+
     // _read(dioProvider).interceptors.add(RetryInterceptor(
     //       dio: _read(dioProvider),
     //       logPrint: print, // specify log function (optional)
@@ -185,10 +201,29 @@ class UserService {
   }
 
   //  STATEMENT OF ACCOUNT
+  Future<StatementOfAccount> getAccountRange(StatementReq statementReq) async {
+    const url = '/misc/statement-of-account-ranged';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: statementReq.toJson());
+      final result = StatementOfAccount.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
   Future<StatementOfAccount> statementOfAccount() async {
     const url = '/misc/statement-of-account';
     try {
-      final response = await _read(dioProvider).post(url);
+      final response = await _read(dioProvider).post(
+        url,
+      );
       final result = StatementOfAccount.fromJson(response.data);
       return result;
     } on DioError catch (e) {

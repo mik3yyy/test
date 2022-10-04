@@ -15,6 +15,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/expandable_widget/expanded.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
@@ -262,8 +263,9 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                                     Space(14.h),
                                     CustomButton(
                                       buttonText: convert is Loading
-                                          ? 'Processing'
-                                          : 'Get Exchange Rate',
+                                          ? loading()
+                                          : buttonText(
+                                              context, "Get Exchange Rate"),
                                       bgColor: AppColors.appColor,
                                       textColor: AppColors.whiteColor,
                                       borderColor:

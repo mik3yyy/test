@@ -48,7 +48,7 @@ class _ViewState extends State<View> {
             length: 4,
             controller: _pinKeyboardController,
             onConfirm: (value) {
-              print(value);
+              // print(value);
             },
             onChange: (String? value) {
               _setTextToInput(value!);

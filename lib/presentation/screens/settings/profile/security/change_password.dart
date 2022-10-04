@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/change_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -209,8 +210,9 @@ class ChangePassword extends HookConsumerWidget {
                           ),
                           Space(150.h),
                           CustomButton(
-                              buttonText:
-                                  vn is Loading ? "Please wait ..." : 'Save',
+                              buttonText: vn is Loading
+                                  ? loading()
+                                  : buttonText(context, "Save"),
                               bgColor: AppColors.appColor,
                               borderColor: AppColors.appColor,
                               textColor: Colors.white,

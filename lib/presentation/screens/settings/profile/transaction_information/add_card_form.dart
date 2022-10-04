@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.da
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/address_authentication.dart';
@@ -319,7 +320,8 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 23),
               child: CustomButton(
-                  buttonText: card is Loading ? "Processing" : 'Next',
+                  buttonText:
+                      card is Loading ? loading() : buttonText(context, "Next"),
                   bgColor: AppColors.appColor,
                   borderColor: AppColors.appColor,
                   textColor: Colors.white,

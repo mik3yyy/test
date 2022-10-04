@@ -16,7 +16,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/prof
 import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
@@ -49,14 +48,6 @@ class HomePage extends StatefulHookConsumerWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final toggleAmountProvider =
       StateProvider<bool>((ref) => PreferenceManager.revealBalance);
-  final currency = [
-    "Dollar",
-    "Pounds",
-    "Euro",
-    "Naira",
-  ];
-
-  String setValue = 'Dollar';
 
   @override
   void initState() {
@@ -68,7 +59,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final toggleAmount = ref.watch(toggleAmountProvider.state);
-    final accountNo = ref.watch(signInProvider);
     final transactions = ref.watch(walletTransactionProvider);
     final defaultWallet = ref.watch(userProfileProvider);
     var formatter = NumberFormat("#,##0.00");
@@ -111,7 +101,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Hi ${accountNo.maybeMap(success: (v) => v.value!.data!.user.firstName.capitalize(), orElse: () => '')}',
+                            'Hi ${defaultWallet.maybeMap(data: (v) => v.value.data.user.firstName?.capitalize(), orElse: () => '')}',
                             style:
                                 AppText.header1(context, Colors.white, 25.sp),
                           ),
@@ -205,7 +195,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ),
                         Space(8.h),
                         Text(
-                          'Kayndrexsphere Account Number: ${accountNo.maybeWhen(success: (v) => v!.data!.user.accountNumber, orElse: () => '')}',
+                          'Kayndrexsphere Account Number: ${defaultWallet.maybeWhen(data: (v) => v.data.user.accountNumber, orElse: () => '')}',
                           style:
                               AppText.body2(context, AppColors.appColor, 17.sp),
                         ),

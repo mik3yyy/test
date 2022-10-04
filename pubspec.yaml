@@ -76,6 +76,7 @@ dependencies:
   adaptive_dialog: ^1.6.3
   event_bus: ^2.0.0
   sentry_flutter: ^6.10.0
+  dio_cache_interceptor: ^3.3.1 
   # envied: ^0.2.3
   
 

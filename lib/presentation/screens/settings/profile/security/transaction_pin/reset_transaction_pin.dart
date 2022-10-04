@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/reset_pin_vm.dart';
 
@@ -196,8 +197,9 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                           Space(150.h),
                           CustomButton(
                             buttonWidth: double.infinity,
-                            buttonText:
-                                vm is Loading ? "Setting New Pin" : 'Continue',
+                            buttonText: vm is Loading
+                                ? loading()
+                                : buttonText(context, "Continue"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,

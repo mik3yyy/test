@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/iban/iban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -315,8 +316,9 @@ class _IbanViewState extends ConsumerState<IbanView> {
           // ),
           Space(20.h),
           CustomButton(
-              buttonText:
-                  iban is Loading ? "Processing ..." : 'Withdraw to bank',
+              buttonText: iban is Loading
+                  ? loading()
+                  : buttonText(context, "Withdraw to Bank"),
               bgColor: AppColors.appColor,
               borderColor: AppColors.appColor,
               textColor: Colors.white,

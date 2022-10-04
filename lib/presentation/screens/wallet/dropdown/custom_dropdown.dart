@@ -230,6 +230,7 @@ class SelectFormField extends FormField<String> {
             }
 
             Widget buildField(SelectFormFieldType peType) {
+              // ignore: prefer_typing_uninitialized_variables
               var lfOnTap;
 
               if (readOnly == false) {

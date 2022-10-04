@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/change_transaction_pin_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -207,8 +208,9 @@ class ResetTransactionPin extends HookConsumerWidget {
                           ),
                           Space(150.h),
                           CustomButton(
-                              buttonText:
-                                  vn is Loading ? "Setting pin" : 'Save',
+                              buttonText: vn is Loading
+                                  ? loading()
+                                  : buttonText(context, "Save"),
                               bgColor: AppColors.appColor,
                               borderColor: AppColors.appColor,
                               textColor: Colors.white,

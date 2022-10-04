@@ -9,6 +9,8 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Aba/aba_r
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -81,17 +83,8 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(
-            'ACH [ABA]',
-            style: AppText.header2(context, Colors.black, 20.sp),
-          ),
-          leading: InkWell(
-            onTap: (() => Navigator.pop(context)),
-            child: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
+          title: const AppBarTitle(title: "ACH [ABA]", color: Colors.black),
+          leading: const BackButton(color: Colors.black),
           automaticallyImplyLeading: false,
           elevation: 0,
         ),
@@ -497,8 +490,8 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                         // Space(20.h),
                         CustomButton(
                             buttonText: aba is Loading
-                                ? "Processing"
-                                : 'Withdraw to bank',
+                                ? loading()
+                                : buttonText(context, "Withdraw to Bank"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,

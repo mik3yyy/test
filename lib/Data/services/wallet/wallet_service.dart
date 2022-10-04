@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
@@ -23,13 +24,33 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 
+final cacheProvider =
+    Provider((ref) => MemCacheStore(maxSize: 10485760, maxEntrySize: 1048576));
+final cacheOptions = Provider((ref) => CacheOptions(
+      store: ref.watch(cacheProvider),
+      hitCacheOnErrorExcept: [],
+      priority: CachePriority.normal,
+      maxStale: const Duration(days: 5),
+      // for offline behaviour
+    ));
+
+// final cacheStore = MemCacheStore(maxSize: 10485760, maxEntrySize: 1048576);
+// final cacheOptions = CacheOptions(
+//   store: cacheStore,
+//   hitCacheOnErrorExcept: [], // for offline behaviour
+// );
+
 class WalletService {
   final Reader _read;
   final Ref ref;
+
   WalletService(this._read, this.ref) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      PrettyDioLogger(),
+      DioCacheInterceptor(options: ref.watch(cacheOptions)),
+    ]);
   }
 
 //Create Wallet for user
@@ -198,9 +219,13 @@ class WalletService {
   Future<WalletTransactions> getTransactions() async {
     const url = '/wallets/transactions';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-      );
+      final response = await _read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions());
       final result = WalletTransactions.fromJson(response.data);
 
       return result;
@@ -217,9 +242,13 @@ class WalletService {
   Future<CurrencyTransaction> currencyTransactions(String currency) async {
     final url = '/wallets/transactions/$currency';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-      );
+      final response = await _read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions());
       final result = CurrencyTransaction.fromJson(response.data);
 
       return result;

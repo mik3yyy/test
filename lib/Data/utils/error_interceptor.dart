@@ -12,7 +12,7 @@ class ErrorInterceptor extends InterceptorsWrapper {
 
     if (err.response?.requestOptions.path != "/auth/sign-in") {
       if (err.error == "Unauthorized") {
-        eventBus.fire(ErrorState(error: err.error));
+        eventBus.fire(UnAuthenticated());
       }
     }
 

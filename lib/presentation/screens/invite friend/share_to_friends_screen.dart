@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/invite%20friend/widget/share_option_details.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_custom_text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -86,7 +87,7 @@ class ShareToFriendsScreen extends StatelessWidget {
               // Space(76.h),
               CustomButton(
                 borderColor: AppColors.appColor,
-                buttonText: 'Continue',
+                buttonText: buttonText(context, "Continue"),
                 bgColor: AppColors.appColor,
                 textColor: AppColors.whiteColor,
                 buttonWidth: MediaQuery.of(context).size.width,

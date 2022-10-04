@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/create_post_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/get_post_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/widget/faq_app_bar.dart';
@@ -119,7 +120,8 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
                               .createPost(createPostReq);
                           context.loaderOverlay.show();
                         },
-                  buttonText: vm is Loading ? "Posting" : 'Post',
+                  buttonText:
+                      vm is Loading ? loading() : buttonText(context, "Post"),
                   bgColor: postText.text.isEmpty || postTitle.text.isEmpty
                       ? AppColors.appColor.withOpacity(0.3)
                       : AppColors.appColor,

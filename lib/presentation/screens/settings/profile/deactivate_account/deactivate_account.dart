@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactiv
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deactivate_account/view_model/view_model.dart';
@@ -63,17 +64,9 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'Deactivate Account',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back_ios_outlined,
-            color: Colors.black,
-          ),
-        ),
+        title:
+            const AppBarTitle(title: "Deactivate Account", color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -84,7 +77,7 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Space(20),
+                const Space(10),
                 Text(
                   """Deactivating account deletes your Kayndrexsphere account.A new sign up will be required if you decide to return.
                   """,
@@ -138,8 +131,8 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
                 const Space(50),
                 CustomButton(
                   buttonText: deactivate is Loading
-                      ? "Deactivating"
-                      : 'Deactivate Account',
+                      ? loading()
+                      : buttonText(context, "Deactivate Account"),
                   bgColor: AppColors.appColor,
                   borderColor: AppColors.appColor,
                   textColor: Colors.white,

@@ -11,6 +11,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/format_currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
@@ -263,7 +264,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                       }),
                   Center(
                     child: CustomButton(
-                        buttonText: 'Create Wallet',
+                        buttonText: buttonText(context, "Create Wallet"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,
                         textColor: Colors.white,

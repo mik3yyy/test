@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/e_wallet_acct_history.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -21,17 +22,8 @@ class _StatementOfAcctScreenState extends State<StatementOfAcctScreen> {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
-        title: Text(
-          'Statements',
-          style: AppText.header2(context, Colors.black, 20.sp),
-        ),
-        leading: InkWell(
-          onTap: (() => Navigator.pop(context)),
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
+        title: const AppBarTitle(title: "Statements", color: Colors.black),
+        leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,

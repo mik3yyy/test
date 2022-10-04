@@ -58,7 +58,6 @@ class _ContactListBuildState extends State<ContactListBuild> {
     return SizedBox(
       height: 500.h,
       child: Scrollbar(
-        //TODO: To reduce the height of the scroll bar
         isAlwaysShown: true,
         controller: _scrollController,
         child: ListView.separated(

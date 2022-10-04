@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
@@ -196,7 +197,8 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               // ),
               Space(20.h),
               CustomButton(
-                buttonText: vm is Loading ? "Processing" : 'Transfer',
+                buttonText:
+                    vm is Loading ? loading() : buttonText(context, "Transfer"),
                 bgColor: AppColors.appColor,
                 borderColor: AppColors.appColor,
                 textColor: Colors.white,

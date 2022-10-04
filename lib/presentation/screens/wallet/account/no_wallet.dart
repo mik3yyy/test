@@ -5,6 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/account/view_all_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
@@ -94,7 +95,7 @@ class NoWalletWidget extends StatelessWidget {
             ),
             Space(135.h),
             CustomButton(
-                buttonText: 'Create Wallet',
+                buttonText: buttonText(context, "Create Wallet"),
                 bgColor: AppColors.appColor,
                 borderColor: AppColors.appColor,
                 textColor: Colors.white,

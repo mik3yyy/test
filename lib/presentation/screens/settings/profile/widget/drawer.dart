@@ -31,6 +31,7 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'My Profile',
               comingSoon: false,
+              isIcon: false,
               image: AppImage.myProfile,
               onPressed: () {
                 pushNewScreen(context,
@@ -46,6 +47,7 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'My Prop',
               comingSoon: false,
+              isIcon: false,
               image: AppImage.myProp,
               onPressed: () {
                 // context.navigate(const PropScreen());
@@ -63,6 +65,7 @@ class Navigation extends HookConsumerWidget {
             DrawerList(
               color: Colors.black,
               comingSoon: false,
+              isIcon: false,
               title: 'Notification',
               image: AppImage.myNotification,
               onPressed: () {
@@ -83,6 +86,7 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'Safepay',
               comingSoon: true,
+              isIcon: false,
               image: AppImage.mySafePay,
               onPressed: () {
                 // pushNewScreen(
@@ -99,7 +103,8 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'Statement of account',
               comingSoon: false,
-              image: AppImage.referAFriend,
+              isIcon: false,
+              image: AppImage.document,
               onPressed: () {
                 pushNewScreen(context,
                     screen: const StatementOfAcctScreen(),
@@ -113,6 +118,7 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'Refer a friend',
               comingSoon: true,
+              isIcon: false,
               image: AppImage.referAFriend,
               onPressed: () {
                 // pushNewScreen(context,
@@ -127,7 +133,8 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               comingSoon: false,
               title: 'FAQ',
-              image: AppImage.faq,
+              image: "assets/images/new_faq.png",
+              isIcon: true,
               onPressed: () {
                 // context.navigate(const FaqScreen());
                 pushNewScreen(context,
@@ -143,6 +150,7 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               title: 'log out',
               comingSoon: false,
+              isIcon: false,
               image: AppImage.logOut,
               onPressed: () {
                 // ref
@@ -169,10 +177,12 @@ class DrawerList extends StatelessWidget {
   final String image;
   final Color color;
   final bool comingSoon;
+  final bool isIcon;
   final void Function()? onPressed;
   const DrawerList(
       {Key? key,
       required this.title,
+      required this.isIcon,
       required this.color,
       required this.comingSoon,
       required this.onPressed,
@@ -185,26 +195,24 @@ class DrawerList extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       hoverColor: hoverColor,
-      // overlayColor: MaterialStateProperty.resolveWith<Color?>(
-      //   (Set<MaterialState> states) {
-      //     if (states.contains(MaterialState.pressed)) {
-      //       return Colors.redAccent;
-      //     } //<-- SEE HERE
-      //     return null; // Defer to the widget's default.
-      //   },
-      // ),
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.062,
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset(
-                image,
-                color: color,
-                height: 30.h,
-                width: 25.w,
-              ),
+              isIcon
+                  ? const Icon(
+                      Icons.help,
+                      size: 20,
+                      color: Colors.black,
+                    )
+                  : Image.asset(
+                      image,
+                      color: color,
+                      height: 30.h,
+                      width: 25.w,
+                    ),
               Space(20.w),
               Text(
                 title,

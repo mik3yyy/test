@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
@@ -18,7 +19,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
 final profileProvider = Provider<ProfileService>((ref) {
-  return ProfileService((ref.read));
+  return ProfileService((ref.read), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -26,24 +27,45 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     connectTimeout: 100000,
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
+final cacheProvider =
+    Provider((ref) => MemCacheStore(maxSize: 10485760, maxEntrySize: 1048576));
+final cacheOptions = Provider((ref) => CacheOptions(
+      store: ref.watch(cacheProvider),
+      hitCacheOnErrorExcept: [],
+      priority: CachePriority.normal,
+      maxStale: const Duration(days: 5),
+      // for offline behaviour
+    ));
 
 class ProfileService {
   final Reader _read;
-
-  ProfileService(this._read) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+  final Ref ref;
+  ProfileService(this._read, this.ref) {
+    _read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      PrettyDioLogger(),
+      DioCacheInterceptor(options: ref.watch(cacheOptions)),
+    ]);
   }
 
   // get profile details
   Future<ProfileRes> getPrfileDetails() async {
     const url = '/profile';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(Constants.token);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final token = prefs.getString(Constants.token);
     try {
       final response = await _read(dioProvider).get(url,
-          options: Options(headers: {"Authentication": "Bearer $token"}));
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions()
+
+          // Options(headers: {"Authentication": "Bearer $token"})
+
+          );
 
       final result = ProfileRes.fromJson(response.data);
 
@@ -155,25 +177,6 @@ class ProfileService {
       }
     }
   }
-
-  // Future upLoadProfilePic(String filePath) async {
-  //   var cloudinary = CloudinaryPublic('dnnxnfr6c', 'ouvoc5zb', cache: false);
-  //   try {
-  //     final response = await cloudinary.uploadFile(
-  //       CloudinaryFile.fromFile(filePath,
-  //           resourceType: CloudinaryResourceType.Image),
-  //     );
-  //     print("this is  ${response.secureUrl}");
-  //     return response.secureUrl;
-  //   } on DioError catch (e) {
-  //     if (e.response != null && e.response!.data != "") {
-  //       Failure result = Failure.fromJson(e.response!.data);
-  //       throw result.message!;
-  //     } else {
-  //       throw e.error;
-  //     }
-  //   }
-  // }
 
   Future<bool> updateImage(String filePath) async {
     const url = '/profile/upload-picture';

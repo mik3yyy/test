@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/debit_credit_card_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -42,31 +43,17 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
     // ];
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
-      appBar: widget.route == "HomeScreen"
-          ? AppBar(
-              elevation: 0.0,
-              systemOverlayStyle: SystemUiOverlayStyle.dark,
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              leading: GestureDetector(
-                onTap: (() => Navigator.pop(context)),
-                child: const Icon(
-                  Icons.arrow_back_ios_outlined,
-                  color: Colors.black,
-                ),
-              ),
-            )
-          : AppBar(
-              systemOverlayStyle: SystemUiOverlayStyle.dark,
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.transparent,
-              title: Text(
-                'Portfolio',
-                style: AppText.header2(context, Colors.black, 20.sp),
-              ),
-              centerTitle: true,
-              elevation: 0,
-            ),
+      appBar: AppBar(
+        elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        leading: widget.route == "HomeScreen"
+            ? const BackButton(color: Colors.black)
+            : const SizedBox.shrink(),
+        title: const AppBarTitle(title: 'Portfolio', color: Colors.black),
+      ),
       body: SafeArea(
         child: Column(
           children: [

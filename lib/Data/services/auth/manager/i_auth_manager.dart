@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
@@ -38,6 +39,7 @@ abstract class IAuthManager {
   Future<SigninOutRes> signOut(String deviceId);
   Future<ConvertCurrencyRes> convertCurrency(String from, String to);
   Future<StatementOfAccount> statementOfAccount();
+  Future<StatementOfAccount> getAccountRange(StatementReq statementReq);
   Future<DeactivateAccountRes> deactivateAccount(
       String password, String reason);
 }

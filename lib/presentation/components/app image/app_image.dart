@@ -75,6 +75,7 @@ class AppImage {
   static const masterCard = "assets/images/mastercard.svg";
   static const visa = "assets/images/visa.svg";
   static const verve = "assets/images/verve.svg";
+  static const moreIcon = "assets/images/more.png";
   //
   //
   //ICONS FOR SETTINGS SCREEN
@@ -83,7 +84,8 @@ class AppImage {
   static const myNotification = "assets/images/notifications.png";
   static const mySafePay = "assets/images/safepay.png";
   static const referAFriend = "assets/images/refer_a_friend.png";
-  static const faq = "assets/images/faq.png";
+  static const faq = "assets/images/new_faq.png";
+  static const document = "assets/images/Document.png";
   static const logOut = "assets/images/logout.png";
   static const deactivateAccount = "assets/images/deactivate_account.png";
   static const securityProfile = "assets/images/profile_security.png";

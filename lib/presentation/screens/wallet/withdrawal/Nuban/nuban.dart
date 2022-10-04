@@ -12,6 +12,8 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/ban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
@@ -37,9 +39,9 @@ class NubanWithdraw extends StatefulHookConsumerWidget {
 
 class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   final toggleStateProvider = StateProvider<bool>((ref) {
-    return true;
+    return false;
   });
-  final transactionPinStateProvider = StateProvider<bool>((ref) => true);
+  final transactionPinStateProvider = StateProvider<bool>((ref) => false);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -95,18 +97,10 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           backgroundColor: Colors.transparent,
-          title: Text(
-            'NUBAN',
-            style: AppText.header2(context, Colors.black, 20.sp),
-          ),
-          leading: InkWell(
-            onTap: (() => Navigator.pop(context)),
-            child: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
+          title: const AppBarTitle(title: "NUBAN", color: Colors.black),
+          leading: const BackButton(color: Colors.black),
           automaticallyImplyLeading: false,
+          centerTitle: true,
           elevation: 0,
         ),
         body: SafeArea(
@@ -449,8 +443,8 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         Space(20.h),
                         CustomButton(
                             buttonText: nuban is Loading
-                                ? "Processing"
-                                : 'Withdraw to bank',
+                                ? loading()
+                                : buttonText(context, "Withdraw to Bank"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,

@@ -51,7 +51,9 @@ class _SelectWalletListState extends ConsumerState<SelectWalletList> {
                       loading: () => const CircularProgressIndicator.adaptive(),
                       data: (data) {
                         double _getSized() {
-                          if (data.data!.wallets!.length == 2) {
+                          if (data.data!.wallets!.length == 1) {
+                            return 150;
+                          } else if (data.data!.wallets!.length == 2) {
                             return 200;
                           } else if (data.data!.wallets!.length == 3) {
                             return 250;
