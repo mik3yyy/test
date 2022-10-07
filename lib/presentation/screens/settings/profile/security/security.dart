@@ -9,9 +9,9 @@ import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_titl
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/change_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/enable_transaction_pin_modal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/global/transaction_pin_toggle.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/password_security.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
@@ -60,12 +60,12 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               ProfileCard(
                 color: Colors.black,
                 title: 'Password',
-                subTitle: 'Change your already existing password',
+                subTitle: 'Change or Retrieve forgotten password',
                 image: AppImage.setPassword,
                 onPressed: () {
                   pushNewScreen(
                     context,
-                    screen: ChangePassword(),
+                    screen: const ChangePasswordSecurity(),
                     pageTransitionAnimation: PageTransitionAnimation.fade,
                   );
                 },
