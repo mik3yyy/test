@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
-import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
@@ -47,14 +46,16 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
     final range = ref.watch(accountRangeProvider);
 
     ref.listen<RequestState>(accountRangeProvider, (prev, value) {
-      if (value is Loading<StatementOfAccount>) {
+      if (value is Loading<dynamic>) {
         ScreenView.showLoadingView(context);
       } else {
         ScreenView.hideLoadingView(context);
       }
-      if (value is Success<StatementOfAccount>) {
+      if (value is Success<dynamic>) {
         pushNewScreen(context,
             screen: StatementRangeAccount(
+              startDate: startDate.text,
+              endDate: endDate.text,
               statement: value.value!.data,
             ));
       }

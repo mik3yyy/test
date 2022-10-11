@@ -14,7 +14,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       // handle user  inactive timeout
       if (PreferenceManager.isloggedIn == true) {
         navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
-        PreferenceManager.removeToken();
+        PreferenceManager.clear();
         debugPrint("INACTIVE");
       } else {
         return;
@@ -23,7 +23,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       // handle user  app lost focus timeout
       if (PreferenceManager.isloggedIn == true) {
         navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
-        PreferenceManager.removeToken();
+        PreferenceManager.clear();
         debugPrint("APPFOCUS");
       } else {
         return;

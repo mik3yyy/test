@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import '../../../../components/app text theme/app_text_theme.dart';
 
 class EditForm extends StatelessWidget {
@@ -70,7 +69,7 @@ class EditForm extends StatelessWidget {
             borderSide: BorderSide(color: Colors.blue),
           ),
           focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColors.appColor),
+            borderSide: BorderSide(color: Colors.black),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 0.h),
           // floatingLabelBehavior: FloatingLabelBehavior.always,

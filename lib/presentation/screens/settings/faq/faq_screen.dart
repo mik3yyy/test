@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -6,13 +7,13 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/all_forum_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/view_single_post_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/get_post_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/widget/faq_app_bar.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class FaqScreen extends HookConsumerWidget {
@@ -26,11 +27,34 @@ class FaqScreen extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.appColor,
-      body: Column(children: [
-        const SizedBox(
-          height: 50,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: Colors.transparent,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppBarTitle(title: "FAQ", color: Colors.white),
+            Text(
+              'Frequently asked questions',
+              style: AppText.robotoStyle(
+                context,
+                AppColors.whiteColor,
+                14.sp,
+                FontWeight.w400,
+              ),
+            ),
+          ],
         ),
-        const FaqHeader(),
+        leading: const BackButton(color: Colors.white),
+        // centerTitle: true,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+      ),
+      body: Column(children: [
+        // const SizedBox(
+        //   height: 50,
+        // ),
+        // const FaqHeader(),
         const SizedBox(
           height: 20,
         ),

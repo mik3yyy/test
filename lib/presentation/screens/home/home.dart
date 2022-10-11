@@ -119,6 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       const ProfileImage(
                           height: 50,
                           width: 50,
+                          avatar: 40,
                           ignoreClick: true,
                           hasIcon: false),
                       Space(10.w),

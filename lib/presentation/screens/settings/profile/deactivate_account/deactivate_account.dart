@@ -55,7 +55,7 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
             context, state.value!.message.toString(), onpressed: () {
           navigator.key.currentContext!
               .navigateReplaceRoot(const SigninScreen());
-          PreferenceManager.removeToken();
+          PreferenceManager.clear();
         });
       }
     });

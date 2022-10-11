@@ -156,7 +156,7 @@ class Navigation extends HookConsumerWidget {
                 // ref
                 //     .read(localAuthStateProvider.notifier)
                 //     .resetbiometrics(false);
-                PreferenceManager.removeToken();
+                PreferenceManager.clear();
                 context.navigateReplaceRoot(const SigninScreen());
               },
             ),

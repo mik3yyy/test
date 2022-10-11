@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/download_statement.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
@@ -41,6 +42,8 @@ final cacheOptions = Provider((ref) => CacheOptions(
       maxStale: const Duration(days: 2),
       // for offline behaviour
     ));
+
+CancelToken cancelToken = CancelToken();
 
 class UserService {
   final Reader _read;
@@ -200,13 +203,40 @@ class UserService {
     }
   }
 
-  //  STATEMENT OF ACCOUNT
+  // //  STATEMENT OF ACCOUNT
+  // String url(bool isDownload) {
+  //   if (isDownload) {
+  //     return '/misc/statement-of-account-ranged/download';
+  //   } else {
+  //     return '/misc/statement-of-account-ranged';
+  //   }
+  // }
+
   Future<StatementOfAccount> getAccountRange(StatementReq statementReq) async {
     const url = '/misc/statement-of-account-ranged';
     try {
       final response =
           await _read(dioProvider).post(url, data: statementReq.toJson());
       final result = StatementOfAccount.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<DownloadStatement> downloadRange(
+    StatementReq statementReq,
+  ) async {
+    const url = '/misc/statement-of-account-ranged/download';
+    try {
+      final response =
+          await _read(dioProvider).post(url, data: statementReq.toJson());
+      final result = DownloadStatement.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
@@ -282,11 +312,12 @@ class UserService {
   }
 
   // forget password
-  Future<bool> forgotPassword(String emailPhone) async {
+  Future<bool> forgotPassword(
+      String emailPhone, CancelToken cancelToken) async {
     const url = '/auth/forgot-password/send-code';
     try {
-      final response =
-          await _read(dioProvider).post(url, data: {"email_phone": emailPhone});
+      final response = await _read(dioProvider).post(url,
+          data: {"email_phone": emailPhone}, cancelToken: cancelToken);
       final result = response.data = true;
       return result;
     } on DioError catch (e) {

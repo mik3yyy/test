@@ -57,23 +57,25 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
     if (Platform.isIOS) {
       return buildCupertinoWidget(context);
     } else {
-      return Padding(
-        padding: const EdgeInsets.only(right: 20, left: 20, top: 10),
-        child: TextButton(
-            onPressed: () {
-              buttonClicked?.call();
-            },
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: AppColors.appColor,
-              onSurface: AppColors.appColor,
+      return AlertDialog(
+        title: const Text("Expired session"),
+        content: Text(
+            "Session has expired. Please login to authenticate this user.",
+            style: AppText.body2(context, Colors.black, 16.sp)),
+        actions: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: InkWell(
+                onTap: () {
+                  buttonClicked?.call();
+                },
+                child: Text("Ok",
+                    style: AppText.body2(context, Colors.blue, 20.sp)),
+              ),
             ),
-            child: Text(
-              buttonText,
-              textAlign: TextAlign.center,
-              maxLines: 4,
-              style: AppText.body4(context, Colors.white),
-            )),
+          )
+        ],
       );
     }
   }
@@ -112,8 +114,7 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
       content: Column(
         children: [
           const Space(20),
-          Text("Session has expired. Please login to authenticate this user.",
-              style: AppText.body2(context, Colors.black, 16.sp))
+          Text(message, style: AppText.body2(context, Colors.black, 16.sp))
         ],
       ),
       actions: [
@@ -124,8 +125,8 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
               onTap: () {
                 buttonClicked?.call();
               },
-              child:
-                  Text("Ok", style: AppText.body2(context, Colors.blue, 20.sp)),
+              child: Text(buttonText,
+                  style: AppText.body2(context, Colors.blue, 20.sp)),
             ),
           ),
         )
@@ -143,8 +144,8 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
     // You can add your own animations for the overlay content
     return FadeTransition(
       opacity: animation,
-      child: ScaleTransition(
-        scale: animation,
+      child: FadeTransition(
+        opacity: animation,
         child: child,
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -88,11 +89,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
     ref.listen<LocalAuthState>(localAuthStateProvider, (T, value) {
       if (value.isAuthenticated) {
+        setState(() {
+          isLoading = true;
+        });
         context.loaderOverlay.show();
       }
-      if (value.success) {
-        context.loaderOverlay.hide();
-      }
+      if (value.success) {}
     });
     return LoaderOverlay(
       useDefaultLoading: false,
@@ -137,9 +139,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                             FilteringTextInputFormatter.deny(RegExp('[ ]'))
                           ],
                           validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Email address or Phone Number is required";
-                            }
+                            // if (value!.isEmpty) {
+                            //   return "";
+                            // }
 
                             return null;
                           },
@@ -156,12 +158,12 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                         capitalization: TextCapitalization.none,
                         validator: (String? value) {
-                          if (value!.length < 8) {
-                            return 'Password must at least be 8 characters';
-                          }
-                          if (value.isEmpty) {
-                            return 'Invalid password';
-                          }
+                          // if (value!.length < 8) {
+                          //   return '';
+                          // }
+                          // if (value!.isEmpty) {
+                          //   return "";
+                          // }
                           return null;
                         },
                         obscureText: true,
@@ -207,18 +209,20 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         children: [
                           CustomButton(
                             buttonWidth: 280.w,
-                            buttonText: vm is Loading
-                                ? loading()
-                                : isLoading
-                                    ? loading()
-                                    : buttonText(context, "Sign in"),
+                            buttonText: buttonText(context, "Sign in"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
                             onPressed: vm is Loading
                                 ? null
                                 : () async {
-                                    if (formKey.currentState!.validate()) {
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
+                                    if ((emailPhoneController.text.isEmpty) ||
+                                        (passwordController.text.isEmpty)) {
+                                      return;
+                                    } else {
                                       if (!currentFocus.hasPrimaryFocus) {
                                         currentFocus.unfocus();
                                       }
@@ -238,10 +242,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                               Constants.userPassword,
                                               passwordController.text);
 
-                                      // if (PreferenceManager.isFirstLaunch) {
-
-                                      // }
-
                                       ref
                                           .read(signInProvider.notifier)
                                           .signIn(signinReq);
@@ -253,13 +253,19 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           PreferenceManager.hasBiometrics
                               ? GestureDetector(
                                   onTap: () async {
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
                                     if (PreferenceManager.enableBioMetrics ==
                                         true) {
                                       ref
                                           .read(localAuthStateProvider.notifier)
                                           .authenticate();
                                     } else {
-                                      return;
+                                      showOkAlertDialog(
+                                        context: context,
+                                        message: 'Login and enable biometric',
+                                      );
                                     }
                                   },
                                   child: Container(

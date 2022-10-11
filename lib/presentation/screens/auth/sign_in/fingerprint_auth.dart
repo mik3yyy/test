@@ -98,22 +98,20 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
         ),
       );
 
-      if (isAuthenticated) {
+      state = state.copyWith(isAuthenticated: isAuthenticated);
+
+      if (state.isAuthenticated) {
         var signinReq = SigninReq(
             emailPhone: email!,
             password: password!,
             timezone: device.timeZone,
             deviceId: device.deviceId);
 
-        ref.read(signInProvider.notifier).signIn(signinReq).then((value) {
-          state = state.copyWith(
-            isAuthenticated: isAuthenticated,
-          );
-        });
+        await ref.read(signInProvider.notifier).signIn(signinReq);
 
-        Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
           state = state.copyWith(success: true);
-        });
+        }
       } else {
         throw "Unathenticated. Please try again";
       }

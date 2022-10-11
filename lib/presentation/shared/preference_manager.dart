@@ -19,7 +19,7 @@ class PreferenceManager {
 
   static set isFirstLaunch(bool isFirstLaunch) =>
       prefs.setBool("isFirstLaunch", isFirstLaunch);
-  static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? false;
+  static bool get isFirstLaunch => prefs.getBool("isFirstLaunch") ?? true;
 
   static set isloggedIn(bool isloggedIn) =>
       prefs.setBool("isloggedIn", isloggedIn);
@@ -90,22 +90,14 @@ class PreferenceManager {
   static bool get isPostUnLike => prefs.getBool("isPostUnLike") ?? false;
 
   static void clear() {
-    prefs.clear();
-  }
-
-  static void removeToken() {
+    // prefs.clear();
+    PreferenceManager.isFirstLaunch = false;
     PreferenceManager.authToken = "";
     PreferenceManager.refreshToken = "";
-    PreferenceManager.depositRef = "";
-    PreferenceManager.isloggedIn = false;
+    PreferenceManager.pseudoToken = "";
   }
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
-    PreferenceManager.isloggedIn = false;
-    PreferenceManager.authToken = "";
-    // PreferenceManager.enableBioMetrics = false;
-    // PreferenceManager.enableTransactionBioMetrics = false;
-    // prefs.clear();
   }
 }

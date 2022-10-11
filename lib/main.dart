@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,6 +18,7 @@ import 'package:kayndrexsphere_mobile/third_party/sentry_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
+import 'presentation/utils/alert_dialog/show_unauthenicated_dialog.dart';
 
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -40,17 +40,13 @@ class MyApp extends HookConsumerWidget {
     final appSession = ref.watch(appSessionConfigProvider);
     //* Agba refactor this code biko
     eventBus.on<UnAuthenticated>().listen((event) async {
-      final result = await showOkAlertDialog(
-        context: navigator.key.currentContext!,
-        title: 'Expired session',
-        message: 'Session has expired. Please login to authenticate this user',
-        barrierDismissible: false,
-      );
-      if (result == OkCancelResult.ok) {
+      navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
+      AuthenicatedState.showMessage(navigator.key.currentContext!,
+          "Session has expired. Login to authenticate this user.",
+          buttonText: "Ok", buttonClicked: () {
         Navigator.pop(navigator.key.currentContext!);
-        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
-        PreferenceManager.removeToken();
-      }
+        PreferenceManager.clear();
+      });
     });
     final locale = ref.watch(localeProvider);
     return ScreenUtilInit(

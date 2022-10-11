@@ -12,12 +12,14 @@ class ProfileImage extends HookConsumerWidget {
   final bool ignoreClick;
   final bool hasIcon;
   final double height;
+  final double avatar;
   final double width;
   const ProfileImage(
       {Key? key,
       required this.ignoreClick,
       required this.hasIcon,
       this.height = 95,
+      this.avatar = 30,
       this.width = 95})
       : super(key: key);
 
@@ -40,7 +42,7 @@ class ProfileImage extends HookConsumerWidget {
             },
             child: userAvatar.state.isNotEmpty
                 ? CircleAvatar(
-                    radius: 50,
+                    radius: avatar,
                     backgroundImage: FileImage(File(userAvatar.state)),
                   )
                 : SizedBox(

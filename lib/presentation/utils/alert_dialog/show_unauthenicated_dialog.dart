@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/alert_dialog/alert_dialg.dart';
 
-class AuthenicatedStateVie {
+class AuthenicatedState {
   static void showLoadingView(BuildContext context) {
     Navigator.of(context).push(LoadingView());
   }
@@ -49,7 +49,7 @@ class AuthenicatedStateVie {
   //       textLabel: textLabel));
   // }
 
-  static void showPinSuccessDialog(
+  static void showMessage(
     BuildContext context,
     String message, {
     String buttonText = "Continue",
