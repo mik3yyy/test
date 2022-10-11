@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
@@ -8,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/download_statement.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/auth_service.dart';
@@ -101,8 +103,9 @@ class AuthManager extends IAuthManager {
 
   // forget password
   @override
-  Future<bool> forgotPassword(String emailPhone) async {
-    final res = await _userService.forgotPassword(emailPhone);
+  Future<bool> forgotPassword(
+      String emailPhone, CancelToken cancelToken) async {
+    final res = await _userService.forgotPassword(emailPhone, cancelToken);
     return res;
   }
 
@@ -161,4 +164,8 @@ class AuthManager extends IAuthManager {
   @override
   Future<StatementOfAccount> getAccountRange(StatementReq statementReq) async =>
       await _userService.getAccountRange(statementReq);
+
+  @override
+  Future<DownloadStatement> downloadRange(StatementReq statementReq) async =>
+      await _userService.downloadRange(statementReq);
 }

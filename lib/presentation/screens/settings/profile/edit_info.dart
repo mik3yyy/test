@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/check_date/check_date.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
@@ -123,42 +124,52 @@ class _EditInfoState extends ConsumerState<EditInfo> {
           title: const AppBarTitle(title: "Edit Account", color: Colors.black),
           leading: const BackButton(color: Colors.black),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(top: 20.h, right: 20.w),
-              child: InkWell(
-                onTap: vm is Loading
-                    ? null
-                    : () async {
-                        if (formKey.currentState!.validate()) {
-                          // fieldFocusNode.unfocus();
-                          var updateProfile = UpdateProfileReq(
-                            firstName: fistNameController.text,
-                            lastName: lastNameCountroller.text,
-                            email: emailCountroller.text,
-                            address: addressCountroller.text,
-                            gender: genderCountroller.text,
-                            phoneCode: phoneCode,
-                            phoneNumber: phoneNoCountroller.text,
-                            dateOfBirth: dobCountroller.text,
-                            city: cityCountroller.text,
-                            country: countryCountroller.text,
-                            state: stateCountroller.text,
-                          );
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
+            vm is Loading
+                ? Padding(
+                    padding: EdgeInsets.only(top: 20.h, right: 20.w),
+                    child: Text(
+                      'Loading...',
+                      style:
+                          AppText.body2Bold(context, AppColors.appColor, 20.sp),
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(top: 20.h, right: 20.w),
+                    child: InkWell(
+                      onTap: vm is Loading
+                          ? null
+                          : () async {
+                              if (formKey.currentState!.validate()) {
+                                // fieldFocusNode.unfocus();
+                                var updateProfile = UpdateProfileReq(
+                                  firstName: fistNameController.text,
+                                  lastName: lastNameCountroller.text,
+                                  email: emailCountroller.text,
+                                  address: addressCountroller.text,
+                                  gender: genderCountroller.text,
+                                  phoneCode: phoneCode,
+                                  phoneNumber: phoneNoCountroller.text,
+                                  dateOfBirth: formatDate(dobCountroller.text),
+                                  city: cityCountroller.text,
+                                  country: countryCountroller.text,
+                                  state: stateCountroller.text,
+                                );
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
 
-                          ref
-                              .read(updateProfileProvider.notifier)
-                              .updateProfile(updateProfile);
-                        }
-                      },
-                child: Text(
-                  'Save',
-                  style: AppText.body2(context, Colors.greenAccent, 20.sp),
-                ),
-              ),
-            ),
+                                ref
+                                    .read(updateProfileProvider.notifier)
+                                    .updateProfile(updateProfile);
+                              }
+                            },
+                      child: Text(
+                        'Save',
+                        style: AppText.body2Bold(
+                            context, AppColors.appColor, 20.sp),
+                      ),
+                    ),
+                  ),
           ],
           centerTitle: true,
           automaticallyImplyLeading: false,
@@ -291,23 +302,37 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                           initialValue: number,
                           textFieldController: phoneNoCountroller,
                           formatInput: false,
+
                           inputDecoration: const InputDecoration(
                             hintText: "Phone number",
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
                           ),
                           focusNode: fieldFocusNode,
+
                           keyboardType: const TextInputType.numberWithOptions(
                               signed: true, decimal: false),
                           inputBorder: InputBorder.none,
+
                           // onSaved: (PhoneNumber number) {},
                         ),
                         Space(20.h),
                         DateTimePicker(
+                          enabled: dobCountroller.text.isEmpty ? true : false,
                           controller: dobCountroller,
                           type: DateTimePickerType.date,
                           dateMask: 'MM-dd-yyyy',
 
                           firstDate: DateTime(1900),
                           lastDate: DateTime(3100),
+                          decoration: InputDecoration(
+                              suffix: dobCountroller.text.isEmpty
+                                  ? const SizedBox()
+                                  : const Icon(
+                                      Icons.lock,
+                                      size: 20,
+                                    )),
                           // icon: Icon(Icons.event),
                           dateLabelText: 'Date of Birth',
 

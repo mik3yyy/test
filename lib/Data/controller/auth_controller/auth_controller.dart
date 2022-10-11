@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/controller/auth_controller/auth_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 enum AuthenticationStatus {
   unknown,
@@ -10,28 +10,20 @@ enum AuthenticationStatus {
 }
 
 final authControllerProvider =
-    StateNotifierProvider<AuthController, AuthState>((ref) {
+    StateNotifierProvider<AuthController, bool>((ref) {
   // final authRepository = ref.watch(authManagerProvider);
 
   return AuthController();
 });
 
-class AuthController extends StateNotifier<AuthState> {
-  AuthController([AuthState? state])
-      : super(state ?? const AuthUnauthenticated()) {
-    auth(AuthenticationStatus.unknown);
+class AuthController extends StateNotifier<bool> {
+  AuthController() : super(PreferenceManager.isFirstLaunch);
+
+  void getAuth() {
+    state = PreferenceManager.isFirstLaunch;
   }
 
-  void auth(AuthenticationStatus status) async {
-    if (status == AuthenticationStatus.unauthenticated) {
-      state = const AuthUnauthenticated();
-    } else if (status == AuthenticationStatus.authenticated) {
-      state = const AuthAuthenticated(true);
-    } else if (status == AuthenticationStatus.logout) {
-      // await _authRepository.removeToken();
-      state = const AuthUnauthenticated();
-    } else {
-      state = const AuthUnauthenticated();
-    }
+  void setAuth(bool value) async {
+    state = value;
   }
 }

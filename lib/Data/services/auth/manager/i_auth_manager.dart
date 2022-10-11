@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -7,6 +8,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/download_statement.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/get_range_request.dart';
 import 'package:kayndrexsphere_mobile/Data/model/statement_of_account/statement_of_account.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_req.dart';
@@ -29,7 +31,7 @@ abstract class IAuthManager {
   Future<CountryRes> getCountry();
   Future<bool> setCurrency(String currency, String language, String country);
   Future<SigninRes> signIn(SigninReq signinReq);
-  Future<bool> forgotPassword(String emailPhone);
+  Future<bool> forgotPassword(String emailPhone, CancelToken cancelToken);
   Future<SigninRes> resetPassword(String emailPhone, String otpCode,
       String password, String confirmPassword);
   Future<bool> transactionPin(
@@ -40,6 +42,9 @@ abstract class IAuthManager {
   Future<ConvertCurrencyRes> convertCurrency(String from, String to);
   Future<StatementOfAccount> statementOfAccount();
   Future<StatementOfAccount> getAccountRange(StatementReq statementReq);
+  Future<DownloadStatement> downloadRange(
+    StatementReq statementReq,
+  );
   Future<DeactivateAccountRes> deactivateAccount(
       String password, String reason);
 }

@@ -38,6 +38,6 @@ String timeAgoSinceDate(String dateString, {bool numericDates = true}) {
 String formatDate(String value) {
   final format = DateTime.parse(value);
 
-  final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  final DateFormat formatter = DateFormat('MM-dd-yyyy');
   return formatter.format(format);
 }

@@ -146,14 +146,14 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                 ],
                               ),
                               const Spacer(),
-                              OptionsModalSheet(
-                                balance:
-                                    data.data.defaultWallet.balance.toString(),
-                                currencyCode: data
-                                    .data.defaultWallet.currencyCode
-                                    .toString(),
-                                isDefault: true,
-                              )
+                              // OptionsModalSheet(
+                              //   balance:
+                              //       data.data.defaultWallet.balance.toString(),
+                              //   currencyCode: data
+                              //       .data.defaultWallet.currencyCode
+                              //       .toString(),
+                              //   isDefault: true,
+                              // )
                             ],
                           ),
                         );
@@ -161,7 +161,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                       loading: () => SizedBox(
                           height: 20.w,
                           width: 20.w,
-                          child: const CircularProgressIndicator.adaptive()),
+                          child: const CircularProgressIndicator()),
                       error: (e, s) {
                         return Text(
                           e.toString(),
@@ -207,8 +207,6 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                   decoration: BoxDecoration(
                                     color: AppColors.whiteColor,
                                     borderRadius: BorderRadius.circular(5.r),
-                                    // border: Border.all(
-                                    //     width: 1, color: AppColors.appColor),
                                     boxShadow: const [
                                       BoxShadow(
                                         color: Color.fromRGBO(255, 255, 255, 1),
@@ -313,10 +311,6 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
       if (value is Success<SetWalletAsDefaultRes>) {
         ref.read(getProfileProvider.notifier).getProfile();
         context.loaderOverlay.hide();
-
-        // AppSnackBar.showSuccessSnackBar(context,
-        //     message:
-        //         "${value.value!.data!.wallet!.currencyCode} is set to default");
       }
 
       if (value is Error) {
@@ -353,35 +347,13 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                       ),
                     ),
                     //View Wallet
-                    Container(
-                      color: Colors.white,
-                      child: CupertinoActionSheetAction(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                          child: Text(
-                            'view wallet',
-                            style: AppText.body5(
-                              context,
-                              AppColors.textColor,
-                              16.sp,
-                            ),
-                          ),
-                        ),
-                        isDefaultAction: true,
-                        onPressed: () {
-                          // currencyController.text = dollar;
-                          // Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                    //Transfer to another wallet
                     // Container(
                     //   color: Colors.white,
                     //   child: CupertinoActionSheetAction(
                     //     child: Padding(
                     //       padding: EdgeInsets.only(left: 30.w, right: 30.w),
                     //       child: Text(
-                    //         'Transfer to another wallet',
+                    //         'view wallet',
                     //         style: AppText.body5(
                     //           context,
                     //           AppColors.textColor,
@@ -391,17 +363,12 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                     //     ),
                     //     isDefaultAction: true,
                     //     onPressed: () {
-                    //       // pushNewScreen(context,
-                    //       //     screen: const ToWallet(),
-                    //       //     pageTransitionAnimation:
-                    //       //         PageTransitionAnimation.slideRight);
-
                     //       // currencyController.text = dollar;
                     //       // Navigator.pop(context);
                     //     },
                     //   ),
                     // ),
-                    //Make wallet default
+
                     widget.isDefault
                         ? const SizedBox.shrink()
                         : Container(
@@ -429,41 +396,38 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
                                     .read(setWalletAsDefaultProvider.notifier)
                                     .setWalletAsDefault(widget.currencyCode);
                                 Navigator.pop(context);
-
-                                // currencyController.text = dollar;
-                                // Navigator.pop(context);
                               },
                             ),
                           ),
                     //Remove wallet
 
-                    Container(
-                      color: Colors.white,
-                      child: CupertinoActionSheetAction(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 30.w, right: 30.w),
-                          child: Opacity(
-                            opacity: widget.balance == "0.0" ? 0.2 : 0.8,
-                            child: Text(
-                              'Remove Wallet',
-                              style: AppText.body5(
-                                context,
-                                AppColors.textColor,
-                                16.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                        isDefaultAction: true,
-                        onPressed: () {
-                          if (widget.balance == "0.0") {
-                            return;
-                          }
-                          // currencyController.text = dollar;
-                          // Navigator.pop(context);
-                        },
-                      ),
-                    ),
+                    // Container(
+                    //   color: Colors.white,
+                    //   child: CupertinoActionSheetAction(
+                    //     child: Padding(
+                    //       padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                    //       child: Opacity(
+                    //         opacity: widget.balance == "0.0" ? 0.2 : 0.8,
+                    //         child: Text(
+                    //           'Remove Wallet',
+                    //           style: AppText.body5(
+                    //             context,
+                    //             AppColors.textColor,
+                    //             16.sp,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     isDefaultAction: true,
+                    //     onPressed: () {
+                    //       if (widget.balance == "0.0") {
+                    //         return;
+                    //       }
+                    //       // currencyController.text = dollar;
+                    //       // Navigator.pop(context);
+                    //     },
+                    //   ),
+                    // ),
                   ],
                   cancelButton: CupertinoActionSheetAction(
                     child: Text(

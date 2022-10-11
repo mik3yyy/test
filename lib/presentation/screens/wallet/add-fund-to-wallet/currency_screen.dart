@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wal
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/get_currency_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/create_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
@@ -57,18 +59,12 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
           backgroundColor: Colors.transparent,
-          title: Text(
-            'Choose a currency',
-            style: AppText.header2(context, Colors.black, 20.sp),
-          ),
-          leading: InkWell(
-            onTap: (() => Navigator.pop(context)),
-            child: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
+          title:
+              const AppBarTitle(title: "Choose Currency", color: Colors.black),
+          leading: const BackButton(color: Colors.black),
+          centerTitle: true,
           automaticallyImplyLeading: false,
           elevation: 0,
         ),

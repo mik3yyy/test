@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,12 +8,14 @@ import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forgot_password_otp.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/forgot_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +32,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(forgotPasswordProvider);
     final controller = useTextEditingController();
-    ref.listen<RequestState>(forgotPasswordProvider, (T, value) {
+    ref.listen<RequestState>(forgotPasswordProvider, (_, value) {
       if (value is Success) {
         context.navigate(ForgetPasswordOTPScreen(
           emailAdress: controller.text,
@@ -40,7 +43,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         );
       }
       if (value is Error) {
-        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -54,6 +56,16 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         ),
       ),
       child: Scaffold(
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          backgroundColor: Colors.transparent,
+          title: const AppBarTitle(
+              title: "Forgot Password", color: AppColors.appColor),
+          leading: const BackButton(color: Colors.black),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -62,25 +74,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                 key: formKey,
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: Icon(
-                            Icons.keyboard_arrow_left,
-                            size: 35.h,
-                          ),
-                        ),
-                        Space(85.w),
-                        Text(
-                          "Forgot Password",
-                          style: AppText.header3(
-                              context, AppColors.appColor, 20.sp),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    Space(19.h),
                     Text(
                       "Forgot your Kayndrexsphere Password?",
                       style:
@@ -96,18 +89,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                       capitalization: TextCapitalization.none,
                       controller: controller,
                       focusNode: fieldFocusNode,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Email address is required";
-                        }
-                        // if (!RegExp(
-                        //         "^[a-zA-Z0-9.!#%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*")
-                        //     .hasMatch(value)) {
-                        //   return 'Please input a valid email address';
-                        // }
-
-                        return null;
-                      },
+                      validator: (value) => validateEmail(value),
                       obscureText: false,
                     ),
 
@@ -135,8 +117,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                                 ref
                                     .read(forgotPasswordProvider.notifier)
                                     .forgotPassword(controller.text);
-
-                                context.loaderOverlay.show();
                               }
                             },
                     ),
