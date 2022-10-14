@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
@@ -10,7 +11,9 @@ import 'package:kayndrexsphere_mobile/presentation/screens/notification/notifica
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/statement_of_acct.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -26,7 +29,6 @@ class Navigation extends HookConsumerWidget {
         padding: padding,
         child: Column(
           children: [
-            Space(50.h),
             DrawerList(
               color: Colors.black,
               title: 'My Profile',
@@ -148,6 +150,69 @@ class Navigation extends HookConsumerWidget {
             ),
             DrawerList(
               color: Colors.black,
+              title: 'Language',
+              comingSoon: false,
+              isIcon: false,
+              image: AppImage.language,
+              onPressed: () {
+                pushNewScreen(context,
+                    screen: const AppWebView(
+                      url: Constants.language,
+                      successMsg: '',
+                      webViewRoute: WebViewRoute.language,
+                    ),
+                    withNavBar: false,
+                    pageTransitionAnimation:
+                        PageTransitionAnimation.slideRight);
+              },
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            DrawerList(
+              color: Colors.black,
+              title: 'Privacy Policy',
+              comingSoon: false,
+              isIcon: false,
+              image: AppImage.privacy,
+              onPressed: () {
+                pushNewScreen(context,
+                    screen: const AppWebView(
+                      url: Constants.privacyPolicy,
+                      successMsg: '',
+                      webViewRoute: WebViewRoute.privacy,
+                    ),
+                    withNavBar: false,
+                    pageTransitionAnimation:
+                        PageTransitionAnimation.slideRight);
+              },
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            DrawerList(
+              color: Colors.black,
+              title: 'Terms and Conditions',
+              comingSoon: false,
+              isIcon: false,
+              image: AppImage.terms,
+              onPressed: () {
+                pushNewScreen(context,
+                    screen: const AppWebView(
+                      url: Constants.terms,
+                      successMsg: '',
+                      webViewRoute: WebViewRoute.privacy,
+                    ),
+                    withNavBar: false,
+                    pageTransitionAnimation:
+                        PageTransitionAnimation.slideRight);
+              },
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            DrawerList(
+              color: Colors.black,
               title: 'log out',
               comingSoon: false,
               isIcon: false,
@@ -160,7 +225,6 @@ class Navigation extends HookConsumerWidget {
                 context.navigateReplaceRoot(const SigninScreen());
               },
             ),
-            Space(10.h),
             const Divider(
               thickness: 1,
             ),

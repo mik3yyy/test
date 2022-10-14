@@ -3,17 +3,20 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/select_language/select_language.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/language.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/select_country_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -121,7 +124,6 @@ class CurrencyScreen extends HookConsumerWidget {
                             ),
                             pageTransitionAnimation:
                                 PageTransitionAnimation.slideRight);
-                        // currencyBuild(context, currencyController);
                       },
                       child: TextFormInput(
                         enabled: false,
@@ -147,7 +149,12 @@ class CurrencyScreen extends HookConsumerWidget {
                     // language
                     GestureDetector(
                       onTap: () {
-                        openLanguagePickerDialog(context, languageController);
+                        pushNewScreen(context,
+                            screen: SelectLanguage(
+                              languageName: languageController,
+                            ),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.slideRight);
                       },
                       child: TextFormInput(
                         enabled: false,
@@ -195,22 +202,34 @@ class CurrencyScreen extends HookConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          child: Text(
-                            'Privacy Policy ',
-                            style: AppText.body4(context, AppColors.appColor),
-                          ),
-                        ),
+                        TextButton(
+                            onPressed: () {
+                              context.navigate(const AppWebView(
+                                url: Constants.privacyPolicy,
+                                successMsg: '',
+                                webViewRoute: WebViewRoute.privacy,
+                              ));
+                            },
+                            child: Text(
+                              'Privacy Policy ',
+                              style: AppText.body4(context, AppColors.appColor),
+                            )),
                         Text(
                           ' | ',
                           style: AppText.body4(context, AppColors.appColor),
                         ),
-                        InkWell(
-                          child: Text(
-                            ' Terms',
-                            style: AppText.body4(context, AppColors.appColor),
-                          ),
-                        ),
+                        TextButton(
+                            onPressed: () {
+                              context.navigate(const AppWebView(
+                                url: Constants.terms,
+                                successMsg: '',
+                                webViewRoute: WebViewRoute.terms,
+                              ));
+                            },
+                            child: Text(
+                              'Terms',
+                              style: AppText.body4(context, AppColors.appColor),
+                            )),
                       ],
                     ),
                   ],

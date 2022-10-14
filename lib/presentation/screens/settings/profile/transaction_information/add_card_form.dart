@@ -6,21 +6,17 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
-import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/address_authentication.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/card_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/view_model/add_card_viewmodel.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/currency_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -81,23 +77,23 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
     final cardControllerValue = useState("");
 
     ref.listen<RequestState>(addCardProvider, (prev, value) {
-      if (value is Success<AddCardRes>) {
-        context.loaderOverlay.hide();
-        if (value.value!.data!.fields![1].contains("address")) {
-          pushNewScreen(context,
-              screen: AddressAuthenication(
-                depositRef: value.value!.data!.depositRef!,
-                mode: value.value!.data!.mode!,
-              ));
-        } else {
-          pushNewScreen(context,
-              screen: CardWebView(
-                url: value.value!.data!.url.toString(),
-                successMsg: 'Card added',
-                webViewRoute: WebViewRoute.addCard,
-              ));
-        }
-      }
+      // if (value is Success<AddCardRes>) {
+      //   context.loaderOverlay.hide();
+      //   if (value.value!.data!.fields![1].contains("address")) {
+      //     pushNewScreen(context,
+      //         screen: AddressAuthenication(
+      //           depositRef: value.value!.data!.depositRef!,
+      //           mode: value.value!.data!.mode!,
+      //         ));
+      //   } else {
+      //     pushNewScreen(context,
+      //         screen: CardWebView(
+      //           url: value.value!.data!.url.toString(),
+      //           successMsg: 'Card added',
+      //           webViewRoute: WebViewRoute.addCard,
+      //         ));
+      //   }
+      // }
 
       if (value is Error) {
         context.loaderOverlay.hide();

@@ -9,4 +9,8 @@ class Constants {
   static const transactionPin = "pin";
   static const stripePublishableKey =
       "pk_test_51Kf3xlIK0uyzlLuMFE6NbmNXMCCujzhCCS9tawsdSOqfRlgIFxUdWZTfhKsFp4BK8tCInssJGhSM5uydz5nSQl1O00BgqojuB2";
+
+  static const privacyPolicy = "https://kayndrex.com/blog/15/";
+  static const terms = "https://kayndrex.com/blog/117/";
+  static const language = "https://kayndrex.com/blog/v2/";
 }

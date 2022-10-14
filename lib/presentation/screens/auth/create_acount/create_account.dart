@@ -41,7 +41,7 @@ class CreateAccountScreen extends HookConsumerWidget {
         ));
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Check Your Mail or SMS for Verification Code",
+          message: "Check Your Mail for Verification Code",
         );
       }
       if (value is Error) {

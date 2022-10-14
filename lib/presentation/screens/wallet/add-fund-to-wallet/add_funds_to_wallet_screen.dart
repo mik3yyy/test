@@ -34,13 +34,6 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
   void onAppleResult(payment) {}
   @override
   Widget build(BuildContext context) {
-    // const _paymentItems = [
-    //   PaymentItem(
-    //     label: 'Total',
-    //     amount: '99.99',
-    //     status: PaymentItemStatus.final_price,
-    //   )
-    // ];
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: AppBar(
