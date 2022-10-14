@@ -91,7 +91,7 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                     ),
             ),
           ),
-          const Space(100),
+          const Space(80),
           PinKeyboard(
             enableBiometric: true,
             textColor: Colors.black,
@@ -135,18 +135,20 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                 text = value;
               });
             },
-            iconBackspace:
-                IconButton(onPressed: () {}, icon: const Icon(Icons.backspace)),
-            iconBiometric: SizedBox(
-              height: 80.h,
-              width: 80.w,
-              child: const Image(
-                image: AssetImage(
-                  "assets/images/fingerprint-3.png",
-                ),
-                color: AppColors.appColor,
-              ),
-            ),
+            // iconBackspace:
+            //     IconButton(onPressed: () {
+
+            //     }, icon: const Icon(Icons.backspace)),
+            // iconBiometric: SizedBox(
+            //   height: 80.h,
+            //   width: 80.w,
+            //   child: const Image(
+            //     image: AssetImage(
+            //       "assets/images/fingerprint-3.png",
+            //     ),
+            //     color: AppColors.appColor,
+            //   ),
+            // ),
           ),
         ],
       ),

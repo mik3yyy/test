@@ -215,10 +215,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(45.r)),
               ),
-              child: Column(
-                children: [
-                  SingleChildScrollView(
-                    child: Padding(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
                       padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 0.h),
                       child: Column(
                         children: [
@@ -374,11 +374,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       label: const Text('Retry'),
                                     ),
                                   ),
-                              idle: () => const Center(
-                                    child: CircularProgressIndicator.adaptive(
-                                      strokeWidth: 5,
-                                    ),
-                                  ),
                               loading: () => Padding(
                                     padding: EdgeInsets.symmetric(
                                         vertical:
@@ -392,8 +387,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                       strokeWidth: 5,
                                     ),
                                   ),
-                              success: (data) {
-                                if (data!.data!.transactions.isEmpty) {
+                              data: (data) {
+                                if (data.data!.transactions.isEmpty) {
                                   return const Center(
                                     child: Text("No transaction History"),
                                   );
@@ -436,8 +431,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ))
           ]),

@@ -25,7 +25,6 @@ class _MakeTransferState extends ConsumerState<MakeTransfer>
   late TabController _tabController;
   @override
   Widget build(BuildContext context) {
-    // final walletList = ref.watch(getAccountDetailsProvider);
     return SizedBox(
       child: SingleChildScrollView(
         child: Column(

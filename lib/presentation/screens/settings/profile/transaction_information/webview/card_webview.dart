@@ -77,7 +77,8 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
                 // ref.read(getCardProvider.notifier).getCard();
 
                 Navigator.pop(context);
-                ref.refresh(walletTransactionProvider);
+                ref.refresh(userProfileProvider);
+                // ref.refresh(walletTransactionProvider);
                 AppDialog.showSuccessMessageDialog(
                   context,
                   widget.successMsg,
@@ -94,11 +95,8 @@ class _CardWebViewState extends ConsumerState<CardWebView> {
               break;
             case WebViewRoute.authorization:
               if (navigation.url.contains('embed_token')) {
-                // final index = navigation.url.toString().lastIndexOf('=');
-                // final reference =
-                //     navigation.url.toString().substring(index + 1);
-                // ref.read(getCardProvider.notifier).getCard();
-                ref.refresh(walletTransactionProvider);
+                ref.refresh(userProfileProvider);
+                // ref.refresh(walletTransactionProvider);
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);

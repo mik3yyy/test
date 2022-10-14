@@ -43,48 +43,51 @@ class _NotificationTabBarState extends ConsumerState<NotificationTabBar>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(
-            // padding: EdgeInsets.only(left: 21.w, right: 18.w),
-            height: 50.h,
-            width: MediaQuery.of(context).size.width,
-            child: TabBar(
-              isScrollable: false,
-              controller: _tabController,
-              labelColor: AppColors.greenColor,
-              labelStyle: AppText.body3(context, AppColors.greenColor),
-              unselectedLabelStyle: AppText.body3(context, AppColors.appColor),
-              unselectedLabelColor: AppColors.appColor,
-              labelPadding: EdgeInsets.zero,
-              indicatorPadding: EdgeInsets.zero,
-              indicatorColor: AppColors.greenColor,
-              tabs: const [
-                Tab(
-                  child: Text("All"),
-                ),
-                Tab(
-                  child: Text("Requests"),
-                ),
-              ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              // padding: EdgeInsets.only(left: 21.w, right: 18.w),
+              height: 50.h,
+              width: MediaQuery.of(context).size.width,
+              child: TabBar(
+                isScrollable: false,
+                controller: _tabController,
+                labelColor: AppColors.greenColor,
+                labelStyle: AppText.body3(context, AppColors.greenColor),
+                unselectedLabelStyle:
+                    AppText.body3(context, AppColors.appColor),
+                unselectedLabelColor: AppColors.appColor,
+                labelPadding: EdgeInsets.zero,
+                indicatorPadding: EdgeInsets.zero,
+                indicatorColor: AppColors.greenColor,
+                tabs: const [
+                  Tab(
+                    child: Text("All"),
+                  ),
+                  Tab(
+                    child: Text("Requests"),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 23.h),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.6,
-            // height: 580.h,
-            // color: Colors.grey,
-            child: TabBarView(
-              controller: _tabController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: const [
-                AllNotificationTabBarView(),
-                RequestNotificationTabBarView(),
-              ],
+            SizedBox(height: 23.h),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.6,
+              // height: 580.h,
+              // color: Colors.grey,
+              child: TabBarView(
+                controller: _tabController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: const [
+                  AllNotificationTabBarView(),
+                  RequestNotificationTabBarView(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

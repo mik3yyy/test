@@ -56,17 +56,13 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
         text: userData?.data.defaultWallet.currencyCode);
     final currencyController = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
-    // final toExchangeCurrency = useTextEditingController();
 
     final amountController = useTextEditingController();
-    // final firstDigit = useTextEditingController();
-    // final secondDigit = useTextEditingController();
 
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
 
     final rate = useState("0.0");
-    // final toExchangeCurrency = useTextEditingController(text: rate.value);
     final from = useState("0.0");
     final convert = ref.watch(conversionProvider);
 

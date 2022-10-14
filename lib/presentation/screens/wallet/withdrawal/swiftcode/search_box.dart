@@ -18,7 +18,7 @@ class SearchBox extends StatelessWidget {
             ),
             focusColor: AppColors.appBgColor,
             filled: true,
-            fillColor: AppColors.appBgColor,
+            fillColor: Colors.grey.shade100,
             hintText: hintText,
             hintStyle: Theme.of(context)
                 .textTheme

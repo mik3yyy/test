@@ -52,6 +52,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     ref.read(deviceInfoProvider.notifier).timeZone();
   }
 
+  bool toogle = true;
+
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
@@ -155,7 +157,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(RegExp('[ ]'))
                         ],
-
                         capitalization: TextCapitalization.none,
                         validator: (String? value) {
                           // if (value!.length < 8) {
@@ -166,21 +167,21 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           // }
                           return null;
                         },
-                        obscureText: true,
-                        // suffixIcon: GestureDetector(
-                        //   onTap: () {
-                        //     togglePasswords.state = !togglePasswords.state;
-                        //   },
-                        //   child: Padding(
-                        //     padding: EdgeInsets.only(bottom: 0.h),
-                        //     child: Icon(
-                        //       togglePasswords.state
-                        //           ? Icons.visibility_off
-                        //           : Icons.visibility,
-                        //       color: AppColors.appColor,
-                        //     ),
-                        //   ),
-                        // ),
+                        obscureText: toogle,
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              toogle = !toogle;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 0.h),
+                            child: Icon(
+                              toogle ? Icons.visibility_off : Icons.visibility,
+                              color: AppColors.appColor,
+                            ),
+                          ),
+                        ),
                       ),
                       Space(32.h),
                       Row(

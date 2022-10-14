@@ -1,24 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/repo/notification_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/withdrawal_request/withdrawal_req.dart';
-
-// final getWithdrawalNotificationProvider = StateNotifierProvider.autoDispose<
-//     GetWithdrawalNotification, RequestState<GetWithdrawalReq>>(
-//   (ref) => GetWithdrawalNotification(ref),
-// );
-
-// class GetWithdrawalNotification extends RequestStateNotifier<GetWithdrawalReq> {
-//   final NotificationServiceManager notificationServiceManager;
-
-//   GetWithdrawalNotification(Ref ref)
-//       : notificationServiceManager =
-//             ref.read(notificationServiceManagerProvider) {
-//     getWithdrawlNotification();
-//   }
-
-//   void getWithdrawlNotification() =>
-//       makeRequest(() => notificationServiceManager.getWithdrawalRequest());
-// }
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 
 final notificationReqSearchQueryProvider =
     StateProvider.autoDispose<String>((ref) {
@@ -26,7 +9,8 @@ final notificationReqSearchQueryProvider =
 });
 
 final remoteReqNotificationListProvider = FutureProvider.autoDispose((ref) {
-  // ref.maintainState = true;
+  ref.maintainState = true;
+  ref.watch(userProfileProvider);
   return ref.watch(notificationServiceManagerProvider).getWithdrawalRequest();
 });
 

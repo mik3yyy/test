@@ -40,11 +40,9 @@ class _TransferState extends ConsumerState<Transfer>
     final userData = ref.watch(userProfileProvider);
     final accountNum = ref.watch(userProfileProvider).value;
     var formatter = NumberFormat("#,##0.00");
+    FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
-      if (value is Success) {
-        context.loaderOverlay.hide();
-      }
       if (value is Error) {
         context.loaderOverlay.hide();
       }
@@ -57,127 +55,137 @@ class _TransferState extends ConsumerState<Transfer>
           size: 50.0,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: AppColors.appColor,
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Space(30.h),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const BackButton(color: Colors.white),
-                        Space(15.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            userData.maybeWhen(data: (data) {
-                              return Text(
-                                "${data.data.defaultWallet.currencyCode} ${formatter.format(data.data.defaultWallet.balance)} ",
-                                style: AppText.header1(
-                                    context, Colors.white, 25.sp),
-                              );
-                            }, orElse: () {
-                              return Text(
-                                "-----",
-                                style: AppText.header1(
-                                    context, Colors.white, 25.sp),
-                              );
-                            }),
-
-                            Space(10.h),
-                            Text(
-                              "Kayndrexsphere Account Number: \n${accountNum?.data.user.accountNumber}",
-                              style:
-                                  AppText.body2(context, Colors.white, 18.sp),
-                            ),
-
-                            // ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Space(40.h),
-                  // const WalletOptionList()
-                ],
-              ),
-              Expanded(
-                  child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(45.r)),
-                ),
-                child: Column(
+      child: GestureDetector(
+        onTap: () {
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.appColor,
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                Column(
                   children: [
+                    Space(30.h),
                     Padding(
-                      padding:
-                          EdgeInsets.only(left: 30.w, right: 30.w, top: 25.h),
-                      child: Container(
-                          padding: EdgeInsets.only(left: 0.w, right: 0.w),
-                          height: 50.h,
-                          width: MediaQuery.of(context).size.width,
-                          // color: Colors.black,
-                          child: TabBar(
-                            isScrollable: false,
-                            controller: _tabController,
-                            // unselectedLabelColor: Colors.white,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const BackButton(color: Colors.white),
+                          Space(15.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              userData.maybeWhen(data: (data) {
+                                return Text(
+                                  "${data.data.defaultWallet.currencyCode} ${formatter.format(data.data.defaultWallet.balance)} ",
+                                  style: AppText.header1(
+                                      context, Colors.white, 25.sp),
+                                );
+                              }, orElse: () {
+                                return Text(
+                                  "-----",
+                                  style: AppText.header1(
+                                      context, Colors.white, 25.sp),
+                                );
+                              }),
 
-                            labelColor: AppColors.appColor,
-                            labelStyle: AppText.body2(
-                                context, AppColors.appColor, 19.sp),
-                            unselectedLabelStyle:
-                                AppText.body2(context, Colors.black45, 19.sp),
-                            unselectedLabelColor: Colors.black26,
-                            labelPadding: EdgeInsets.zero,
-                            indicatorPadding: EdgeInsets.zero,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25.r),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 7), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            tabs: const [
-                              Tab(
-                                text: 'Wallet Info',
+                              Space(10.h),
+                              Text(
+                                "Kayndrexsphere Account Number: \n${accountNum?.data.user.accountNumber}",
+                                style:
+                                    AppText.body2(context, Colors.white, 18.sp),
                               ),
-                              Tab(
-                                text: 'Make Transfer',
-                              ),
+
+                              // ),
                             ],
-                          )),
-                    ),
-                    SizedBox(height: 30.h),
-                    Expanded(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        // height: 783.h,
-                        // color: Colors.blue,
-                        child: TabBarView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: const [AccounInfoTab(), MakeTransfer()]),
+                          ),
+                        ],
                       ),
-                    )
+                    ),
+                    Space(40.h),
+                    // const WalletOptionList()
                   ],
                 ),
-              ))
-            ],
+                Expanded(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(45.r)),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.only(left: 30.w, right: 30.w, top: 25.h),
+                        child: Container(
+                            padding: EdgeInsets.only(left: 0.w, right: 0.w),
+                            height: 50.h,
+                            width: MediaQuery.of(context).size.width,
+                            // color: Colors.black,
+                            child: TabBar(
+                              isScrollable: false,
+                              controller: _tabController,
+                              // unselectedLabelColor: Colors.white,
+
+                              labelColor: AppColors.appColor,
+                              labelStyle: AppText.body2(
+                                  context, AppColors.appColor, 19.sp),
+                              unselectedLabelStyle:
+                                  AppText.body2(context, Colors.black45, 19.sp),
+                              unselectedLabelColor: Colors.black26,
+                              labelPadding: EdgeInsets.zero,
+                              indicatorPadding: EdgeInsets.zero,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25.r),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 7), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              tabs: const [
+                                Tab(
+                                  text: 'Wallet Info',
+                                ),
+                                Tab(
+                                  text: 'Make Transfer',
+                                ),
+                              ],
+                            )),
+                      ),
+                      SizedBox(height: 30.h),
+                      Expanded(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          // height: 783.h,
+                          // color: Colors.blue,
+                          child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _tabController,
+                              children: const [
+                                AccounInfoTab(),
+                                MakeTransfer()
+                              ]),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+              ],
+            ),
           ),
         ),
       ),
