@@ -81,7 +81,7 @@ class _EnableTransactionPinState extends ConsumerState<EnableTransactionPin> {
                     ),
             ),
           ),
-          const Space(100),
+          const Space(80),
           PinKeyboard(
             enableBiometric: true,
             textColor: Colors.black,

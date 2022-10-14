@@ -22,7 +22,6 @@ class CreatePasswordScreen extends HookConsumerWidget {
   final formKey = GlobalKey<FormState>();
   final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
   final passwordConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
-  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,6 +29,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
     final togglePassword = ref.watch(passwordToggleStateProvider.state);
     final toggleConfirmPassword =
         ref.watch(passwordConfirmToggleStateProvider.state);
+    FocusScopeNode currentFocus = FocusScope.of(context);
 
     final passwordController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
@@ -124,7 +124,6 @@ class CreatePasswordScreen extends HookConsumerWidget {
                       labelText: 'Confirm Password',
                       controller: confirmPasswordController,
                       capitalization: TextCapitalization.none,
-                      focusNode: fieldFocusNode,
                       validator: (String? value) {
                         if (value!.isEmpty) {
                           return 'Confirm Password is required';
@@ -158,7 +157,7 @@ class CreatePasswordScreen extends HookConsumerWidget {
                       buttonWidth: 244.w,
                       buttonText: vm is Loading
                           ? loading()
-                          : buttonText(context, "Sign in"),
+                          : buttonText(context, "Save"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,
@@ -166,7 +165,10 @@ class CreatePasswordScreen extends HookConsumerWidget {
                           ? null
                           : () {
                               if (formKey.currentState!.validate()) {
-                                fieldFocusNode.unfocus();
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
+
                                 ref
                                     .read(createPasswordProvider.notifier)
                                     .createPassword(passwordController.text,

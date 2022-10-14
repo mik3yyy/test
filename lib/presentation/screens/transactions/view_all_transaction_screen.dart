@@ -26,18 +26,13 @@ class ViewAllTransactionScreen extends HookConsumerWidget {
       body: SizedBox(
         child: transactionsVm.when(
             error: (error, stackTrace) => Text(error.toString()),
-            idle: () => const Center(
-                  child: CircularProgressIndicator.adaptive(
-                    strokeWidth: 5,
-                  ),
-                ),
             loading: () => const Center(
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 5,
                   ),
                 ),
-            success: (data) {
-              if (data!.data!.transactions.isEmpty) {
+            data: (data) {
+              if (data.data!.transactions.isEmpty) {
                 return const Center(
                   child: Text("You have no transactions"),
                 );

@@ -12,6 +12,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_p
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/user_saved_beneficary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/verify_acct_no_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
@@ -32,21 +33,20 @@ class FriendsTab extends StatefulHookConsumerWidget {
 }
 
 class _FriendsTabState extends ConsumerState<FriendsTab> {
-  // final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
   final _formKey = GlobalKey<FormState>();
+  bool togglePin = true;
   @override
   Widget build(BuildContext context) {
     final defaultWallet = ref.watch(userProfileProvider).value;
     final acctNoVm = ref.watch(verifyAcctNoProvider);
     final beneficiaryVm = ref.watch(usersavedWalletBeneficirayProvider);
     final vm = ref.watch(transferToWalletProvider);
-    // final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
     final accountNoController = useTextEditingController();
     final currencyController = useTextEditingController(
         text: defaultWallet?.data.defaultWallet.currencyCode);
     final friendNameController = useTextEditingController();
     final amountController = useTextEditingController();
-    // final pinController = useTextEditingController();
+    FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(verifyAcctNoProvider, (T, value) {
       if (value is Success<VerifyAcctNoRes>) {
@@ -56,35 +56,23 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
-
-        // // message: value.error.toString());
-
       }
     });
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
-      if (value is Loading) {
-        context.loaderOverlay.show();
-      } else {
-        context.loaderOverlay.hide();
-      }
-      if (value is Success) {
+      if (value is Success<bool>) {
         // context.loaderOverlay.hide();
         AppDialog.showSuccessMessageDialog(
           context,
           'Funds transferred successfully',
           onpressed: () => Navigator.pop(context),
         );
-        //Refreshing user account details, so the new balance can reflect on the screen
 
         ref.refresh(getUserProfileProvider);
-        ref.refresh(usersavedWalletBeneficirayProvider);
-
-        // return AppSnackBar.showSuccessSnackBar(context,
-        //     message: 'Transfer Succesfully');
+        ref.refresh(userProfileProvider);
+        // ref.refresh(usersavedWalletBeneficirayProvider);
       }
       if (value is Error) {
-        // context.loaderOverlay.hide();
         AppDialog.showErrorMessageDialog(context, value.error.toString());
       }
     });
@@ -95,26 +83,21 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             beneficiaryVm.when(
-              success: (value) {
-                return value!.data!.walletBeneficiaries!.isEmpty
+              data: (value) {
+                return value.data!.walletBeneficiaries!.isEmpty
                     ? const SizedBox.shrink()
                     : Container(
-                        color: AppColors.appColor.withOpacity(0.1),
-                        height: 300.h,
+                        color: AppColors.appColor.withOpacity(0.09),
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Space(20.h),
-                              Text(
-                                'Transfer to',
-                                style:
-                                    AppText.body2(context, Colors.black, 18.sp),
-                              ),
-                              Space(20.h),
+                              Space(10.h),
                               SizedBox(
-                                height: 95,
+                                // color: Colors.red,
+                                height: 100,
                                 child: ListView.separated(
                                   scrollDirection: Axis.horizontal,
                                   itemCount:
@@ -125,16 +108,28 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
 
                                     return Column(
                                       children: [
-                                        Container(
-                                          height: 80.h,
-                                          width: 80.w,
-                                          decoration: BoxDecoration(
-                                            color: Colors.orange,
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            border: Border.all(
-                                                width: 5,
-                                                color: Colors.grey.shade300),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              accountNoController.text = item
+                                                  .beneficiary!.accountNumber!;
+                                              friendNameController.text =
+                                                  '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
+                                            });
+                                          },
+                                          child: Container(
+                                            height: 80.h,
+                                            width: 80.w,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.grey.shade100,
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              '${item.beneficiary!.firstName?[0]}',
+                                              style: AppText.body2(context,
+                                                  Colors.black45, 40.sp),
+                                            )),
                                           ),
                                         ),
                                         Space(10.h),
@@ -168,14 +163,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   ),
                 );
               },
-              idle: () {
-                //When enpoint is loading, it should display default ideas with overlay loading
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.appBgColor,
-                  ),
-                );
-              },
             ),
             Space(25.h),
             Padding(
@@ -187,7 +174,7 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Make transfer from your ${defaultWallet!.data.defaultWallet.currencyCode} wallet',
+                    'Make transfer from your ${defaultWallet?.data.defaultWallet.currencyCode} wallet',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
                   ),
                   Space(40.h),
@@ -242,10 +229,11 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                     labelText: acctNoVm is Loading
                         ? 'Fetching...'
                         : friendNameController.text,
+                    controller: friendNameController,
                     obscureText: false,
                     color: Colors.white,
-                    readOnly: true,
-                    // controller: fr,
+                    // readOnly: true,
+
                     // enabled: false,
                   ),
                   Space(25.h),
@@ -261,6 +249,12 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                     readOnly: false,
                     controller: amountController,
                     keyboardType: TextInputType.number,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return "Amount is required";
+                      }
+                      return null;
+                    },
                   ),
                   Space(25.h),
                   Text(
@@ -270,170 +264,122 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   Space(5.h),
                   WalletTextField(
                     controller: currencyController,
-                    labelText: defaultWallet.data.defaultWallet.currencyCode,
+                    labelText: defaultWallet?.data.defaultWallet.currencyCode,
                     obscureText: false,
                     color: AppColors.appColor.withOpacity(0.05),
                     readOnly: true,
                   ),
                   Space(10.h),
+
                   const SaveBeneficiaryCheckBox(),
-                  // Space(35.h),
-                  // Container(
-                  //   height: 80.h,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   color: AppColors.appColor.withOpacity(0.05),
-                  //   child: Row(
-                  //     children: [
-                  //       Space(20.w),
-                  //       const Icon(
-                  //         Icons.security,
-                  //         size: 30,
-                  //       ),
-                  //       Space(15.w),
-                  //       Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Text(
-                  //             'For security reaso',
-                  //             style:
-                  //                 AppText.header2(context, Colors.black, 20.sp),
+                  // if (PreferenceManager.enableBioMetrics) ...[
+                  //   const SizedBox.shrink()
+                  // ] else ...[
+                  //   const TransactionPinMessage(),
+                  //   Space(20.h),
+                  //   EditForm(
+                  //     autovalidateMode: AutovalidateMode.onUserInteraction,
+                  //     labelText: 'Enter Transaction Pin',
+                  //     keyboardType: TextInputType.number,
+                  //     controller: transactionPin,
+                  //     obscureText: togglePin,
+                  //     validator: (value) => null,
+                  //     suffixIcon: SizedBox(
+                  //       width: 55.w,
+                  //       child: GestureDetector(
+                  //         onTap: () {
+                  //           setState(() {
+                  //             togglePin = !togglePin;
+                  //           });
+                  //         },
+                  //         child: Padding(
+                  //           padding: EdgeInsets.only(bottom: 0.h),
+                  //           child: Icon(
+                  //             togglePin
+                  //                 ? Icons.visibility_off_outlined
+                  //                 : Icons.visibility_outlined,
+                  //             color: Colors.grey.shade300,
                   //           ),
-                  //           const Space(2),
-                  //           Text(
-                  //             'Enter transaction PIN',
-                  //             style: AppText.body2Bold(
-                  //                 context, Colors.black, 23.sp),
-                  //           ),
-                  //         ],
+                  //         ),
                   //       ),
-                  //     ],
+                  //     ),
                   //   ),
-                  // ),
+                  // ],
+
                   // Space(20.h),
-                  // EditForm(
-                  //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  //   labelText: 'Enter Transaction Pin',
-                  //   keyboardType: TextInputType.number,
-                  //   // textAlign: TextAlign.start,
-                  //   controller: pinController,
-                  //   obscureText: transactionPinToggle.state,
-                  //   // validator: (value) => validatePassword(value),
-                  //   validator: (String? value) {
-                  //     if (value!.isEmpty) {
-                  //       return 'Transaction pin is required';
-                  //     }
-                  //     return null;
-                  //   },
-                  //   suffixIcon: SizedBox(
-                  //     width: 55.w,
-                  //     child: GestureDetector(
-                  //       onTap: () {
-                  //         transactionPinToggle.state =
-                  //             !transactionPinToggle.state;
-                  //       },
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(bottom: 0.h),
-                  //         child: Icon(
-                  //           transactionPinToggle.state
-                  //               ? Icons.visibility_off_outlined
-                  //               : Icons.visibility_outlined,
-                  //           color: Colors.grey.shade300,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // EditForm(
-                  //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  //   labelText: 'Enter Transaction Pin',
-                  //   keyboardType: TextInputType.text,
-                  //   // textAlign: TextAlign.start,
-                  //   controller: fistNameController,
-                  //   obscureText: transactionPinToggle.state,
-                  //   validator: (value) => validatePassword(value),
-                  //   suffixIcon: SizedBox(
-                  //     width: 55.w,
-                  //     child: GestureDetector(
-                  //       onTap: () {
-                  //         transactionPinToggle.state =
-                  //             !transactionPinToggle.state;
-                  //       },
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(bottom: 0.h),
-                  //         child: Icon(
-                  //           transactionPinToggle.state
-                  //               ? Icons.visibility_off_outlined
-                  //               : Icons.visibility_outlined,
-                  //           color: Colors.grey.shade300,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+
                   Space(20.h),
                   CustomButton(
-                      buttonText: buttonText(context, "Transfer"),
+                      buttonText: vm is Loading
+                          ? loading()
+                          : buttonText(context, "Transfer"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
                       textColor: Colors.white,
-                      onPressed: vm is Loading
+                      onPressed: acctNoVm is Loading
                           ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                // ref
-                                //     .read(transferToWalletProvider.notifier)
-                                //     .transferToAnotherUser(
-                                //       accountNoController.text,
-                                //       currencyController.text,
-                                //       int.parse(amountController.text),
-                                //       "",
-                                //       savedAsBenefeciaryChecked,
-                                //     );
+                          : vm is Loading
+                              ? null
+                              : () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
 
-                                if (PreferenceManager
-                                    .enableTransactionBioMetrics) {
-                                  // print(object)
+                                    // ref
+                                    //     .read(transferToWalletProvider.notifier)
+                                    //     .transferToAnotherUser(
+                                    //       accountNoController.text,
+                                    //       currencyController.text,
+                                    //       int.parse(amountController.text),
+                                    //       "",
+                                    //       savedAsBenefeciaryChecked,
+                                    //     );
 
-                                  ref
-                                      .read(localAuthStateProvider.notifier)
-                                      .authenticateTransaction()
-                                      .then((value) {
-                                    ref
-                                        .read(transferToWalletProvider.notifier)
-                                        .transferToAnotherUser(
-                                          accountNoController.text,
-                                          currencyController.text,
-                                          int.parse(amountController.text),
-                                          value,
-                                          savedAsBenefeciaryChecked,
-                                        );
-                                  });
-                                } else {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      isDismissible: true,
-                                      isScrollControlled: true,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(20))),
-                                      builder: (context) {
-                                        return PinModalSheet(
-                                          routeName: ModalRouteName.toFriend,
-                                          fromCurrency:
+                                    if (PreferenceManager
+                                        .enableTransactionBioMetrics) {
+                                      ref
+                                          .read(localAuthStateProvider.notifier)
+                                          .authenticateTransaction()
+                                          .then((value) {
+                                        ref
+                                            .read(transferToWalletProvider
+                                                .notifier)
+                                            .transferToAnotherUser(
                                               accountNoController.text,
-                                          toCurrency: currencyController.text,
-                                          transferAmount:
+                                              currencyController.text,
                                               int.parse(amountController.text),
-                                          saveBeneficiary:
+                                              value,
                                               savedAsBenefeciaryChecked,
-                                        );
+                                            );
                                       });
-                                }
-
-                                // context.loaderOverlay.show();
-                              }
-                            },
+                                    } else {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          isDismissible: true,
+                                          isScrollControlled: true,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                      top:
+                                                          Radius.circular(20))),
+                                          builder: (context) {
+                                            return PinModalSheet(
+                                              routeName:
+                                                  ModalRouteName.toFriend,
+                                              fromCurrency:
+                                                  accountNoController.text,
+                                              toCurrency:
+                                                  currencyController.text,
+                                              transferAmount: int.parse(
+                                                  amountController.text),
+                                              saveBeneficiary:
+                                                  savedAsBenefeciaryChecked,
+                                            );
+                                          });
+                                    }
+                                  }
+                                },
                       buttonWidth: MediaQuery.of(context).size.width),
                   Space(7.h),
                   Center(
@@ -453,16 +399,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
     );
   }
 }
-
-// class FriendsTab extends HookConsumerWidget {
-//   FriendsTab({Key? key}) : super(key: key);
-
-//   // final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
-//   final _formKey = GlobalKey<FormState>(debugLabel: 'resendKey');
-//   @override
-//   Widget build(BuildContext context, ref) {
-//     }
-// }
 
 class SaveBeneficiaryCheckBox extends StatefulWidget {
   const SaveBeneficiaryCheckBox({Key? key}) : super(key: key);
@@ -498,5 +434,43 @@ class _SaveBeneficiaryCheckBoxState extends State<SaveBeneficiaryCheckBox> {
             savedAsBenefeciaryChecked = newValue!;
           });
         });
+  }
+}
+
+class TransactionPinMessage extends StatelessWidget {
+  const TransactionPinMessage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80.h,
+      width: MediaQuery.of(context).size.width,
+      color: AppColors.appColor.withOpacity(0.05),
+      child: Row(
+        children: [
+          Space(20.w),
+          const Icon(
+            Icons.security,
+            size: 30,
+          ),
+          Space(15.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'For security reasons',
+                style: AppText.header2(context, Colors.black, 20.sp),
+              ),
+              const Space(2),
+              Text(
+                'Enter transaction PIN',
+                style: AppText.body2Bold(context, Colors.black, 23.sp),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

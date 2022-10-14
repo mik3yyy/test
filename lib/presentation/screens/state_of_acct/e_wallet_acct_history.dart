@@ -34,7 +34,6 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
   late TabController _tabController;
   @override
   void initState() {
-    // ref.refresh(provider)
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
   }

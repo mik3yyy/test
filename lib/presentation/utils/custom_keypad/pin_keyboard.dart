@@ -81,6 +81,9 @@ class _PinKeyboardState extends State<PinKeyboard> {
                 _createNumber('6', _handleTabNumber),
               ],
             ),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -90,6 +93,9 @@ class _PinKeyboardState extends State<PinKeyboard> {
                 const Spacer(),
                 _createNumber('9', _handleTabNumber),
               ],
+            ),
+            const SizedBox(
+              height: 10,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,12 +187,12 @@ class _PinKeyboardState extends State<PinKeyboard> {
   Widget _createBiometricIcon() {
     if (widget.enableBiometric) {
       return _createImage(
-        widget.iconBiometric ??
-            Image.asset(
-              'assets/images/fingerprint-3.png',
-              // package: 'pin_keyboard',
-              color: widget.iconBiometricColor ?? const Color(0xff6f6f6f),
-            ),
+        widget.iconBiometric ?? const SizedBox.shrink(),
+        // Image.asset(
+        //   'assets/images/fingerprint-3.png',
+        //   // package: 'pin_keyboard',
+        //   color: widget.iconBiometricColor ?? const Color(0xff6f6f6f),
+        // ),
         _handleTabBiometric,
       );
     } else {
@@ -199,10 +205,9 @@ class _PinKeyboardState extends State<PinKeyboard> {
 
   Widget _createBackspaceIcon() => _createImage(
         widget.iconBackspace ??
-            Image.asset(
-              'assets/images/backButton.png',
-              // package: 'pin_keyboard',
-              color: widget.iconBackspaceColor ?? Colors.black,
+            const Icon(
+              Icons.backspace,
+              size: 30,
             ),
         _handleTabBackspace,
       );

@@ -1,24 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/repo/wallet_repo.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 
-final walletTransactionProvider = StateNotifierProvider.autoDispose<
-    WalletTransactionsVM, RequestState<WalletTransactions>>(
-  (ref) {
-    ref.maintainState = true;
-    return WalletTransactionsVM(ref);
-  },
-);
-
-class WalletTransactionsVM extends RequestStateNotifier<WalletTransactions> {
-  final WalletRepo _walletRepo;
-
-  WalletTransactionsVM(Ref ref)
-      : _walletRepo = ref.read(walletManagerProvider) {
-    getwalletTransactions();
-  }
-
-  void getwalletTransactions() =>
-      makeRequest(() => _walletRepo.getTransactions());
-}
+final walletTransactionProvider = FutureProvider.autoDispose((ref) {
+  ref.maintainState = true;
+  ref.watch(userProfileProvider);
+  return ref.watch(walletManagerProvider).getTransactions();
+});
