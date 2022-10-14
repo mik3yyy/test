@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -12,6 +13,8 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/verify_account_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -55,7 +58,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
       if (value is Success) {
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Check Your Mail or SMS for Verification Code",
+          message: "Check Your Mail for Verification Code",
         );
       }
       if (value is Error) {
@@ -185,37 +188,39 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     Text('By clicking Proceed, you agree to our ',
                         style: AppText.body4(context, AppColors.hintColor)),
                     Space(5.h),
-                    InkWell(
-                      onTap: () {},
-                      // context.navigate(VerifyAccountScreen()),
-                      child: Text(
-                        'Privacy Policy',
-                        style: AppText.body4(
-                          context,
-                          AppColors.appColor,
-                        ),
-                      ),
-                    ),
+
+                    TextButton(
+                        onPressed: () {
+                          context.navigate(const AppWebView(
+                            url: Constants.privacyPolicy,
+                            successMsg: '',
+                            webViewRoute: WebViewRoute.privacy,
+                          ));
+                        },
+                        child: Text(
+                          'Privacy Policy ',
+                          style: AppText.body4(context, AppColors.appColor),
+                        )),
                     Space(5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'and our ',
-                          style: AppText.body4(context, AppColors.hintColor),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Text(
-                            'Terms and Conditions',
-                            style: AppText.body4(
-                              context,
-                              AppColors.appColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'and our ',
+                    //       style: AppText.body4(context, AppColors.hintColor),
+                    //     ),
+                    //     InkWell(
+                    //       onTap: () {},
+                    //       child: Text(
+                    //         'Terms and Conditions',
+                    //         style: AppText.body4(
+                    //           context,
+                    //           AppColors.appColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

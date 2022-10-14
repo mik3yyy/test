@@ -76,8 +76,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
             });
 
             context.loaderOverlay.hide();
-            navigator.key.currentContext!
-                .navigate(MainScreen(menuScreenContext: context));
+            navigator.key.currentContext!.navigate(MainScreen(
+              menuScreenContext: context,
+            ));
           });
         }
       }

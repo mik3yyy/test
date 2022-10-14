@@ -574,13 +574,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
-  go_router:
-    dependency: "direct main"
-    description:
-      name: go_router
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.6"
   graphs:
     dependency: transitive
     description:
@@ -728,13 +721,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.0"
-  language_picker:
-    dependency: "direct main"
-    description:
-      name: language_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   libphonenumber:
     dependency: transitive
     description:
@@ -1057,13 +1043,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  recase:
-    dependency: transitive
-    description:
-      name: recase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   riverpod:
     dependency: transitive
     description:

@@ -27,7 +27,6 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(userProfileProvider);
-    // final profileImage = PreferenceManager.avatarUrl;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,

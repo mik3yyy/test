@@ -58,10 +58,9 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
       return buildCupertinoWidget(context);
     } else {
       return AlertDialog(
-        title: const Text("Expired session"),
-        content: Text(
-            "Session has expired. Please login to authenticate this user.",
-            style: AppText.body2(context, Colors.black, 16.sp)),
+        title: const Text("Info"),
+        content:
+            Text(message, style: AppText.body2(context, Colors.black, 16.sp)),
         actions: [
           Center(
             child: Padding(
@@ -108,7 +107,7 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(
-        'Expired session',
+        'Info',
         style: AppText.header2(context, Colors.black, 20.sp),
       ),
       content: Column(

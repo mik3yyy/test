@@ -84,7 +84,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
       }
       if (value is Success<StripeWebRes>) {
         pushNewScreen(context,
-            screen: CardWebView(
+            screen: AppWebView(
               url: value.value!.url,
               successMsg: 'Wallet Funded',
               webViewRoute: WebViewRoute.fundCard,

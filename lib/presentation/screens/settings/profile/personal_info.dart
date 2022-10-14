@@ -64,7 +64,8 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                     screen: EditInfo(
                       userValue: userValue!,
                     ),
-                    pageTransitionAnimation: PageTransitionAnimation.fade);
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
               }),
         ],
       ),
@@ -72,12 +73,10 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         bottom: false,
         child: Column(
           children: [
-            const Space(10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 children: [
-                  Space(5.h),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   //   children: [

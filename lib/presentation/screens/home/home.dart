@@ -63,6 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final defaultWallet = ref.watch(userProfileProvider);
     var formatter = NumberFormat("#,##0.00");
     final currency = useTextEditingController();
+
     final newUser = PreferenceManager.isFirstLaunch;
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {

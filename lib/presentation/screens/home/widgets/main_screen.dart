@@ -99,13 +99,6 @@ class _MainScreenState extends State<MainScreen> {
         title: ("wallet"),
         activeColorPrimary: AppColors.appColor,
         inactiveColorPrimary: Colors.grey,
-        // routeAndNavigatorSettings: RouteAndNavigatorSettings(
-        //   initialRoute: '/',
-        //   routes: {
-        //     '/first': (context) => MainScreen2(),
-        //     '/second': (context) => MainScreen3(),
-        //   },
-        // ),
       ),
       PersistentBottomNavBarItem(
         icon: SvgPicture.asset(
@@ -119,13 +112,6 @@ class _MainScreenState extends State<MainScreen> {
         title: ("portfolio"),
         activeColorPrimary: AppColors.appColor,
         inactiveColorPrimary: Colors.grey,
-        // routeAndNavigatorSettings: RouteAndNavigatorSettings(
-        //   initialRoute: '/',
-        //   routes: {
-        //     '/first': (context) => MainScreen2(),
-        //     '/second': (context) => MainScreen3(),
-        //   },
-        // ),
       ),
       PersistentBottomNavBarItem(
         icon: SvgPicture.asset(
@@ -139,13 +125,6 @@ class _MainScreenState extends State<MainScreen> {
         title: ("settings"),
         activeColorPrimary: AppColors.appColor,
         inactiveColorPrimary: Colors.grey,
-        // routeAndNavigatorSettings: RouteAndNavigatorSettings(
-        //   initialRoute: '/',
-        //   routes: {
-        //     '/first': (context) => MainScreen2(),
-        //     '/second': (context) => MainScreen3(),
-        //   },
-        // ),
       ),
     ];
   }
@@ -192,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedTabScreenContext: (context) {
           // testContext = context;
         },
+
         hideNavigationBar: _hideNavBar,
         decoration: const NavBarDecoration(
           colorBehindNavBar: Colors.indigo,

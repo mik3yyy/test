@@ -42,8 +42,8 @@ class MyApp extends HookConsumerWidget {
     eventBus.on<UnAuthenticated>().listen((event) async {
       navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
       AuthenicatedState.showMessage(navigator.key.currentContext!,
-          "Session has expired. Login to authenticate this user.",
-          buttonText: "Ok", buttonClicked: () {
+          "Your session has timed out, please login again", buttonText: "Ok",
+          buttonClicked: () {
         Navigator.pop(navigator.key.currentContext!);
         PreferenceManager.clear();
       });
