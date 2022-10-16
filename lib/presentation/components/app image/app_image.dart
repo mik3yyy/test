@@ -57,7 +57,7 @@ class AppImage {
   static const investIcon = "assets/images/invest_icon.svg";
   static const startInvestin = "assets/images/start_investing.svg";
   static const settings = "assets/images/Setting.svg";
-  static const prop = "assets/images/Chat.svg";
+  static const prop = "assets/images/chat.png";
   static const deactivate = "assets/images/deactivate.svg";
   static const notification = "assets/images/notification.svg";
   static const security = "assets/images/Security.svg";
@@ -84,16 +84,16 @@ class AppImage {
   //ICONS FOR SETTINGS SCREEN
   static const myProfile = "assets/images/profile.png";
   static const myProp = "assets/images/props.png";
-  static const myNotification = "assets/images/notifications.png";
-  static const mySafePay = "assets/images/safepay.png";
-  static const referAFriend = "assets/images/refer_a_friend.png";
-  static const faq = "assets/images/new_faq.png";
-  static const document = "assets/images/Document.png";
-  static const logOut = "assets/images/logout.png";
-  static const deactivateAccount = "assets/images/deactivate_account.png";
-  static const securityProfile = "assets/images/profile_security.png";
+  static const myNotification = "assets/images/notification.png";
+  static const mySafePay = "assets/images/safe-pay.png";
+  static const referAFriend = "assets/images/refer_friend.png";
+  static const faq = "assets/images/faq.png";
+  static const document = "assets/images/document.png";
+  static const logOut = "assets/images/sign-out.png";
+  static const deactivateAccount = "assets/images/deactivate.png";
+  static const securityProfile = "assets/images/security.png";
   static const transaction = "assets/images/transaction_info.png";
-  static const uploadId = "assets/images/upload_id.png";
+  static const uploadId = "assets/images/upload.png";
   static const transactionPin = "assets/images/transaction_pin.png";
   static const resetTransactionPin = "assets/images/reset_transaction_pin.png";
   static const setPassword = "assets/images/password_icon.png";

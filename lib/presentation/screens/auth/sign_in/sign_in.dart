@@ -57,8 +57,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
+    final email = ref.watch(userEmail.state);
     final device = ref.watch(deviceInfoProvider);
-    final emailPhoneController = useTextEditingController(text: widget.email);
+    final emailPhoneController = useTextEditingController(text: email.state);
     final passwordController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
 

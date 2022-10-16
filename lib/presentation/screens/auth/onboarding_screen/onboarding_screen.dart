@@ -36,7 +36,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 items: [
                   //Image One
                   ImageWidget(
-                    language: "Change Language?",
+                    language: "",
                     height: height,
                     image: AppImage.image1,
                     text1: "Welcome!",

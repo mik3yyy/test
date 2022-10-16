@@ -104,8 +104,6 @@ class AppDialog {
   static void showDetailsDialog(
     BuildContext context, {
     required String transactionType,
-    required String accountNo,
-    required String accountName,
     required String amount,
     required String reference,
     required String status,
@@ -144,20 +142,6 @@ class AppDialog {
                           "Transaction type : $transactionType",
                           style: AppText.body2(context, Colors.black, 18.sp),
                         ),
-                        if (accountNo.isEmpty) ...[
-                          const SizedBox.shrink()
-                        ] else ...[
-                          Space(25.h),
-                          Text(
-                            "Credit account : $accountNo",
-                            style: AppText.body2(context, Colors.black, 18.sp),
-                          ),
-                          Space(25.h),
-                          Text(
-                            "Payment from : $accountName",
-                            style: AppText.body2(context, Colors.black, 18.sp),
-                          ),
-                        ],
                         Space(25.h),
                         Text(
                           "Amount : $amount",

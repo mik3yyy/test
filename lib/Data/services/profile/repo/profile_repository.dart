@@ -3,6 +3,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/saved_id.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
@@ -90,15 +91,6 @@ class ProfileRepository extends IProfileManager {
     return res;
   }
 
-  // @override
-  // Future upLoadProfilePic(String filePath) async {
-  //   final res = await _profileService.upLoadProfilePic(filePath);
-  //   return res;
-  // }
-
-  // @override
-  // Future<bool> uploadPP(String imageUrl) async {
-  //   final res = await _profileService.uploadPP(imageUrl);
-  //   return res;
-  // }
+  @override
+  Future<SavedId> getID() async => await _profileService.getID();
 }

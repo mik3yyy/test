@@ -72,8 +72,6 @@ class StatementListCard extends StatelessWidget {
         AppDialog.showDetailsDialog(
           context,
           transactionType: statement.direction.toString(),
-          accountName: "",
-          accountNo: "",
           status: statement.entity!.status.toString(),
           amount:
               "${statement.entity?.walletCurrencyCode} ${formatter.format(statement.amount)}",
@@ -94,9 +92,9 @@ class StatementListCard extends StatelessWidget {
                 Text(statement.direction.toString()),
                 const Space(5),
                 Text(
-                  getStatus(statement.entity!.status.toString()),
-                  style: AppText.body3(context,
-                      statusColor(statement.entity!.status.toString())),
+                  getStatus(statement.direction.toString()),
+                  style: AppText.body3(
+                      context, statusColor(statement.direction.toString())),
                 ),
               ],
             ),
@@ -121,9 +119,11 @@ String getStatus(String status) {
 Color statusColor(String status) {
   if (status.isEmpty) {
     return Colors.blue;
-  } else if (status == "completed") {
+  } else if (status == "credit") {
     return Colors.green;
-  } else {
+  } else if (status == "debit") {
     return Colors.red;
+  } else {
+    return Colors.blue;
   }
 }

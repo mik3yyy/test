@@ -39,7 +39,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         ));
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Please Check Your Mail or SMS for Verification Code",
+          message: "Please Check Your Mail for Verification Code",
         );
       }
       if (value is Error) {

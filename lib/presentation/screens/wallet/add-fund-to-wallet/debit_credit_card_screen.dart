@@ -131,9 +131,12 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                   ),
                 ),
                 Space(27.h),
-                Text(
-                  'Transfer amount should not be less than £1',
-                  style: AppText.body2Medium(context, Colors.black54, 20.sp),
+                Padding(
+                  padding: EdgeInsets.only(left: 23.w, right: 23.w),
+                  child: Text(
+                    'Transfer amount due must add up to at least £0.30',
+                    style: AppText.body2(context, Colors.black, 18.sp),
+                  ),
                 ),
                 Space(40.h),
                 Padding(
@@ -559,10 +562,6 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                             if (amountController.text.isEmpty) {
                               AppSnackBar.showErrorSnackBar(context,
                                   message: "Please add amount");
-                            }
-                            if (int.parse(amountController.text) < 400) {
-                              AppSnackBar.showInfoSnackBar(context,
-                                  message: "Transfer amount is less than £1");
                             } else {
                               if (formKey.currentState!.validate()) {
                                 var fundWalletReq = FundWalletReq(

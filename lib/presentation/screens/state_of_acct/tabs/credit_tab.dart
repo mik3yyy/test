@@ -74,8 +74,6 @@ class CreditStatementCard extends StatelessWidget {
         AppDialog.showDetailsDialog(
           context,
           transactionType: statement.direction.toString(),
-          accountName: "",
-          accountNo: "",
           status: statement.entity!.status.toString(),
           amount:
               "${statement.entity?.walletCurrencyCode} ${formatter.format(statement.amount)}",

@@ -6,9 +6,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/beneficiary_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/shared/route_name.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../home/widgets/bottomNav/persistent_tab_view.dart';
@@ -31,7 +28,6 @@ class _WithdrawalMethodScreenState
 
   @override
   Widget build(BuildContext context) {
-    final controller = ref.watch(genericController);
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       appBar: AppBar(
@@ -92,38 +88,35 @@ class _WithdrawalMethodScreenState
                   WithdrawMethod(
                       method: "NUBAN [Nigeria]",
                       onPressed: () {
-                        if (controller.beneficiary.isEmpty) {
-                          ref
-                              .read(genericController.notifier)
-                              .getBeneficiaries();
-                          pushNewScreen(
-                            context,
-                            screen: controller.beneficiary.isNotEmpty
-                                ? const BeneficiaryScreen(
-                                    routeName: RouteName.nuban)
-                                : const NubanWithdraw(),
+                        // if (controller.beneficiary.isEmpty) {
+                        //   ref
+                        //       .read(genericController.notifier)
+                        //       .getBeneficiaries();
+                        pushNewScreen(
+                          context,
+                          screen: const NubanWithdraw(),
 
-                            // const NubanWithdraw(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade,
-                          );
-                        } else {
-                          pushNewScreen(
-                            context,
-                            screen: controller.beneficiary.isNotEmpty
-                                ? const BeneficiaryScreen(
-                                    routeName: RouteName.nuban)
-                                : const NubanWithdraw(),
+                          // const NubanWithdraw(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
 
-                            // const NubanWithdraw(),
-                            withNavBar:
-                                true, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.fade,
-                          );
-                        }
+                        // else {
+                        //   pushNewScreen(
+                        //     context,
+                        //     screen: controller.beneficiary.isNotEmpty
+                        //         ? const BeneficiaryScreen(
+                        //             routeName: RouteName.nuban)
+                        //         : const NubanWithdraw(),
+
+                        //     // const NubanWithdraw(),
+                        //     withNavBar:
+                        //         true, // OPTIONAL VALUE. True by default.
+                        //     pageTransitionAnimation:
+                        //         PageTransitionAnimation.cupertino,
+                        //   );
+                        // }
                       }),
                   Space(20.h),
                   WithdrawMethod(

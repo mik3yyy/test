@@ -34,79 +34,87 @@ class ProfileImage extends HookConsumerWidget {
       absorbing: ignoreClick,
       child: Stack(
         children: [
-          InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => const SelectImageType());
-            },
-            child: userAvatar.state.isNotEmpty
-                ? CircleAvatar(
-                    radius: avatar,
-                    backgroundImage: FileImage(File(userAvatar.state)),
-                  )
-                : SizedBox(
-                    height: height,
-                    width: width,
-                    child: user.value?.data.user.profilePicture == null
-                        ? SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
+          userAvatar.state.isNotEmpty
+              ? CircleAvatar(
+                  radius: avatar,
+                  backgroundImage: FileImage(File(userAvatar.state)),
+                )
+              : SizedBox(
+                  height: height,
+                  width: width,
+                  child: user.value?.data.user.profilePicture == null
+                      ? SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Image.asset(
+                            AppImage.profile,
+                            scale: 5,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(300.0),
+                          child: KYNetworkImage(
+                            url: user.value!.data.user.profilePicture!.imageUrl
+                                .toString(),
+                            errorImage: Image.asset(
                               AppImage.profile,
                               scale: 5,
                               fit: BoxFit.cover,
                             ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(300.0),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => const Center(
-                                  child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) => SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: Image.asset(
-                                  AppImage.profile,
-                                  scale: 5,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              imageUrl: user
-                                  .value!.data.user.profilePicture!.imageUrl
-                                  .toString(),
-                            ),
-                          ),
-                  ),
-          ),
+                            fit: BoxFit.cover,
+                          )),
+                ),
           hasIcon
-              ? const Padding(
-                  padding: EdgeInsets.only(left: 60, top: 65),
-                  child: CircleAvatar(
-                    radius: 18.0,
-                    child: Icon(Icons.camera_alt_outlined,
-                        size: 18, color: Colors.white),
+              ? InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => const SelectImageType());
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 60, top: 65),
+                    child: CircleAvatar(
+                      radius: 18.0,
+                      child: Icon(Icons.camera_alt_outlined,
+                          size: 18, color: Colors.white),
+                    ),
                   ),
                 )
               : const SizedBox.shrink(),
         ],
       ),
+    );
+  }
+}
 
-      // CircleAvatar(
-      //     radius: blockH * 9,
-      //     backgroundImage: FileImage(File(avatar)),
-      //     child: upload is Loading
-      //         ? BackdropFilter(
-      //             filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-      //             child: Container(
-      //                 decoration: BoxDecoration(
-      //                     shape: BoxShape.circle,
-      //                     color: Colors.white.withOpacity(0.0))))
-      //         : const SizedBox.shrink(),
-      //   )
+class KYNetworkImage extends StatelessWidget {
+  final String url;
+  final Widget errorImage;
+  final BoxFit fit;
+  final double height;
+  final double width;
+  const KYNetworkImage(
+      {Key? key,
+      required this.url,
+      required this.errorImage,
+      required this.fit,
+      this.height = 50.0,
+      this.width = 50.0})
+      : super(key: key);
 
-      //   ),
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      fit: BoxFit.cover,
+      placeholder: (context, url) =>
+          const Center(child: CircularProgressIndicator()),
+      errorWidget: (context, url, error) => SizedBox(
+        height: 50,
+        width: 50,
+        child: errorImage,
+      ),
+      imageUrl: url,
     );
   }
 }

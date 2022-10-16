@@ -28,7 +28,6 @@ class _TransferState extends ConsumerState<Transfer>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
-    // ref.refresh(provider)
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }

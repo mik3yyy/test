@@ -32,13 +32,12 @@ class ResetPasswordScreen extends HookConsumerWidget {
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
 
-  final fieldFocusNode = FocusNode();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(resetPasswordProvider);
     final confirmController = useTextEditingController();
     final controller = useTextEditingController();
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final togglePassword = ref.watch(pinToggleStateProvider.state);
     final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
 
@@ -114,9 +113,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                         if (value!.isEmpty) {
                           return "Password is requied";
                         }
-                        if (value.length < 8) {
-                          return 'Password must at least be 8 characters';
-                        }
+
                         return null;
                       },
                       obscureText: togglePassword.state,
@@ -142,7 +139,6 @@ class ResetPasswordScreen extends HookConsumerWidget {
                       labelText: 'Confirm Password',
                       controller: confirmController,
                       capitalization: TextCapitalization.none,
-                      focusNode: fieldFocusNode,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Confirm Password is required';
@@ -185,7 +181,9 @@ class ResetPasswordScreen extends HookConsumerWidget {
                               final email = pref.getString(Constants.email);
 
                               if (formKey.currentState!.validate()) {
-                                fieldFocusNode.unfocus();
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
                                 ref
                                     .read(resetPasswordProvider.notifier)
                                     .resetPassword(

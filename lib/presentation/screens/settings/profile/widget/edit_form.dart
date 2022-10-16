@@ -66,7 +66,7 @@ class EditForm extends StatelessWidget {
             borderSide: BorderSide(color: Colors.red),
           ),
           focusedErrorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: Colors.black),
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),

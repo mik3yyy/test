@@ -53,7 +53,10 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+          padding: EdgeInsets.only(
+            left: 20.w,
+            right: 20.w,
+          ),
           child: Column(
             children: [
               Space(20.h),
@@ -66,7 +69,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                   pushNewScreen(
                     context,
                     screen: const ChangePasswordSecurity(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
               ),
@@ -85,7 +88,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                   pushNewScreen(
                     context,
                     screen: const ChangeTransactionPin(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
               ),

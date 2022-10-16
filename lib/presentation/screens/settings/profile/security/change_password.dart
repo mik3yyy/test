@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/change_password_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -62,192 +63,176 @@ class ChangePassword extends HookConsumerWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
-          title: Text(
-            'Security',
-            style: AppText.header2(context, Colors.black, 20.sp),
-          ),
-          leading: InkWell(
-            onTap: (() => Navigator.pop(context)),
-            child: const Icon(
-              Icons.arrow_back_ios_outlined,
-              color: Colors.black,
-            ),
-          ),
+          backgroundColor: Colors.transparent,
+          title:
+              const AppBarTitle(title: "Change Password", color: Colors.black),
+          leading: const BackButton(color: Colors.black),
           centerTitle: true,
           automaticallyImplyLeading: false,
           elevation: 0,
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 40.h,
-                      width: MediaQuery.of(context).size.width,
-                      color: AppColors.appColor.withOpacity(0.1),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 240.w),
-                        child: Center(
-                          child: Text(
-                            'Change password',
-                            style:
-                                AppText.body2(context, Colors.black54, 20.sp),
-                          ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40.h,
+                    width: MediaQuery.of(context).size.width,
+                    color: AppColors.appColor.withOpacity(0.1),
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 240.w),
+                      child: Center(
+                        child: Text(
+                          'Change password',
+                          style: AppText.body2(context, Colors.black54, 20.sp),
                         ),
                       ),
                     ),
-                    Space(20.h),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
-                      child: Column(
-                        children: [
-                          //old password
-                          TextFormInput(
-                            enabled: vn is Loading ? false : true,
-                            labelText: 'Old Password',
-                            controller: oldPasswordController,
-                            capitalization: TextCapitalization.none,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Password is requied";
-                              }
-                              if (value.length < 8) {
-                                return 'Password must at least be 8 characters';
-                              }
-                              return null;
+                  ),
+                  Space(20.h),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: 20.w, right: 20.w, top: 10.h),
+                    child: Column(
+                      children: [
+                        //old password
+                        TextFormInput(
+                          enabled: vn is Loading ? false : true,
+                          labelText: 'Old Password',
+                          controller: oldPasswordController,
+                          capitalization: TextCapitalization.none,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Password is requied";
+                            }
+                            if (value.length < 8) {
+                              return 'Password must at least be 8 characters';
+                            }
+                            return null;
+                          },
+                          obscureText: toggleOldPin.state,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              toggleOldPin.state = !toggleOldPin.state;
                             },
-                            obscureText: toggleOldPin.state,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                toggleOldPin.state = !toggleOldPin.state;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 0.h),
-                                child: Icon(
-                                  toggleOldPin.state
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.appColor,
-                                ),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 0.h),
+                              child: Icon(
+                                toggleOldPin.state
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: AppColors.appColor,
                               ),
                             ),
                           ),
-                          Space(32.h),
+                        ),
+                        Space(32.h),
 
-                          // new password
-                          TextFormInput(
-                            enabled: vn is Loading ? false : true,
-                            labelText: 'New Password',
-                            controller: controller,
-                            capitalization: TextCapitalization.none,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Password is requied";
-                              }
-                              if (value.length < 8) {
-                                return 'Password must at least be 8 characters';
-                              }
-                              return null;
+                        // new password
+                        TextFormInput(
+                          enabled: vn is Loading ? false : true,
+                          labelText: 'New Password',
+                          controller: controller,
+                          capitalization: TextCapitalization.none,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Password is requied";
+                            }
+                            if (value.length < 8) {
+                              return 'Password must at least be 8 characters';
+                            }
+                            return null;
+                          },
+                          obscureText: togglePassword.state,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              togglePassword.state = !togglePassword.state;
                             },
-                            obscureText: togglePassword.state,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                togglePassword.state = !togglePassword.state;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 0.h),
-                                child: Icon(
-                                  togglePassword.state
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.appColor,
-                                ),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 0.h),
+                              child: Icon(
+                                togglePassword.state
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: AppColors.appColor,
                               ),
                             ),
                           ),
-                          Space(32.h),
+                        ),
+                        Space(32.h),
 
-                          // confirm password
-                          TextFormInput(
-                            enabled: vn is Loading ? false : true,
-                            labelText: 'Re-enter new password',
-                            controller: confirmController,
-                            capitalization: TextCapitalization.none,
-                            focusNode: fieldFocusNode,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Confirm Password is required';
-                              } else if (controller.text !=
-                                  confirmController.text) {
-                                return 'Password doesn\'t match';
-                              }
+                        // confirm password
+                        TextFormInput(
+                          enabled: vn is Loading ? false : true,
+                          labelText: 'Re-enter new password',
+                          controller: confirmController,
+                          capitalization: TextCapitalization.none,
+                          focusNode: fieldFocusNode,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Confirm Password is required';
+                            } else if (controller.text !=
+                                confirmController.text) {
+                              return 'Password doesn\'t match';
+                            }
 
-                              return null;
+                            return null;
+                          },
+                          obscureText: toggleConfirmPin.state,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              toggleConfirmPin.state = !toggleConfirmPin.state;
                             },
-                            obscureText: toggleConfirmPin.state,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                toggleConfirmPin.state =
-                                    !toggleConfirmPin.state;
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 0.h),
-                                child: Icon(
-                                  toggleConfirmPin.state
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: AppColors.appColor,
-                                ),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 0.h),
+                              child: Icon(
+                                toggleConfirmPin.state
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: AppColors.appColor,
                               ),
                             ),
                           ),
-                          Space(150.h),
-                          CustomButton(
-                              buttonText: vn is Loading
-                                  ? loading()
-                                  : buttonText(context, "Save"),
-                              bgColor: AppColors.appColor,
-                              borderColor: AppColors.appColor,
-                              textColor: Colors.white,
-                              onPressed: vn is Loading
-                                  ? null
-                                  : () {
-                                      if (formKey.currentState!.validate()) {
-                                        fieldFocusNode.unfocus();
-                                        ChangePasswordReq changePassword =
-                                            ChangePasswordReq(
-                                          oldPassword:
-                                              oldPasswordController.text,
-                                          newPassword: controller.text,
-                                          confirmPassword:
-                                              confirmController.text,
-                                        );
-                                        ref
-                                            .read(credentialProvider.notifier)
-                                            .storeCredential(
-                                                Constants.userPassword,
-                                                controller.text);
+                        ),
+                        Space(150.h),
+                        CustomButton(
+                            buttonText: vn is Loading
+                                ? loading()
+                                : buttonText(context, "Save"),
+                            bgColor: AppColors.appColor,
+                            borderColor: AppColors.appColor,
+                            textColor: Colors.white,
+                            onPressed: vn is Loading
+                                ? null
+                                : () {
+                                    if (formKey.currentState!.validate()) {
+                                      fieldFocusNode.unfocus();
+                                      ChangePasswordReq changePassword =
+                                          ChangePasswordReq(
+                                        oldPassword: oldPasswordController.text,
+                                        newPassword: controller.text,
+                                        confirmPassword: confirmController.text,
+                                      );
+                                      ref
+                                          .read(credentialProvider.notifier)
+                                          .storeCredential(
+                                              Constants.userPassword,
+                                              controller.text);
 
-                                        ref
-                                            .read(
-                                                changePasswordProvider.notifier)
-                                            .changePassword(changePassword);
-                                        context.loaderOverlay.show();
-                                      }
-                                    },
-                              buttonWidth: MediaQuery.of(context).size.width),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                                      ref
+                                          .read(changePasswordProvider.notifier)
+                                          .changePassword(changePassword);
+                                      context.loaderOverlay.show();
+                                    }
+                                  },
+                            buttonWidth: MediaQuery.of(context).size.width),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),

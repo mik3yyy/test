@@ -43,12 +43,12 @@ class Data {
   String? accountNumber;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        accountName: json["account_name"],
-        accountNumber: json["account_number"],
+        accountName: json["account_name"] ?? "",
+        accountNumber: json["account_number"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
-        "account_name": accountName,
-        "account_number": accountNumber,
+        "account_name": accountName ?? "",
+        "account_number": accountNumber ?? "",
       };
 }

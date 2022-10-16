@@ -101,6 +101,8 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                       } else {
                         return Expanded(
                           child: ListView.separated(
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
                               itemCount: currency.value!.length,
                               itemBuilder: (context, index) {
                                 final banks = currency.value![index];
@@ -127,7 +129,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                                     child: Center(
                                         child: Text(
                                       banks.name.toString(),
-                                      style: AppText.header2(
+                                      style: AppText.body2(
                                           context, AppColors.appColor, 20.sp),
                                     )),
                                   ),

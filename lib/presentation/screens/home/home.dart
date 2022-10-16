@@ -283,11 +283,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                             menuScreenContext:
                                                 widget.menuScreenContext,
                                             hideStatus: widget.hideStatus,
-                                            onScreenHideButtonPressed: () {
-                                              setState(() {
-                                                // widget.hideStatus = !_hideNavBar;
-                                              });
-                                            },
+                                            onScreenHideButtonPressed: () {},
                                             route: "HomeScreen",
                                           ),
                                           withNavBar:
@@ -308,8 +304,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           context,
                                           screen:
                                               const WithdrawalMethodScreen(),
-                                          withNavBar:
-                                              false, // OPTIONAL VALUE. True by default.
+                                          withNavBar: false,
                                           pageTransitionAnimation:
                                               PageTransitionAnimation.cupertino,
                                         );
@@ -324,8 +319,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     children: [
                                       Text(
                                         'Transactions',
-                                        style: AppText.body2Bold(
-                                            context, Colors.black26, 21.sp),
+                                        style: AppText.body2(
+                                            context, Colors.black45, 20.sp),
                                       ),
                                       const Spacer(),
                                       GestureDetector(
@@ -344,8 +339,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         },
                                         child: Text(
                                           'View all',
-                                          style: AppText.body2Bold(
-                                              context, Colors.black54, 21.sp),
+                                          style: AppText.body2(context,
+                                              AppColors.appColor, 20.sp),
                                         ),
                                       ),
                                     ],
@@ -548,8 +543,6 @@ class TransactionBuild extends StatelessWidget {
           context,
           transactionType: direction(),
           status: "",
-          accountName: transactions.user!.firstName.toString(),
-          accountNo: transactions.user!.accountNumber.toString(),
           amount: "${currencyCode()} ${formatter.format(transactions.amount)}",
           date: "$dateCreated,  $formattedTime",
           reference: transactions.transactionRef.toString(),

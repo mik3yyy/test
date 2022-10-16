@@ -6,12 +6,11 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/saved_id.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constant/constant.dart';
 import '../../model/auth/res/failure_res.dart';
 import '../../utils/api_interceptor.dart';
 import '../../utils/error_interceptor.dart';
@@ -61,11 +60,7 @@ class ProfileService {
               .copyWith(
                 policy: CachePolicy.refreshForceCache,
               )
-              .toOptions()
-
-          // Options(headers: {"Authentication": "Bearer $token"})
-
-          );
+              .toOptions());
 
       final result = ProfileRes.fromJson(response.data);
 
@@ -83,12 +78,12 @@ class ProfileService {
   // update profile details
   Future<bool> updatePrfileDetails(UpdateProfileReq updateProfileReq) async {
     const url = '/profile/edit-personal-info';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(Constants.token);
+
     try {
-      final response = await _read(dioProvider).post(url,
-          data: updateProfileReq.toJson(),
-          options: Options(headers: {"Authentication": "Bearer $token"}));
+      final response = await _read(dioProvider).post(
+        url,
+        data: updateProfileReq.toJson(),
+      );
       return response.data != null;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
@@ -192,7 +187,6 @@ class ProfileService {
     try {
       final response = await _read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
-      // final result = ProfileRes.fromJson(response.data);
       return response.data != null;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != '') {
@@ -237,21 +231,26 @@ class ProfileService {
     }
   }
 
-  // Future<bool> uploadPP(String imageUrl) async {
-  //   const url = '/profile/upload-picture';
-  //   try {
-  //     final response = await _read(dioProvider)
-  //         .post(url, data: {"profile_picture": imageUrl});
+  Future<SavedId> getID() async {
+    const url = '/profile/get-ids';
+    try {
+      final response = await _read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refreshForceCache,
+              )
+              .toOptions());
 
-  //     final result = response.data = true;
-  //     return result;
-  //   } on DioError catch (e) {
-  //     if (e.response != null && e.response!.data != "") {
-  //       Failure result = Failure.fromJson(e.response!.data);
-  //       throw result.message!;
-  //     } else {
-  //       throw e.error;
-  //     }
-  //   }
-  // }
+      final result = SavedId.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
 }

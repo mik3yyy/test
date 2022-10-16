@@ -50,7 +50,7 @@ class Navigation extends HookConsumerWidget {
               title: 'My Prop',
               comingSoon: false,
               isIcon: false,
-              image: AppImage.myProp,
+              image: AppImage.prop,
               onPressed: () {
                 // context.navigate(const PropScreen());
                 pushNewScreen(
@@ -71,8 +71,6 @@ class Navigation extends HookConsumerWidget {
               title: 'Notification',
               image: AppImage.myNotification,
               onPressed: () {
-                ///CHECK IF AUTODISPOSE WORKS
-
                 pushNewScreen(
                   context,
                   withNavBar: false,
@@ -110,7 +108,7 @@ class Navigation extends HookConsumerWidget {
               onPressed: () {
                 pushNewScreen(context,
                     screen: const StatementOfAcctScreen(),
-                    pageTransitionAnimation: PageTransitionAnimation.fade);
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
             ),
             const Divider(
@@ -135,8 +133,8 @@ class Navigation extends HookConsumerWidget {
               color: Colors.black,
               comingSoon: false,
               title: 'FAQ',
-              image: "assets/images/new_faq.png",
-              isIcon: true,
+              image: AppImage.faq,
+              isIcon: false,
               onPressed: () {
                 // context.navigate(const FaqScreen());
                 pushNewScreen(context,
@@ -274,8 +272,8 @@ class DrawerList extends StatelessWidget {
                   : Image.asset(
                       image,
                       color: color,
-                      height: 30.h,
-                      width: 25.w,
+                      height: 20,
+                      width: 20,
                     ),
               Space(20.w),
               Text(

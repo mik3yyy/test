@@ -1,25 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/beneficiary_accounts.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/repository/withdrawal_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 
-// final getBeneficiaryProvider = StateNotifierProvider<NubanBeneficiaryVM,
-//     RequestState<NubanBeneficiariesRes>>(
-//   (ref) => NubanBeneficiaryVM(ref),
-// );
-
-// class NubanBeneficiaryVM extends RequestStateNotifier<NubanBeneficiariesRes> {
-//   final WithdrawalManager withdrawalManager;
-
-//   NubanBeneficiaryVM(Ref ref)
-//       : withdrawalManager = ref.read(withdrawManagerProvider) {
-//     getNubanBeneficiary();
-//   }
-
-//   void getNubanBeneficiary() =>
-//       makeRequest(() => withdrawalManager.nubanBeneficiary());
-// }
-
-final getBeneficiaryProvider = FutureProvider.autoDispose
-    .family<BeneficiaryAccount, String>((ref, _) async {
+final nubanBeneficiaryProvider =
+    FutureProvider.autoDispose<BeneficiaryAccount>((ref) async {
+  ref.maintainState = true;
+  ref.watch(userProfileProvider);
   return ref.watch(withdrawManagerProvider).nubanBeneficiary();
 });

@@ -51,6 +51,15 @@ class AppText {
         color: color);
   }
 
+  static TextStyle uploadTerms(BuildContext context, Color color, double size) {
+    return Theme.of(context).textTheme.bodyText1!.copyWith(
+        fontSize: size,
+        fontWeight: FontWeight.w400,
+        height: 1.7,
+        fontFamily: 'Avenir LTStd',
+        color: color);
+  }
+
   static TextStyle body2Bold(BuildContext context, Color color, double size) {
     return Theme.of(context).textTheme.bodyText1!.copyWith(
         fontSize: size,
