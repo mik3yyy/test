@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/get_country_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
@@ -74,6 +75,8 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
               listState.value.isNotEmpty
                   ? Expanded(
                       child: ListView.separated(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           itemCount: filterableCountry.length,
                           itemBuilder: (context, index) {
                             final country = filterableCountry[index];
@@ -95,8 +98,8 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
                                 child: Center(
                                     child: Text(
                                   country.name.toString(),
-                                  style:
-                                      AppText.body2(context, Colors.black, 18),
+                                  style: AppText.body2(
+                                      context, AppColors.appColor, 18),
                                 )),
                               ),
                             );
@@ -147,7 +150,7 @@ class _SelectCountryScreenState extends ConsumerState<SelectCountryScreen> {
                                         child: Text(
                                       country.name.toString(),
                                       style: AppText.body2(
-                                          context, Colors.black, 18),
+                                          context, AppColors.appColor, 18),
                                     )),
                                   ),
                                 );

@@ -10,7 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -33,7 +32,6 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
   final formKey = GlobalKey<FormState>();
   final pinToggleStateProvider = StateProvider<bool>((ref) => true);
   final pinConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
-  final fieldFocusNode = FocusNode();
 
   bool togglePin = true;
   bool toggleConfirmPin = true;
@@ -41,11 +39,11 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(transactionPinProvider);
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final pinController = useTextEditingController();
     final confirmPinController = useTextEditingController();
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
       if (value is Success<bool>) {
-        ref.refresh(getAccountDetailsProvider);
         ref.refresh(userProfileProvider);
         if (value.value == true) {
           context.loaderOverlay.hide();
@@ -119,7 +117,9 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                         obscureText: togglePin,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            togglePin = !togglePin;
+                            setState(() {
+                              togglePin = !togglePin;
+                            });
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
@@ -140,7 +140,6 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                         capitalization: TextCapitalization.none,
                         labelText: 'Re-Enter Transaction PIN',
                         controller: confirmPinController,
-                        focusNode: fieldFocusNode,
                         validator: (String? value) {
                           if (value!.isEmpty) {
                             return 'Confirm transaction pin is required';
@@ -155,7 +154,9 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                         obscureText: toggleConfirmPin,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            toggleConfirmPin = !toggleConfirmPin;
+                            setState(() {
+                              toggleConfirmPin = !toggleConfirmPin;
+                            });
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
@@ -182,7 +183,10 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                             ? null
                             : () async {
                                 if (formKey.currentState!.validate()) {
-                                  fieldFocusNode.unfocus();
+                                  if (!currentFocus.hasPrimaryFocus) {
+                                    currentFocus.unfocus();
+                                  }
+
                                   ref
                                       .read(transactionPinProvider.notifier)
                                       .transactionPin(pinController.text,

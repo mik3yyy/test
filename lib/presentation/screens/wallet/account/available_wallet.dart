@@ -309,7 +309,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
   Widget build(BuildContext context) {
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        ref.read(getProfileProvider.notifier).getProfile();
+        ref.refresh(userProfileProvider);
         context.loaderOverlay.hide();
       }
 

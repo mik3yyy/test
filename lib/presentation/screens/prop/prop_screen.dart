@@ -60,41 +60,48 @@ class PropScreen extends HookConsumerWidget {
                               data: (data) {
                                 if (data.data.contacts.isEmpty) {
                                   return Center(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "You have No contact\nAdd a new contact and connect with friends",
-                                          textAlign: TextAlign.center,
-                                          style: AppText.header2(context,
-                                              AppColors.appColor, 19.sp),
-                                        ),
-                                        const Space(20),
-                                        SizedBox(
-                                          height: 50,
-                                          width: MediaQuery.of(context)
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
                                                   .size
-                                                  .width *
-                                              0.9,
-                                          child: TextButton(
-                                            child: const Text('Add Contact'),
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.white,
-                                              backgroundColor:
-                                                  AppColors.appColor,
-                                              onSurface: Colors.grey,
-                                            ),
-                                            onPressed: () {
-                                              pushNewScreen(
-                                                context,
-                                                screen: AddContactScreen(),
-                                                pageTransitionAnimation:
-                                                    PageTransitionAnimation
-                                                        .fade,
-                                              );
-                                            },
+                                                  .height /
+                                              4),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "You have No contact\nAdd a new contact and connect with friends",
+                                            textAlign: TextAlign.center,
+                                            style: AppText.header2(context,
+                                                AppColors.appColor, 19.sp),
                                           ),
-                                        ),
-                                      ],
+                                          const Space(20),
+                                          SizedBox(
+                                            height: 50,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.9,
+                                            child: TextButton(
+                                              child: const Text('Add Contact'),
+                                              style: TextButton.styleFrom(
+                                                primary: Colors.white,
+                                                backgroundColor:
+                                                    AppColors.appColor,
+                                                onSurface: Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                pushNewScreen(
+                                                  context,
+                                                  screen: AddContactScreen(),
+                                                  pageTransitionAnimation:
+                                                      PageTransitionAnimation
+                                                          .cupertino,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 } else {

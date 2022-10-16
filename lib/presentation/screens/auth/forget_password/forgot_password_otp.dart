@@ -34,7 +34,7 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(verifyAccountProvider);
-
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final verifyController = useTextEditingController();
     var toggleState = ref.watch(toggleStateProvider);
 
@@ -42,7 +42,7 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
       if (value is Success) {
         return AppSnackBar.showSuccessSnackBar(
           context,
-          message: "Please Check Your Mail or SMS for Verification Code",
+          message: "Please Check Your Mail for Verification Code",
         );
       }
       if (value is Error) {
@@ -137,6 +137,9 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
                             style: AppText.body4(context, AppColors.hintColor)),
                         InkWell(
                           onTap: () {
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
                             ref
                                 .read(resendOtpProvider.notifier)
                                 .resendOtp(emailAdress);

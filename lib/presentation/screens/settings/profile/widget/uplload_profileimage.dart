@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/pick_image_dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
@@ -28,7 +27,7 @@ class _UploadImageState extends ConsumerState<UploadImage> {
 
     ref.listen<RequestState>(userPhotoProvider, (_, value) {
       if (value is Success) {
-        return ref.refresh(getProfileProvider);
+        // return ref.refresh(getProfileProvider);
       }
       if (value is Error) {
         // return AppSnackBar.showErrorSnackBar(context,

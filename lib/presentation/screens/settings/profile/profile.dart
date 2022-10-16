@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deac
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/upload_id.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/view_all_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -97,13 +97,14 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                           ProfileCard(
                             color: Colors.black,
                             title: 'Upload ID',
-                            subTitle: 'Verify yourself by providing an ID',
+                            subTitle: 'Upload your identification card',
                             image: AppImage.uploadId,
                             onPressed: () {
                               pushNewScreen(context,
-                                  screen: const UploadId(),
+                                  screen: const ViewIdentification(),
+                                  withNavBar: false,
                                   pageTransitionAnimation:
-                                      PageTransitionAnimation.fade);
+                                      PageTransitionAnimation.cupertino);
                             },
                           ),
                           Space(10.h),
@@ -216,8 +217,8 @@ class ProfileCard extends StatelessWidget {
             Image.asset(
               image,
               color: color,
-              height: 20.h,
-              width: 20.w,
+              height: 25,
+              width: 25,
             ),
             Space(20.w),
             Column(

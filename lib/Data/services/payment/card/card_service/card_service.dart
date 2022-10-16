@@ -103,8 +103,12 @@ class CardService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "Transfer amount due must add up to at least £0.30";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         throw e.error;
       }

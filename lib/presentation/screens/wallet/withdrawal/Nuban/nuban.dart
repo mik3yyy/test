@@ -19,12 +19,12 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/g
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/get_beneficiary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/verify_account_number.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/generic_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -49,13 +49,17 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   Widget build(BuildContext context) {
     final accountName = ref.watch(getBankDetailsProvider);
     final nuban = ref.watch(nubanWithdrawalProvider);
-    final savedBeneficiary = ref.watch(genericController);
+    final recipientDetail = ref.watch(accountDetailProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     final descriptionController = useTextEditingController();
-    final bankAccountController = useTextEditingController(
-        text: savedBeneficiary.passBeneficiary.accountNumber);
+    final accountNumber = useState("");
+    final bankAccountController =
+        useTextEditingController(text: accountNumber.value);
+    final acctName = useState("");
+    final accountNameController =
+        useTextEditingController(text: acctName.value);
     final bankController = useTextEditingController();
     final bankCodeController = useTextEditingController();
     final amountController = useTextEditingController();
@@ -63,15 +67,13 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     final amount = useState(0);
     final enteredAmount = useState(false);
     var formatter = NumberFormat("#,##0.00");
-    final recipientAccountName =
-        useState(savedBeneficiary.passBeneficiary.accountName);
 
     ref.listen<RequestState>(nubanWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
-        ref.refresh(getAccountDetailsProvider);
+        // ref.refresh(getAccountDetailsProvider);
         ref.refresh(userProfileProvider);
-        ref.refresh(walletTransactionProvider);
+        // ref.refresh(walletTransactionProvider);
         AppDialog.showSuccessMessageDialog(
           context,
           value.value!.message!,
@@ -178,6 +180,9 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             ],
                           ),
                         ),
+
+                        const NubanBeneficiary(),
+
                         Space(20.h),
                         Stack(
                           children: [
@@ -237,7 +242,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         //
                         //*
                         EditForm(
-                          // readOnly: true,
                           enabled: true,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           labelText: 'Select bank',
@@ -275,10 +279,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                     PageTransitionAnimation.slideRight);
                           },
                         ),
-                        // SelectBank(
-                        //   bankController: bankController,
-                        //   bankCode: bankCodeController,
-                        // ),
+
                         Space(20.h),
                         EditForm(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -299,59 +300,48 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                 accountNumber: bankAccountController.text,
                               );
                               ref
-                                  .read(getBankDetailsProvider.notifier)
+                                  .read(accountDetailProvider.notifier)
                                   .getDetails(getBankAccountDetails);
                             } else {}
                           },
                         ),
                         Space(10.h),
-                        savedBeneficiary.passBeneficiary.accountName.isEmpty
-                            ? accountName.when(error: (error, stackTrace) {
-                                return Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    errorState.value.length < 10
-                                        ? ""
-                                        : error.toString(),
-                                    style: AppText.body2(
-                                        context, Colors.red, 18.sp),
-                                  ),
-                                );
-                              }, loading: () {
-                                return Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    '...',
-                                    style: AppText.body2(
-                                        context, Colors.black, 18.sp),
-                                  ),
-                                );
-                              }, idle: () {
-                                return const SizedBox.shrink();
-                              }, success: (data) {
-                                recipientAccountName.value =
-                                    data!.data.accountName.toString();
+                        recipientDetail.when(data: (data) {
+                          acctName.value = data.data.accountName.toString();
+                          accountNumber.value =
+                              data.data.accountNumber.toString();
+                          // setState(() {
 
-                                return Align(
+                          // });
+
+                          return data.data.accountName == null
+                              ? const SizedBox.shrink()
+                              : Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Text(
                                     data.data.accountName.toString(),
                                     style: AppText.body2(
-                                        context, Colors.green, 18.sp),
+                                        context, Colors.green, 15.sp),
                                   ),
                                 );
-                              })
-                            : Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  savedBeneficiary.passBeneficiary.accountName
-                                      .toString(),
-                                  style: AppText.body2(
-                                      context, Colors.greenAccent, 18.sp),
-                                ),
-                              ),
-
-                        Space(20.h),
+                        }, error: (e, s) {
+                          return Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              errorState.value.length < 10 ? "" : e.toString(),
+                              style: AppText.body2(context, Colors.red, 15.sp),
+                            ),
+                          );
+                        }, loading: () {
+                          return Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Text(
+                              '...',
+                              style:
+                                  AppText.body2(context, Colors.black, 15.sp),
+                            ),
+                          );
+                        }),
 
                         EditForm(
                             autovalidateMode:
@@ -440,7 +430,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         //     ),
                         //   ),
                         // ),
-                        Space(20.h),
+                        Space(40.h),
                         CustomButton(
                             buttonText: nuban is Loading
                                 ? loading()
@@ -453,21 +443,21 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                 : nuban is Loading
                                     ? null
                                     : () {
-                                        if ((formKey.currentState!
-                                            .validate())) {
-                                          if (enteredAmount.value == true) {
-                                            context.loaderOverlay.hide();
-                                            AppDialog.showErrorMessageDialog(
-                                                context,
-                                                "Withdrawal amount cannot be more than available amount");
-                                          } else {
-                                            if (!currentFocus.hasPrimaryFocus) {
-                                              currentFocus.unfocus();
-                                            }
+                                        if (enteredAmount.value == true) {
+                                          context.loaderOverlay.hide();
+                                          AppDialog.showErrorMessageDialog(
+                                              context,
+                                              "Withdrawal amount cannot be more than available amount");
+                                        } else {
+                                          if (!currentFocus.hasPrimaryFocus) {
+                                            currentFocus.unfocus();
+                                          }
 
+                                          if ((formKey.currentState!
+                                              .validate())) {
                                             var nubanReq = NubanReq(
                                                 accountName:
-                                                    recipientAccountName.value,
+                                                    accountNameController.text,
                                                 accountNumber:
                                                     bankAccountController.text,
                                                 amount: int.parse(
@@ -480,7 +470,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                                 .read(nubanWithdrawalProvider
                                                     .notifier)
                                                 .nubanWithdrawal(nubanReq);
-                                            context.loaderOverlay.show();
                                           }
                                         }
                                       },
@@ -510,323 +499,96 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   }
 }
 
-// class SelectBank extends StatefulHookConsumerWidget {
-//   final TextEditingController bankController;
-//   final TextEditingController bankCode;
-//   const SelectBank(
-//       {Key? key, required this.bankController, required this.bankCode})
-//       : super(key: key);
+class NubanBeneficiary extends StatefulHookConsumerWidget {
+  const NubanBeneficiary({Key? key}) : super(key: key);
 
-//   @override
-//   ConsumerState<ConsumerStatefulWidget> createState() => _SelectBankState();
-// }
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _NubanBeneficiaryState();
+}
 
-// class _SelectBankState extends ConsumerState<SelectBank> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final bankRes = ref.watch(searchInputProvider);
-//     return Stack(
-//       children: [
-//         InkWell(
-//           onTap: () {
-//             showCupertinoModalPopup(
-//                 context: context,
-//                 builder: (context) {
-//                   return Padding(
-//                     padding: EdgeInsets.only(left: 25.w, right: 25.w),
-//                     child: CupertinoActionSheet(
-//                       actions: [
-//                         Container(
-//                           color: Colors.white,
-//                           child: CupertinoActionSheetAction(
-//                             child: Padding(
-//                               padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                               child: Center(
-//                                 child: Text(
-//                                   "Select Bank",
-//                                   style: AppText.body2(
-//                                       context, Colors.black, 20.sp),
-//                                 ),
-//                               ),
-//                             ),
-//                             isDefaultAction: true,
-//                             onPressed: () {
-//                               // widget.bankController.text = gtBank;
-//                               // Navigator.pop(context);
-//                             },
-//                           ),
-//                         ),
-//                         const SizedBox(
-//                           height: 5,
-//                         ),
-//                         SizedBox(
-//                             height: 500,
-//                             child: bankRes.when(
-//                               // idle: () => const CircularProgressIndicator(),
-//                               loading: () => const CircularProgressIndicator(),
-//                               error: (e, s) => Text(e.toString()),
-//                               data: (data) {
-//                                 return SizedBox(
-//                                   height: 500,
-//                                   child: ListView.separated(
-//                                     itemCount: data.data!.length,
-//                                     itemBuilder: (context, index) {
-//                                       final bank = data.data![index];
-//                                       return Padding(
-//                                         padding: EdgeInsets.only(
-//                                             left: 5.w, right: 5.w),
-//                                         child: Container(
-//                                           color: Colors.white,
-//                                           child: CupertinoActionSheetAction(
-//                                             child: Padding(
-//                                               padding: EdgeInsets.only(
-//                                                   left: 30.w, right: 30.w),
-//                                               child: Center(
-//                                                 child: Text(
-//                                                   bank.name.toString(),
-//                                                   style: AppText.body2(context,
-//                                                       Colors.black, 17.sp),
-//                                                 ),
-//                                               ),
-//                                             ),
-//                                             isDefaultAction: true,
-//                                             onPressed: () {
-//                                               widget.bankController.text =
-//                                                   bank.name!;
-//                                               widget.bankCode.text = bank.code!;
-//                                               Navigator.pop(context);
-//                                             },
-//                                           ),
-//                                         ),
-//                                       );
-//                                     },
-//                                     separatorBuilder:
-//                                         (BuildContext context, int index) {
-//                                       return const SizedBox(
-//                                         height: 5,
-//                                       );
-//                                     },
-//                                   ),
-//                                 );
-//                               },
-//                             )),
-//                       ],
-//                       // actions: [
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             gtBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDefaultAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = gtBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       // ],
+class _NubanBeneficiaryState extends ConsumerState<NubanBeneficiary> {
+  @override
+  Widget build(BuildContext context) {
+    final beneficiaryVm = ref.watch(nubanBeneficiaryProvider);
+    return beneficiaryVm.when(
+      data: (value) {
+        return value.data!.beneficiaries!.isEmpty
+            ? const SizedBox.shrink()
+            : Container(
+                color: AppColors.appColor.withOpacity(0.09),
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Space(10.h),
+                      SizedBox(
+                        // color: Colors.red,
+                        height: 100,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: value.data!.beneficiaries!.length,
+                          itemBuilder: (context, index) {
+                            final user = value.data!.beneficiaries![index];
 
-//                       // actions: <Widget>[
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             gtBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDefaultAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = gtBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             uba,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = uba;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             accessbankDiamond,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = accessbankDiamond;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             accessBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = accessBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             zenithBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = zenithBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             stanbicBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = stanbicBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             sterlingBank,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = sterlingBank;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       //   Container(
-//                       //     color: Colors.white,
-//                       //     child: CupertinoActionSheetAction(
-//                       //       child: Padding(
-//                       //         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-//                       //         child: Center(
-//                       //           child: Text(
-//                       //             fidelity,
-//                       //             style: AppText.body2(
-//                       //                 context, Colors.black, 20.sp),
-//                       //           ),
-//                       //         ),
-//                       //       ),
-//                       //       isDestructiveAction: true,
-//                       //       onPressed: () {
-//                       //         widget.bankController.text = fidelity;
-//                       //         Navigator.pop(context);
-//                       //       },
-//                       //     ),
-//                       //   ),
-//                       // ],
-//                       cancelButton: CupertinoActionSheetAction(
-//                         child: const Text("Close"),
-//                         onPressed: () {
-//                           Navigator.pop(context);
-//                         },
-//                       ),
-//                     ),
-//                   );
-//                 });
-//           },
-//           child: EditForm(
-//               enabled: false,
-//               autovalidateMode: AutovalidateMode.onUserInteraction,
-//               labelText: 'Select bank name of recipient',
-
-//               // textAlign: TextAlign.start,
-//               controller: widget.bankController,
-//               obscureText: false,
-//               validator: (value) => validateCountry(value)),
-//         ),
-//         Positioned(
-//           left: 375.w,
-//           right: 0,
-//           bottom: 17.h,
-//           child: const Icon(
-//             CupertinoIcons.chevron_down,
-//             color: Color(0xffA8A8A8),
-//             size: 15,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+                            return Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      // accountNoController.text = item
+                                      //     .beneficiary!.accountNumber!;
+                                      // friendNameController.text =
+                                      //     '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 80.h,
+                                    width: 80.w,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey.shade100,
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      '${user.beneficiaryName}',
+                                      style: AppText.body2(
+                                          context, Colors.black45, 40.sp),
+                                    )),
+                                  ),
+                                ),
+                                Space(10.h),
+                                Text(
+                                  '${user.beneficiaryName}',
+                                  style: AppText.body2(
+                                      context, Colors.black, 16.sp),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(width: 20.w);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+      },
+      error: (Object error, StackTrace? stackTrace) {
+        return Text(error.toString());
+      },
+      loading: () {
+        //When enpoint is loading, it should display default ideas with overlay loading
+        return const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.appBgColor,
+          ),
+        );
+      },
+    );
+  }
+}

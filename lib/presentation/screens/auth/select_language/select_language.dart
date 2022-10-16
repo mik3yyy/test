@@ -79,16 +79,17 @@ class _SelectLanguageState extends State<SelectLanguage> {
                           setState(() {
                             widget.languageName.text = lang.name;
                           });
+                          Navigator.pop(context);
                         },
                         child: Container(
                           height: 50,
                           decoration: BoxDecoration(
                               border: Border.all(
-                                  width: 0.2, color: AppColors.appColor)),
+                                  width: 0.2, color: Colors.black26)),
                           child: Center(
                               child: Text(
                             lang.name.toString(),
-                            style: AppText.header2(
+                            style: AppText.body2(
                                 context, AppColors.appColor, 20.sp),
                           )),
                         ),
