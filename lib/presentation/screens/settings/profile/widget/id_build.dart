@@ -25,8 +25,8 @@ class IDbuild extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.55,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    left: 30.w,
-                    right: 30.w,
+                    left: 20.w,
+                    right: 20.w,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,17 +37,18 @@ class IDbuild extends StatelessWidget {
                       Text(id.idType.toString(),
                           style: AppText.body2(context, Colors.black, 25.sp)),
                       const Space(30),
-                      SizedBox(
-                        height: 200,
-                        width: MediaQuery.of(context).size.width,
-                        child: KYNetworkImage(
-                            url: id.fileFront.toString(),
-                            errorImage: Image.asset(
-                              AppImage.profile,
-                              scale: 5,
-                              fit: BoxFit.cover,
-                            ),
-                            fit: BoxFit.fill),
+                      Center(
+                        child: Transform.scale(
+                          scale: 1.2,
+                          child: SizedBox(
+                            height: 200,
+                            child: KYNetworkImage(
+                                url: id.fileFront.toString(),
+                                errorImage: Image.asset(AppImage.profile,
+                                    scale: 5, fit: BoxFit.contain),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
                       const Space(30),
                       Text("ID number:",
@@ -72,7 +73,7 @@ class IDbuild extends StatelessWidget {
                     url: id.fileFront.toString(),
                     errorImage: Image.asset(
                       AppImage.profile,
-                      scale: 5,
+                      scale: 7,
                       fit: BoxFit.cover,
                     ),
                     fit: BoxFit.fill),

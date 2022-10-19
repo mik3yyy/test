@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
-import 'package:kayndrexsphere_mobile/Data/utils/error_state.dart';
 import 'package:kayndrexsphere_mobile/l10n/l10n.dart';
 import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
@@ -25,10 +24,22 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeCore(environment: Environment.staging);
+  await initializeCore(environment: Environment.production);
   await initSentry(
-      environment: Environment.staging,
-      runApp: () => runApp(const ProviderScope(child: MyApp())));
+      environment: Environment.production,
+      runApp: () {
+        eventBus.on<UnAuthenticated>().listen((event) async {
+          navigator.key.currentContext!
+              .navigateReplaceRoot(const SigninScreen());
+          AuthenicatedState.showMessage(navigator.key.currentContext!,
+              "Your session has timed out, please login again",
+              buttonText: "Ok", buttonClicked: () {
+            Navigator.pop(navigator.key.currentContext!);
+            PreferenceManager.clear();
+          });
+        });
+        runApp(const ProviderScope(child: MyApp()));
+      });
 }
 
 class MyApp extends HookConsumerWidget {
@@ -38,17 +49,7 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appSession = ref.watch(appSessionConfigProvider);
-    //* Agba refactor this code biko
-    eventBus.on<UnAuthenticated>().listen((event) async {
-      navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
-      AuthenicatedState.showMessage(navigator.key.currentContext!,
-          "Your session has timed out, please login again", buttonText: "Ok",
-          buttonClicked: () {
-        Navigator.pop(navigator.key.currentContext!);
-        PreferenceManager.clear();
-      });
-    });
-    final locale = ref.watch(localeProvider);
+    // final locale = ref.watch(localeProvider);
     return ScreenUtilInit(
       designSize: const Size(428, 926),
       minTextAdapt: true,
@@ -65,8 +66,8 @@ class MyApp extends HookConsumerWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: const Color(0xFFFFFFFF),
               primarySwatch: Colors.blue),
-          locale: locale,
-          supportedLocales: L10n.all,
+          // locale: locale,
+          // supportedLocales: L10n.all,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -87,4 +88,8 @@ class MyApp extends HookConsumerWidget {
       ),
     );
   }
+}
+
+class UnAuthenticated {
+  UnAuthenticated();
 }

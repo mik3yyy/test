@@ -186,7 +186,7 @@ class ForumTextFormField extends StatelessWidget {
         controller: controller,
         maxLines: maxLines,
         decoration: InputDecoration(
-          hintText: 'Post title',
+          hintText: 'Post body',
           hintStyle: AppText.robotoStyle(
             context,
             AppColors.textColor,

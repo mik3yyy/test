@@ -19,6 +19,7 @@ class EditForm extends StatelessWidget {
       this.readOnly = false,
       this.enabled,
       this.inputter,
+      this.textLength,
       this.keyboardType,
       this.onEditingComplete,
       this.onChanged})
@@ -37,6 +38,7 @@ class EditForm extends StatelessWidget {
   final String? Function(String?) validator;
   final void Function()? onEditingComplete;
   final FocusNode? focusNode;
+  final int? textLength;
   final void Function(String)? onChanged;
   final void Function()? onTap;
   final List<TextInputFormatter>? inputter;
@@ -48,7 +50,8 @@ class EditForm extends StatelessWidget {
         inputFormatters: inputter,
         enabled: enabled,
         readOnly: readOnly,
-        // textAlign: textAlign!,
+        maxLength: textLength,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
         controller: controller,
         cursorColor: Colors.blue,
         autovalidateMode: autovalidateMode,

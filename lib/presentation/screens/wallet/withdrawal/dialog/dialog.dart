@@ -126,7 +126,7 @@ class AppDialog {
                       children: [
                         Center(
                           child: Image.asset(
-                            "assets/images/logo_foreground.png",
+                            "assets/images/splashLogo.jpeg",
                             scale: 20,
                           ),
                         ),

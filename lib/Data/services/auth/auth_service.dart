@@ -414,7 +414,7 @@ class UserService {
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
         Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        throw e.error;
       } else {
         throw e.error;
       }

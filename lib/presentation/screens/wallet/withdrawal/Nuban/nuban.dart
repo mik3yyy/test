@@ -54,16 +54,15 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     final descriptionController = useTextEditingController();
-    final accountNumber = useState("");
-    final bankAccountController =
-        useTextEditingController(text: accountNumber.value);
-    final acctName = useState("");
-    final accountNameController =
-        useTextEditingController(text: acctName.value);
+    final acctNum = useState("");
+    final bankAccountController = useTextEditingController(text: acctNum.value);
+
+    final accountNameController = useTextEditingController();
     final bankController = useTextEditingController();
     final bankCodeController = useTextEditingController();
     final amountController = useTextEditingController();
-    final errorState = useState("");
+    final verifyState = useState("");
+    final errorState = useState(false);
     final amount = useState(0);
     final enteredAmount = useState(false);
     var formatter = NumberFormat("#,##0.00");
@@ -182,6 +181,11 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         ),
 
                         const NubanBeneficiary(),
+                        Space(20.h),
+                        Text(
+                          "Entered amount must be more than NGN 100",
+                          style: AppText.body2(context, Colors.black, 16.sp),
+                        ),
 
                         Space(20.h),
                         Stack(
@@ -193,21 +197,21 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                       AutovalidateMode.onUserInteraction,
                                   labelText: 'Enter amount',
                                   keyboardType: TextInputType.number,
-                                  // textAlign: TextAlign.start,
                                   controller: amountController,
                                   obscureText: false,
                                   onChanged: (value) {
                                     if (value.isEmpty) {
+                                      enteredAmount.value = false;
                                       return;
                                     }
-                                    if (int.tryParse(value)! > amount.value) {
+                                    if ((int.tryParse(value)! > amount.value) ||
+                                        (int.tryParse(value)! == 0)) {
                                       enteredAmount.value = true;
                                     } else {
                                       enteredAmount.value = false;
                                     }
                                   },
-                                  validator: (value) =>
-                                      withdrawalAmount(value)),
+                                  validator: (value) => null),
                             ),
                           ],
                         ),
@@ -217,7 +221,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           Align(
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              'Withdrawal amount cannot be more than available amount',
+                              'Amount cannot be more than available amount or zero',
                               style: AppText.body2(context, Colors.red, 15.sp),
                             ),
                           ),
@@ -285,15 +289,14 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           labelText:
                               'Enter NUBAN (Nigerian account no) of recipient',
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           // textAlign: TextAlign.start,
                           controller: bankAccountController,
                           obscureText: false,
-                          validator: (value) =>
-                              validateNubanAccountNumber(value),
-
+                          textLength: 10,
+                          validator: (value) => null,
                           onChanged: (value) {
-                            errorState.value = value;
+                            verifyState.value = value;
                             if (value.length == 10) {
                               var getBankAccountDetails = GetBankAccountDetails(
                                 bankCode: bankCodeController.text,
@@ -305,14 +308,21 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             } else {}
                           },
                         ),
-                        Space(10.h),
+                        // Space(10.h),
                         recipientDetail.when(data: (data) {
-                          acctName.value = data.data.accountName.toString();
-                          accountNumber.value =
-                              data.data.accountNumber.toString();
-                          // setState(() {
+                          setState(() {
+                            errorState.value = false;
+                            accountNameController.text =
+                                data.data.accountName.toString();
+                            if (data.data.accountNumber == null) {
+                              return;
+                            } else {
+                              acctNum.value =
+                                  data.data.accountNumber.toString();
+                            }
 
-                          // });
+                            // bankAccountController.text = acctNum.value;
+                          });
 
                           return data.data.accountName == null
                               ? const SizedBox.shrink()
@@ -325,10 +335,11 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                   ),
                                 );
                         }, error: (e, s) {
+                          errorState.value = true;
                           return Align(
                             alignment: Alignment.bottomLeft,
                             child: Text(
-                              errorState.value.length < 10 ? "" : e.toString(),
+                              verifyState.value.length < 10 ? "" : e.toString(),
                               style: AppText.body2(context, Colors.red, 15.sp),
                             ),
                           );
@@ -342,6 +353,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             ),
                           );
                         }),
+                        Space(30.h),
 
                         EditForm(
                             autovalidateMode:
@@ -447,14 +459,22 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                           context.loaderOverlay.hide();
                                           AppDialog.showErrorMessageDialog(
                                               context,
-                                              "Withdrawal amount cannot be more than available amount");
+                                              "Amount cannot be more than available amount or zero");
+                                        } else if (amountController
+                                            .text.isEmpty) {
+                                          AppDialog.showErrorMessageDialog(
+                                              context, "Amount is required");
+                                        } else if (errorState.value == true) {
+                                          AppDialog.showErrorMessageDialog(
+                                              context,
+                                              "Account number could not be verified");
                                         } else {
-                                          if (!currentFocus.hasPrimaryFocus) {
-                                            currentFocus.unfocus();
-                                          }
-
                                           if ((formKey.currentState!
                                               .validate())) {
+                                            if (!currentFocus.hasPrimaryFocus) {
+                                              currentFocus.unfocus();
+                                            }
+
                                             var nubanReq = NubanReq(
                                                 accountName:
                                                     accountNameController.text,

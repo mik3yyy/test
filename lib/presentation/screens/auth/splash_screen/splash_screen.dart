@@ -20,7 +20,7 @@ class SplashScreen extends HookConsumerWidget {
       splash: Transform.scale(
         scale: 2,
         child: Image(
-          image: const AssetImage("assets/images/logo_foreground.png"),
+          image: const AssetImage("assets/images/splashLogo.jpeg"),
           width: 400.w,
           height: 400.h,
         ),
