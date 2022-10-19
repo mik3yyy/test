@@ -125,7 +125,7 @@ class UnAuthenticatedDialog extends ModalRoute<void> {
                 buttonClicked?.call();
               },
               child: Text(buttonText,
-                  style: AppText.body2(context, Colors.blue, 20.sp)),
+                  style: AppText.body2(context, AppColors.appColor, 20.sp)),
             ),
           ),
         )

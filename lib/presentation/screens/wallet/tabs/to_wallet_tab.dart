@@ -76,7 +76,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               Center(
                 child: Text(
                   'Transfer from ${defaultWallet?.data.defaultWallet.currencyCode} wallet to other wallets',
-                  style: AppText.body2(context, Colors.black, 19.sp),
+                  style: AppText.body2(context, AppColors.appColor, 19.sp),
                 ),
               ),
               Space(25.h),

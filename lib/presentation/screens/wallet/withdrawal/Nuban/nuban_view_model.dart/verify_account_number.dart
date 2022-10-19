@@ -24,8 +24,7 @@ class AccountNumNotifier extends StateNotifier<AsyncValue<BankDetailsRes>> {
   }
 }
 
-final accountDetailProvider =
-    StateNotifierProvider<AccountNumNotifier, AsyncValue<BankDetailsRes>>(
-        (ref) {
+final accountDetailProvider = StateNotifierProvider.autoDispose<
+    AccountNumNotifier, AsyncValue<BankDetailsRes>>((ref) {
   return AccountNumNotifier(ref);
 });

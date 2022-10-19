@@ -88,7 +88,7 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                         color: AppColors.appColor.withOpacity(0.09),
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.all(10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -125,16 +125,21 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                                             child: Center(
                                                 child: Text(
                                               '${item.beneficiary!.firstName?[0]}',
-                                              style: AppText.body2(context,
-                                                  Colors.black45, 40.sp),
+                                              style: AppText.body2(
+                                                  context,
+                                                  AppColors.appColor
+                                                      .withOpacity(0.5),
+                                                  40.sp),
                                             )),
                                           ),
                                         ),
                                         Space(10.h),
-                                        Text(
-                                          '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}',
-                                          style: AppText.body2(
-                                              context, Colors.black, 16.sp),
+                                        Expanded(
+                                          child: Text(
+                                            '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}',
+                                            style: AppText.body2(context,
+                                                AppColors.appColor, 16.sp),
+                                          ),
                                         ),
                                       ],
                                     );

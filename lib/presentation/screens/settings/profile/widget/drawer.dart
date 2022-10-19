@@ -48,7 +48,7 @@ class Navigation extends HookConsumerWidget {
             DrawerList(
               color: Colors.black,
               title: 'My Prop',
-              comingSoon: false,
+              comingSoon: true,
               isIcon: false,
               image: AppImage.prop,
               onPressed: () {
@@ -255,7 +255,7 @@ class DrawerList extends StatelessWidget {
   Widget build(BuildContext context) {
     const hoverColor = Colors.red;
     return InkWell(
-      onTap: onPressed,
+      onTap: comingSoon ? null : onPressed,
       hoverColor: hoverColor,
       child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.062,

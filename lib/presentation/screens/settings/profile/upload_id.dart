@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
@@ -55,37 +56,31 @@ class _UploadIdState extends ConsumerState<UploadId> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                InkWell(
-                  onTap: () {},
-                  child: EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'Id Type',
-                    keyboardType: TextInputType.name,
-                    controller: idTypeController,
-                    obscureText: false,
-                    validator: (value) => validateIdType(value),
-                  ),
+                EditForm(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  labelText: 'Id Type',
+                  keyboardType: TextInputType.name,
+                  controller: idTypeController,
+                  obscureText: false,
+                  validator: (value) => validateIdType(value),
                 ),
                 Space(20.h),
-                InkWell(
-                  onTap: () {},
-                  child: EditForm(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    labelText: 'ID number',
-                    keyboardType: TextInputType.name,
-                    controller: idNoController,
-                    obscureText: togglePassword.state,
-                    validator: (value) => validateIdNo(value),
-                    suffixIcon: InkWell(
-                      onTap: () {
-                        togglePassword.state = !togglePassword.state;
-                      },
-                      child: Icon(
-                        togglePassword.state
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: Colors.grey.shade300,
-                      ),
+                EditForm(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  labelText: 'ID number',
+                  keyboardType: TextInputType.name,
+                  controller: idNoController,
+                  obscureText: togglePassword.state,
+                  validator: (value) => validateIdNo(value),
+                  suffixIcon: InkWell(
+                    onTap: () {
+                      togglePassword.state = !togglePassword.state;
+                    },
+                    child: Icon(
+                      togglePassword.state
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.grey.shade300,
                     ),
                   ),
                 ),
@@ -102,7 +97,17 @@ class _UploadIdState extends ConsumerState<UploadId> {
                         return;
                       }
 
-                      selectedImage.value = image.path;
+                      CroppedFile? croppedFile = await ImageCropper().cropImage(
+                          sourcePath: image.path,
+                          aspectRatio:
+                              const CropAspectRatio(ratioX: 14, ratioY: 10),
+                          compressQuality: 100);
+
+                      if (croppedFile == null) {
+                        return;
+                      } else {
+                        selectedImage.value = croppedFile.path;
+                      }
                     },
                     child: Text(
                       'Upload ID',
