@@ -93,4 +93,13 @@ class ProfileRepository extends IProfileManager {
 
   @override
   Future<SavedId> getID() async => await _profileService.getID();
+
+  @override
+  Future<UploadIdRes> editId(
+          String filePath, String idType, String idNo, String id) async =>
+      await _profileService.editId(filePath, idType, idNo, id);
+
+  @override
+  Future<UploadIdRes> deleteId(String id) async =>
+      await _profileService.deleteId(id);
 }

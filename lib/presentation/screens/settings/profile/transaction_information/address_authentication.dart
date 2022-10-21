@@ -182,7 +182,9 @@ class _AddressAuthenicationState extends ConsumerState<AddressAuthenication> {
                     const Space(70),
                     CustomButton(
                         buttonText: authorize.loading
-                            ? loading()
+                            ? loading(
+                                Colors.white,
+                              )
                             : buttonText(context, "Next"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,

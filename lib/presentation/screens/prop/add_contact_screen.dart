@@ -92,7 +92,9 @@ class AddContactScreen extends HookConsumerWidget {
                       CustomButton(
                         buttonWidth: 280.w,
                         buttonText: addContact is Loading
-                            ? loading()
+                            ? loading(
+                                Colors.white,
+                              )
                             : buttonText(context, "Add contact"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,

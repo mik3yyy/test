@@ -197,8 +197,11 @@ class _ToWalletState extends ConsumerState<ToWallet> {
               // ),
               Space(20.h),
               CustomButton(
-                buttonText:
-                    vm is Loading ? loading() : buttonText(context, "Transfer"),
+                buttonText: vm is Loading
+                    ? loading(
+                        Colors.white,
+                      )
+                    : buttonText(context, "Transfer"),
                 bgColor: AppColors.appColor,
                 borderColor: AppColors.appColor,
                 textColor: Colors.white,

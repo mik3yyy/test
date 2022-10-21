@@ -1,8 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
+import '../../../../components/app image/app_image.dart';
 import '../../../../components/app text theme/app_text_theme.dart';
 
 class AppDialog {
@@ -225,6 +230,141 @@ class AppDialog {
                 onPressed: () {
                   Navigator.pop(context);
                 },
+              ),
+            ),
+          );
+        });
+  }
+
+  static void viewIdOptions(BuildContext context,
+      {required VoidCallback deletedID,
+      required VoidCallback viewId,
+      required VoidCallback editID}) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(left: 25.w, right: 25.w),
+            child: CupertinoActionSheet(
+              actions: [
+                //WalletName
+                Container(
+                  color: Colors.white,
+                  child: CupertinoActionSheetAction(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      child: Text(
+                        'View ID',
+                        style: AppText.body2(
+                          context,
+                          AppColors.appColor,
+                          18.sp,
+                        ),
+                      ),
+                    ),
+                    isDefaultAction: true,
+                    onPressed: viewId,
+                  ),
+                ),
+                //View Wallet
+                Container(
+                  color: Colors.white,
+                  child: CupertinoActionSheetAction(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                        child: Text(
+                          'Edit ID',
+                          style: AppText.body2(
+                            context,
+                            AppColors.appColor,
+                            18.sp,
+                          ),
+                        ),
+                      ),
+                      isDefaultAction: true,
+                      onPressed: editID),
+                ),
+
+                Container(
+                  color: Colors.white,
+                  child: CupertinoActionSheetAction(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 30.w, right: 30.w),
+                      child: Text(
+                        'Delete ID',
+                        style: AppText.body2(
+                          context,
+                          Colors.red,
+                          16.sp,
+                        ),
+                      ),
+                    ),
+                    isDefaultAction: true,
+                    onPressed: deletedID,
+                  ),
+                ),
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                child: Text(
+                  "Close",
+                  style: AppText.body2(
+                    context,
+                    AppColors.appColor,
+                    18.sp,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          );
+        });
+  }
+
+  static void viewId(BuildContext context,
+      {required String idNo, required String idType, required String image}) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        builder: (context) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.55,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 20.w,
+                right: 20.w,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Space(40),
+                  Text("ID Type:",
+                      style: AppText.body2(context, Colors.black45, 15.sp)),
+                  Text(idType,
+                      style: AppText.body2(context, Colors.black, 25.sp)),
+                  const Space(30),
+                  Center(
+                    child: Transform.scale(
+                      scale: 1.2,
+                      child: SizedBox(
+                        height: 200,
+                        child: KYNetworkImage(
+                            url: image,
+                            errorImage: Image.asset(AppImage.profile,
+                                scale: 5, fit: BoxFit.contain),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                  ),
+                  const Space(30),
+                  Text("ID number:",
+                      style: AppText.body2(context, Colors.black45, 15.sp)),
+                  Text(idNo,
+                      style: AppText.body2(context, Colors.black, 25.sp)),
+                ],
               ),
             ),
           );

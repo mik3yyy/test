@@ -174,7 +174,9 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
                       CustomButton(
                         buttonWidth: double.infinity,
                         buttonText: vm is Loading
-                            ? loading()
+                            ? loading(
+                                Colors.white,
+                              )
                             : buttonText(context, "Set Pin"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,

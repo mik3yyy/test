@@ -317,7 +317,9 @@ class _IbanViewState extends ConsumerState<IbanView> {
           Space(20.h),
           CustomButton(
               buttonText: iban is Loading
-                  ? loading()
+                  ? loading(
+                      Colors.white,
+                    )
                   : buttonText(context, "Withdraw to Bank"),
               bgColor: AppColors.appColor,
               borderColor: AppColors.appColor,

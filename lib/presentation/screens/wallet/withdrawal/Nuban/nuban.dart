@@ -445,7 +445,9 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         Space(40.h),
                         CustomButton(
                             buttonText: nuban is Loading
-                                ? loading()
+                                ? loading(
+                                    Colors.white,
+                                  )
                                 : buttonText(context, "Withdraw to Bank"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,

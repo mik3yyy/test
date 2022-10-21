@@ -120,8 +120,11 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
                               .createPost(createPostReq);
                           context.loaderOverlay.show();
                         },
-                  buttonText:
-                      vm is Loading ? loading() : buttonText(context, "Post"),
+                  buttonText: vm is Loading
+                      ? loading(
+                          Colors.white,
+                        )
+                      : buttonText(context, "Post"),
                   bgColor: postText.text.isEmpty || postTitle.text.isEmpty
                       ? AppColors.appColor.withOpacity(0.3)
                       : AppColors.appColor,

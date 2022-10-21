@@ -218,7 +218,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                       CustomButton(
                         buttonWidth: 244.w,
                         buttonText: vm is Loading
-                            ? loading()
+                            ? loading(
+                                Colors.white,
+                              )
                             : buttonText(context, "Sign Up"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,

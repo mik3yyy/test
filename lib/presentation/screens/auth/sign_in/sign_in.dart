@@ -325,12 +325,10 @@ Widget buttonText(BuildContext context, String text) {
   );
 }
 
-Widget loading() {
-  return const SizedBox(
+Widget loading(Color color) {
+  return SizedBox(
     height: 20,
     width: 20,
-    child: CircularProgressIndicator(
-      color: Colors.white,
-    ),
+    child: CircularProgressIndicator(color: color),
   );
 }

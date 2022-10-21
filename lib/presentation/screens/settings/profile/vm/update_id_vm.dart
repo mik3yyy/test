@@ -18,3 +18,39 @@ class UserIdVM extends RequestStateNotifier<UploadIdRes> {
   uploadId(String filePath, String idType, String idNo) =>
       makeRequest(() => _profileRepository.updateId(filePath, idType, idNo));
 }
+
+///EDIT SAVED ID PROVIDER
+final editIdProvider =
+    StateNotifierProvider<EditIDVM, RequestState<UploadIdRes>>(
+  (ref) => EditIDVM(ref),
+);
+
+class EditIDVM extends RequestStateNotifier<UploadIdRes> {
+  final ProfileRepository _profileRepository;
+
+  EditIDVM(StateNotifierProviderRef ref)
+      : _profileRepository = ref.read(profilehManagerProvider);
+
+  void editID(
+          {required String filePath,
+          required String idType,
+          required String idNo,
+          required String id}) =>
+      makeRequest(() => _profileRepository.editId(filePath, idType, idNo, id));
+}
+
+///DELETE SAVED ID PROVIDER
+final deleteIdProvider =
+    StateNotifierProvider<DeleteIDVM, RequestState<UploadIdRes>>(
+  (ref) => DeleteIDVM(ref),
+);
+
+class DeleteIDVM extends RequestStateNotifier<UploadIdRes> {
+  final ProfileRepository _profileRepository;
+
+  DeleteIDVM(StateNotifierProviderRef ref)
+      : _profileRepository = ref.read(profilehManagerProvider);
+
+  void deleteID({required String id}) =>
+      makeRequest(() => _profileRepository.deleteId(id));
+}

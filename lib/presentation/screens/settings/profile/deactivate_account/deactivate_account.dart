@@ -131,7 +131,9 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
                 const Space(50),
                 CustomButton(
                   buttonText: deactivate is Loading
-                      ? loading()
+                      ? loading(
+                          Colors.white,
+                        )
                       : buttonText(context, "Deactivate Account"),
                   bgColor: AppColors.appColor,
                   borderColor: AppColors.appColor,

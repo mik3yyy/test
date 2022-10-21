@@ -200,7 +200,9 @@ class ResetTransactionPin extends HookConsumerWidget {
                         Space(150.h),
                         CustomButton(
                             buttonText: vn is Loading
-                                ? loading()
+                                ? loading(
+                                    Colors.white,
+                                  )
                                 : buttonText(context, "Save"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,

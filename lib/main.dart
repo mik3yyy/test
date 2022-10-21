@@ -62,7 +62,7 @@ class MyApp extends HookConsumerWidget {
           navigatorObservers: [
             SentryNavigatorObserver(),
           ],
-          title: 'Flutter Demo',
+          title: 'Kayndrexsphere',
           theme: ThemeData(
               scaffoldBackgroundColor: const Color(0xFFFFFFFF),
               primarySwatch: Colors.blue),

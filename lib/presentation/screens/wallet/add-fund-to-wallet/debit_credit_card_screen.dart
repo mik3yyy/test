@@ -449,7 +449,9 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                       Space(14.h),
                                       CustomButton(
                                         buttonText: convert is Loading
-                                            ? loading()
+                                            ? loading(
+                                                Colors.white,
+                                              )
                                             : buttonText(
                                                 context, "Get Exchange Rate"),
                                         bgColor: AppColors.appColor,
@@ -550,7 +552,9 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: CustomButton(
                     buttonText: fundWallet is Loading
-                        ? loading()
+                        ? loading(
+                            Colors.white,
+                          )
                         : buttonText(context, "Next"),
                     bgColor: AppColors.appColor,
                     textColor: AppColors.whiteColor,
