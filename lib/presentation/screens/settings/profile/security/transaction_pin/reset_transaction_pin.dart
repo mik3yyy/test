@@ -198,7 +198,9 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                           CustomButton(
                             buttonWidth: double.infinity,
                             buttonText: vm is Loading
-                                ? loading()
+                                ? loading(
+                                    Colors.white,
+                                  )
                                 : buttonText(context, "Continue"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,

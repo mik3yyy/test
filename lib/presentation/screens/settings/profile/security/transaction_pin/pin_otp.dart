@@ -189,7 +189,9 @@ class _PinOTPScreenState extends ConsumerState<PinOTPScreen> {
                       child: CustomButton(
                         buttonWidth: double.infinity,
                         buttonText: vm is Loading
-                            ? loading()
+                            ? loading(
+                                Colors.white,
+                              )
                             : buttonText(context, "Proceed"),
                         bgColor: AppColors.appColor,
                         borderColor: AppColors.appColor,

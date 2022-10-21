@@ -322,7 +322,9 @@ class _SafePayScreenState extends ConsumerState<SafePayScreen> {
                                     Space(14.h),
                                     CustomButton(
                                       buttonText: convert is Loading
-                                          ? loading()
+                                          ? loading(
+                                              Colors.white,
+                                            )
                                           : buttonText(
                                               context, "Get Exchange Rate"),
                                       bgColor: AppColors.appColor,

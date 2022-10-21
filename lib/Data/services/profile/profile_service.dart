@@ -217,15 +217,61 @@ class ProfileService {
     try {
       final response = await _read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
-      // final result = ProfileRes.fromJson(response.data);
+
       return UploadIdRes.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != '') {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        // print(Constants.errorMessage);
-        // throw Constants.errorMessage;
+        throw e.error;
+      }
+    }
+  }
+
+  Future<UploadIdRes> editId(
+      String filePath, String idType, String idNo, String id) async {
+    const url = '/profile/edit-id';
+
+    File file = File(filePath);
+    final mimeTypeData =
+        lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
+
+    FormData formData = FormData.fromMap({
+      "file_front": await MultipartFile.fromFile(file.path,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "id_no": idNo,
+      "id": id,
+      "id_type": idType
+    });
+    try {
+      final response = await _read(dioProvider).post(url,
+          data: formData, options: Options(headers: {"requireToken": true}));
+
+      return UploadIdRes.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != '') {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<UploadIdRes> deleteId(String id) async {
+    final url = '/profile/delete-id/$id';
+    try {
+      final response = await _read(dioProvider).post(
+        url,
+      );
+      final result = UploadIdRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
         throw e.error;
       }
     }

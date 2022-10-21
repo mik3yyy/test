@@ -122,7 +122,9 @@ class ForgotTransactionPin extends HookConsumerWidget {
                         CustomButton(
                           buttonWidth: double.infinity,
                           buttonText: vm is Loading
-                              ? loading()
+                              ? loading(
+                                  Colors.white,
+                                )
                               : buttonText(context, "Send"),
                           bgColor: AppColors.appColor,
                           borderColor: AppColors.appColor,

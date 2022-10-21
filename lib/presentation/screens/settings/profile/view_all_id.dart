@@ -34,7 +34,9 @@ class ViewIdentification extends HookConsumerWidget {
                 pushNewScreen(
                   context,
                   withNavBar: false,
-                  screen: const UploadId(),
+                  screen: const UploadId(
+                    uploadId: UploadRoute.addId,
+                  ),
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
               },
@@ -77,7 +79,9 @@ class ViewIdentification extends HookConsumerWidget {
                                   pushNewScreen(
                                     context,
                                     withNavBar: false,
-                                    screen: const UploadId(),
+                                    screen: const UploadId(
+                                      uploadId: UploadRoute.addId,
+                                    ),
                                     pageTransitionAnimation:
                                         PageTransitionAnimation.cupertino,
                                   );

@@ -316,8 +316,11 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
             Padding(
               padding: const EdgeInsets.only(left: 23, right: 23),
               child: CustomButton(
-                  buttonText:
-                      card is Loading ? loading() : buttonText(context, "Next"),
+                  buttonText: card is Loading
+                      ? loading(
+                          Colors.white,
+                        )
+                      : buttonText(context, "Next"),
                   bgColor: AppColors.appColor,
                   borderColor: AppColors.appColor,
                   textColor: Colors.white,

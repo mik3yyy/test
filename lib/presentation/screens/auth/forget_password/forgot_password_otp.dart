@@ -155,7 +155,9 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
                     CustomButton(
                       buttonWidth: double.infinity,
                       buttonText: vm is Loading
-                          ? loading()
+                          ? loading(
+                              Colors.white,
+                            )
                           : buttonText(context, "Process"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,

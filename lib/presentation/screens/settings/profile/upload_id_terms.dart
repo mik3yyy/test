@@ -8,7 +8,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_id_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/update_id_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -36,7 +36,7 @@ class _UploadIDTermsState extends ConsumerState<UploadIDTerms> {
     final vm = ref.watch(userIdProvider);
     ref.listen<RequestState>(userIdProvider, (_, value) {
       if (value is Success<UploadIdRes>) {
-        ref.refresh(userProfileProvider);
+        ref.refresh(getAllIdentification);
         Navigator.pop(context);
         Navigator.pop(context);
 
@@ -115,7 +115,9 @@ class _UploadIDTermsState extends ConsumerState<UploadIDTerms> {
                     onSurface: Colors.grey,
                   ),
                   child: vm is Loading
-                      ? loading()
+                      ? loading(
+                          Colors.white,
+                        )
                       : buttonText(context, "I Agree")),
             )
           ],

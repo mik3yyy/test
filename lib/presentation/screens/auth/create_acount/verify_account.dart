@@ -165,7 +165,9 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     CustomButton(
                       buttonWidth: 244.w,
                       buttonText: vm is Loading
-                          ? loading()
+                          ? loading(
+                              Colors.white,
+                            )
                           : buttonText(context, "Process"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,

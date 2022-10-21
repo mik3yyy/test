@@ -490,7 +490,9 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                         // Space(20.h),
                         CustomButton(
                             buttonText: aba is Loading
-                                ? loading()
+                                ? loading(
+                                    Colors.white,
+                                  )
                                 : buttonText(context, "Withdraw to Bank"),
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,

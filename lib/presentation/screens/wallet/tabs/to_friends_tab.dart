@@ -314,7 +314,9 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   Space(20.h),
                   CustomButton(
                       buttonText: vm is Loading
-                          ? loading()
+                          ? loading(
+                              Colors.white,
+                            )
                           : buttonText(context, "Transfer"),
                       bgColor: AppColors.appColor,
                       borderColor: AppColors.appColor,
