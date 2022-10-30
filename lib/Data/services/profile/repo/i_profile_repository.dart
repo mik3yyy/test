@@ -19,6 +19,6 @@ abstract class IProfileManager {
   Future<UploadIdRes> updateId(String filePath, String idType, String idNo);
   Future<SavedId> getID();
   Future<UploadIdRes> editId(
-      String filePath, String idType, String idNo, String id);
+      String filePath, String idType, String idNo, String id, bool isEdit);
   Future<UploadIdRes> deleteId(String id);
 }

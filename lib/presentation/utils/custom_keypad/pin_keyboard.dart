@@ -2,6 +2,7 @@ library pin_keyboard;
 
 import 'package:flutter/material.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keyboard_controller.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class PinKeyboard extends StatefulWidget {
   final double space;
@@ -71,6 +72,7 @@ class _PinKeyboardState extends State<PinKeyboard> {
                 _createNumber('3', _handleTabNumber),
               ],
             ),
+            const Space(30),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -81,9 +83,7 @@ class _PinKeyboardState extends State<PinKeyboard> {
                 _createNumber('6', _handleTabNumber),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const Space(30),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -94,9 +94,7 @@ class _PinKeyboardState extends State<PinKeyboard> {
                 _createNumber('9', _handleTabNumber),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const Space(30),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

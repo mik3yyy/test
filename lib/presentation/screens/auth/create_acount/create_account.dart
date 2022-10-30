@@ -16,12 +16,11 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_accoun
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
-
-final userEmail = StateProvider((ref) => "");
 
 class CreateAccountScreen extends HookConsumerWidget {
   CreateAccountScreen({Key? key}) : super(key: key);
@@ -36,15 +35,17 @@ class CreateAccountScreen extends HookConsumerWidget {
     final vm = ref.watch(createAccountProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
     final fistNameController = useTextEditingController();
+
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
     var toggleState = ref.watch(toggleStateProvider.state);
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success<bool>) {
+        PreferenceManager.email = emailPhoneController.text;
         context.navigate(VerifyAccountScreen(
           emailAdress: emailPhoneController.text,
         ));
-        ref.read(userEmail.notifier).state = emailPhoneController.text;
+
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Check Your Mail for Verification Code",

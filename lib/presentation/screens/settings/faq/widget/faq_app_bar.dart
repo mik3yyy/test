@@ -3,8 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/search_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class FaqAppBar extends HookConsumerWidget {
@@ -58,14 +56,16 @@ class FaqAppBar extends HookConsumerWidget {
             ],
           ),
           Space(18.h),
-          SizedBox(
-              height: 46.h,
-              child: SearchBox(
-                hintText: 'Search FAQ',
-                onTextEntered: (value) {
-                  ref.watch(faqSearchQueryStateProvider.notifier).state = value;
-                },
-              )),
+
+          ///SEARCH BAR
+          // SizedBox(
+          //     height: 46.h,
+          //     child: SearchBox(
+          //       hintText: 'Search FAQ',
+          //       onTextEntered: (value) {
+          //         ref.watch(faqSearchQueryStateProvider.notifier).state = value;
+          //       },
+          //     )),
           Space(0.h),
         ],
       ),

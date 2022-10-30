@@ -31,7 +31,7 @@ class WalletTransactions {
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": data!.toJson(),
+        "data": data?.toJson(),
       };
 }
 
@@ -68,11 +68,11 @@ class Transaction {
 
   String? transactionRef;
   String? description;
-  Direction? direction;
-  CurrencyCode? currencyCode;
-  double? amount;
-  double? balanceBeforeTransaction;
-  double? balanceAfterTransaction;
+  String? direction;
+  String? currencyCode;
+  num? amount;
+  num? balanceBeforeTransaction;
+  num? balanceAfterTransaction;
   DateTime? createdAt;
   DateTime? updatedAt;
   User? user;
@@ -80,43 +80,33 @@ class Transaction {
   factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
         transactionRef: json["transaction_ref"],
         description: json["description"],
-        direction: directionValues.map![json["direction"]],
-        currencyCode: currencyCodeValues.map![json["currency_code"]],
-        amount: json["amount"].toDouble(),
-        balanceBeforeTransaction: json["balance_before_transaction"].toDouble(),
-        balanceAfterTransaction: json["balance_after_transaction"].toDouble(),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        direction: json["direction"],
+        currencyCode: json["currency_code"],
+        amount: json["amount"] ?? 0.0,
+        balanceBeforeTransaction: json["balance_before_transaction"] ?? 0.0,
+        balanceAfterTransaction: json["balance_after_transaction"] ?? 0.0,
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
         user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
         "transaction_ref": transactionRef,
         "description": description,
-        "direction": directionValues.reverse![direction],
-        "currency_code": currencyCodeValues.reverse![currencyCode],
+        "direction": direction,
+        "currency_code": currencyCode,
         "amount": amount,
         "balance_before_transaction": balanceBeforeTransaction,
         "balance_after_transaction": balanceAfterTransaction,
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
-        "user": user!.toJson(),
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "user": user?.toJson(),
       };
 }
-
-enum CurrencyCode { usd, ngn, gbp, eur }
-
-final currencyCodeValues = EnumValues({
-  "EUR": CurrencyCode.eur,
-  "GBP": CurrencyCode.gbp,
-  "NGN": CurrencyCode.ngn,
-  "USD": CurrencyCode.usd
-});
-
-enum Direction { credit, debit }
-
-final directionValues =
-    EnumValues({"credit": Direction.credit, "debit": Direction.debit});
 
 class User {
   User({
@@ -145,107 +135,77 @@ class User {
 
   String? firstName;
   String? lastName;
-  dynamic gender;
+  String? gender;
   dynamic dateOfBirth;
   String? accountNumber;
-  RefCode? refCode;
-  Email? email;
+  String? refCode;
+  String? email;
   dynamic phoneNumber;
-  dynamic address;
-  dynamic city;
-  dynamic state;
-  CountryName? countryName;
-  CurrencyCode? currencyCode;
-  Language? language;
+  String? address;
+  String? city;
+  String? state;
+  String? countryName;
+  String? currencyCode;
+  String? language;
   DateTime? transactionPinAddedAt;
   DateTime? verifiedAt;
   int? isBanned;
   dynamic profilePicture;
-  Timezone? timezone;
+  String? timezone;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         firstName: json["first_name"],
         lastName: json["last_name"],
-        gender: json["gender"],
+        gender: json["gender"] ?? "",
         dateOfBirth: json["date_of_birth"],
         accountNumber: json["account_number"],
-        refCode: refCodeValues.map![json["ref_code"]],
-        email: emailValues.map![json["email"]],
+        refCode: json["ref_code"] ?? "",
+        email: json["email"] ?? "",
         phoneNumber: json["phone_number"],
         address: json["address"],
-        city: json["city"],
-        state: json["state"],
-        countryName: countryNameValues.map![json["country_name"]],
-        currencyCode: currencyCodeValues.map![json["currency_code"]],
-        language: languageValues.map![json["language"]],
-        transactionPinAddedAt: DateTime.parse(json["transaction_pin_added_at"]),
+        city: json["city"] ?? "",
+        state: json["state"] ?? "",
+        countryName: json["country_name"] ?? "",
+        currencyCode: json["currency_code"],
+        language: json["language"] ?? "",
+        transactionPinAddedAt: json["transaction_pin_added_at"] == null
+            ? null
+            : DateTime.parse(json["transaction_pin_added_at"]),
         verifiedAt: DateTime.parse(json["verified_at"]),
         isBanned: json["is_banned"],
         profilePicture: json["profile_picture"],
-        timezone: timezoneValues.map![json["timezone"]],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        timezone: json["timezone"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "first_name": stNameValues.reverse![firstName],
-        "last_name": stNameValues.reverse![lastName],
+        "first_name": firstName,
+        "last_name": lastName,
         "gender": gender,
         "date_of_birth": dateOfBirth,
         "account_number": accountNumber,
-        "ref_code": refCodeValues.reverse![refCode],
-        "email": emailValues.reverse![email],
+        "ref_code": refCode,
+        "email": email,
         "phone_number": phoneNumber,
         "address": address,
         "city": city,
         "state": state,
-        "country_name": countryNameValues.reverse![countryName],
-        "currency_code": currencyCodeValues.reverse![currencyCode],
-        "language": languageValues.reverse![language],
-        "transaction_pin_added_at": transactionPinAddedAt!.toIso8601String(),
+        "country_name": countryName,
+        "currency_code": currencyCode,
+        "language": language,
+        "transaction_pin_added_at": transactionPinAddedAt?.toIso8601String(),
         "verified_at": verifiedAt!.toIso8601String(),
         "is_banned": isBanned,
         "profile_picture": profilePicture,
-        "timezone": timezoneValues.reverse![timezone],
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
+        "timezone": timezone,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
-}
-
-enum CountryName { nigeria }
-
-final countryNameValues = EnumValues({"Nigeria": CountryName.nigeria});
-
-enum Email { etoediagmailcom }
-
-final emailValues = EnumValues({"etoedia@gmail.com": Email.etoediagmailcom});
-
-enum StName { david }
-
-final stNameValues = EnumValues({"David": StName.david});
-
-enum Language { english }
-
-final languageValues = EnumValues({"English": Language.english});
-
-enum RefCode { ddqs7wy }
-
-final refCodeValues = EnumValues({"DD-QS7WY": RefCode.ddqs7wy});
-
-enum Timezone { africalagos }
-
-final timezoneValues = EnumValues({"Africa/Lagos": Timezone.africalagos});
-
-class EnumValues<T> {
-  Map<String, T>? map;
-  Map<T, String>? reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String>? get reverse {
-    reverseMap ??= map!.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

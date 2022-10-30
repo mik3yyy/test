@@ -33,7 +33,10 @@ final transactionSearchResultProvider =
   //GETS THE RESULT FROM THE SERVER
   final listSearch = ref.watch(remoteTransactionListProvider).value;
   //STORE THE RESULT AND THEN FILTER IT
-  return listSearch!.data.transactions
+  if (listSearch == null) {
+    return [];
+  } else {}
+  return listSearch.data.transactions
       .where((transaction) => transaction.amount
           .toString()
           .toLowerCase()

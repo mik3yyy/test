@@ -42,7 +42,7 @@ class NotificationScreen extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
+                height: MediaQuery.of(context).size.height * 0.02,
               ),
               Expanded(
                   child: Container(

@@ -75,7 +75,7 @@ class Withdrawal {
   String? provider;
   String? bankaccountType;
   String? currencyCode;
-  int? amount;
+  num? amount;
   String? description;
   String? status;
   DateTime? createdAt;
@@ -90,7 +90,7 @@ class Withdrawal {
         provider: json["provider"],
         bankaccountType: json["bankaccount_type"],
         currencyCode: json["currency_code"],
-        amount: json["amount"],
+        amount: json["amount"] ?? 0.0,
         description: json["description"],
         status: json["status"],
         createdAt: DateTime.parse(json["created_at"]),
@@ -205,14 +205,14 @@ class Wallet {
     this.isDefault,
   });
 
-  double? balance;
+  String? balance;
   String? currencyCode;
   DateTime? createdAt;
   DateTime? updatedAt;
   int? isDefault;
 
   factory Wallet.fromJson(Map<String, dynamic> json) => Wallet(
-        balance: json["balance"].toDouble(),
+        balance: json["balance"] ?? "0.0",
         currencyCode: json["currency_code"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),

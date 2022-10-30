@@ -229,8 +229,8 @@ class ProfileService {
     }
   }
 
-  Future<UploadIdRes> editId(
-      String filePath, String idType, String idNo, String id) async {
+  Future<UploadIdRes> editId(String filePath, String idType, String idNo,
+      String id, bool isEdit) async {
     const url = '/profile/edit-id';
 
     File file = File(filePath);
@@ -238,8 +238,10 @@ class ProfileService {
         lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
 
     FormData formData = FormData.fromMap({
-      "file_front": await MultipartFile.fromFile(file.path,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "file_front": !isEdit
+          ? ""
+          : await MultipartFile.fromFile(file.path,
+              contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
       "id_no": idNo,
       "id": id,
       "id_type": idType

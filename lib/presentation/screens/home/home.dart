@@ -1,34 +1,25 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
-import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/transactions/view_all_transaction_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/add_funds_to_wallet_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/amount_display.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomView/bottomview.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/name_image_header.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/withdrawal_method.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../components/app image/app_image.dart';
 import '../../components/app text theme/app_text_theme.dart';
 import '../settings/profile/vm/get_profile_vm.dart';
-import '../wallet/transfer/transfer.dart';
-import 'widgets/bottomNav/persistent_tab_view.dart';
 
 class HomePage extends StatefulHookConsumerWidget {
   final BuildContext menuScreenContext;
@@ -45,31 +36,56 @@ class HomePage extends StatefulHookConsumerWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
-  final toggleAmountProvider =
-      StateProvider<bool>((ref) => PreferenceManager.revealBalance);
-
+class _HomePageState extends ConsumerState<HomePage>
+    with WidgetsBindingObserver {
+  bool isBackground = false;
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance?.addObserver(this);
     ref.read(refreshControllerProvider.notifier).refreshToken();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final toggleAmount = ref.watch(toggleAmountProvider.state);
-    final transactions = ref.watch(walletTransactionProvider);
-    final defaultWallet = ref.watch(userProfileProvider);
-    var formatter = NumberFormat("#,##0.00");
-    final currency = useTextEditingController();
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    setState(() {
+      isBackground = state == AppLifecycleState.inactive;
+    });
 
-    final newUser = PreferenceManager.isFirstLaunch;
+    // final isBackground = state == AppLifecycleState.inactive;
+
+    if (isBackground) {
+      log("$isBackground");
+    }
+
+    /* if (isBackground) {
+      // service.stop();
+    } else {
+      // service.start();
+    }*/
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      ref.read(savedUserProvider.notifier).getUserDb();
+      // ref.read(walletDataProvider.notifier).getData();
+    });
+    final savedUser = ref.watch(savedUserProvider);
+    final defaultWallet = ref.watch(userProfileProvider);
+    final setwallet = ref.watch(setWalletAsDefaultProvider);
+    final currency = useTextEditingController();
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
         ref.refresh(userProfileProvider);
-
         ref.refresh(currencyTransactionProvider(
             value.value!.data!.wallet!.currencyCode!));
       }
@@ -85,7 +101,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Scaffold(
         backgroundColor: AppColors.appColor,
         body: SafeArea(
-          child: Column(children: [
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            InnerPageLoadingIndicator(loadingStream: setwallet is Loading),
             Padding(
               padding: EdgeInsets.only(
                 left: 20.w,
@@ -94,343 +111,22 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Column(
                 children: [
                   Space(20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Hi ${defaultWallet.maybeMap(data: (v) => v.value.data.user.firstName?.capitalize(), orElse: () => '')}',
-                            style:
-                                AppText.header1(context, Colors.white, 25.sp),
-                          ),
-                          Space(10.h),
-                          newUser
-                              ? Text(
-                                  'Thanks for signing up with us',
-                                  style: AppText.body2(
-                                      context, Colors.white, 18.sp),
-                                )
-                              : const SizedBox.shrink()
-                        ],
-                      ),
-                      const Spacer(),
-                      const ProfileImage(
-                          height: 50,
-                          width: 50,
-                          avatar: 40,
-                          ignoreClick: true,
-                          hasIcon: false),
-                      Space(10.w),
-                    ],
+                  NameAndImageHeader(
+                    defaultWallet: defaultWallet,
+                    savedUser: savedUser,
                   ),
                   Space(20.h),
-                  Container(
-                    height: 150.h,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.r),
-                      color: AppColors.bottomSheet,
-                    ),
-                    child: Column(
-                      children: [
-                        const Space(10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            defaultWallet.maybeWhen(data: (data) {
-                              return Text(
-                                '${data.data.defaultWallet.currencyCode.toString()} wallet',
-                                style: AppText.header2(
-                                    context, AppColors.appColor, 18.sp),
-                              );
-                            }, orElse: () {
-                              return Text(
-                                '-----',
-                                style: AppText.header2(
-                                    context, AppColors.appColor, 18.sp),
-                              );
-                            }),
-                            SelectWalletList(
-                              currency: currency,
-                              routeName: "homeScreen",
-                            ),
-                            Space(85.w),
-                            InkWell(
-                              onTap: () {
-                                toggleAmount.state = !toggleAmount.state;
-                                PreferenceManager.revealBalance =
-                                    toggleAmount.state;
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Icon(
-                                  PreferenceManager.revealBalance
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: PreferenceManager.revealBalance
-                                      ? AppColors.appColor
-                                      : Colors.grey.shade400,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                            Space(20.w)
-                          ],
-                        ),
-                        const Space(15),
-                        PreferenceManager.revealBalance
-                            ? Text(
-                                '****',
-                                style: AppText.header1(
-                                    context, AppColors.appColor, 40.sp),
-                              )
-                            : Text(
-                                defaultWallet.maybeWhen(
-                                    data: (v) =>
-                                        '${v.data.defaultWallet.currencyCode.toString()} ${formatter.format(v.data.defaultWallet.balance)}',
-                                    orElse: () => '----'),
-                                style: AppText.header1(
-                                    context, AppColors.appColor, 40.sp),
-                              ),
-                        Space(8.h),
-                        Text(
-                          'Kayndrexsphere Account Number: ${defaultWallet.maybeWhen(data: (v) => v.data.user.accountNumber, orElse: () => '')}',
-                          style:
-                              AppText.body2(context, AppColors.appColor, 17.sp),
-                        ),
-                      ],
-                    ),
+                  AmountDisplay(
+                    currency: currency,
+                    defaultWallet: defaultWallet,
+                    savedUser: savedUser,
+                    isBackGround: isBackground,
                   )
-                  // Space(30.h),
-                  // const WalletOptionList()
                 ],
               ),
             ),
             const Space(20),
-            Expanded(
-                child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(45.r)),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 0.w, right: 0.w, top: 0.h),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(bottom: 10, top: 20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(45.r)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 2,
-                                  offset: const Offset(
-                                      0, 2), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    MenuCards(
-                                      title: 'Transfer',
-                                      image: AppImage.transfer,
-                                      firstColor:
-                                          AppColors.appColor.withOpacity(0.65),
-                                      secondColor: AppColors.appColor,
-                                      onPressed: () {
-                                        ref
-                                                .watch(
-                                                    defaultTransactionStateProvider
-                                                        .notifier)
-                                                .state =
-                                            defaultWallet.value!.data
-                                                .defaultWallet.currencyCode
-                                                .toString();
-                                        pushNewScreen(
-                                          context,
-                                          screen: const Transfer(),
-                                          withNavBar:
-                                              false, // OPTIONAL VALUE. True by default.
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                        );
-                                      },
-                                    ),
-                                    MenuCards(
-                                      title: 'Add funds',
-                                      image: AppImage.addFunds,
-                                      firstColor: const Color(0xff00848C)
-                                          .withOpacity(0.6),
-                                      secondColor: const Color(0xff00404E),
-                                      onPressed: () {
-                                        pushNewScreen(
-                                          context,
-                                          screen: AddFundsToWalletScreen(
-                                            menuScreenContext:
-                                                widget.menuScreenContext,
-                                            hideStatus: widget.hideStatus,
-                                            onScreenHideButtonPressed: () {},
-                                            route: "HomeScreen",
-                                          ),
-                                          withNavBar:
-                                              false, // OPTIONAL VALUE. True by default.
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                        );
-                                      },
-                                    ),
-                                    MenuCards(
-                                      title: 'Withdraw',
-                                      image: AppImage.withdraw,
-                                      firstColor: const Color(0xff1E6342)
-                                          .withOpacity(0.6),
-                                      secondColor: const Color(0xff00351C),
-                                      onPressed: () {
-                                        pushNewScreen(
-                                          context,
-                                          screen:
-                                              const WithdrawalMethodScreen(),
-                                          withNavBar: false,
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Space(30.w),
-                                SizedBox(
-                                  width: 370.w,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Transactions',
-                                        style: AppText.body2(
-                                            context, Colors.black45, 20.sp),
-                                      ),
-                                      const Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // context
-                                          //     .navigate(const ViewAllTransactionScreen());
-                                          pushNewScreen(
-                                            context,
-                                            screen:
-                                                const ViewAllTransactionScreen(),
-                                            withNavBar:
-                                                false, // OPTIONAL VALUE. True by default.
-                                            pageTransitionAnimation:
-                                                PageTransitionAnimation.fade,
-                                          );
-                                        },
-                                        child: Text(
-                                          'View all',
-                                          style: AppText.body2(context,
-                                              AppColors.appColor, 20.sp),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Space(30.h),
-                          transactions.when(
-                              error: (error, stackTrace) => Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical:
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                    ),
-                                    child: TextButton.icon(
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.grey.shade500,
-                                        onSurface: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        ref.refresh(walletTransactionProvider);
-                                      },
-                                      icon: const Icon(Icons.restart_alt),
-                                      label: const Text('Retry'),
-                                    ),
-                                  ),
-                              loading: () => Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            MediaQuery.of(context).size.height *
-                                                0.1,
-                                        horizontal:
-                                            MediaQuery.of(context).size.width *
-                                                0.3),
-                                    child: const CircularProgressIndicator
-                                        .adaptive(
-                                      strokeWidth: 5,
-                                    ),
-                                  ),
-                              data: (data) {
-                                if (data.data!.transactions.isEmpty) {
-                                  return const Center(
-                                    child: Text("No transaction History"),
-                                  );
-                                } else {
-                                  return RefreshIndicator(
-                                    onRefresh: () async {
-                                      ref.refresh(walletTransactionProvider);
-                                    },
-                                    child: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.32,
-                                      child: ListView.separated(
-                                        physics:
-                                            const AlwaysScrollableScrollPhysics(
-                                                parent:
-                                                    BouncingScrollPhysics()),
-                                        itemCount:
-                                            data.data!.transactions.length < 5
-                                                ? data.data!.transactions.length
-                                                : 5,
-                                        // itemCount: data.data!.transactions.length,
-                                        itemBuilder: (context, index) {
-                                          final transactions =
-                                              data.data!.transactions[index];
-                                          return TransactionBuild(
-                                            transactions: transactions,
-                                          );
-                                        },
-                                        separatorBuilder:
-                                            (BuildContext context, int index) {
-                                          return SizedBox(height: 20.h);
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                }
-                              }),
-                          // Space(10.h),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ))
+            BottomView(defaultWallet: defaultWallet)
           ]),
         ),
       ),
@@ -447,190 +143,17 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 }
 
-class MenuCards extends StatelessWidget {
-  final String title;
-  final String image;
-  final Color firstColor;
-  final Color secondColor;
-
-  final void Function()? onPressed;
-  const MenuCards(
-      {Key? key,
-      required this.title,
-      required this.image,
-      required this.firstColor,
-      required this.secondColor,
-      required this.onPressed})
+class InnerPageLoadingIndicator extends StatelessWidget {
+  final bool loadingStream;
+  const InnerPageLoadingIndicator({required this.loadingStream, Key? key})
       : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        height: 120.h,
-        width: 110.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
-          // color: AppColors.appColor,
-          gradient: RadialGradient(
-            colors: [firstColor, secondColor],
-            radius: 0.75,
-            focal: Alignment.topLeft,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Space(5.h),
-            SvgPicture.asset(
-              image,
-              color: Colors.white,
-              height: 30.h,
-              width: 30.w,
-            ),
-            Space(25.h),
-            Text(
-              title,
-              style: AppText.header2(context, Colors.white, 15.sp),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class TransactionBuild extends StatelessWidget {
-  final Transaction transactions;
-  const TransactionBuild({Key? key, required this.transactions})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime date = transactions.createdAt!;
-    String dateCreated = DateFormat(' d, MMM yyyy').format(date);
-    String formattedTime = DateFormat('kk:mm:a').format(date);
-    var formatter = NumberFormat("#,##0.00");
-    String currencyCode() {
-      if (transactions.currencyCode == CurrencyCode.eur) {
-        return "EUR";
-      }
-      if (transactions.currencyCode == CurrencyCode.gbp) {
-        return "GBP";
-      }
-      if (transactions.currencyCode == CurrencyCode.ngn) {
-        return "NGN";
-      }
-      if (transactions.currencyCode == CurrencyCode.usd) {
-        return "USD";
-      } else {
-        return '';
-      }
-    }
-
-    String direction() {
-      if (transactions.direction == Direction.credit) {
-        return "Credit";
-      } else {
-        return 'Debit';
-      }
-    }
-
-    return GestureDetector(
-      onTap: () {
-        AppDialog.showDetailsDialog(
-          context,
-          transactionType: direction(),
-          status: "",
-          amount: "${currencyCode()} ${formatter.format(transactions.amount)}",
-          date: "$dateCreated,  $formattedTime",
-          reference: transactions.transactionRef.toString(),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 2,
-              blurRadius: 2,
-              offset: const Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: 60.h,
-              width: 60.w,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.orange.withOpacity(0.3)),
-              child: Center(
-                child: SvgPicture.asset(
-                  AppImage.transferIcon,
-                  height: 20.h,
-                  width: 20.w,
-                ),
-              ),
-            ),
-            Space(10.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (transactions.direction == Direction.debit) ...[
-                    Row(
-                      children: [
-                        Text(
-                          'Debit',
-                          style: AppText.body2(context, Colors.red, 18.sp),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "${currencyCode()} ${formatter.format(transactions.amount)}",
-                          style: AppText.body2(context, Colors.red, 18.sp),
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    Row(
-                      children: [
-                        Text(
-                          "Credit",
-                          style: AppText.body2(context, Colors.green, 18.sp),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "${currencyCode()} ${formatter.format(transactions.amount)}",
-                          style: AppText.body2(context, Colors.green, 18.sp),
-                        ),
-                      ],
-                    ),
-                  ],
-                  Space(10.h),
-                  Row(
-                    children: [
-                      Text(
-                        transactions.user!.firstName.toString(),
-                        style: AppText.body2(context, Colors.black, 18.sp),
-                      ),
-                      const Spacer(),
-                      Text(
-                        dateCreated,
-                        style: AppText.body2(context, Colors.black, 18.sp),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    //
+    return loadingStream
+        ? const LinearProgressIndicator(
+            backgroundColor: Colors.white,
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.appColor))
+        : const SizedBox(height: 3.5);
   }
 }

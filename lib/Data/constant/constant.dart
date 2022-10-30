@@ -13,4 +13,8 @@ class Constants {
   static const privacyPolicy = "https://kayndrex.com/blog/15/";
   static const terms = "https://kayndrex.com/blog/117/";
   static const language = "https://kayndrex.com/blog/v2/";
+
+  static const transaction = "transactionsBox";
+  static const walletKey = "walletKey";
+  static const wallets = "wallets";
 }

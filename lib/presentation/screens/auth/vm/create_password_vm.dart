@@ -5,8 +5,9 @@ import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.da
 
 final createPasswordProvider =
     StateNotifierProvider<CreatePasswordVm, RequestState<CreatePassword>>(
-  (ref) => CreatePasswordVm(ref),
-);
+        (ref) {
+  return CreatePasswordVm(ref);
+});
 
 class CreatePasswordVm extends RequestStateNotifier<CreatePassword> {
   final AuthManager _authManager;

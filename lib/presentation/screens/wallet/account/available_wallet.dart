@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/set_default_as_wallet_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
@@ -43,6 +44,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
     final vm = ref.watch(userProfileProvider);
     final wallet = ref.watch(getAccountDetailsProvider);
     final walletCount = useState(0);
+    var formatter = NumberFormat("#,##0.00");
     final currency = useTextEditingController();
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
@@ -192,7 +194,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                             return ref.refresh(getAccountDetailsProvider);
                           },
                           child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.44,
+                            height: MediaQuery.of(context).size.height * 0.42,
                             child: ListView.separated(
                               physics: const AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
@@ -234,7 +236,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                                           ),
                                           Space(10.h),
                                           Text(
-                                            '${walletList.currencyCode.toString()} ${formatCurrency(walletList.balance.toString())}',
+                                            '${walletList.currencyCode.toString()} ${formatter.format(num.tryParse(walletList.balance ?? "0.0"))}',
                                             style: AppText.header2(context,
                                                 AppColors.appColor, 20.sp),
                                           ),

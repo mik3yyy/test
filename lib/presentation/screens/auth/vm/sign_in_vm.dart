@@ -4,9 +4,16 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 final signInProvider =
     StateNotifierProvider.autoDispose<SignInVm, RequestState<SigninRes>>((ref) {
+  // ref.refresh(getAccountDetailsProvider);
+  // ref.refresh(userProfileProvider);
+  // ref.refresh(walletTransactionProvider);
+  // PreferenceManager.isloggedIn = true;
   return SignInVm(ref);
 });
 
@@ -18,6 +25,14 @@ class SignInVm extends RequestStateNotifier<SigninRes> {
   Future<RequestState<SigninRes>> signIn(SigninReq signinReq) {
     // PreferenceManager.isFirstLaunch = false;
     ref.read(authControllerProvider.notifier).setAuth(false);
-    return makeRequest(() => ref.read(authManagerProvider).signIn(signinReq));
+    return makeRequest(() async {
+      final res = await ref.read(authManagerProvider).signIn(signinReq);
+      if (res.status == "success") {
+        ref.refresh(getAccountDetailsProvider);
+        ref.refresh(userProfileProvider);
+        PreferenceManager.isFirstLaunch = false;
+      }
+      return res;
+    });
   }
 }

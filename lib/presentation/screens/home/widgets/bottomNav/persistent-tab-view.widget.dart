@@ -8,7 +8,6 @@ part of persistent_bottom_nav_bar;
 ///A highly customizable persistent navigation bar for flutter.
 ///
 ///To learn more, check out the [Readme](https://github.com/BilalShahid13/PersistentBottomNavBar).
-
 class PersistentTabView extends PersistentTabViewBase {
   ///Screens that will be displayed on tapping of persistent bottom navigation bar items.
   final List<Widget> screens;
@@ -214,7 +213,6 @@ class PersistentTabViewBase extends StatefulWidget {
 
   ///Style the `neumorphic` navigation bar item.
   ///
-
   ///A custom widget which is displayed at the bottom right of the display at all times.
   final Widget? floatingActionButton;
 

@@ -169,7 +169,7 @@ class UserService {
 
   //  get currency
   Future<CurrencyRes> getCurrency() async {
-    const url = '/currencies/all-api';
+    const url = '/currencies/all';
     try {
       final response = await _read(dioProvider).get(url);
       final stringList = CurrencyRes.fromJson(response.data);
@@ -414,7 +414,7 @@ class UserService {
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
         Failure result = Failure.fromJson(e.response!.data);
-        throw e.error;
+        throw result.message ?? "";
       } else {
         throw e.error;
       }

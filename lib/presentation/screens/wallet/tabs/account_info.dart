@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/widget/currency_transaction_build.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/widget/exchange_rate.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
@@ -25,7 +25,8 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
     super.build(context);
     final remoteTransaction = ref.watch(remoteTransactionListProvider);
     final transaction = ref.watch(transactionsearchInputProvider);
-    final user = ref.watch(userProfileProvider).value;
+    // final user = ref.watch(userProfileProvider);
+    final saveduser = ref.watch(savedUserProvider);
 
     return Padding(
       padding: EdgeInsets.only(left: 30.w, right: 30.w, top: 15.h),
@@ -34,6 +35,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
           child: Column(
             children: [
               SearchBox(
+                hintText: "Search amount",
                 onTextEntered: (value) {
                   ref.read(transactionSearchQueryStateProvider.notifier).state =
                       value;
@@ -78,7 +80,7 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                       return RefreshIndicator(
                         onRefresh: () async {
                           return ref.refresh(currencyTransactionProvider(
-                              user!.data.defaultWallet.currencyCode ?? ""));
+                              saveduser.countryCode ?? ""));
                         },
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height * 0.49,
@@ -86,7 +88,6 @@ class _AccounInfoTabState extends ConsumerState<AccounInfoTab>
                             physics: const AlwaysScrollableScrollPhysics(
                                 parent: BouncingScrollPhysics()),
                             itemCount: transaction.value!.length,
-                            // itemCount: data.data!.transactions.length,
                             itemBuilder: (context, index) {
                               final value = transaction.value![index];
                               return CurrencyTransactionBuild(

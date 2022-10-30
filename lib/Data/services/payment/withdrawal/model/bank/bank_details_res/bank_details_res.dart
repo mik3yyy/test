@@ -18,18 +18,18 @@ class BankDetailsRes {
 
   String? message;
   String? status;
-  Data data;
+  Data? data;
 
   factory BankDetailsRes.fromJson(Map<String, dynamic> json) => BankDetailsRes(
         message: json["message"],
         status: json["status"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "message": message,
         "status": status,
-        "data": data.toJson(),
+        "data": data?.toJson(),
       };
 }
 

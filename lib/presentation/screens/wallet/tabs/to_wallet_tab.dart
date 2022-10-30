@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wallets.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
@@ -15,7 +16,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 import '../../../components/reusable_widget.dart/custom_button.dart';
@@ -33,22 +33,16 @@ class _ToWalletState extends ConsumerState<ToWallet> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultWallet = ref.watch(userProfileProvider).value;
+    final defaultWallet = ref.watch(userProfileProvider);
+    final saveduser = ref.watch(savedUserProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
-    // final defaultWallet = ref.watch(signInProvider);
     final vm = ref.watch(transferToWalletProvider);
-    // final transactionPinToggle = ref.watch(passwordToggleStateProvider.state);
-
     final amountController = useTextEditingController();
     final toCurrencyController = useTextEditingController();
-    // final transactionPinController = useTextEditingController();
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Loading) {
-        context.loaderOverlay.show();
-      } else {
-        context.loaderOverlay.hide();
-      }
+      } else {}
       if (value is Success) {
         AppDialog.showSuccessMessageDialog(
           context,
@@ -75,7 +69,7 @@ class _ToWalletState extends ConsumerState<ToWallet> {
             children: [
               Center(
                 child: Text(
-                  'Transfer from ${defaultWallet?.data.defaultWallet.currencyCode} wallet to other wallets',
+                  'Transfer from ${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)} wallet to other wallets',
                   style: AppText.body2(context, AppColors.appColor, 19.sp),
                 ),
               ),
@@ -226,10 +220,9 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                               ref
                                   .read(transferToWalletProvider.notifier)
                                   .transferToWallet(
-                                    defaultWallet!
-                                        .data.defaultWallet.currencyCode!,
+                                    "${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)}",
                                     toCurrencyController.text,
-                                    int.parse(amountController.text),
+                                    num.parse(amountController.text),
                                     value,
                                   );
                             });
@@ -244,12 +237,14 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                                 builder: (context) {
                                   return PinModalSheet(
                                     routeName: ModalRouteName.toWallet,
-                                    fromCurrency: defaultWallet!
-                                        .data.defaultWallet.currencyCode!,
+                                    fromCurrency: defaultWallet
+                                        .value!.data.defaultWallet.currencyCode
+                                        .toString(),
                                     toCurrency: toCurrencyController.text,
                                     saveBeneficiary: false,
                                     transferAmount:
-                                        int.parse(amountController.text),
+                                        num.tryParse(amountController.text) ??
+                                            0,
                                   );
                                 });
                           }

@@ -96,12 +96,14 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
                 ),
                 Space(15.h),
                 ForumTextFormField(
+                  hint: "Post Title",
                   height: 75.h,
                   maxLines: 5,
                   controller: postTitle,
                 ),
                 Space(14.h),
                 ForumTextFormField(
+                  hint: "Post Body",
                   height: 250.h,
                   maxLines: 15,
                   controller: postText,
@@ -160,16 +162,18 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
 }
 
 class ForumTextFormField extends StatelessWidget {
-  const ForumTextFormField({
-    Key? key,
-    required this.controller,
-    required this.height,
-    required this.maxLines,
-  }) : super(key: key);
+  const ForumTextFormField(
+      {Key? key,
+      required this.controller,
+      required this.height,
+      required this.maxLines,
+      required this.hint})
+      : super(key: key);
 
   final TextEditingController controller;
   final double height;
   final int maxLines;
+  final String hint;
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +193,7 @@ class ForumTextFormField extends StatelessWidget {
         controller: controller,
         maxLines: maxLines,
         decoration: InputDecoration(
-          hintText: 'Post body',
+          hintText: hint,
           hintStyle: AppText.robotoStyle(
             context,
             AppColors.textColor,

@@ -220,6 +220,8 @@ class WalletService {
                 policy: CachePolicy.refreshForceCache,
               )
               .toOptions());
+
+      ///   REFACTOR THIS CODE
       final result = WalletTransactions.fromJson(response.data);
 
       return result;

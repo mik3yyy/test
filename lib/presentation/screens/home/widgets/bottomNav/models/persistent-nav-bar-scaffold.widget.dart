@@ -1,6 +1,10 @@
 part of persistent_bottom_nav_bar;
 
 ///Navigation bar controller for `PersistentTabView`.
+///
+///
+///
+
 class PersistentTabController extends ChangeNotifier {
   PersistentTabController({int initialIndex = 0})
       : _index = initialIndex,

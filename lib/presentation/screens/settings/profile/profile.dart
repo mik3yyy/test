@@ -49,6 +49,9 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                     const ProfileImage(
                       hasIcon: false,
                       ignoreClick: false,
+                      avatar: 50,
+                      height: 100,
+                      width: 100,
                     ),
                     Space(10.h),
                     Text(

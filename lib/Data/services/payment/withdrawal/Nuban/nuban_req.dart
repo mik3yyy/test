@@ -20,7 +20,7 @@ class NubanReq {
   String bankCode;
   String accountNumber;
   String accountName;
-  int amount;
+  num amount;
   String? description;
 
   factory NubanReq.fromJson(Map<String, dynamic> json) => NubanReq(

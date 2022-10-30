@@ -8,11 +8,12 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/profile/vm/get_user_profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/widget/beneficiary.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/widget/beneficiary_checkbox.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/user_saved_beneficary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/verify_acct_no_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
@@ -35,17 +36,19 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
   bool togglePin = true;
   @override
   Widget build(BuildContext context) {
-    final defaultWallet = ref.watch(userProfileProvider).value;
+    final saveduser = ref.watch(savedUserProvider);
+    final defaultWallet = ref.watch(userProfileProvider);
     final acctNoVm = ref.watch(verifyAcctNoProvider);
-    final beneficiaryVm = ref.watch(usersavedWalletBeneficirayProvider);
     final vm = ref.watch(transferToWalletProvider);
     final accountNoController = useTextEditingController();
     final currencyController = useTextEditingController(
-        text: defaultWallet?.data.defaultWallet.currencyCode);
+        text: defaultWallet.value?.data.defaultWallet.currencyCode ?? "");
     final friendNameController = useTextEditingController();
     final amountController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
+    final saveBeneficiary = useState(false);
 
+    /// VERIFY ACCOUNT NUMBER LISTENER
     ref.listen<RequestState>(verifyAcctNoProvider, (T, value) {
       if (value is Success<VerifyAcctNoRes>) {
         friendNameController.text =
@@ -57,18 +60,16 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
       }
     });
 
+    /// TRANSFER WALLET LISTENER
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
       if (value is Success<bool>) {
-        // context.loaderOverlay.hide();
         AppDialog.showSuccessMessageDialog(
           context,
           'Funds transferred successfully',
           onpressed: () => Navigator.pop(context),
         );
 
-        ref.refresh(getUserProfileProvider);
         ref.refresh(userProfileProvider);
-        // ref.refresh(usersavedWalletBeneficirayProvider);
       }
       if (value is Error) {
         AppDialog.showErrorMessageDialog(context, value.error.toString());
@@ -80,93 +81,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            beneficiaryVm.when(
-              data: (value) {
-                return value.data!.walletBeneficiaries!.isEmpty
-                    ? const SizedBox.shrink()
-                    : Container(
-                        color: AppColors.appColor.withOpacity(0.09),
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Space(10.h),
-                              SizedBox(
-                                // color: Colors.red,
-                                height: 100,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount:
-                                      value.data!.walletBeneficiaries!.length,
-                                  itemBuilder: (context, index) {
-                                    final item =
-                                        value.data!.walletBeneficiaries![index];
-
-                                    return Column(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              accountNoController.text = item
-                                                  .beneficiary!.accountNumber!;
-                                              friendNameController.text =
-                                                  '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 80.h,
-                                            width: 80.w,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.grey.shade100,
-                                            ),
-                                            child: Center(
-                                                child: Text(
-                                              '${item.beneficiary!.firstName?[0]}',
-                                              style: AppText.body2(
-                                                  context,
-                                                  AppColors.appColor
-                                                      .withOpacity(0.5),
-                                                  40.sp),
-                                            )),
-                                          ),
-                                        ),
-                                        Space(10.h),
-                                        Expanded(
-                                          child: Text(
-                                            '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}',
-                                            style: AppText.body2(context,
-                                                AppColors.appColor, 16.sp),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return SizedBox(width: 20.w);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-              },
-              error: (Object error, StackTrace? stackTrace) {
-                return Text(error.toString());
-              },
-              loading: () {
-                //When enpoint is loading, it should display default ideas with overlay loading
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.appBgColor,
-                  ),
-                );
-              },
-            ),
             Space(25.h),
             Padding(
               padding: EdgeInsets.only(
@@ -176,8 +90,13 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BeneficiaryView(
+                    accountNoController: accountNoController,
+                    friendNameController: friendNameController,
+                  ),
+                  Space(30.h),
                   Text(
-                    'Make transfer from your ${defaultWallet?.data.defaultWallet.currencyCode} wallet',
+                    'Make transfer from your ${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode ?? "")} wallet',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
                   ),
                   Space(40.h),
@@ -227,8 +146,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   ),
                   Space(5.h),
                   WalletTextField(
-                    // labelText: 'hhhh',
-                    // initialValue: friendNameController.text,
                     labelText: acctNoVm is Loading
                         ? 'Fetching...'
                         : friendNameController.text,
@@ -267,50 +184,14 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                   Space(5.h),
                   WalletTextField(
                     controller: currencyController,
-                    labelText: defaultWallet?.data.defaultWallet.currencyCode,
+                    labelText:
+                        "${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)}",
                     obscureText: false,
                     color: AppColors.appColor.withOpacity(0.05),
                     readOnly: true,
                   ),
                   Space(10.h),
-
-                  const SaveBeneficiaryCheckBox(),
-                  // if (PreferenceManager.enableBioMetrics) ...[
-                  //   const SizedBox.shrink()
-                  // ] else ...[
-                  //   const TransactionPinMessage(),
-                  //   Space(20.h),
-                  //   EditForm(
-                  //     autovalidateMode: AutovalidateMode.onUserInteraction,
-                  //     labelText: 'Enter Transaction Pin',
-                  //     keyboardType: TextInputType.number,
-                  //     controller: transactionPin,
-                  //     obscureText: togglePin,
-                  //     validator: (value) => null,
-                  //     suffixIcon: SizedBox(
-                  //       width: 55.w,
-                  //       child: GestureDetector(
-                  //         onTap: () {
-                  //           setState(() {
-                  //             togglePin = !togglePin;
-                  //           });
-                  //         },
-                  //         child: Padding(
-                  //           padding: EdgeInsets.only(bottom: 0.h),
-                  //           child: Icon(
-                  //             togglePin
-                  //                 ? Icons.visibility_off_outlined
-                  //                 : Icons.visibility_outlined,
-                  //             color: Colors.grey.shade300,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ],
-
-                  // Space(20.h),
-
+                  SaveBeneficiaryCheckBox(saved: saveBeneficiary),
                   Space(20.h),
                   CustomButton(
                       buttonText: vm is Loading
@@ -331,16 +212,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                                       currentFocus.unfocus();
                                     }
 
-                                    // ref
-                                    //     .read(transferToWalletProvider.notifier)
-                                    //     .transferToAnotherUser(
-                                    //       accountNoController.text,
-                                    //       currencyController.text,
-                                    //       int.parse(amountController.text),
-                                    //       "",
-                                    //       savedAsBenefeciaryChecked,
-                                    //     );
-
                                     if (PreferenceManager
                                         .enableTransactionBioMetrics) {
                                       ref
@@ -353,9 +224,11 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                                             .transferToAnotherUser(
                                               accountNoController.text,
                                               currencyController.text,
-                                              int.parse(amountController.text),
+                                              num.tryParse(
+                                                      amountController.text) ??
+                                                  0.0,
                                               value,
-                                              savedAsBenefeciaryChecked,
+                                              saveBeneficiary.value,
                                             );
                                       });
                                     } else {
@@ -376,10 +249,11 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                                                   accountNoController.text,
                                               toCurrency:
                                                   currencyController.text,
-                                              transferAmount: int.parse(
-                                                  amountController.text),
+                                              transferAmount: num.tryParse(
+                                                      amountController.text) ??
+                                                  0,
                                               saveBeneficiary:
-                                                  savedAsBenefeciaryChecked,
+                                                  saveBeneficiary.value,
                                             );
                                           });
                                     }
@@ -400,81 +274,6 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SaveBeneficiaryCheckBox extends StatefulWidget {
-  const SaveBeneficiaryCheckBox({Key? key}) : super(key: key);
-
-  @override
-  _SaveBeneficiaryCheckBoxState createState() =>
-      _SaveBeneficiaryCheckBoxState();
-}
-
-bool savedAsBenefeciaryChecked = false;
-
-class _SaveBeneficiaryCheckBoxState extends State<SaveBeneficiaryCheckBox> {
-  @override
-  Widget build(BuildContext context) {
-    return CheckboxListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-        controlAffinity: ListTileControlAffinity.leading,
-        value: savedAsBenefeciaryChecked,
-        checkColor: Colors.white,
-        activeColor: AppColors.appColor,
-        // selectedTileColor: AppColors.primaryColor,
-        // title: Transform.translate(offset: Offset(-15,0),
-        title: Transform.translate(
-          offset: const Offset(-17, 0),
-          child: Text(
-            'Save beneficiary',
-            style: AppText.body2(context, AppColors.appColor, 18.sp),
-          ),
-        ),
-        onChanged: (newValue) {
-          setState(() {
-            savedAsBenefeciaryChecked = newValue!;
-          });
-        });
-  }
-}
-
-class TransactionPinMessage extends StatelessWidget {
-  const TransactionPinMessage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 80.h,
-      width: MediaQuery.of(context).size.width,
-      color: AppColors.appColor.withOpacity(0.05),
-      child: Row(
-        children: [
-          Space(20.w),
-          const Icon(
-            Icons.security,
-            size: 30,
-          ),
-          Space(15.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'For security reasons',
-                style: AppText.header2(context, Colors.black, 20.sp),
-              ),
-              const Space(2),
-              Text(
-                'Enter transaction PIN',
-                style: AppText.body2Bold(context, Colors.black, 23.sp),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

@@ -32,4 +32,12 @@ class UserDataBase extends HiveObject {
   String? phoneNumer;
   @HiveField(13)
   String? address;
+  @HiveField(14)
+  String? balance;
+  @HiveField(15)
+  num? defaultWalletBalance;
+  @HiveField(16)
+  String? defaultWalletCode;
+  @HiveField(17)
+  String? imageUrl;
 }

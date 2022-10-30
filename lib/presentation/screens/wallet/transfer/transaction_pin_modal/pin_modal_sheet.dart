@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_modal_route_source.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/to_friends_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keyboard.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keyboard_controller.dart';
@@ -66,9 +65,9 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Space(70.h),
+          Space(50.h),
           const SecurityDisplayHeader(),
-          const Space(60),
+          const Space(40),
           Container(
             height: 50,
             width: 190,
@@ -91,7 +90,7 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                     ),
             ),
           ),
-          const Space(80),
+          const Space(40),
           PinKeyboard(
             enableBiometric: true,
             textColor: Colors.black,
@@ -120,7 +119,7 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                           widget.toCurrency,
                           widget.transferAmount,
                           value,
-                          savedAsBenefeciaryChecked,
+                          widget.saveBeneficiary,
                         );
                     Navigator.pop(context);
                     break;

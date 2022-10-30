@@ -56,9 +56,9 @@ class _EnableTransactionPinState extends ConsumerState<EnableTransactionPin> {
         // crossAxisAlignment: CrossAxisAlignment.center,
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Space(70.h),
+          Space(50.h),
           const SecurityDisplayHeader(),
-          const Space(60),
+          const Space(40),
           Container(
             height: 50,
             width: 190,
@@ -81,7 +81,7 @@ class _EnableTransactionPinState extends ConsumerState<EnableTransactionPin> {
                     ),
             ),
           ),
-          const Space(80),
+          const Space(40),
           PinKeyboard(
             enableBiometric: true,
             textColor: Colors.black,

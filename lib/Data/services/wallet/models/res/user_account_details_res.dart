@@ -62,7 +62,7 @@ class Wallet {
     this.currency,
   });
 
-  num? balance;
+  String? balance;
   String? currencyCode;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -70,7 +70,7 @@ class Wallet {
   Currency? currency;
 
   factory Wallet.fromJson(Map<String, dynamic> json) => Wallet(
-        balance: json["balance"].toDouble() ?? 0.0,
+        balance: json["balance"] ?? "0.0",
         currencyCode: json["currency_code"] ?? '',
         createdAt: json["createdAt"] == null
             ? null

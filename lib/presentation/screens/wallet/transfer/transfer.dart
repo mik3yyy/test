@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/make_transfer.dart';
@@ -37,7 +38,8 @@ class _TransferState extends ConsumerState<Transfer>
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userProfileProvider);
-    final accountNum = ref.watch(userProfileProvider).value;
+    final saveduser = ref.watch(savedUserProvider);
+    final accountNum = ref.watch(userProfileProvider);
     var formatter = NumberFormat("#,##0.00");
     FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -83,13 +85,13 @@ class _TransferState extends ConsumerState<Transfer>
                             children: [
                               userData.maybeWhen(data: (data) {
                                 return Text(
-                                  "${data.data.defaultWallet.currencyCode} ${formatter.format(data.data.defaultWallet.balance)} ",
+                                  "${data.data.defaultWallet.currencyCode} ${formatter.format(num.tryParse(data.data.defaultWallet.balance ?? "0.0"))} ",
                                   style: AppText.header1(
                                       context, Colors.white, 25.sp),
                                 );
                               }, orElse: () {
                                 return Text(
-                                  "-----",
+                                  "${saveduser.countryCode} ${formatter.format(num.tryParse(saveduser.balance ?? "0.0"))}",
                                   style: AppText.header1(
                                       context, Colors.white, 25.sp),
                                 );
@@ -97,7 +99,7 @@ class _TransferState extends ConsumerState<Transfer>
 
                               Space(10.h),
                               Text(
-                                "Kayndrexsphere Account Number: \n${accountNum?.data.user.accountNumber}",
+                                "Kayndrexsphere Account Number: \n${accountNum.maybeWhen(data: (data) => data.data.user.accountNumber, orElse: () => saveduser.accountNumber ?? "0.0")}",
                                 style:
                                     AppText.body2(context, Colors.white, 18.sp),
                               ),
@@ -109,7 +111,6 @@ class _TransferState extends ConsumerState<Transfer>
                       ),
                     ),
                     Space(40.h),
-                    // const WalletOptionList()
                   ],
                 ),
                 Expanded(

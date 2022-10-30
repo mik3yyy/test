@@ -38,7 +38,7 @@ class DebitTabView extends HookConsumerWidget {
                     return DebitStatementCard(statement: value);
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 15);
+                    return const SizedBox(height: 10);
                   },
                 );
               }

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app image/app_image.dart';

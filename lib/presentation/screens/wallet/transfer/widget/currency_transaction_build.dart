@@ -37,15 +37,15 @@ class CurrencyTransactionBuild extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: 60.h,
-            width: 60.w,
+            height: 50.h,
+            width: 50.w,
             decoration: BoxDecoration(
                 shape: BoxShape.circle, color: Colors.orange.withOpacity(0.3)),
             child: Center(
               child: SvgPicture.asset(
                 AppImage.transferIcon,
-                height: 20.h,
-                width: 20.w,
+                height: 15.h,
+                width: 15.w,
               ),
             ),
           ),
@@ -59,12 +59,12 @@ class CurrencyTransactionBuild extends StatelessWidget {
                     children: [
                       Text(
                         'Debit',
-                        style: AppText.body2(context, Colors.red, 18.sp),
+                        style: AppText.body2(context, Colors.red, 16.sp),
                       ),
                       const Spacer(),
                       Text(
                         "$currency ${formatter.format(transactions.amount)}",
-                        style: AppText.body2(context, Colors.red, 18.sp),
+                        style: AppText.body2(context, Colors.red, 16.sp),
                       ),
                     ],
                   ),
@@ -73,12 +73,12 @@ class CurrencyTransactionBuild extends StatelessWidget {
                     children: [
                       Text(
                         "Credit",
-                        style: AppText.body2(context, Colors.green, 18.sp),
+                        style: AppText.body2(context, Colors.green, 16.sp),
                       ),
                       const Spacer(),
                       Text(
                         "${transactions.currencyCode} ${formatter.format(transactions.amount)}",
-                        style: AppText.body2(context, Colors.green, 18.sp),
+                        style: AppText.body2(context, Colors.green, 16.sp),
                       ),
                     ],
                   ),
@@ -88,12 +88,12 @@ class CurrencyTransactionBuild extends StatelessWidget {
                   children: [
                     Text(
                       transactions.user!.firstName.toString(),
-                      style: AppText.body2(context, Colors.black, 18.sp),
+                      style: AppText.body2(context, Colors.black, 16.sp),
                     ),
                     const Spacer(),
                     Text(
                       dateCreated,
-                      style: AppText.body2(context, Colors.black, 18.sp),
+                      style: AppText.body2(context, Colors.black, 16.sp),
                     ),
                   ],
                 )

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,7 +86,7 @@ class AppDialog {
                         child: Center(
                           child: Text(
                             message,
-                            style: AppText.body2(context, Colors.black, 20.sp),
+                            style: AppText.body2(context, Colors.black, 10.sp),
                           ),
                         ),
                       ),
@@ -191,7 +189,7 @@ class AppDialog {
         context: context,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.only(left: 25.w, right: 25.w),
+            padding: EdgeInsets.only(left: 10.w, right: 10.w),
             child: CupertinoActionSheet(
               actions: <Widget>[
                 Container(

@@ -9,26 +9,27 @@ import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/Nuban/nuban_req.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_req/bank_details_req.dart';
+import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/get_beneficiary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/verify_account_number.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../components/app text theme/app_text_theme.dart';
+import 'widget/nuban_beneficiary.dart';
 
 class NubanWithdraw extends StatefulHookConsumerWidget {
   const NubanWithdraw({Key? key}) : super(key: key);
@@ -47,32 +48,48 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
 
   @override
   Widget build(BuildContext context) {
-    final accountName = ref.watch(getBankDetailsProvider);
-    final nuban = ref.watch(nubanWithdrawalProvider);
-    final recipientDetail = ref.watch(accountDetailProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
+    final getBankDetails = ref.watch(getBankDetailsProvider);
+    final nuban = ref.watch(nubanWithdrawalProvider);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final toggle = ref.watch(toggleStateProvider.state);
     final descriptionController = useTextEditingController();
-    final acctNum = useState("");
-    final bankAccountController = useTextEditingController(text: acctNum.value);
-
+    final bankAccountController = useTextEditingController();
     final accountNameController = useTextEditingController();
     final bankController = useTextEditingController();
     final bankCodeController = useTextEditingController();
     final amountController = useTextEditingController();
     final verifyState = useState("");
+    final acctName = useState("");
     final errorState = useState(false);
-    final amount = useState(0);
+    final amount = useState<num>(0);
     final enteredAmount = useState(false);
     var formatter = NumberFormat("#,##0.00");
 
-    ref.listen<RequestState>(nubanWithdrawalProvider, (previous, value) {
+    ref.listen<RequestState>(getBankDetailsProvider, (_, value) {
+      if (value is Loading) {
+        errorState.value = false;
+      }
+
+      if (value is Success<BankDetailsRes>) {
+        errorState.value = false;
+        acctName.value = value.value!.data!.accountName.toString();
+        accountNameController.text = value.value!.data!.accountName.toString();
+        bankAccountController.text =
+            value.value!.data!.accountNumber.toString();
+      }
+
+      if (value is Error) {
+        errorState.value = true;
+        acctName.value = value.error.toString();
+      }
+    });
+
+    ref.listen<RequestState>(nubanWithdrawalProvider, (_, value) {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
-        // ref.refresh(getAccountDetailsProvider);
+
         ref.refresh(userProfileProvider);
-        // ref.refresh(walletTransactionProvider);
         AppDialog.showSuccessMessageDialog(
           context,
           value.value!.message!,
@@ -110,20 +127,9 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                 parent: BouncingScrollPhysics()),
             child: Column(
               children: [
-                Container(
-                  height: 40.h,
-                  width: MediaQuery.of(context).size.width,
-                  color: AppColors.appColor.withOpacity(0.05),
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 210.w),
-                    child: Center(
-                      child: Text(
-                        'Withdraw From Wallets',
-                        style: AppText.body2(context, Colors.black54, 20.sp),
-                      ),
-                    ),
-                  ),
-                ),
+                const HeaderTitle(),
+                InnerPageLoadingIndicator(
+                    loadingStream: getBankDetails is Loading),
                 Padding(
                   padding: EdgeInsets.only(right: 20.w, left: 20.w),
                   child: Form(
@@ -160,9 +166,10 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                       ),
                                   data: (data) {
                                     data.data!.wallets!.any(((element) {
-                                      if (element.currency!.name ==
+                                      if (element.currency?.name ==
                                           "Nigerian Naira") {
-                                        amount.value = element.balance!.toInt();
+                                        amount.value =
+                                            num.parse(element.balance ?? "");
 
                                         return true;
                                       } else {
@@ -179,8 +186,14 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             ],
                           ),
                         ),
-
-                        const NubanBeneficiary(),
+                        const Space(10),
+                        NubanBeneficiary(
+                          acctName: acctName,
+                          accountName: accountNameController,
+                          accountNumber: bankAccountController,
+                          bankName: bankController,
+                          bankCode: bankCodeController,
+                        ),
                         Space(20.h),
                         Text(
                           "Entered amount must be more than NGN 100",
@@ -191,7 +204,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         Stack(
                           children: [
                             InkWell(
-                              onTap: () {},
                               child: EditForm(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -204,8 +216,13 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                       enteredAmount.value = false;
                                       return;
                                     }
-                                    if ((int.tryParse(value)! > amount.value) ||
-                                        (int.tryParse(value)! == 0)) {
+                                    if ((value.contains("..") ||
+                                        (amountController.text
+                                            .contains("..")))) {
+                                      return;
+                                    }
+                                    if ((num.parse(value) > amount.value) ||
+                                        (num.parse(value) == 0)) {
                                       enteredAmount.value = true;
                                     } else {
                                       enteredAmount.value = false;
@@ -228,17 +245,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         ] else
                           ...[],
 
-                        // Space(20.h),
-                        //*
-                        //*
-                        //* Select currency
-                        //*
-                        //*
-
-                        // CurrencyWidget(
-                        //   currencyController: currencyController,
-                        //   text: 'Select wallet to transfer from',
-                        // ),
                         Space(20.h),
                         //*
                         //*
@@ -261,18 +267,18 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                 size: 15,
                               ),
                               onTap: () {
-                                pushNewScreen(context,
-                                    screen: SelectBankScreen(
-                                      bankCode: bankCodeController,
-                                      bankName: bankController,
-                                    ),
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.slideRight);
+                                // pushNewScreen(context,
+                                //     screen: SelectBankScreen(
+                                //       bankCode: bankCodeController,
+                                //       bankName: bankController,
+                                //     ),
+                                //     pageTransitionAnimation:
+                                //         PageTransitionAnimation.slideRight);
                               },
                             ),
                           ),
                           obscureText: false,
-                          validator: (value) => validateCountry(value),
+                          validator: (value) => null,
                           onTap: () {
                             pushNewScreen(context,
                                 screen: SelectBankScreen(
@@ -297,62 +303,32 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           validator: (value) => null,
                           onChanged: (value) {
                             verifyState.value = value;
+
+                            /// CLEAR THE ACCT NAME VALUE WHEN BANK ACCOUNT IS EMPTY
+                            if (value.isEmpty) {
+                              acctName.value = "";
+                            }
                             if (value.length == 10) {
                               var getBankAccountDetails = GetBankAccountDetails(
                                 bankCode: bankCodeController.text,
                                 accountNumber: bankAccountController.text,
                               );
                               ref
-                                  .read(accountDetailProvider.notifier)
+                                  .read(getBankDetailsProvider.notifier)
                                   .getDetails(getBankAccountDetails);
                             } else {}
                           },
                         ),
-                        // Space(10.h),
-                        recipientDetail.when(data: (data) {
-                          setState(() {
-                            errorState.value = false;
-                            accountNameController.text =
-                                data.data.accountName.toString();
-                            if (data.data.accountNumber == null) {
-                              return;
-                            } else {
-                              acctNum.value =
-                                  data.data.accountNumber.toString();
-                            }
-
-                            // bankAccountController.text = acctNum.value;
-                          });
-
-                          return data.data.accountName == null
-                              ? const SizedBox.shrink()
-                              : Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    data.data.accountName.toString(),
-                                    style: AppText.body2(
-                                        context, Colors.green, 15.sp),
-                                  ),
-                                );
-                        }, error: (e, s) {
-                          errorState.value = true;
-                          return Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Text(
-                              verifyState.value.length < 10 ? "" : e.toString(),
-                              style: AppText.body2(context, Colors.red, 15.sp),
-                            ),
-                          );
-                        }, loading: () {
-                          return Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Text(
-                              '...',
-                              style:
-                                  AppText.body2(context, Colors.black, 15.sp),
-                            ),
-                          );
-                        }),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            acctName.value,
+                            style: AppText.body2(
+                                context,
+                                errorState.value ? Colors.red : Colors.green,
+                                15.sp),
+                          ),
+                        ),
                         Space(30.h),
 
                         EditForm(
@@ -381,67 +357,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                 }),
                           ],
                         ),
-                        // Space(20.h),
-                        // Container(
-                        //   height: 80.h,
-                        //   width: MediaQuery.of(context).size.width,
-                        //   color: AppColors.appColor.withOpacity(0.05),
-                        //   child: Row(
-                        //     children: [
-                        //       Space(20.w),
-                        //       const Icon(
-                        //         Icons.security,
-                        //         size: 30,
-                        //       ),
-                        //       Space(15.w),
-                        //       Column(
-                        //         crossAxisAlignment: CrossAxisAlignment.start,
-                        //         mainAxisAlignment: MainAxisAlignment.center,
-                        //         children: [
-                        //           Text(
-                        //             'For security reasons',
-                        //             style: AppText.header2(
-                        //                 context, Colors.black, 20.sp),
-                        //           ),
-                        //           const Space(2),
-                        //           Text(
-                        //             'Enter transaction PIN',
-                        //             style: AppText.body2Bold(
-                        //                 context, Colors.black, 23.sp),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // Space(20.h),
-                        // EditForm(
-                        //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                        //   labelText: 'Enter Transaction Pin',
-                        //   keyboardType: TextInputType.text,
-                        //   // textAlign: TextAlign.start,
-                        //   controller: enterPinController,
-                        //   obscureText: transactionPinToggle.state,
-                        //   validator: (value) => validatePassword(value),
-                        //   suffixIcon: SizedBox(
-                        //     width: 55.w,
-                        //     child: GestureDetector(
-                        //       onTap: () {
-                        //         transactionPinToggle.state =
-                        //             !transactionPinToggle.state;
-                        //       },
-                        //       child: Padding(
-                        //         padding: EdgeInsets.only(bottom: 0.h),
-                        //         child: Icon(
-                        //           transactionPinToggle.state
-                        //               ? Icons.visibility_off_outlined
-                        //               : Icons.visibility_outlined,
-                        //           color: Colors.grey.shade300,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+
                         Space(40.h),
                         CustomButton(
                             buttonText: nuban is Loading
@@ -452,7 +368,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
-                            onPressed: accountName is Loading
+                            onPressed: getBankDetails is Loading
                                 ? null
                                 : nuban is Loading
                                     ? null
@@ -466,33 +382,35 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                             .text.isEmpty) {
                                           AppDialog.showErrorMessageDialog(
                                               context, "Amount is required");
+                                        } else if (descriptionController
+                                            .text.isEmpty) {
+                                          AppDialog.showErrorMessageDialog(
+                                              context,
+                                              "Purpose of withdrawal is required");
                                         } else if (errorState.value == true) {
                                           AppDialog.showErrorMessageDialog(
                                               context,
                                               "Account number could not be verified");
                                         } else {
-                                          if ((formKey.currentState!
-                                              .validate())) {
-                                            if (!currentFocus.hasPrimaryFocus) {
-                                              currentFocus.unfocus();
-                                            }
-
-                                            var nubanReq = NubanReq(
-                                                accountName:
-                                                    accountNameController.text,
-                                                accountNumber:
-                                                    bankAccountController.text,
-                                                amount: int.parse(
-                                                    amountController.text),
-                                                bankCode:
-                                                    bankCodeController.text,
-                                                description:
-                                                    descriptionController.text);
-                                            ref
-                                                .read(nubanWithdrawalProvider
-                                                    .notifier)
-                                                .nubanWithdrawal(nubanReq);
+                                          if (!currentFocus.hasPrimaryFocus) {
+                                            currentFocus.unfocus();
                                           }
+
+                                          var nubanReq = NubanReq(
+                                              accountName:
+                                                  accountNameController.text,
+                                              accountNumber:
+                                                  bankAccountController.text,
+                                              amount: num.tryParse(
+                                                      amountController.text) ??
+                                                  0.0,
+                                              bankCode: bankCodeController.text,
+                                              description:
+                                                  descriptionController.text);
+                                          ref
+                                              .read(nubanWithdrawalProvider
+                                                  .notifier)
+                                              .nubanWithdrawal(nubanReq);
                                         }
                                       },
                             buttonWidth: MediaQuery.of(context).size.width),
@@ -521,96 +439,26 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
   }
 }
 
-class NubanBeneficiary extends StatefulHookConsumerWidget {
-  const NubanBeneficiary({Key? key}) : super(key: key);
+class HeaderTitle extends StatelessWidget {
+  const HeaderTitle({
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _NubanBeneficiaryState();
-}
-
-class _NubanBeneficiaryState extends ConsumerState<NubanBeneficiary> {
   @override
   Widget build(BuildContext context) {
-    final beneficiaryVm = ref.watch(nubanBeneficiaryProvider);
-    return beneficiaryVm.when(
-      data: (value) {
-        return value.data!.beneficiaries!.isEmpty
-            ? const SizedBox.shrink()
-            : Container(
-                color: AppColors.appColor.withOpacity(0.09),
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Space(10.h),
-                      SizedBox(
-                        // color: Colors.red,
-                        height: 100,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: value.data!.beneficiaries!.length,
-                          itemBuilder: (context, index) {
-                            final user = value.data!.beneficiaries![index];
-
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      // accountNoController.text = item
-                                      //     .beneficiary!.accountNumber!;
-                                      // friendNameController.text =
-                                      //     '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 80.h,
-                                    width: 80.w,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.grey.shade100,
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      '${user.beneficiaryName}',
-                                      style: AppText.body2(
-                                          context, Colors.black45, 40.sp),
-                                    )),
-                                  ),
-                                ),
-                                Space(10.h),
-                                Text(
-                                  '${user.beneficiaryName}',
-                                  style: AppText.body2(
-                                      context, Colors.black, 16.sp),
-                                ),
-                              ],
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(width: 20.w);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-      },
-      error: (Object error, StackTrace? stackTrace) {
-        return Text(error.toString());
-      },
-      loading: () {
-        //When enpoint is loading, it should display default ideas with overlay loading
-        return const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.appBgColor,
+    return Container(
+      height: 40.h,
+      width: MediaQuery.of(context).size.width,
+      color: AppColors.appColor.withOpacity(0.05),
+      child: Padding(
+        padding: EdgeInsets.only(right: 210.w),
+        child: Center(
+          child: Text(
+            'Withdraw From Wallets',
+            style: AppText.body2(context, Colors.black54, 20.sp),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

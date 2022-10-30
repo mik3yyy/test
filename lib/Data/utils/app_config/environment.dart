@@ -1,10 +1,10 @@
-enum Environment { staging, production }
+enum Environment { dev, prod }
 
 class AppConfig {
-  static Environment environment = Environment.staging;
-  static const String stagingURL = "https://dev.kayndrexsphere.com/v1";
+  static Environment environment = Environment.dev;
+  static const String devURL = "https://dev.kayndrexsphere.com/v1";
   static const String productionURL = "https://api.kayndrexsphere.com/v1";
 
   static final coreBaseUrl =
-      environment == Environment.production ? productionURL : stagingURL;
+      environment == Environment.prod ? productionURL : devURL;
 }

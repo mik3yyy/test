@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -173,6 +172,14 @@ class _UploadIdState extends ConsumerState<UploadId> {
                         if (!currentFocus.hasPrimaryFocus) {
                           currentFocus.unfocus();
                         }
+                        String image() {
+                          if (selectedImage.value.isEmpty) {
+                            return widget.image;
+                          } else {
+                            return selectedImage.value;
+                          }
+                        }
+
                         if (widget.uploadId == UploadRoute.addId) {
                           if (selectedImage.value.isEmpty) {
                             AppSnackBar.showInfoSnackBar(context,
@@ -189,8 +196,10 @@ class _UploadIdState extends ConsumerState<UploadId> {
                           }
                         } else {
                           ref.read(editIdProvider.notifier).editID(
-                              filePath: selectedImage.value,
+                              filePath: image(),
                               id: widget.id,
+                              isEdit:
+                                  selectedImage.value.isEmpty ? false : true,
                               idNo: idNoController.text,
                               idType: idTypeController.text);
                         }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/select_image_dialog.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/providers.dart';
 
 class ProfileImage extends HookConsumerWidget {
@@ -28,7 +28,7 @@ class ProfileImage extends HookConsumerWidget {
     // final avatar = PreferenceManager.userAvatarUrl;
     // final upload = ref.watch(uploadFileState);
     final userAvatar = ref.watch(profileImage.state);
-    final user = ref.watch(userProfileProvider);
+    final savedUser = ref.watch(savedUserProvider);
 
     return AbsorbPointer(
       absorbing: ignoreClick,
@@ -42,7 +42,7 @@ class ProfileImage extends HookConsumerWidget {
               : SizedBox(
                   height: height,
                   width: width,
-                  child: user.value?.data.user.profilePicture == null
+                  child: savedUser.imageUrl == null
                       ? SizedBox(
                           height: 50,
                           width: 50,
@@ -55,8 +55,7 @@ class ProfileImage extends HookConsumerWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(300.0),
                           child: KYNetworkImage(
-                            url: user.value!.data.user.profilePicture!.imageUrl
-                                .toString(),
+                            url: savedUser.imageUrl.toString(),
                             errorImage: Image.asset(
                               AppImage.profile,
                               scale: 5,

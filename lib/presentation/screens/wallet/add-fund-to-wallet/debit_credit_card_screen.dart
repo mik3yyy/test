@@ -134,7 +134,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: 23.w, right: 23.w),
                   child: Text(
-                    'Transfer amount due must add up to at least £0.30',
+                    'Minimum amount is £1.00 or it’s equivalence when converting to another currency',
                     style: AppText.body2(context, Colors.black, 18.sp),
                   ),
                 ),
