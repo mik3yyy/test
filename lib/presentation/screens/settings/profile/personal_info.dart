@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/database/user_database.dart';
+import 'package:kayndrexsphere_mobile/Data/database/user/user_database.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
@@ -104,9 +104,13 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                   //   ],
                   // ),
                   const ProfileImage(
-                    ignoreClick: false,
                     hasIcon: true,
+                    ignoreClick: false,
+                    avatar: 50,
+                    height: 100,
+                    width: 100,
                   ),
+
                   Space(10.h),
                   Text(
                     userName(userValue?.data.user.firstName!.capitalize(),

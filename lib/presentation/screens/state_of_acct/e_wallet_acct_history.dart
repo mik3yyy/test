@@ -80,7 +80,7 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Space(20),
+              const Space(10),
               Row(
                 children: [
                   Text(
@@ -206,7 +206,7 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
                       ]),
                 ),
               ),
-              SizedBox(height: 80.h),
+              SizedBox(height: 10.h),
             ],
           ),
         ),

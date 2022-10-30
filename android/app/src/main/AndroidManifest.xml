@@ -2,10 +2,11 @@
     package="co.kayndrexsphere">
     
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="Kayndrexsphere’"
+        android:label="Kayndrexsphere"
         android:name="${applicationName}"
         android:screenOrientation="portrait"
         android:hardwareAccelerated="true"

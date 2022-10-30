@@ -12,36 +12,7 @@ part of 'auth_state_notifier.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$AuthStateTearOff {
-  const _$AuthStateTearOff();
-
-  AuthUnauthenticated<T> authUnauthenticated<T>() {
-    return AuthUnauthenticated<T>();
-  }
-
-  AuthLoading<T> authLoading<T>() {
-    return AuthLoading<T>();
-  }
-
-  AuthAuthenticated<T> authAuthenticated<T>(T? value) {
-    return AuthAuthenticated<T>(
-      value,
-    );
-  }
-
-  AuthError<T> authError<T>(Object error, StackTrace stackTrace) {
-    return AuthError<T>(
-      error,
-      stackTrace,
-    );
-  }
-}
-
-/// @nodoc
-const $AuthState = _$AuthStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$AuthState<T> {
@@ -114,22 +85,23 @@ class _$AuthStateCopyWithImpl<T, $Res> implements $AuthStateCopyWith<T, $Res> {
 }
 
 /// @nodoc
-abstract class $AuthUnauthenticatedCopyWith<T, $Res> {
-  factory $AuthUnauthenticatedCopyWith(AuthUnauthenticated<T> value,
-          $Res Function(AuthUnauthenticated<T>) then) =
-      _$AuthUnauthenticatedCopyWithImpl<T, $Res>;
+abstract class _$$AuthUnauthenticatedCopyWith<T, $Res> {
+  factory _$$AuthUnauthenticatedCopyWith(_$AuthUnauthenticated<T> value,
+          $Res Function(_$AuthUnauthenticated<T>) then) =
+      __$$AuthUnauthenticatedCopyWithImpl<T, $Res>;
 }
 
 /// @nodoc
-class _$AuthUnauthenticatedCopyWithImpl<T, $Res>
+class __$$AuthUnauthenticatedCopyWithImpl<T, $Res>
     extends _$AuthStateCopyWithImpl<T, $Res>
-    implements $AuthUnauthenticatedCopyWith<T, $Res> {
-  _$AuthUnauthenticatedCopyWithImpl(AuthUnauthenticated<T> _value,
-      $Res Function(AuthUnauthenticated<T>) _then)
-      : super(_value, (v) => _then(v as AuthUnauthenticated<T>));
+    implements _$$AuthUnauthenticatedCopyWith<T, $Res> {
+  __$$AuthUnauthenticatedCopyWithImpl(_$AuthUnauthenticated<T> _value,
+      $Res Function(_$AuthUnauthenticated<T>) _then)
+      : super(_value, (v) => _then(v as _$AuthUnauthenticated<T>));
 
   @override
-  AuthUnauthenticated<T> get _value => super._value as AuthUnauthenticated<T>;
+  _$AuthUnauthenticated<T> get _value =>
+      super._value as _$AuthUnauthenticated<T>;
 }
 
 /// @nodoc
@@ -145,7 +117,7 @@ class _$AuthUnauthenticated<T> implements AuthUnauthenticated<T> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is AuthUnauthenticated<T>);
+        (other.runtimeType == runtimeType && other is _$AuthUnauthenticated<T>);
   }
 
   @override
@@ -231,22 +203,22 @@ abstract class AuthUnauthenticated<T> implements AuthState<T> {
 }
 
 /// @nodoc
-abstract class $AuthLoadingCopyWith<T, $Res> {
-  factory $AuthLoadingCopyWith(
-          AuthLoading<T> value, $Res Function(AuthLoading<T>) then) =
-      _$AuthLoadingCopyWithImpl<T, $Res>;
+abstract class _$$AuthLoadingCopyWith<T, $Res> {
+  factory _$$AuthLoadingCopyWith(
+          _$AuthLoading<T> value, $Res Function(_$AuthLoading<T>) then) =
+      __$$AuthLoadingCopyWithImpl<T, $Res>;
 }
 
 /// @nodoc
-class _$AuthLoadingCopyWithImpl<T, $Res>
+class __$$AuthLoadingCopyWithImpl<T, $Res>
     extends _$AuthStateCopyWithImpl<T, $Res>
-    implements $AuthLoadingCopyWith<T, $Res> {
-  _$AuthLoadingCopyWithImpl(
-      AuthLoading<T> _value, $Res Function(AuthLoading<T>) _then)
-      : super(_value, (v) => _then(v as AuthLoading<T>));
+    implements _$$AuthLoadingCopyWith<T, $Res> {
+  __$$AuthLoadingCopyWithImpl(
+      _$AuthLoading<T> _value, $Res Function(_$AuthLoading<T>) _then)
+      : super(_value, (v) => _then(v as _$AuthLoading<T>));
 
   @override
-  AuthLoading<T> get _value => super._value as AuthLoading<T>;
+  _$AuthLoading<T> get _value => super._value as _$AuthLoading<T>;
 }
 
 /// @nodoc
@@ -262,7 +234,7 @@ class _$AuthLoading<T> implements AuthLoading<T> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is AuthLoading<T>);
+        (other.runtimeType == runtimeType && other is _$AuthLoading<T>);
   }
 
   @override
@@ -348,29 +320,29 @@ abstract class AuthLoading<T> implements AuthState<T> {
 }
 
 /// @nodoc
-abstract class $AuthAuthenticatedCopyWith<T, $Res> {
-  factory $AuthAuthenticatedCopyWith(AuthAuthenticated<T> value,
-          $Res Function(AuthAuthenticated<T>) then) =
-      _$AuthAuthenticatedCopyWithImpl<T, $Res>;
+abstract class _$$AuthAuthenticatedCopyWith<T, $Res> {
+  factory _$$AuthAuthenticatedCopyWith(_$AuthAuthenticated<T> value,
+          $Res Function(_$AuthAuthenticated<T>) then) =
+      __$$AuthAuthenticatedCopyWithImpl<T, $Res>;
   $Res call({T? value});
 }
 
 /// @nodoc
-class _$AuthAuthenticatedCopyWithImpl<T, $Res>
+class __$$AuthAuthenticatedCopyWithImpl<T, $Res>
     extends _$AuthStateCopyWithImpl<T, $Res>
-    implements $AuthAuthenticatedCopyWith<T, $Res> {
-  _$AuthAuthenticatedCopyWithImpl(
-      AuthAuthenticated<T> _value, $Res Function(AuthAuthenticated<T>) _then)
-      : super(_value, (v) => _then(v as AuthAuthenticated<T>));
+    implements _$$AuthAuthenticatedCopyWith<T, $Res> {
+  __$$AuthAuthenticatedCopyWithImpl(_$AuthAuthenticated<T> _value,
+      $Res Function(_$AuthAuthenticated<T>) _then)
+      : super(_value, (v) => _then(v as _$AuthAuthenticated<T>));
 
   @override
-  AuthAuthenticated<T> get _value => super._value as AuthAuthenticated<T>;
+  _$AuthAuthenticated<T> get _value => super._value as _$AuthAuthenticated<T>;
 
   @override
   $Res call({
     Object? value = freezed,
   }) {
-    return _then(AuthAuthenticated<T>(
+    return _then(_$AuthAuthenticated<T>(
       value == freezed
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -396,7 +368,7 @@ class _$AuthAuthenticated<T> implements AuthAuthenticated<T> {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AuthAuthenticated<T> &&
+            other is _$AuthAuthenticated<T> &&
             const DeepCollectionEquality().equals(other.value, value));
   }
 
@@ -406,8 +378,8 @@ class _$AuthAuthenticated<T> implements AuthAuthenticated<T> {
 
   @JsonKey(ignore: true)
   @override
-  $AuthAuthenticatedCopyWith<T, AuthAuthenticated<T>> get copyWith =>
-      _$AuthAuthenticatedCopyWithImpl<T, AuthAuthenticated<T>>(
+  _$$AuthAuthenticatedCopyWith<T, _$AuthAuthenticated<T>> get copyWith =>
+      __$$AuthAuthenticatedCopyWithImpl<T, _$AuthAuthenticated<T>>(
           this, _$identity);
 
   @override
@@ -486,38 +458,39 @@ class _$AuthAuthenticated<T> implements AuthAuthenticated<T> {
 }
 
 abstract class AuthAuthenticated<T> implements AuthState<T> {
-  const factory AuthAuthenticated(T? value) = _$AuthAuthenticated<T>;
+  const factory AuthAuthenticated(final T? value) = _$AuthAuthenticated<T>;
 
   T? get value;
   @JsonKey(ignore: true)
-  $AuthAuthenticatedCopyWith<T, AuthAuthenticated<T>> get copyWith =>
+  _$$AuthAuthenticatedCopyWith<T, _$AuthAuthenticated<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AuthErrorCopyWith<T, $Res> {
-  factory $AuthErrorCopyWith(
-          AuthError<T> value, $Res Function(AuthError<T>) then) =
-      _$AuthErrorCopyWithImpl<T, $Res>;
+abstract class _$$AuthErrorCopyWith<T, $Res> {
+  factory _$$AuthErrorCopyWith(
+          _$AuthError<T> value, $Res Function(_$AuthError<T>) then) =
+      __$$AuthErrorCopyWithImpl<T, $Res>;
   $Res call({Object error, StackTrace stackTrace});
 }
 
 /// @nodoc
-class _$AuthErrorCopyWithImpl<T, $Res> extends _$AuthStateCopyWithImpl<T, $Res>
-    implements $AuthErrorCopyWith<T, $Res> {
-  _$AuthErrorCopyWithImpl(
-      AuthError<T> _value, $Res Function(AuthError<T>) _then)
-      : super(_value, (v) => _then(v as AuthError<T>));
+class __$$AuthErrorCopyWithImpl<T, $Res>
+    extends _$AuthStateCopyWithImpl<T, $Res>
+    implements _$$AuthErrorCopyWith<T, $Res> {
+  __$$AuthErrorCopyWithImpl(
+      _$AuthError<T> _value, $Res Function(_$AuthError<T>) _then)
+      : super(_value, (v) => _then(v as _$AuthError<T>));
 
   @override
-  AuthError<T> get _value => super._value as AuthError<T>;
+  _$AuthError<T> get _value => super._value as _$AuthError<T>;
 
   @override
   $Res call({
     Object? error = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(AuthError<T>(
+    return _then(_$AuthError<T>(
       error == freezed
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -549,7 +522,7 @@ class _$AuthError<T> implements AuthError<T> {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is AuthError<T> &&
+            other is _$AuthError<T> &&
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other.stackTrace, stackTrace));
@@ -563,8 +536,8 @@ class _$AuthError<T> implements AuthError<T> {
 
   @JsonKey(ignore: true)
   @override
-  $AuthErrorCopyWith<T, AuthError<T>> get copyWith =>
-      _$AuthErrorCopyWithImpl<T, AuthError<T>>(this, _$identity);
+  _$$AuthErrorCopyWith<T, _$AuthError<T>> get copyWith =>
+      __$$AuthErrorCopyWithImpl<T, _$AuthError<T>>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -642,11 +615,12 @@ class _$AuthError<T> implements AuthError<T> {
 }
 
 abstract class AuthError<T> implements AuthState<T> {
-  const factory AuthError(Object error, StackTrace stackTrace) = _$AuthError<T>;
+  const factory AuthError(final Object error, final StackTrace stackTrace) =
+      _$AuthError<T>;
 
   Object get error;
   StackTrace get stackTrace;
   @JsonKey(ignore: true)
-  $AuthErrorCopyWith<T, AuthError<T>> get copyWith =>
+  _$$AuthErrorCopyWith<T, _$AuthError<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }

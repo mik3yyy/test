@@ -29,7 +29,7 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
     // final listState = useState("");
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: const AppBarTitle(title: "Select Bank", color: Colors.black),
         leading: const BackButton(color: Colors.black),

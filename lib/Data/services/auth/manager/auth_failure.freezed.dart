@@ -12,27 +12,7 @@ part of 'auth_failure.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$AuthFailuresTearOff {
-  const _$AuthFailuresTearOff();
-
-  ServerError serverError() {
-    return const ServerError();
-  }
-
-  EmailAlreadyInUse emailAlreadyInUse() {
-    return const EmailAlreadyInUse();
-  }
-
-  InavalidEmailAndPasswordCombination invalidEmailAndPasswordCombination() {
-    return const InavalidEmailAndPasswordCombination();
-  }
-}
-
-/// @nodoc
-const $AuthFailures = _$AuthFailuresTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$AuthFailures {
@@ -102,21 +82,21 @@ class _$AuthFailuresCopyWithImpl<$Res> implements $AuthFailuresCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $ServerErrorCopyWith<$Res> {
-  factory $ServerErrorCopyWith(
-          ServerError value, $Res Function(ServerError) then) =
-      _$ServerErrorCopyWithImpl<$Res>;
+abstract class _$$ServerErrorCopyWith<$Res> {
+  factory _$$ServerErrorCopyWith(
+          _$ServerError value, $Res Function(_$ServerError) then) =
+      __$$ServerErrorCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$ServerErrorCopyWithImpl<$Res> extends _$AuthFailuresCopyWithImpl<$Res>
-    implements $ServerErrorCopyWith<$Res> {
-  _$ServerErrorCopyWithImpl(
-      ServerError _value, $Res Function(ServerError) _then)
-      : super(_value, (v) => _then(v as ServerError));
+class __$$ServerErrorCopyWithImpl<$Res> extends _$AuthFailuresCopyWithImpl<$Res>
+    implements _$$ServerErrorCopyWith<$Res> {
+  __$$ServerErrorCopyWithImpl(
+      _$ServerError _value, $Res Function(_$ServerError) _then)
+      : super(_value, (v) => _then(v as _$ServerError));
 
   @override
-  ServerError get _value => super._value as ServerError;
+  _$ServerError get _value => super._value as _$ServerError;
 }
 
 /// @nodoc
@@ -132,7 +112,7 @@ class _$ServerError implements ServerError {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is ServerError);
+        (other.runtimeType == runtimeType && other is _$ServerError);
   }
 
   @override
@@ -215,22 +195,22 @@ abstract class ServerError implements AuthFailures {
 }
 
 /// @nodoc
-abstract class $EmailAlreadyInUseCopyWith<$Res> {
-  factory $EmailAlreadyInUseCopyWith(
-          EmailAlreadyInUse value, $Res Function(EmailAlreadyInUse) then) =
-      _$EmailAlreadyInUseCopyWithImpl<$Res>;
+abstract class _$$EmailAlreadyInUseCopyWith<$Res> {
+  factory _$$EmailAlreadyInUseCopyWith(
+          _$EmailAlreadyInUse value, $Res Function(_$EmailAlreadyInUse) then) =
+      __$$EmailAlreadyInUseCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$EmailAlreadyInUseCopyWithImpl<$Res>
+class __$$EmailAlreadyInUseCopyWithImpl<$Res>
     extends _$AuthFailuresCopyWithImpl<$Res>
-    implements $EmailAlreadyInUseCopyWith<$Res> {
-  _$EmailAlreadyInUseCopyWithImpl(
-      EmailAlreadyInUse _value, $Res Function(EmailAlreadyInUse) _then)
-      : super(_value, (v) => _then(v as EmailAlreadyInUse));
+    implements _$$EmailAlreadyInUseCopyWith<$Res> {
+  __$$EmailAlreadyInUseCopyWithImpl(
+      _$EmailAlreadyInUse _value, $Res Function(_$EmailAlreadyInUse) _then)
+      : super(_value, (v) => _then(v as _$EmailAlreadyInUse));
 
   @override
-  EmailAlreadyInUse get _value => super._value as EmailAlreadyInUse;
+  _$EmailAlreadyInUse get _value => super._value as _$EmailAlreadyInUse;
 }
 
 /// @nodoc
@@ -246,7 +226,7 @@ class _$EmailAlreadyInUse implements EmailAlreadyInUse {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is EmailAlreadyInUse);
+        (other.runtimeType == runtimeType && other is _$EmailAlreadyInUse);
   }
 
   @override
@@ -329,25 +309,25 @@ abstract class EmailAlreadyInUse implements AuthFailures {
 }
 
 /// @nodoc
-abstract class $InavalidEmailAndPasswordCombinationCopyWith<$Res> {
-  factory $InavalidEmailAndPasswordCombinationCopyWith(
-          InavalidEmailAndPasswordCombination value,
-          $Res Function(InavalidEmailAndPasswordCombination) then) =
-      _$InavalidEmailAndPasswordCombinationCopyWithImpl<$Res>;
+abstract class _$$InavalidEmailAndPasswordCombinationCopyWith<$Res> {
+  factory _$$InavalidEmailAndPasswordCombinationCopyWith(
+          _$InavalidEmailAndPasswordCombination value,
+          $Res Function(_$InavalidEmailAndPasswordCombination) then) =
+      __$$InavalidEmailAndPasswordCombinationCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$InavalidEmailAndPasswordCombinationCopyWithImpl<$Res>
+class __$$InavalidEmailAndPasswordCombinationCopyWithImpl<$Res>
     extends _$AuthFailuresCopyWithImpl<$Res>
-    implements $InavalidEmailAndPasswordCombinationCopyWith<$Res> {
-  _$InavalidEmailAndPasswordCombinationCopyWithImpl(
-      InavalidEmailAndPasswordCombination _value,
-      $Res Function(InavalidEmailAndPasswordCombination) _then)
-      : super(_value, (v) => _then(v as InavalidEmailAndPasswordCombination));
+    implements _$$InavalidEmailAndPasswordCombinationCopyWith<$Res> {
+  __$$InavalidEmailAndPasswordCombinationCopyWithImpl(
+      _$InavalidEmailAndPasswordCombination _value,
+      $Res Function(_$InavalidEmailAndPasswordCombination) _then)
+      : super(_value, (v) => _then(v as _$InavalidEmailAndPasswordCombination));
 
   @override
-  InavalidEmailAndPasswordCombination get _value =>
-      super._value as InavalidEmailAndPasswordCombination;
+  _$InavalidEmailAndPasswordCombination get _value =>
+      super._value as _$InavalidEmailAndPasswordCombination;
 }
 
 /// @nodoc
@@ -365,7 +345,7 @@ class _$InavalidEmailAndPasswordCombination
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is InavalidEmailAndPasswordCombination);
+            other is _$InavalidEmailAndPasswordCombination);
   }
 
   @override

@@ -30,13 +30,17 @@ class UserDataBaseAdapter extends TypeAdapter<UserDataBase> {
       ..refCode = fields[10] as String?
       ..dateOfBirth = fields[11] as DateTime?
       ..phoneNumer = fields[12] as String?
-      ..address = fields[13] as String?;
+      ..address = fields[13] as String?
+      ..balance = fields[14] as String?
+      ..defaultWalletBalance = fields[15] as num?
+      ..defaultWalletCode = fields[16] as String?
+      ..imageUrl = fields[17] as String?;
   }
 
   @override
   void write(BinaryWriter writer, UserDataBase obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.firstName)
       ..writeByte(1)
@@ -64,7 +68,15 @@ class UserDataBaseAdapter extends TypeAdapter<UserDataBase> {
       ..writeByte(12)
       ..write(obj.phoneNumer)
       ..writeByte(13)
-      ..write(obj.address);
+      ..write(obj.address)
+      ..writeByte(14)
+      ..write(obj.balance)
+      ..writeByte(15)
+      ..write(obj.defaultWalletBalance)
+      ..writeByte(16)
+      ..write(obj.defaultWalletCode)
+      ..writeByte(17)
+      ..write(obj.imageUrl);
   }
 
   @override

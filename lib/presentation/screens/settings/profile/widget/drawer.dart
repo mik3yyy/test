@@ -12,7 +12,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/prop/prop_screen.dart
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/faq_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/statement_of_acct.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/e_wallet_acct_history.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -106,8 +106,10 @@ class Navigation extends HookConsumerWidget {
               isIcon: false,
               image: AppImage.document,
               onPressed: () {
+                ///CHNAGE TO StatementOfAcctScreen()
                 pushNewScreen(context,
-                    screen: const StatementOfAcctScreen(),
+                    screen: const EWalletAccountHistory(),
+                    withNavBar: false,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino);
               },
             ),

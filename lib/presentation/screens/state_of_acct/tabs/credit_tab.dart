@@ -39,7 +39,7 @@ class CreditTabView extends HookConsumerWidget {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 15);
+                    return const SizedBox(height: 10);
                   },
                 );
               }

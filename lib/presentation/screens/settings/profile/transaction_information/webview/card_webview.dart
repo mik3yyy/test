@@ -37,7 +37,7 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         title: AppBarTitle(
             title: widget.webViewRoute == WebViewRoute.privacy

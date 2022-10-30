@@ -56,8 +56,14 @@ class WalletRepo extends IWalletRepo {
   }
 
   @override
-  Future<WalletTransactions> getTransactions() async =>
-      await _walletService.getTransactions();
+  Future<WalletTransactions> getTransactions() async {
+    final wallet = await _walletService.getTransactions();
+    // if (wallet.data!.transactions.isNotEmpty) {
+    //   SaveWalletTransaction().saveWalletTransaction(wallet.data!.transactions);
+    // }
+
+    return wallet;
+  }
 
   @override
   Future<VerifyAcctNoRes> verifyAcctNo(String accountNo) async {

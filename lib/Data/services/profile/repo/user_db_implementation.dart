@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kayndrexsphere_mobile/Data/database/user_database.dart';
+import 'package:kayndrexsphere_mobile/Data/database/user/user_database.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 
 class UserDB {
@@ -18,6 +18,9 @@ class UserDB {
       ..refCode = profile.data.user.refCode!
       ..address = profile.data.user.address
       ..dateOfBirth = profile.data.user.dateOfBirth
+      ..countryCode = profile.data.defaultWallet.currencyCode
+      ..balance = profile.data.defaultWallet.balance
+      ..imageUrl = profile.data.user.profilePicture?.imageUrl
       ..phoneNumer = profile.data.user.phoneNumber!.phoneNumber;
 
     if (userDb.isEmpty) {

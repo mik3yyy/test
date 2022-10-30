@@ -26,12 +26,12 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class ForgotPasswordScreen extends HookConsumerWidget {
   ForgotPasswordScreen({Key? key}) : super(key: key);
   final formKey = GlobalKey<FormState>();
-  final fieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(forgotPasswordProvider);
     final controller = useTextEditingController();
+    FocusScopeNode currentFocus = FocusScope.of(context);
     ref.listen<RequestState>(forgotPasswordProvider, (_, value) {
       if (value is Success) {
         context.navigate(ForgetPasswordOTPScreen(
@@ -57,7 +57,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           backgroundColor: Colors.transparent,
           title: const AppBarTitle(
               title: "Forgot Password", color: AppColors.appColor),
@@ -88,7 +88,6 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                       labelText: 'Email Address',
                       capitalization: TextCapitalization.none,
                       controller: controller,
-                      focusNode: fieldFocusNode,
                       validator: (value) => validateEmail(value),
                       obscureText: false,
                     ),
@@ -111,7 +110,9 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                                   await SharedPreferences.getInstance();
                               pref.setString(Constants.email, controller.text);
                               if (formKey.currentState!.validate()) {
-                                fieldFocusNode.unfocus();
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
                                 ref
                                     .read(credentialProvider.notifier)
                                     .storeCredential(Constants.userPassword,

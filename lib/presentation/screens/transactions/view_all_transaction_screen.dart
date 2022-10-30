@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/transaction_build.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 
 class ViewAllTransactionScreen extends HookConsumerWidget {

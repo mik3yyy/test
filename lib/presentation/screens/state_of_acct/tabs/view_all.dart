@@ -27,17 +27,12 @@ class ViewAllStatement extends HookConsumerWidget {
                   itemBuilder: (context, index) {
                     final value = data.data.statements[index];
 
-                    // for (var date in data.data.statements) {
-                    //   if (data.data.statements.contains(date))
-                    //     print(
-                    //         timeAgoSinceDate(date.createdAt!.toIso8601String()));
-                    // }
                     return StatementListCard(
                       statement: value,
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 15);
+                    return const SizedBox(height: 10);
                   },
                 ),
               );

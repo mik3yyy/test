@@ -76,6 +76,9 @@ class PreferenceManager {
   static set appUser(String appUser) => prefs.setString("appUser", appUser);
   static String get appUser => prefs.getString("appUser") ?? '';
 
+  static set email(String email) => prefs.setString("email", email);
+  static String get email => prefs.getString("email") ?? '';
+
   //* password
   static set password(String password) => prefs.setString("password", password);
   static String get password => prefs.getString("password") ?? '';
@@ -90,11 +93,8 @@ class PreferenceManager {
   static bool get isPostUnLike => prefs.getBool("isPostUnLike") ?? false;
 
   static void clear() {
-    // prefs.clear();
+    prefs.clear();
     PreferenceManager.isFirstLaunch = false;
-    PreferenceManager.authToken = "";
-    PreferenceManager.refreshToken = "";
-    PreferenceManager.pseudoToken = "";
   }
 
   static Future<void> init() async {

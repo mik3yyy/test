@@ -54,7 +54,7 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
     final amountController = useTextEditingController();
     final currencyCode = useState("");
     final enteredAmount = useState(false);
-    final amount = useState(0);
+    final amount = useState<num>(0);
 
     ref.listen<RequestState>(abaWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
@@ -164,8 +164,8 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                                         data.data!.wallets!.any(((element) {
                                           if (element.currency!.name ==
                                               "US Dollar") {
-                                            amount.value =
-                                                element.balance!.toInt();
+                                            amount.value = num.parse(
+                                                element.balance ?? "");
 
                                             return true;
                                           } else {

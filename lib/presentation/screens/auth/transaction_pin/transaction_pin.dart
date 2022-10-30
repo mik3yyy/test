@@ -8,8 +8,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -44,7 +43,6 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
     final confirmPinController = useTextEditingController();
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
       if (value is Success<bool>) {
-        ref.refresh(userProfileProvider);
         if (value.value == true) {
           context.loaderOverlay.hide();
           ScreenView.showPinSuccessDialog(

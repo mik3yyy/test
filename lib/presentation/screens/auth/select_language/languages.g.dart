@@ -1,4 +1,3 @@
-// This is a generated file. See DEVELOPMENT_NOTES.md.
 import 'languages.dart';
 
 class Languages {

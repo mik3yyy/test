@@ -35,8 +35,10 @@ class EditIDVM extends RequestStateNotifier<UploadIdRes> {
           {required String filePath,
           required String idType,
           required String idNo,
+          required bool isEdit,
           required String id}) =>
-      makeRequest(() => _profileRepository.editId(filePath, idType, idNo, id));
+      makeRequest(
+          () => _profileRepository.editId(filePath, idType, idNo, id, isEdit));
 }
 
 ///DELETE SAVED ID PROVIDER

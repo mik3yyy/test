@@ -354,7 +354,7 @@ class Wallet {
     this.entityId,
   });
 
-  num? balance;
+  String? balance;
   String? currencyCode;
   DateTime? createdAt;
   DateTime? updatedAt;

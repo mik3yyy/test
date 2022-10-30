@@ -16,9 +16,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_success_event.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/main_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -57,16 +56,16 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(signInProvider);
-    final email = ref.watch(userEmail.state);
+    // final email = PreferenceManager.email;
     final device = ref.watch(deviceInfoProvider);
-    final emailPhoneController = useTextEditingController(text: email.state);
+    final emailPhoneController = useTextEditingController();
     final passwordController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Success<SigninRes>) {
         //REFRESH THE PROVIDERS
-        ref.refresh(providers);
+        // ref.refresh(providers);
         if (value.value!.data!.user.transactionPinAddedAt == null) {
           context.loaderOverlay.hide();
           context.navigate(const TransactionPinScreen());
@@ -77,7 +76,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
             });
 
             context.loaderOverlay.hide();
-            navigator.key.currentContext!.navigate(MainScreen(
+            navigator.key.currentContext!.navigateReplaceRoot(MainScreen(
               menuScreenContext: context,
             ));
           });
@@ -136,7 +135,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                       //email
                       TextFormInput(
-                          labelText: " Enter Email ",
+                          labelText: "Enter Email ",
                           controller: emailPhoneController,
                           capitalization: TextCapitalization.none,
                           inputFormatters: [
@@ -186,21 +185,23 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         ),
                       ),
                       Space(32.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: vm is Loading
-                                ? null
-                                : () =>
-                                    context.navigate(ForgotPasswordScreen()),
-                            child: Text(
-                              "Forgot Password?",
-                              style: AppText.body4(context, AppColors.appColor),
-                              textAlign: TextAlign.center,
-                            ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          onPressed: vm is Loading
+                              ? null
+                              : () => context.navigate(ForgotPasswordScreen()),
+                          child: Text(
+                            "Forgot Password?",
+                            style: AppText.body4(context, AppColors.appColor),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
+                          style: TextButton.styleFrom(
+                            primary: AppColors.appColor,
+                            backgroundColor: Colors.transparent,
+                            onSurface: Colors.grey,
+                          ),
+                        ),
                       ),
 
                       Space(160.h),

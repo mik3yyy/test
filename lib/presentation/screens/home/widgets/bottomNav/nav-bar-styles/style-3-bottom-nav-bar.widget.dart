@@ -9,7 +9,10 @@ class BottomNavStyle3 extends StatelessWidget {
   }) : super(key: key);
 
   Widget _buildItem(
-      PersistentBottomNavBarItem item, bool isSelected, double? height) {
+    PersistentBottomNavBarItem item,
+    bool isSelected,
+    double? height,
+  ) {
     return navBarEssentials!.navBarHeight == 0
         ? const SizedBox.shrink()
         : AnimatedContainer(
@@ -75,6 +78,8 @@ class BottomNavStyle3 extends StatelessWidget {
             ),
           );
   }
+
+  void onSelectedIcon() {}
 
   @override
   Widget build(BuildContext context) {

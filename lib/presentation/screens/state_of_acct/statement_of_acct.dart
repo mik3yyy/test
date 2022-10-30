@@ -42,10 +42,10 @@ class _StatementOfAcctScreenState extends State<StatementOfAcctScreen> {
               },
             ),
             const Space(40),
-            AccountHistoryButton(
-              text: "E-Banking Account History",
-              onPressed: () {},
-            ),
+            // AccountHistoryButton(
+            //   text: "E-Banking Account History",
+            //   onPressed: () {},
+            // ),
           ],
         ),
       ),
@@ -66,7 +66,7 @@ class AccountHistoryButton extends StatelessWidget {
       height: 60,
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-        child: Text(text, style: AppText.body2(context, Colors.black54, 22.sp)),
+        child: Text(text, style: AppText.body2(context, Colors.black54, 20.sp)),
         style: TextButton.styleFrom(
           primary: Colors.white,
           backgroundColor: Colors.grey.shade100,

@@ -59,7 +59,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           backgroundColor: Colors.transparent,
           title:
               const AppBarTitle(title: "Choose Currency", color: Colors.black),
@@ -74,7 +74,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
             child: Column(
               children: [
                 SearchBox(
-                  hintText: "Search",
+                  hintText: "Search currency",
                   onTextEntered: (value) {
                     ref.read(currencySearchQueryStateProvider.notifier).state =
                         value;
@@ -105,18 +105,18 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                                   ScrollViewKeyboardDismissBehavior.onDrag,
                               itemCount: currency.value!.length,
                               itemBuilder: (context, index) {
-                                final banks = currency.value![index];
+                                final value = currency.value![index];
                                 return InkWell(
                                   onTap: () {
                                     if (widget.routeName == "createWallet") {
                                       ref
                                           .read(createWalletProvider.notifier)
-                                          .createWallet(banks.code.toString());
+                                          .createWallet(value.code.toString());
                                       context.loaderOverlay.show();
                                     } else {
                                       setState(() {
                                         widget.currencyCode.text =
-                                            banks.code.toString();
+                                            value.code.toString();
                                       });
                                       Navigator.pop(context);
                                     }
@@ -128,7 +128,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                                             width: 0.5, color: Colors.black26)),
                                     child: Center(
                                         child: Text(
-                                      banks.name.toString(),
+                                      value.name.toString(),
                                       style: AppText.body2(
                                           context, AppColors.appColor, 20.sp),
                                     )),

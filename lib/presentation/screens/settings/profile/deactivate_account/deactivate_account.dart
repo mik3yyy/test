@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -12,8 +13,6 @@ import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deactivate_account/view_model/view_model.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -51,12 +50,15 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
         context.loaderOverlay.hide();
       }
       if (state is Success<DeactivateAccountRes>) {
-        AppDialog.showSuccessMessageDialog(
-            context, state.value!.message.toString(), onpressed: () {
-          navigator.key.currentContext!
-              .navigateReplaceRoot(const SigninScreen());
-          PreferenceManager.clear();
-        });
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
+        PreferenceManager.clear();
+
+        return AppSnackBar.showSuccessSnackBar(context,
+            message: state.value!.message.toString());
+      }
+      if (state is Error) {
+        return AppSnackBar.showErrorSnackBar(context,
+            message: state.error.toString());
       }
     });
 
@@ -96,7 +98,7 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
                     // textAlign: TextAlign.start,
                     controller: passwordController,
                     obscureText: obscure,
-                    validator: (value) => validatePassword(value),
+                    validator: (value) => null,
 
                     suffixIcon: SizedBox(
                       width: 55.w,
@@ -141,7 +143,13 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
                   onPressed: deactivate is Loading
                       ? null
                       : () {
-                          if (formKey.currentState!.validate()) {
+                          if (passwordController.text.isEmpty) {
+                            return AppSnackBar.showErrorSnackBar(context,
+                                message: "Password is required");
+                          } else if (reasonController.text.isEmpty) {
+                            return AppSnackBar.showErrorSnackBar(context,
+                                message: "Reason for deactivation is required");
+                          } else {
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }

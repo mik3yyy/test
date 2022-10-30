@@ -70,7 +70,7 @@ class Wallet {
     this.entityId,
   });
 
-  num? balance;
+  String? balance;
   String? currencyCode;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -79,7 +79,7 @@ class Wallet {
   dynamic entityId;
 
   factory Wallet.fromJson(Map<String, dynamic> json) => Wallet(
-        balance: json["balance"] ?? 0,
+        balance: json["balance"] ?? '',
         currencyCode: json["currency_code"] ?? "",
         createdAt: json["created_at"] == null
             ? null
@@ -93,7 +93,7 @@ class Wallet {
       );
 
   Map<String, dynamic> toJson() => {
-        "balance": balance ?? 0,
+        "balance": balance ?? '',
         "currency_code": currencyCode ?? "",
         "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
         "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),

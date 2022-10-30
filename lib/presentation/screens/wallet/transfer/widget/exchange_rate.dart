@@ -37,7 +37,6 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
     final rate = useState("0.0");
     final from = useState("0.0");
     final convert = ref.watch(conversionProvider);
-    // final listState = useState("");
 
     ref.listen<RequestState>(conversionProvider, (previous, value) {
       if (value is Success<ConvertCurrencyRes>) {
@@ -177,19 +176,9 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
                                       style: AppText.body2(
                                           context, Colors.black38, 15.sp)),
                                   const Space(10),
-                                  convert is Loading
-                                      ? const Center(
-                                          child: SizedBox(
-                                            height: 18,
-                                            width: 18,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 4,
-                                            ),
-                                          ),
-                                        )
-                                      : Text(rate.value,
-                                          style: AppText.body2(
-                                              context, Colors.black, 20.sp)),
+                                  Text(rate.value,
+                                      style: AppText.body2(
+                                          context, Colors.black, 20.sp)),
                                 ],
                               ),
                             ],
