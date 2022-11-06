@@ -69,7 +69,7 @@ class _AddFundsToWalletScreenState extends State<AddFundsToWalletScreen> {
                 pushNewScreen(
                   context, screen: const DebitCreditCardScreen(),
                   withNavBar: false, // OPTIONAL VALUE. True by default.
-                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );
               },
             ),

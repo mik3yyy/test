@@ -86,7 +86,7 @@ class AppDialog {
                         child: Center(
                           child: Text(
                             message,
-                            style: AppText.body2(context, Colors.black, 10.sp),
+                            style: AppText.body2(context, Colors.black, 17.sp),
                           ),
                         ),
                       ),

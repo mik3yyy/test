@@ -49,6 +49,8 @@ class _AllNotificationTabBarViewState
                   },
                   child: ListView.separated(
                     controller: _scrollController,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     physics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics(),
                     ),
@@ -56,7 +58,7 @@ class _AllNotificationTabBarViewState
                     itemBuilder: (BuildContext context, int index) {
                       final msg = notification.value![index];
                       return Padding(
-                        padding: const EdgeInsets.only(right: 32.0),
+                        padding: const EdgeInsets.only(right: 0.0),
                         child: AllNotificationBuild(
                           notificationIcon:
                               Image.asset(AppImage.successNotificationIcon),
@@ -131,12 +133,12 @@ class AllNotificationBuild extends StatelessWidget {
                   AppColors.appColor,
                 ),
               ),
-              Space(5.h),
+              Space(10.h),
               Text(
                 notificationTime,
                 style: AppText.body3(
                   context,
-                  AppColors.appColor,
+                  AppColors.appColor.withOpacity(0.4),
                 ),
               ),
             ],

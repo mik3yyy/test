@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/check_date/check_date.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -176,6 +177,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                   parent: BouncingScrollPhysics()),
               child: Column(
                 children: [
+                  InnerPageLoadingIndicator(loadingStream: vm is Loading),
                   Container(
                     height: 40.h,
                     width: MediaQuery.of(context).size.width,

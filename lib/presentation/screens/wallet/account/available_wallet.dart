@@ -262,24 +262,26 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
                           ),
                         );
                       }),
-                  Center(
-                    child: CustomButton(
-                        buttonText: buttonText(context, "Create Wallet"),
-                        bgColor: AppColors.appColor,
-                        borderColor: AppColors.appColor,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          pushNewScreen(context,
-                              screen: SelectCurrencyScreen(
-                                currencyCode: currency,
-                                routeName: 'createWallet',
-                              ),
-                              withNavBar: false,
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.slideRight);
-                        },
-                        buttonWidth: 320),
-                  ),
+                  wallet is AsyncLoading
+                      ? const SizedBox.shrink()
+                      : Center(
+                          child: CustomButton(
+                              buttonText: buttonText(context, "Create Wallet"),
+                              bgColor: AppColors.appColor,
+                              borderColor: AppColors.appColor,
+                              textColor: Colors.white,
+                              onPressed: () {
+                                pushNewScreen(context,
+                                    screen: SelectCurrencyScreen(
+                                      currencyCode: currency,
+                                      routeName: 'createWallet',
+                                    ),
+                                    withNavBar: false,
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.slideRight);
+                              },
+                              buttonWidth: 320),
+                        ),
                 ],
               ),
             ),

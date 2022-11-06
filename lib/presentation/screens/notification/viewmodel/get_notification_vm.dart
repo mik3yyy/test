@@ -19,12 +19,15 @@ final notificationSearchResultProvider =
     FutureProvider.autoDispose.family<List<Notification>, String>((ref, query) {
   //GETS THE RESULT FROM THE SERVER
   final listSearch = ref.watch(remoteNotificationListProvider).value;
-
-  //STORE THE RESULT AND THEN FILTER IT
-  return listSearch!.data.notifications
-      .where((element) =>
-          element.data!.message!.toLowerCase().contains(query.toLowerCase()))
-      .toList();
+  if (listSearch == null) {
+    return [];
+  } else {
+    //STORE THE RESULT AND THEN FILTER IT
+    return listSearch.data.notifications
+        .where((element) =>
+            element.data!.message!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
 });
 
 //FILTER THE STORED RESULT --- THIS IS USED IN THE UI

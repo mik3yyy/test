@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -27,8 +29,10 @@ class AppWebView extends StatefulHookConsumerWidget {
 }
 
 class _AppWebViewState extends ConsumerState<AppWebView> {
+  bool? webViewLoading;
   @override
   void initState() {
+    webViewLoading = true;
     // if (Platform.isAndroid) WebView.platform = AndroidWebView();
     super.initState();
   }
@@ -38,7 +42,11 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
+        flexibleSpace: Padding(
+          padding: EdgeInsets.only(top: 89.h),
+          child: InnerPageLoadingIndicator(loadingStream: webViewLoading!),
+        ),
         title: AppBarTitle(
             title: widget.webViewRoute == WebViewRoute.privacy
                 ? "Privacy Policy"
@@ -60,6 +68,11 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
         javascriptMode: JavascriptMode.unrestricted,
         debuggingEnabled: true,
         userAgent: 'Flutter;Webview',
+        onPageFinished: (value) {
+          setState(() {
+            webViewLoading = false;
+          });
+        },
         navigationDelegate: (navigation) {
           switch (widget.webViewRoute) {
             case WebViewRoute.fundCard:

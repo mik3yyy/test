@@ -42,8 +42,8 @@ class _HomePageState extends ConsumerState<HomePage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
     ref.read(refreshControllerProvider.notifier).refreshToken();
+    WidgetsBinding.instance?.addObserver(this);
   }
 
   @override

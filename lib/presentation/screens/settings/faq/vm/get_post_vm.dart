@@ -4,12 +4,12 @@ import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/single_post_
 import 'package:kayndrexsphere_mobile/Data/services/forum/repo/forum_repo.dart';
 
 final topPost = FutureProvider.autoDispose<GetPostsRes>((ref) async {
-  final topPostRepository = ref.read(forumManagerProvider);
-
-  return await topPostRepository.getTop10Posts();
+  // final topPostRepository = ref.read(forumManagerProvider);
+  ref.maintainState = true;
+  return ref.watch(forumManagerProvider).getTop10Posts();
 });
 
-final allPost = FutureProvider.autoDispose<GetPostsRes>((ref) async {
+final allPost = FutureProvider<GetPostsRes>((ref) async {
   final topPostRepository = ref.read(forumManagerProvider);
 
   return await topPostRepository.getAllPosts();

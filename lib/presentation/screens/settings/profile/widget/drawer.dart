@@ -138,7 +138,6 @@ class Navigation extends HookConsumerWidget {
               image: AppImage.faq,
               isIcon: false,
               onPressed: () {
-                // context.navigate(const FaqScreen());
                 pushNewScreen(context,
                     withNavBar: false,
                     screen: const FaqScreen(),
@@ -201,7 +200,7 @@ class Navigation extends HookConsumerWidget {
                     screen: const AppWebView(
                       url: Constants.terms,
                       successMsg: '',
-                      webViewRoute: WebViewRoute.privacy,
+                      webViewRoute: WebViewRoute.terms,
                     ),
                     withNavBar: false,
                     pageTransitionAnimation:

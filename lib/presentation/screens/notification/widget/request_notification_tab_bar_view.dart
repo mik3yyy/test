@@ -49,6 +49,8 @@ class _RequestNotificationTabBarViewState
                   controller: _scrollController,
                   child: ListView.separated(
                     controller: _scrollController,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     physics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics(),
                     ),
@@ -137,21 +139,21 @@ class AllNotificationBuild extends StatelessWidget {
                 AppColors.appColor,
               ),
             ),
-            Space(7.h),
+            Space(10.h),
             Row(
               children: [
                 Text(
                   createdTime,
                   style: AppText.body3(
                     context,
-                    AppColors.appColor,
+                    AppColors.appColor.withOpacity(0.4),
                   ),
                 ),
                 Text(
                   dateCreated,
                   style: AppText.body3(
                     context,
-                    AppColors.appColor,
+                    AppColors.appColor.withOpacity(0.4),
                   ),
                 ),
               ],
