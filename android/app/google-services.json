@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "796617255193",
+    "project_id": "kayndrexsphere-ea985",
+    "storage_bucket": "kayndrexsphere-ea985.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796617255193:android:7e244ff8bff44a80527d88",
+        "android_client_info": {
+          "package_name": "co.kayndrexsphere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796617255193-vliq6s010vkqct4t485hojims2s6d4rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD77bgHDOL7yqPDy_Bi_nbuCuiN2cOLSS0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796617255193-vliq6s010vkqct4t485hojims2s6d4rn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

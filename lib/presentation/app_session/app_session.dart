@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
@@ -31,4 +32,10 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
     }
   });
   return sessionConfig;
+});
+
+/// Firebase Analytics Provider
+
+final analyticsProvider = Provider((ref) {
+  return FirebaseAnalytics.instance;
 });

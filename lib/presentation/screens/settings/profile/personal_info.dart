@@ -4,13 +4,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/database/user/user_database.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/edit_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -42,37 +47,63 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final userValue = ref.watch(userProfileProvider).value;
+    final userValue = ref.watch(userProfileProvider);
+    final image = ref.watch(userPhotoProvider);
+    final savedUser = ref.watch(savedUserProvider);
+
+    ref.listen<RequestState>(userPhotoProvider, (T, value) {
+      if (value is Success<bool>) {
+        ref.refresh(userProfileProvider);
+        AppSnackBar.showSuccessSnackBar(context,
+            message: "Image uploaded successfully");
+      }
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context,
+            message: "Image could not be uploaded. Please try again");
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.appColor,
       appBar: AppBar(
         elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        flexibleSpace: Padding(
+          padding: EdgeInsets.only(top: 85.h),
+          child: InnerPageLoadingIndicator(loadingStream: image is Loading),
+        ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         automaticallyImplyLeading: false,
         leading: const BackButton(color: Colors.white),
         actions: [
-          TextButton(
-              child: Text(
-                'Edit',
-                style: AppText.body2(context, Colors.white, 20.sp),
-              ),
-              onPressed: () {
-                pushNewScreen(context,
-                    screen: EditInfo(
-                      userValue: userValue!,
-                    ),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino);
-              }),
+          userValue.maybeWhen(
+            data: (data) => TextButton(
+                child: Text(
+                  'Edit',
+                  style: AppText.body2(context, Colors.white, 20.sp),
+                ),
+                onPressed: () {
+                  pushNewScreen(context,
+                      screen: EditInfo(
+                        userValue: data,
+                      ),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino);
+                }),
+            orElse: () => Text(
+              'Edit',
+              style: AppText.body2(context, Colors.white, 20.sp),
+            ),
+          ),
         ],
       ),
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
+            const Space(10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
@@ -113,14 +144,18 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
                   Space(10.h),
                   Text(
-                    userName(userValue?.data.user.firstName!.capitalize(),
-                        userValue?.data.user.lastName!.capitalize()),
+                    userValue.maybeWhen(
+                        data: (v) =>
+                            '${v.data.user.firstName!.capitalize()} ${v.data.user.lastName!.capitalize()}',
+                        orElse: () =>
+                            '${savedUser.firstName!.capitalize()} ${savedUser.lastName!.capitalize()}'),
                     style: AppText.body2(context, Colors.white, 25.sp),
                   ),
                   Space(5.h),
                 ],
               ),
             ),
+            Space(20.h),
             Expanded(
                 child: Container(
               decoration: BoxDecoration(
@@ -148,7 +183,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(30.h),
@@ -159,7 +194,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(30.h),
@@ -170,7 +205,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(30.h),
@@ -180,7 +215,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                                 subTitle: user.phoneNumer.toString()),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(30.h),
@@ -194,7 +229,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
 
@@ -211,7 +246,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
 
@@ -228,7 +263,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(30.h),
@@ -239,7 +274,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                             ),
                             Space(7.h),
                             const Divider(
-                              color: Colors.black,
+                              color: Colors.black38,
                               thickness: 0.4,
                             ),
                             Space(60.h),

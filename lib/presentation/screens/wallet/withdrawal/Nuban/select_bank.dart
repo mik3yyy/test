@@ -60,6 +60,8 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
                     } else {
                       return Expanded(
                         child: ListView.separated(
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
                             itemCount: bank.value!.length,
                             itemBuilder: (context, index) {
                               final banks = bank.value![index];

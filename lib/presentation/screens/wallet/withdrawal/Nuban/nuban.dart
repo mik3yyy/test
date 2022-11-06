@@ -155,7 +155,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                               const Space(2),
                               walletBalance.when(
                                   error: ((error, stackTrace) =>
-                                      Text(error.toString())),
+                                      const Text("0.0")),
                                   loading: () => const SizedBox(
                                         height: 20,
                                         width: 20,

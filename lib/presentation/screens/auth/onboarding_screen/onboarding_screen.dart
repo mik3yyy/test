@@ -111,15 +111,15 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 ),
                 _current == 1 || _current == 0 ? Space(150.h) : Space(56.w),
                 _current == 2
-                    ? GestureDetector(
-                        onTap: () => navigator.key.currentContext!
+                    ? TextButton(
+                        onPressed: () => navigator.key.currentContext!
                             .navigate(CreateAccountScreen()),
+                        style: TextButton.styleFrom(),
                         child: Text(
                           "Continue",
                           style: AppText.label(context, AppColors.appColor),
                           textAlign: TextAlign.center,
-                        ),
-                      )
+                        ))
                     : const Text(""),
                 Space(40.w),
               ],
@@ -171,20 +171,21 @@ class ImageWidget extends HookConsumerWidget {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () => context.navigate(CreateAccountScreen()),
-                  child: Text(
-                    "Skip",
-                    // AppLocalizations.of(context)!.text("Skip"),
-                    style: AppText.body3(context, AppColors.appColor),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                TextButton(
+                    onPressed: () => navigator.key.currentContext!
+                        .navigate(CreateAccountScreen()),
+                    child: Text(
+                      "Skip",
+                      style: AppText.label(context, AppColors.appColor),
+                      textAlign: TextAlign.center,
+                    )),
               ],
             ),
           ),
           Space(130.h),
-          Image(image: AssetImage(image)),
+          Image(
+            image: AssetImage(image),
+          ),
           Space(50.h),
           Center(
             child: Text(

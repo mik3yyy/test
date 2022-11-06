@@ -37,26 +37,26 @@ class PreferenceManager {
   static set idUrl(String idUrl) => prefs.setString("avatarUrl", idUrl);
   static String get idUrl => prefs.getString("idUrl") ?? '';
 
-  //* DialingCode
-  static set dailingCode(String dailingCode) =>
-      prefs.setString("dailingCode", dailingCode);
-  static String get dailingCode => prefs.getString("dailingCode") ?? '';
+  // //* DialingCode
+  // static set dailingCode(String dailingCode) =>
+  //     prefs.setString("dailingCode", dailingCode);
+  // static String get dailingCode => prefs.getString("dailingCode") ?? '';
 
   //* avatarUrl
   static set defaultWallet(String defaultWallet) =>
       prefs.setString("defaultWallet", defaultWallet);
   static String get defaultWallet => prefs.getString("defaultWallet") ?? '';
 
-  //* Error message
-  static set errorMessage(String errorMessage) =>
-      prefs.setString("errorMessage", errorMessage);
-  static String get errorMessage => prefs.getString("errorMessage") ?? '';
+  // //* Error message
+  // static set errorMessage(String errorMessage) =>
+  //     prefs.setString("errorMessage", errorMessage);
+  // static String get errorMessage => prefs.getString("errorMessage") ?? '';
 
   //* auth token
   static set authToken(String authToken) =>
       prefs.setString("authToken", authToken);
   static String get authToken => prefs.getString("authToken") ?? '';
-  //* auth token
+  //* Device ID
   static set deviceId(String deviceId) => prefs.setString("deviceId", deviceId);
   static String get deviceId => prefs.getString("deviceId") ?? '';
 
@@ -93,8 +93,11 @@ class PreferenceManager {
   static bool get isPostUnLike => prefs.getBool("isPostUnLike") ?? false;
 
   static void clear() {
-    prefs.clear();
+    // prefs.clear();
     PreferenceManager.isFirstLaunch = false;
+    PreferenceManager.authToken = "";
+    PreferenceManager.refreshToken = "";
+    PreferenceManager.pseudoToken = "";
   }
 
   static Future<void> init() async {

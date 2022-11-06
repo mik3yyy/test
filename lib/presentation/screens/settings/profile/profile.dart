@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deac
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/personal_info.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile_image/profile_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/view_all_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -27,6 +28,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(userProfileProvider);
+    final savedUser = ref.watch(savedUserProvider);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -58,7 +60,8 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                       vm.maybeWhen(
                           data: (v) =>
                               '${v.data.user.firstName!.capitalize()} ${v.data.user.lastName!.capitalize()}',
-                          orElse: () => ''),
+                          orElse: () =>
+                              '${savedUser.firstName!.capitalize()} ${savedUser.lastName!.capitalize()}'),
                       style: AppText.body2(context, Colors.white, 25.sp),
                     ),
                     Space(5.h),
@@ -93,7 +96,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                           ),
                           Space(10.h),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.black38,
                             thickness: 0.4,
                           ),
                           Space(30.h),
@@ -112,7 +115,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                           ),
                           Space(10.h),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.black38,
                             thickness: 0.4,
                           ),
                           // Space(30.h),
@@ -155,7 +158,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                           ),
                           Space(10.h),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.black38,
                             thickness: 0.4,
                           ),
                           Space(30.h),
@@ -176,7 +179,7 @@ class _MyProfileState extends ConsumerState<MyProfile> {
                           ),
                           Space(10.h),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.black38,
                             thickness: 0.4,
                           ),
                         ],

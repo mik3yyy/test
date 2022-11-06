@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:event_bus/event_bus.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,8 +15,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/initialize_core/init_app_core.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
-import 'package:kayndrexsphere_mobile/third_party/sentry_analytics.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'presentation/route/navigator.dart';
 import 'presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'presentation/utils/alert_dialog/show_unauthenicated_dialog.dart';
@@ -24,21 +25,41 @@ EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeCore(environment: Environment.prod);
-  await initSentry(
-      environment: Environment.prod,
-      runApp: () {
-        eventBus.on<UnAuthenticated>().listen((event) async {
-          navigator.key.currentContext!
-              .navigateReplaceRoot(const SigninScreen());
-          AuthenicatedState.showMessage(navigator.key.currentContext!,
-              "Your session has timed out, please login again",
-              buttonText: "Ok", buttonClicked: () {
-            Navigator.pop(navigator.key.currentContext!);
-            PreferenceManager.clear();
-          });
-        });
-        runApp(const ProviderScope(child: MyApp()));
+  runZonedGuarded<Future<void>>(() async {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    eventBus.on<UnAuthenticated>().listen((event) async {
+      navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
+      AuthenicatedState.showMessage(navigator.key.currentContext!,
+          "Your session has timed out, please login again", buttonText: "Ok",
+          buttonClicked: () {
+        Navigator.pop(navigator.key.currentContext!);
+        PreferenceManager.clear();
       });
+    });
+
+    runApp(const ProviderScope(child: MyApp()));
+  }, (error, stack) {
+    debugPrintStack(stackTrace: stack);
+    if (kDebugMode) {
+      print(error);
+    }
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  });
+  // await initSentry(
+  //     environment: Environment.dev,
+  //     runApp: () {
+  //       eventBus.on<UnAuthenticated>().listen((event) async {
+  //         navigator.key.currentContext!
+  //             .navigateReplaceRoot(const SigninScreen());
+  //         AuthenicatedState.showMessage(navigator.key.currentContext!,
+  //             "Your session has timed out, please login again",
+  //             buttonText: "Ok", buttonClicked: () {
+  //           Navigator.pop(navigator.key.currentContext!);
+  //           PreferenceManager.clear();
+  //         });
+  //       });
+  //       runApp(const ProviderScope(child: MyApp()));
+  //     });
 }
 
 class MyApp extends HookConsumerWidget {
@@ -48,6 +69,7 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appSession = ref.watch(appSessionConfigProvider);
+    final analytics = ref.watch(analyticsProvider);
     // final locale = ref.watch(localeProvider);
     return ScreenUtilInit(
       designSize: const Size(428, 926),
@@ -59,7 +81,7 @@ class MyApp extends HookConsumerWidget {
           debugShowCheckedModeBanner: false,
           navigatorKey: navigator.key,
           navigatorObservers: [
-            SentryNavigatorObserver(),
+            FirebaseAnalyticsObserver(analytics: analytics),
           ],
           title: 'Kayndrexsphere',
           theme: ThemeData(

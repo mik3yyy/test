@@ -81,7 +81,7 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
               children: [
                 const Space(10),
                 Text(
-                  """Deactivating account deletes your Kayndrexsphere account.A new sign up will be required if you decide to return.
+                  """Deactivating account deletes your Kayndrexsphere account. A new sign up will be required if you decide to return.
                   """,
                   style: AppText.body2(context, Colors.black45, 18.sp),
                 ),

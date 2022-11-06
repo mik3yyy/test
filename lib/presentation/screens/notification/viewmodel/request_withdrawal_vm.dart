@@ -20,11 +20,14 @@ final notificationReqSearchResultProvider =
   //GETS THE RESULT FROM THE SERVER
   final listSearch = ref.watch(remoteReqNotificationListProvider).value;
 
-  //STORE THE RESULT AND THEN FILTER IT
-  return listSearch!.data.withdrawals
-      .where((element) =>
-          element.status!.toLowerCase().contains(query.toLowerCase()))
-      .toList();
+  if (listSearch == null) {
+    return [];
+  } else {
+//STORE THE RESULT AND THEN FILTER IT
+    return listSearch.data.withdrawals
+        .where((element) => element.amount.toString().contains(query))
+        .toList();
+  }
 });
 
 //FILTER THE STORED RESULT --- THIS IS USED IN THE UI

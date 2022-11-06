@@ -13,7 +13,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/create_post_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/vm/get_post_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/faq/widget/faq_app_bar.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_view_widget.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -65,99 +64,199 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
       }
     });
     return LoaderOverlay(
-      useDefaultLoading: false,
-      overlayWidget: const Center(
-        child: SpinKitWave(
-          color: AppColors.appColor,
-          size: 50.0,
-        ),
-      ),
-      child: GenericWidget(
-        appbar: const FaqAppBar(),
-        bgColor: AppColors.genericWidgetBgColor,
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 25.w,
-            right: 25.w,
-            top: 20.h,
+        useDefaultLoading: false,
+        overlayWidget: const Center(
+          child: SpinKitWave(
+            color: AppColors.appColor,
+            size: 50.0,
           ),
-          child: SizedBox(
-            height: 600.h,
+        ),
+        child: Scaffold(
+          backgroundColor: AppColors.appColor,
+          body: SafeArea(
             child: Column(
               children: [
-                Text(
-                  'Add post',
-                  style: AppText.robotoStyle(
-                    context,
-                    AppColors.textColor,
-                    16,
-                    FontWeight.w700,
+                const FaqAppBar(),
+                const Space(30),
+                Expanded(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(45.r)),
                   ),
-                ),
-                Space(15.h),
-                ForumTextFormField(
-                  hint: "Post Title",
-                  height: 75.h,
-                  maxLines: 5,
-                  controller: postTitle,
-                ),
-                Space(14.h),
-                ForumTextFormField(
-                  hint: "Post Body",
-                  height: 250.h,
-                  maxLines: 15,
-                  controller: postText,
-                ),
-                Space(29.h),
-                CustomButton(
-                  onPressed: postText.text.isEmpty && postTitle.text.isEmpty
-                      ? null
-                      : () {
-                          var createPostReq = CreatePostReq(
-                            title: postTitle.text.trim(),
-                            text: postText.text.trim(),
-                          );
-                          ref
-                              .read(createPostVm.notifier)
-                              .createPost(createPostReq);
-                          context.loaderOverlay.show();
-                        },
-                  buttonText: vm is Loading
-                      ? loading(
-                          Colors.white,
-                        )
-                      : buttonText(context, "Post"),
-                  bgColor: postText.text.isEmpty || postTitle.text.isEmpty
-                      ? AppColors.appColor.withOpacity(0.3)
-                      : AppColors.appColor,
-                  textColor: AppColors.whiteColor,
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  borderColor:
-                      postText.text.isEmpty || postTitle.text.isEmpty == true
-                          ? AppColors.appColor.withOpacity(0.3)
-                          : AppColors.appColor,
-                ),
-                Space(20.h),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: AppText.robotoStyle(
-                      context,
-                      AppColors.textColor,
-                      14.sp,
-                      FontWeight.w500,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 25.w,
+                      right: 25.w,
+                      top: 20.h,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Add post',
+                          style: AppText.robotoStyle(
+                            context,
+                            AppColors.textColor,
+                            16,
+                            FontWeight.w700,
+                          ),
+                        ),
+                        Space(15.h),
+                        ForumTextFormField(
+                          hint: "Post Title",
+                          height: 75.h,
+                          maxLines: 5,
+                          controller: postTitle,
+                        ),
+                        Space(14.h),
+                        ForumTextFormField(
+                          hint: "Post Body",
+                          height: 250.h,
+                          maxLines: 15,
+                          controller: postText,
+                        ),
+                        Space(60.h),
+                        CustomButton(
+                          onPressed:
+                              postText.text.isEmpty && postTitle.text.isEmpty
+                                  ? null
+                                  : () {
+                                      var createPostReq = CreatePostReq(
+                                        title: postTitle.text.trim(),
+                                        text: postText.text.trim(),
+                                      );
+                                      ref
+                                          .read(createPostVm.notifier)
+                                          .createPost(createPostReq);
+                                      context.loaderOverlay.show();
+                                    },
+                          buttonText: vm is Loading
+                              ? loading(
+                                  Colors.white,
+                                )
+                              : buttonText(context, "Post"),
+                          bgColor:
+                              postText.text.isEmpty || postTitle.text.isEmpty
+                                  ? AppColors.appColor.withOpacity(0.3)
+                                  : AppColors.appColor,
+                          textColor: AppColors.whiteColor,
+                          buttonWidth: MediaQuery.of(context).size.width,
+                          borderColor: postText.text.isEmpty ||
+                                  postTitle.text.isEmpty == true
+                              ? AppColors.appColor.withOpacity(0.3)
+                              : AppColors.appColor,
+                        ),
+                        Space(20.h),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: AppText.robotoStyle(
+                              context,
+                              AppColors.textColor,
+                              14.sp,
+                              FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                ))
               ],
             ),
           ),
-        ),
-      ),
-    );
+        )
+
+        // GenericWidget(
+        //   appbar: const FaqAppBar(),
+        //   bgColor: AppColors.genericWidgetBgColor,
+        //   child: Padding(
+        //     padding: EdgeInsets.only(
+        //       left: 25.w,
+        //       right: 25.w,
+        //       top: 20.h,
+        //     ),
+        //     child: SizedBox(
+        //       height: 600.h,
+        //       child: Column(
+        //         children: [
+        //           Text(
+        //             'Add post',
+        //             style: AppText.robotoStyle(
+        //               context,
+        //               AppColors.textColor,
+        //               16,
+        //               FontWeight.w700,
+        //             ),
+        //           ),
+        //           Space(15.h),
+        //           ForumTextFormField(
+        //             hint: "Post Title",
+        //             height: 75.h,
+        //             maxLines: 5,
+        //             controller: postTitle,
+        //           ),
+        //           Space(14.h),
+        //           ForumTextFormField(
+        //             hint: "Post Body",
+        //             height: 250.h,
+        //             maxLines: 15,
+        //             controller: postText,
+        //           ),
+        //           Space(29.h),
+        //           CustomButton(
+        //             onPressed: postText.text.isEmpty && postTitle.text.isEmpty
+        //                 ? null
+        //                 : () {
+        //                     var createPostReq = CreatePostReq(
+        //                       title: postTitle.text.trim(),
+        //                       text: postText.text.trim(),
+        //                     );
+        //                     ref
+        //                         .read(createPostVm.notifier)
+        //                         .createPost(createPostReq);
+        //                     context.loaderOverlay.show();
+        //                   },
+        //             buttonText: vm is Loading
+        //                 ? loading(
+        //                     Colors.white,
+        //                   )
+        //                 : buttonText(context, "Post"),
+        //             bgColor: postText.text.isEmpty || postTitle.text.isEmpty
+        //                 ? AppColors.appColor.withOpacity(0.3)
+        //                 : AppColors.appColor,
+        //             textColor: AppColors.whiteColor,
+        //             buttonWidth: MediaQuery.of(context).size.width,
+        //             borderColor:
+        //                 postText.text.isEmpty || postTitle.text.isEmpty == true
+        //                     ? AppColors.appColor.withOpacity(0.3)
+        //                     : AppColors.appColor,
+        //           ),
+        //           Space(20.h),
+        //           InkWell(
+        //             onTap: () {
+        //               Navigator.of(context).pop();
+        //             },
+        //             child: Text(
+        //               'Cancel',
+        //               style: AppText.robotoStyle(
+        //                 context,
+        //                 AppColors.textColor,
+        //                 14.sp,
+        //                 FontWeight.w500,
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }
 
