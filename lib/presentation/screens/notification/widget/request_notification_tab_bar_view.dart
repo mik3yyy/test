@@ -90,7 +90,7 @@ class _RequestNotificationTabBarViewState
           );
         },
         loading: () => const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             ));
   }
 

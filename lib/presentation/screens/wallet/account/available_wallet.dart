@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:skeletons/skeletons.dart';
 import '../../../components/app text theme/app_text_theme.dart';
 
 class AvailableWallet extends StatefulHookConsumerWidget {
@@ -38,7 +41,41 @@ class AvailableWallet extends StatefulHookConsumerWidget {
   ConsumerState<AvailableWallet> createState() => _AvailableWalletState();
 }
 
-class _AvailableWalletState extends ConsumerState<AvailableWallet> {
+class _AvailableWalletState extends ConsumerState<AvailableWallet>
+    with WidgetsBindingObserver {
+  bool isBackground = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    setState(() {
+      isBackground = state == AppLifecycleState.inactive;
+    });
+
+    // final isBackground = state == AppLifecycleState.inactive;
+
+    if (isBackground) {
+      log("list of wallet screen $isBackground");
+    }
+
+    /* if (isBackground) {
+      // service.stop();
+    } else {
+      // service.start();
+    }*/
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(userProfileProvider);
@@ -80,213 +117,237 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet> {
           automaticallyImplyLeading: false,
           elevation: 0,
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 40.h,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.appColor.withOpacity(0.1),
-              child: Center(
-                child: Text(
-                  'Let\'s view your currency wallets',
-                  style: AppText.body2Medium(context, Colors.black54, 20.sp),
-                ),
-              ),
-            ),
-            const Space(20),
-            Padding(
-              padding: EdgeInsets.only(left: 23.w, right: 23.w),
-              child: Column(
+        body: isBackground
+            ? Container()
+            : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Default wallet',
-                    style: AppText.header2(context, AppColors.appColor, 20.sp),
+                  Container(
+                    height: 40.h,
+                    width: MediaQuery.of(context).size.width,
+                    color: AppColors.appColor.withOpacity(0.1),
+                    child: Center(
+                      child: Text(
+                        'Let\'s view your currency wallets',
+                        style:
+                            AppText.body2Medium(context, Colors.black54, 20.sp),
+                      ),
+                    ),
                   ),
-                  const Space(10),
-                  vm.when(
-                      data: (data) {
-                        return Container(
-                          height: 80.h,
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.whiteColor,
-                            borderRadius: BorderRadius.circular(5.r),
-                            // border: Border.all(
-                            //     width: 1, color: AppColors.appColor),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromRGBO(255, 255, 255, 1),
-                                offset: Offset(
-                                  2.0,
-                                  2.0,
-                                ),
-                                blurRadius: 0.0,
-                                spreadRadius: 2.0,
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${data.data.defaultWallet.currencyCode.toString()} wallet',
-                                    style: AppText.header2(
-                                        context, AppColors.appColor, 18.sp),
-                                  ),
-                                  Space(10.h),
-                                  Text(
-                                    '${data.data.defaultWallet.currencyCode.toString()} ${formatCurrency(data.data.defaultWallet.balance.toString())}',
-                                    style: AppText.header2(
-                                        context, AppColors.appColor, 20.sp),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              // OptionsModalSheet(
-                              //   balance:
-                              //       data.data.defaultWallet.balance.toString(),
-                              //   currencyCode: data
-                              //       .data.defaultWallet.currencyCode
-                              //       .toString(),
-                              //   isDefault: true,
-                              // )
-                            ],
-                          ),
-                        );
-                      },
-                      loading: () => SizedBox(
-                          height: 20.w,
-                          width: 20.w,
-                          child: const CircularProgressIndicator()),
-                      error: (e, s) {
-                        return Text(
-                          e.toString(),
+                  const Space(20),
+                  Padding(
+                    padding: EdgeInsets.only(left: 23.w, right: 23.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Default wallet',
                           style: AppText.header2(
                               context, AppColors.appColor, 20.sp),
-                        );
-                      }),
-                  const Space(20),
-                  Text(
-                    'Other wallets',
-                    style: AppText.header2(context, AppColors.appColor, 20.sp),
-                  ),
-
-                  ///
-                  ///
-                  /// LIST OF CREATED WALLETS
-                  ///
-                  const Space(10),
-                  wallet.when(
-                      error: (error, stackTrace) => Text(error.toString()),
-                      loading: () => const Center(
-                          child: CircularProgressIndicator.adaptive()),
-                      data: (data) {
-                        walletCount.value = data.data!.wallets!.length;
-
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            return ref.refresh(getAccountDetailsProvider);
-                          },
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.42,
-                            child: ListView.separated(
-                              physics: const AlwaysScrollableScrollPhysics(
-                                  parent: BouncingScrollPhysics()),
-                              itemCount: data.data!.wallets!.length,
-                              itemBuilder: (context, index) {
-                                final walletList = data.data!.wallets![index];
-                                return Container(
-                                  height: 80.h,
-                                  width: MediaQuery.of(context).size.width,
-                                  padding:
-                                      EdgeInsets.only(left: 20.w, right: 20.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.whiteColor,
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        offset: Offset(
-                                          2.0,
-                                          2.0,
-                                        ),
-                                        blurRadius: 0.0,
-                                        spreadRadius: 2.0,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${walletList.currencyCode.toString()} wallet',
-                                            style: AppText.header2(context,
-                                                AppColors.appColor, 18.sp),
-                                          ),
-                                          Space(10.h),
-                                          Text(
-                                            '${walletList.currencyCode.toString()} ${formatter.format(num.tryParse(walletList.balance ?? "0.0"))}',
-                                            style: AppText.header2(context,
-                                                AppColors.appColor, 20.sp),
-                                          ),
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      OptionsModalSheet(
-                                        balance: walletList.balance.toString(),
-                                        currencyCode:
-                                            walletList.currencyCode.toString(),
-                                        isDefault: false,
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(
-                                  height: 10,
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }),
-                  wallet is AsyncLoading
-                      ? const SizedBox.shrink()
-                      : Center(
-                          child: CustomButton(
-                              buttonText: buttonText(context, "Create Wallet"),
-                              bgColor: AppColors.appColor,
-                              borderColor: AppColors.appColor,
-                              textColor: Colors.white,
-                              onPressed: () {
-                                pushNewScreen(context,
-                                    screen: SelectCurrencyScreen(
-                                      currencyCode: currency,
-                                      routeName: 'createWallet',
-                                    ),
-                                    withNavBar: false,
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.slideRight);
-                              },
-                              buttonWidth: 320),
                         ),
+                        const Space(10),
+                        vm.when(
+                            data: (data) {
+                              return Container(
+                                height: 80.h,
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    EdgeInsets.only(left: 20.w, right: 20.w),
+                                decoration: BoxDecoration(
+                                  color: AppColors.whiteColor,
+                                  borderRadius: BorderRadius.circular(5.r),
+                                  // border: Border.all(
+                                  //     width: 1, color: AppColors.appColor),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(255, 255, 255, 1),
+                                      offset: Offset(
+                                        2.0,
+                                        2.0,
+                                      ),
+                                      blurRadius: 0.0,
+                                      spreadRadius: 2.0,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${data.data.defaultWallet.currencyCode.toString()} wallet',
+                                          style: AppText.header2(context,
+                                              AppColors.appColor, 18.sp),
+                                        ),
+                                        Space(10.h),
+                                        Text(
+                                          '${data.data.defaultWallet.currencyCode.toString()} ${formatCurrency(data.data.defaultWallet.balance.toString())}',
+                                          style: AppText.header2(context,
+                                              AppColors.appColor, 20.sp),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    // OptionsModalSheet(
+                                    //   balance:
+                                    //       data.data.defaultWallet.balance.toString(),
+                                    //   currencyCode: data
+                                    //       .data.defaultWallet.currencyCode
+                                    //       .toString(),
+                                    //   isDefault: true,
+                                    // )
+                                  ],
+                                ),
+                              );
+                            },
+                            loading: () => SizedBox(
+                                height: 20.w,
+                                width: 20.w,
+                                child: const CircularProgressIndicator()),
+                            error: (e, s) {
+                              return Text(
+                                e.toString(),
+                                style: AppText.header2(
+                                    context, AppColors.appColor, 20.sp),
+                              );
+                            }),
+                        const Space(20),
+                        Text(
+                          'Other wallets',
+                          style: AppText.header2(
+                              context, AppColors.appColor, 20.sp),
+                        ),
+
+                        ///
+                        ///
+                        /// LIST OF CREATED WALLETS
+                        ///
+                        const Space(10),
+                        wallet.when(
+
+                            /// CHECK FOR HERE
+                            error: (error, stackTrace) =>
+                                const LoadingWallets(),
+                            loading: () => const LoadingWallets(),
+                            data: (data) {
+                              walletCount.value = data.data!.wallets!.length;
+
+                              return RefreshIndicator(
+                                onRefresh: () async {
+                                  return ref.refresh(getAccountDetailsProvider);
+                                },
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.42,
+                                  child: ListView.separated(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(
+                                            parent: BouncingScrollPhysics()),
+                                    itemCount: data.data!.wallets!.length,
+                                    itemBuilder: (context, index) {
+                                      final walletList =
+                                          data.data!.wallets![index];
+                                      return Container(
+                                        height: 80.h,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        padding: EdgeInsets.only(
+                                            left: 20.w, right: 20.w),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.whiteColor,
+                                          borderRadius:
+                                              BorderRadius.circular(5.r),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color.fromRGBO(
+                                                  255, 255, 255, 1),
+                                              offset: Offset(
+                                                2.0,
+                                                2.0,
+                                              ),
+                                              blurRadius: 0.0,
+                                              spreadRadius: 2.0,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${walletList.currencyCode.toString()} wallet',
+                                                  style: AppText.header2(
+                                                      context,
+                                                      AppColors.appColor,
+                                                      18.sp),
+                                                ),
+                                                Space(10.h),
+                                                Text(
+                                                  '${walletList.currencyCode.toString()} ${formatter.format(num.tryParse(walletList.balance ?? "0.0"))}',
+                                                  style: AppText.header2(
+                                                      context,
+                                                      AppColors.appColor,
+                                                      20.sp),
+                                                ),
+                                              ],
+                                            ),
+                                            const Spacer(),
+                                            OptionsModalSheet(
+                                              balance:
+                                                  walletList.balance.toString(),
+                                              currencyCode: walletList
+                                                  .currencyCode
+                                                  .toString(),
+                                              isDefault: false,
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const SizedBox(
+                                        height: 10,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }),
+                        wallet is AsyncLoading
+                            ? const SizedBox.shrink()
+                            : Center(
+                                child: CustomButton(
+                                    buttonText:
+                                        buttonText(context, "Create Wallet"),
+                                    bgColor: AppColors.appColor,
+                                    borderColor: AppColors.appColor,
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      pushNewScreen(context,
+                                          screen: SelectCurrencyScreen(
+                                            currencyCode: currency,
+                                            routeName: 'createWallet',
+                                          ),
+                                          withNavBar: false,
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation
+                                                  .slideRight);
+                                    },
+                                    buttonWidth: 320),
+                              ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -475,6 +536,39 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
               size: 6,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingWallets extends StatelessWidget {
+  const LoadingWallets({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      // color: AppColors.appColor.withOpacity(0.09),
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: SizedBox(
+          height: 400,
+          child: ListView.separated(
+            scrollDirection: Axis.vertical,
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return const SkeletonAvatar(
+                style: SkeletonAvatarStyle(
+                    width: double.infinity,
+                    height: 70,
+                    borderRadius: BorderRadius.all(Radius.circular(2))),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 10);
+            },
+          ),
         ),
       ),
     );

@@ -85,7 +85,7 @@ class _AllNotificationTabBarViewState
           }
         },
         loading: () => const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             ),
         error: (e, s) {
           return Center(

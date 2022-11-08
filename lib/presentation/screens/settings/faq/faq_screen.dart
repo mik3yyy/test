@@ -54,14 +54,13 @@ class FaqScreen extends HookConsumerWidget {
         elevation: 0,
       ),
       body: SafeArea(
+        bottom: false,
         child: Column(children: [
-          // const SizedBox(
-          //   height: 50,
-          // ),
-          // const FaqHeader(),
           const SizedBox(
-            height: 20,
+            height: 50,
           ),
+          // const FaqHeader(),
+
           Expanded(
               child: Container(
                   decoration: BoxDecoration(

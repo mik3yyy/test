@@ -83,7 +83,8 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                 labelText: 'Enter amount',
                 obscureText: false,
                 color: Colors.white,
-                keyboardType: TextInputType.number,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 controller: amountController,
                 readOnly: false,
                 validator: (String? value) {

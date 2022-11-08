@@ -94,6 +94,7 @@ class _BeneficiaryViewState extends ConsumerState<BeneficiaryView> {
                             },
                           ),
                         ),
+                        Space(30.h),
                       ],
                     ),
                   ),

@@ -76,6 +76,7 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
       }
     });
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
         key: _formKey,
         child: Column(
@@ -94,7 +95,7 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                     accountNoController: accountNoController,
                     friendNameController: friendNameController,
                   ),
-                  Space(30.h),
+                  // Space(30.h),
                   Text(
                     'Make transfer from your ${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode ?? "")} wallet',
                     style: AppText.body2(context, AppColors.appColor, 19.sp),
@@ -168,7 +169,8 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                     color: Colors.white,
                     readOnly: false,
                     controller: amountController,
-                    keyboardType: TextInputType.number,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     validator: (String? value) {
                       if (value!.isEmpty) {
                         return "Amount is required";
