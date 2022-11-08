@@ -31,7 +31,7 @@ class _NubanBeneficiaryState extends ConsumerState<NubanBeneficiary> {
   @override
   Widget build(BuildContext context) {
     final beneficiaryVm = ref.watch(nubanBeneficiaryProvider);
-    return beneficiaryVm.when(
+    return beneficiaryVm.maybeWhen(
       data: (value) {
         return value.data!.beneficiaries!.isEmpty
             ? const SizedBox.shrink()
@@ -117,9 +117,10 @@ class _NubanBeneficiaryState extends ConsumerState<NubanBeneficiary> {
                 ),
               );
       },
-      error: (Object error, StackTrace? stackTrace) {
-        return Text(error.toString());
-      },
+      // CHECK ERROR HERE
+      // error: (Object error, StackTrace? stackTrace) {
+      //   return Text(error.toString());
+      // },
       loading: () {
         //When enpoint is loading, it should display default ideas with overlay loading
         return const Center(
@@ -127,6 +128,9 @@ class _NubanBeneficiaryState extends ConsumerState<NubanBeneficiary> {
             color: AppColors.appBgColor,
           ),
         );
+      },
+      orElse: () {
+        return const SizedBox.shrink();
       },
     );
   }

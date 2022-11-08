@@ -35,6 +35,7 @@ class AllForumScreen extends HookConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.appColor,
         body: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               const FaqAppBar(),

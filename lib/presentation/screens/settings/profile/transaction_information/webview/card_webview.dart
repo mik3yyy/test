@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AppWebView extends StatefulHookConsumerWidget {
@@ -43,21 +42,34 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.grey.shade100,
-        flexibleSpace: Padding(
-          padding: EdgeInsets.only(top: 89.h),
-          child: InnerPageLoadingIndicator(loadingStream: webViewLoading!),
+        // flexibleSpace: Padding(
+        //   padding: EdgeInsets.only(top: 60.h),
+        //   child: InnerPageLoadingIndicator(loadingStream: webViewLoading!),
+        // ),
+        title: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Space(60),
+            AppBarTitle(
+                title: widget.webViewRoute == WebViewRoute.privacy
+                    ? "Privacy Policy"
+                    : widget.webViewRoute == WebViewRoute.terms
+                        ? "Terms and Conditions"
+                        : widget.webViewRoute == WebViewRoute.fundCard
+                            ? "Fund Wallet"
+                            : widget.webViewRoute == WebViewRoute.language
+                                ? "Choose Language"
+                                : "",
+                color: Colors.black),
+            const Spacer(),
+            webViewLoading!
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator.adaptive())
+                : const SizedBox.shrink()
+          ],
         ),
-        title: AppBarTitle(
-            title: widget.webViewRoute == WebViewRoute.privacy
-                ? "Privacy Policy"
-                : widget.webViewRoute == WebViewRoute.terms
-                    ? "Terms and Conditions"
-                    : widget.webViewRoute == WebViewRoute.fundCard
-                        ? "Fund Wallet"
-                        : widget.webViewRoute == WebViewRoute.language
-                            ? "Choose Language"
-                            : "",
-            color: Colors.black),
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
         automaticallyImplyLeading: false,

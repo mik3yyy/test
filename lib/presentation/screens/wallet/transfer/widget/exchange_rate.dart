@@ -218,7 +218,9 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
                                   width: 150.w,
                                   child: EditForm(
                                     enabled: true,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     labelText: convert is Loading

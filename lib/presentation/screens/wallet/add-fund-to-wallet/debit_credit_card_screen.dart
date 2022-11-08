@@ -103,488 +103,510 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
           size: 50.0,
         ),
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          leading: const BackButton(color: Colors.black),
-          title: const AppBarTitle(
-              title: 'Credit/Debit Card', color: Colors.black),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  height: 40.h,
-                  width: MediaQuery.of(context).size.width,
-                  color: AppColors.appColor.withOpacity(0.1),
-                  child: Center(
-                    child: Text(
-                      'Enter an amount you want to fund',
-                      style:
-                          AppText.body2Medium(context, Colors.black54, 20.sp),
+      child: GestureDetector(
+        onTap: () {
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            leading: const BackButton(color: Colors.black),
+            title: const AppBarTitle(
+                title: 'Credit/Debit Card', color: Colors.black),
+          ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: 40.h,
+                    width: MediaQuery.of(context).size.width,
+                    color: AppColors.appColor.withOpacity(0.1),
+                    child: Center(
+                      child: Text(
+                        'Enter an amount you want to fund',
+                        style:
+                            AppText.body2Medium(context, Colors.black54, 20.sp),
+                      ),
                     ),
                   ),
-                ),
-                Space(27.h),
-                Padding(
-                  padding: EdgeInsets.only(left: 23.w, right: 23.w),
-                  child: Text(
-                    'Minimum amount is £1.00 or it’s equivalence when converting to another currency',
-                    style: AppText.body2(context, Colors.black, 18.sp),
+                  Space(27.h),
+                  Padding(
+                    padding: EdgeInsets.only(left: 23.w, right: 23.w),
+                    child: Text(
+                      'Minimum amount is £1.00 or it’s equivalence when converting to another currency',
+                      style: AppText.body2(context, Colors.black, 18.sp),
+                    ),
                   ),
-                ),
-                Space(40.h),
-                Padding(
-                  padding: EdgeInsets.only(left: 23.w, right: 23.w),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                pushNewScreen(context,
-                                    screen: SelectCurrencyScreen(
-                                      currencyCode: currencyController,
-                                      routeName: 'addFunds',
+                  Space(40.h),
+                  Padding(
+                    padding: EdgeInsets.only(left: 23.w, right: 23.w),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  pushNewScreen(context,
+                                      screen: SelectCurrencyScreen(
+                                        currencyCode: currencyController,
+                                        routeName: 'addFunds',
+                                      ),
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.slideRight);
+                                },
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.42,
+                                  child: EditForm(
+                                    readOnly: true,
+                                    enabled: true,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    labelText: 'wallet currency',
+                                    keyboardType: TextInputType.text,
+                                    // textAlign: TextAlign.start,
+                                    controller: depositController,
+                                    obscureText: false,
+                                    suffixIcon: const Icon(
+                                      CupertinoIcons.chevron_down,
+                                      color: Color(0xffA8A8A8),
+                                      size: 15,
                                     ),
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.slideRight);
-                              },
-                              child: SizedBox(
+                                    validator: (value) =>
+                                        validateCountry(value),
+                                    onTap: () {
+                                      pushNewScreen(context,
+                                          screen: SelectCurrencyScreen(
+                                            currencyCode: depositController,
+                                            routeName: 'addFunds',
+                                          ),
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation
+                                                  .slideRight);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              // SizedBox(
+                              //   width: 150.w,
+                              //   child: Stack(
+                              //     children: [
+                              //       SelectCurrency(
+                              //           text: "currency",
+                              //           dollar: dollar,
+                              //           currencyController: currencyController,
+                              //           pound: pound,
+                              //           euro: euro,
+                              //           naira: naira,
+                              //           kayndrex: kayndrex),
+                              //     ],
+                              //   ),
+                              // ),
+                              const Spacer(),
+                              SizedBox(
+                                // width: MediaQuery.of(context).size.width - 150.w,
                                 width: MediaQuery.of(context).size.width * 0.42,
                                 child: EditForm(
-                                  readOnly: true,
-                                  enabled: true,
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  labelText: 'wallet currency',
-                                  keyboardType: TextInputType.text,
+                                  labelText: 'Enter amount',
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
                                   // textAlign: TextAlign.start,
-                                  controller: depositController,
+                                  controller: amountController,
                                   obscureText: false,
-                                  suffixIcon: const Icon(
-                                    CupertinoIcons.chevron_down,
-                                    color: Color(0xffA8A8A8),
-                                    size: 15,
-                                  ),
-                                  validator: (value) => validateCountry(value),
-                                  onTap: () {
-                                    pushNewScreen(context,
-                                        screen: SelectCurrencyScreen(
-                                          currencyCode: depositController,
-                                          routeName: 'addFunds',
-                                        ),
-                                        pageTransitionAnimation:
-                                            PageTransitionAnimation.slideRight);
-                                  },
-                                ),
-                              ),
-                            ),
-                            // SizedBox(
-                            //   width: 150.w,
-                            //   child: Stack(
-                            //     children: [
-                            //       SelectCurrency(
-                            //           text: "currency",
-                            //           dollar: dollar,
-                            //           currencyController: currencyController,
-                            //           pound: pound,
-                            //           euro: euro,
-                            //           naira: naira,
-                            //           kayndrex: kayndrex),
-                            //     ],
-                            //   ),
-                            // ),
-                            const Spacer(),
-                            SizedBox(
-                              // width: MediaQuery.of(context).size.width - 150.w,
-                              width: MediaQuery.of(context).size.width * 0.42,
-                              child: EditForm(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                labelText: 'Enter amount',
-                                keyboardType: TextInputType.number,
-                                // textAlign: TextAlign.start,
-                                controller: amountController,
-                                obscureText: false,
-                                validator: (value) => null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        // Space(40.h),
-                        // SelectSavedCards(
-                        //   firstDigit: firstDigit,
-                        //   secondDigit: secondDigit,
-                        // ),
-                        // const Divider(
-                        //   color: Colors.black,
-                        // ),
-                        // Space(10.h),
-
-                        // InkWell(
-                        //   onTap: () {
-                        //     pushNewScreen(context,
-                        //         screen: SelectCurrencyScreen(
-                        //           currencyCode: depositController,
-                        //           routeName: 'addFunds',
-                        //         ),
-                        //         pageTransitionAnimation:
-                        //             PageTransitionAnimation.slideRight);
-                        //   },
-                        //   child: EditForm(
-                        //       enabled: false,
-                        //       autovalidateMode:
-                        //           AutovalidateMode.onUserInteraction,
-                        //       labelText: 'Deposit currency',
-                        //       keyboardType: TextInputType.text,
-                        //       // textAlign: TextAlign.start,
-                        //       controller: depositController,
-                        //       obscureText: false,
-                        //       suffixIcon: const Icon(
-                        //         CupertinoIcons.chevron_down,
-                        //         color: Color(0xffA8A8A8),
-                        //         size: 15,
-                        //       ),
-                        //       validator: (value) => validateCountry(value)),
-                        // ),
-                        // SelectCurrency(
-                        //     text: "Deposit currency",
-                        //     dollar: dollar,
-                        //     currencyController: depositController,
-                        //     pound: pound,
-                        //     euro: euro,
-                        //     naira: naira,
-                        //     kayndrex: kayndrex),
-                      ],
-                    ),
-                  ),
-                ),
-                Space(43.h),
-                ExpandableTheme(
-                  data: const ExpandableThemeData(
-                    iconColor: Colors.blue,
-                    useInkWell: true,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ExpandableNotifier(
-                        child: ScrollOnExpand(
-                          child: Column(
-                            children: [
-                              ExpandablePanel(
-                                theme: const ExpandableThemeData(
-                                  headerAlignment:
-                                      ExpandablePanelHeaderAlignment.center,
-                                  tapBodyToExpand: false,
-                                  tapBodyToCollapse: false,
-                                  hasIcon: false,
-                                ),
-                                header: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 19.w,
-                                      top: 10.w,
-                                      bottom: 10.w,
-                                      right: 19.w),
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.appColor,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'View Exchange rates',
-                                        style: AppText.body2Medium(
-                                            context, Colors.white, 20.sp),
-                                      ),
-                                      const ExpandableIcon(
-                                        theme: ExpandableThemeData(
-                                          expandIcon:
-                                              Icons.expand_more_outlined,
-                                          collapseIcon:
-                                              Icons.expand_less_outlined,
-                                          iconColor: AppColors.whiteColor,
-                                          iconSize: 28.0,
-                                          iconRotationAngle: math.pi / 2,
-                                          iconPadding:
-                                              EdgeInsets.only(right: 5),
-                                          hasIcon: false,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                collapsed: Container(),
-                                expanded: Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 19.w, right: 19.w),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Space(10.h),
-                                      // Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     Text(
-                                      //       'From',
-                                      //       style: AppText.body6(
-                                      //         context,
-                                      //         AppColors.textColor,
-                                      //         16.sp,
-                                      //       ),
-                                      //     ),
-                                      //     Text(
-                                      //       'To',
-                                      //       style: AppText.body6(
-                                      //         context,
-                                      //         AppColors.textColor,
-                                      //         16.sp,
-                                      //       ),
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      Space(10.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              pushNewScreen(context,
-                                                  screen: SelectCurrencyScreen(
-                                                    currencyCode: fromCurrency,
-                                                    routeName: 'addFunds',
-                                                  ),
-                                                  pageTransitionAnimation:
-                                                      PageTransitionAnimation
-                                                          .slideRight);
-                                            },
-                                            child: SizedBox(
-                                              width: 100.w,
-                                              child: EditForm(
-                                                enabled: false,
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                labelText: 'From',
-
-                                                // textAlign: TextAlign.start,
-                                                controller: fromCurrency,
-                                                obscureText: false,
-
-                                                validator: (value) =>
-                                                    validateCurrency(value),
-                                                suffixIcon: const Icon(
-                                                  CupertinoIcons.chevron_down,
-                                                  color: Color(0xffA8A8A8),
-                                                  size: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              pushNewScreen(context,
-                                                  screen: SelectCurrencyScreen(
-                                                    currencyCode: toCurrency,
-                                                    routeName: "addFunds",
-                                                  ),
-                                                  pageTransitionAnimation:
-                                                      PageTransitionAnimation
-                                                          .slideRight);
-                                            },
-                                            child: SizedBox(
-                                              width: 100.w,
-                                              child: EditForm(
-                                                enabled: false,
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                labelText: 'To',
-
-                                                // textAlign: TextAlign.start,
-                                                controller: toCurrency,
-                                                obscureText: false,
-                                                validator: (value) =>
-                                                    validateCurrency(value),
-                                                suffixIcon: const Icon(
-                                                  CupertinoIcons.chevron_down,
-                                                  color: Color(0xffA8A8A8),
-                                                  size: 15,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Space(10),
-                                              Text("Exchange Rate",
-                                                  style: AppText.body2(context,
-                                                      Colors.black38, 15.sp)),
-                                              const Space(10),
-                                              Text(rate.value,
-                                                  style: AppText.body2(context,
-                                                      Colors.black, 20.sp)),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Space(14.h),
-                                      CustomButton(
-                                        buttonText: convert is Loading
-                                            ? loading(
-                                                Colors.white,
-                                              )
-                                            : buttonText(
-                                                context, "Get Exchange Rate"),
-                                        bgColor: AppColors.appColor,
-                                        textColor: AppColors.whiteColor,
-                                        borderColor:
-                                            AppColors.appColor.withOpacity(0.3),
-                                        buttonWidth:
-                                            MediaQuery.of(context).size.width,
-                                        onPressed: convert is Loading
-                                            ? null
-                                            : () {
-                                                if (fromCurrency.text.isEmpty &&
-                                                    toCurrency.text.isEmpty) {
-                                                  return;
-                                                } else {
-                                                  ref
-                                                      .read(conversionProvider
-                                                          .notifier)
-                                                      .conversion(
-                                                          fromCurrency.text,
-                                                          toCurrency.text);
-                                                }
-                                              },
-                                      ),
-                                      Space(14.h),
-                                      InkWell(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            SizedBox(
-                                              width: 150.w,
-                                              child: EditForm(
-                                                enabled: true,
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                autovalidateMode:
-                                                    AutovalidateMode
-                                                        .onUserInteraction,
-                                                labelText: convert is Loading
-                                                    ? "---"
-                                                    : 'Enter amount',
-
-                                                // textAlign: TextAlign.start,
-                                                controller:
-                                                    fromExchangeCurrency,
-                                                obscureText: false,
-                                                validator: (value) => null,
-
-                                                onChanged: (value) {
-                                                  final res =
-                                                      (num.tryParse(value) ??
-                                                              0) *
-                                                          (num.tryParse(
-                                                                  rate.value) ??
-                                                              0);
-
-                                                  from.value = res.toString();
-                                                },
-                                              ),
-                                            ),
-                                            // Text(
-                                            //   // salesPrice.toString(),
-                                            //   ((num.tryParse(from.value) ?? 0) *
-                                            //           (num.tryParse(rate.value) ??
-                                            //               0))
-                                            //       .toString(),
-                                            //   style: TextStyle(
-                                            //     color: const Color(0xFF2C2C2C),
-                                            //     fontSize: 14.sp,
-                                            //     fontWeight: FontWeight.w700,
-                                            //   ),
-                                            // ),
-                                            Text(
-                                              from.value,
-                                              style: AppText.body2(
-                                                  context, Colors.black, 20.sp),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Space(18.h),
-                                    ],
-                                  ),
+                                  validator: (value) => null,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Space(90.h),
-                Padding(
-                  padding: EdgeInsets.only(left: 22.w, right: 22.w),
-                  child: CustomButton(
-                    buttonText: fundWallet is Loading
-                        ? loading(
-                            Colors.white,
-                          )
-                        : buttonText(context, "Next"),
-                    bgColor: AppColors.appColor,
-                    textColor: AppColors.whiteColor,
-                    borderColor: AppColors.appColor.withOpacity(0.3),
-                    buttonWidth: MediaQuery.of(context).size.width,
-                    onPressed: fundWallet is Loading
-                        ? null
-                        : () async {
-                            if (amountController.text.isEmpty) {
-                              AppSnackBar.showErrorSnackBar(context,
-                                  message: "Please add amount");
-                            } else {
-                              if (formKey.currentState!.validate()) {
-                                var fundWalletReq = FundWalletReq(
-                                  amount: int.parse(amountController.text),
-                                  walletCurrencyCode: depositController.text,
-                                );
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
+                          // Space(40.h),
+                          // SelectSavedCards(
+                          //   firstDigit: firstDigit,
+                          //   secondDigit: secondDigit,
+                          // ),
+                          // const Divider(
+                          //   color: Colors.black,
+                          // ),
+                          // Space(10.h),
 
-                                ref
-                                    .read(fundWalletProvider.notifier)
-                                    .fundWallet(fundWalletReq);
-                              }
-                            }
-                          },
+                          // InkWell(
+                          //   onTap: () {
+                          //     pushNewScreen(context,
+                          //         screen: SelectCurrencyScreen(
+                          //           currencyCode: depositController,
+                          //           routeName: 'addFunds',
+                          //         ),
+                          //         pageTransitionAnimation:
+                          //             PageTransitionAnimation.slideRight);
+                          //   },
+                          //   child: EditForm(
+                          //       enabled: false,
+                          //       autovalidateMode:
+                          //           AutovalidateMode.onUserInteraction,
+                          //       labelText: 'Deposit currency',
+                          //       keyboardType: TextInputType.text,
+                          //       // textAlign: TextAlign.start,
+                          //       controller: depositController,
+                          //       obscureText: false,
+                          //       suffixIcon: const Icon(
+                          //         CupertinoIcons.chevron_down,
+                          //         color: Color(0xffA8A8A8),
+                          //         size: 15,
+                          //       ),
+                          //       validator: (value) => validateCountry(value)),
+                          // ),
+                          // SelectCurrency(
+                          //     text: "Deposit currency",
+                          //     dollar: dollar,
+                          //     currencyController: depositController,
+                          //     pound: pound,
+                          //     euro: euro,
+                          //     naira: naira,
+                          //     kayndrex: kayndrex),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  Space(43.h),
+                  ExpandableTheme(
+                    data: const ExpandableThemeData(
+                      iconColor: Colors.blue,
+                      useInkWell: true,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ExpandableNotifier(
+                          child: ScrollOnExpand(
+                            child: Column(
+                              children: [
+                                ExpandablePanel(
+                                  theme: const ExpandableThemeData(
+                                    headerAlignment:
+                                        ExpandablePanelHeaderAlignment.center,
+                                    tapBodyToExpand: false,
+                                    tapBodyToCollapse: false,
+                                    hasIcon: false,
+                                  ),
+                                  header: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 19.w,
+                                        top: 10.w,
+                                        bottom: 10.w,
+                                        right: 19.w),
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.appColor,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'View Exchange rates',
+                                          style: AppText.body2Medium(
+                                              context, Colors.white, 20.sp),
+                                        ),
+                                        const ExpandableIcon(
+                                          theme: ExpandableThemeData(
+                                            expandIcon:
+                                                Icons.expand_more_outlined,
+                                            collapseIcon:
+                                                Icons.expand_less_outlined,
+                                            iconColor: AppColors.whiteColor,
+                                            iconSize: 28.0,
+                                            iconRotationAngle: math.pi / 2,
+                                            iconPadding:
+                                                EdgeInsets.only(right: 5),
+                                            hasIcon: false,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  collapsed: Container(),
+                                  expanded: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 19.w, right: 19.w),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Space(10.h),
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.spaceBetween,
+                                        //   children: [
+                                        //     Text(
+                                        //       'From',
+                                        //       style: AppText.body6(
+                                        //         context,
+                                        //         AppColors.textColor,
+                                        //         16.sp,
+                                        //       ),
+                                        //     ),
+                                        //     Text(
+                                        //       'To',
+                                        //       style: AppText.body6(
+                                        //         context,
+                                        //         AppColors.textColor,
+                                        //         16.sp,
+                                        //       ),
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        Space(10.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                pushNewScreen(context,
+                                                    screen:
+                                                        SelectCurrencyScreen(
+                                                      currencyCode:
+                                                          fromCurrency,
+                                                      routeName: 'addFunds',
+                                                    ),
+                                                    pageTransitionAnimation:
+                                                        PageTransitionAnimation
+                                                            .slideRight);
+                                              },
+                                              child: SizedBox(
+                                                width: 100.w,
+                                                child: EditForm(
+                                                  enabled: false,
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  labelText: 'From',
+
+                                                  // textAlign: TextAlign.start,
+                                                  controller: fromCurrency,
+                                                  obscureText: false,
+
+                                                  validator: (value) =>
+                                                      validateCurrency(value),
+                                                  suffixIcon: const Icon(
+                                                    CupertinoIcons.chevron_down,
+                                                    color: Color(0xffA8A8A8),
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                pushNewScreen(context,
+                                                    screen:
+                                                        SelectCurrencyScreen(
+                                                      currencyCode: toCurrency,
+                                                      routeName: "addFunds",
+                                                    ),
+                                                    pageTransitionAnimation:
+                                                        PageTransitionAnimation
+                                                            .slideRight);
+                                              },
+                                              child: SizedBox(
+                                                width: 100.w,
+                                                child: EditForm(
+                                                  enabled: false,
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  labelText: 'To',
+
+                                                  // textAlign: TextAlign.start,
+                                                  controller: toCurrency,
+                                                  obscureText: false,
+                                                  validator: (value) =>
+                                                      validateCurrency(value),
+                                                  suffixIcon: const Icon(
+                                                    CupertinoIcons.chevron_down,
+                                                    color: Color(0xffA8A8A8),
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Space(10),
+                                                Text("Exchange Rate",
+                                                    style: AppText.body2(
+                                                        context,
+                                                        Colors.black38,
+                                                        15.sp)),
+                                                const Space(10),
+                                                Text(rate.value,
+                                                    style: AppText.body2(
+                                                        context,
+                                                        Colors.black,
+                                                        20.sp)),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Space(14.h),
+                                        CustomButton(
+                                          buttonText: convert is Loading
+                                              ? loading(
+                                                  Colors.white,
+                                                )
+                                              : buttonText(
+                                                  context, "Get Exchange Rate"),
+                                          bgColor: AppColors.appColor,
+                                          textColor: AppColors.whiteColor,
+                                          borderColor: AppColors.appColor
+                                              .withOpacity(0.3),
+                                          buttonWidth:
+                                              MediaQuery.of(context).size.width,
+                                          onPressed: convert is Loading
+                                              ? null
+                                              : () {
+                                                  if (fromCurrency
+                                                          .text.isEmpty &&
+                                                      toCurrency.text.isEmpty) {
+                                                    return;
+                                                  } else {
+                                                    ref
+                                                        .read(conversionProvider
+                                                            .notifier)
+                                                        .conversion(
+                                                            fromCurrency.text,
+                                                            toCurrency.text);
+                                                  }
+                                                },
+                                        ),
+                                        Space(14.h),
+                                        InkWell(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              SizedBox(
+                                                width: 150.w,
+                                                child: EditForm(
+                                                  enabled: true,
+                                                  keyboardType:
+                                                      const TextInputType
+                                                              .numberWithOptions(
+                                                          decimal: true),
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  labelText: convert is Loading
+                                                      ? "---"
+                                                      : 'Enter amount',
+
+                                                  // textAlign: TextAlign.start,
+                                                  controller:
+                                                      fromExchangeCurrency,
+                                                  obscureText: false,
+                                                  validator: (value) => null,
+
+                                                  onChanged: (value) {
+                                                    final res = (num.tryParse(
+                                                                value) ??
+                                                            0) *
+                                                        (num.tryParse(
+                                                                rate.value) ??
+                                                            0);
+
+                                                    from.value = res.toString();
+                                                  },
+                                                ),
+                                              ),
+                                              // Text(
+                                              //   // salesPrice.toString(),
+                                              //   ((num.tryParse(from.value) ?? 0) *
+                                              //           (num.tryParse(rate.value) ??
+                                              //               0))
+                                              //       .toString(),
+                                              //   style: TextStyle(
+                                              //     color: const Color(0xFF2C2C2C),
+                                              //     fontSize: 14.sp,
+                                              //     fontWeight: FontWeight.w700,
+                                              //   ),
+                                              // ),
+                                              Text(
+                                                from.value,
+                                                style: AppText.body2(context,
+                                                    Colors.black, 20.sp),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Space(18.h),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Space(90.h),
+                  Padding(
+                    padding: EdgeInsets.only(left: 22.w, right: 22.w),
+                    child: CustomButton(
+                      buttonText: fundWallet is Loading
+                          ? loading(
+                              Colors.white,
+                            )
+                          : buttonText(context, "Next"),
+                      bgColor: AppColors.appColor,
+                      textColor: AppColors.whiteColor,
+                      borderColor: AppColors.appColor.withOpacity(0.3),
+                      buttonWidth: MediaQuery.of(context).size.width,
+                      onPressed: fundWallet is Loading
+                          ? null
+                          : () async {
+                              if (amountController.text.isEmpty) {
+                                AppSnackBar.showErrorSnackBar(context,
+                                    message: "Please add amount");
+                              } else {
+                                if (formKey.currentState!.validate()) {
+                                  var fundWalletReq = FundWalletReq(
+                                    amount: int.parse(amountController.text),
+                                    walletCurrencyCode: depositController.text,
+                                  );
+                                  if (!currentFocus.hasPrimaryFocus) {
+                                    currentFocus.unfocus();
+                                  }
+
+                                  ref
+                                      .read(fundWalletProvider.notifier)
+                                      .fundWallet(fundWalletReq);
+                                }
+                              }
+                            },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/uplo
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_id_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/id_build.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
 
@@ -120,15 +121,41 @@ class ViewIdentification extends HookConsumerWidget {
                     ));
                   }
                 },
-                error: (e, s) => Text(e.toString()),
-                loading: () => Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 4),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ))
+
+                ///CHECK FOR ERROR HERE
+                error: (e, s) => const LoadingIDs(),
+                loading: () => const LoadingIDs())
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingIDs extends StatelessWidget {
+  const LoadingIDs({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      // color: AppColors.appColor.withOpacity(0.09),
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: SizedBox(
+          height: 500,
+          child: ListView.separated(
+            scrollDirection: Axis.vertical,
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return const SkeletonAvatar(
+                style: SkeletonAvatarStyle(width: double.infinity, height: 90),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 20);
+            },
+          ),
         ),
       ),
     );

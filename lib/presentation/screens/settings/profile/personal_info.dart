@@ -16,6 +16,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/prof
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/providers.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -58,6 +59,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
             message: "Image uploaded successfully");
       }
       if (value is Error) {
+        ref.read(profileImage.notifier).state = "";
         AppSnackBar.showErrorSnackBar(context,
             message: "Image could not be uploaded. Please try again");
       }
@@ -68,10 +70,6 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
       appBar: AppBar(
         elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        flexibleSpace: Padding(
-          padding: EdgeInsets.only(top: 85.h),
-          child: InnerPageLoadingIndicator(loadingStream: image is Loading),
-        ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -103,6 +101,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
         bottom: false,
         child: Column(
           children: [
+            InnerPageLoadingIndicator(loadingStream: image is Loading),
             const Space(10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),

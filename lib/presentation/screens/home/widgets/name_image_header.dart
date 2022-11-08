@@ -29,7 +29,7 @@ class NameAndImageHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Hi ${defaultWallet.maybeMap(data: (v) => v.value.data.user.firstName?.capitalize(), orElse: () => savedValue(savedUser.firstName))}',
+              'Hi ${defaultWallet.maybeMap(data: (v) => v.value.data.user.firstName?.capitalize(), orElse: () => savedValue(savedUser.firstName?.capitalize()))}',
               style: AppText.header1(context, Colors.white, 25.sp),
             ),
             Space(10.h),

@@ -10,12 +10,14 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/check_date/check_date.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/statement_acct_range_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/credit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/debit_tab.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/tabs/view_all.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/vm/e_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/state_of_acct/vm/get_range/get_range_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -42,6 +44,7 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
   Widget build(BuildContext context) {
     final startDate = useTextEditingController();
     final endDate = useTextEditingController();
+    final _viewallStatement = ref.watch(remoteStatement);
     final range = ref.watch(accountRangeProvider);
 
     ref.listen<RequestState>(accountRangeProvider, (prev, value) {
@@ -80,6 +83,8 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              InnerPageLoadingIndicator(
+                  loadingStream: _viewallStatement is Loading),
               const Space(10),
               Row(
                 children: [
