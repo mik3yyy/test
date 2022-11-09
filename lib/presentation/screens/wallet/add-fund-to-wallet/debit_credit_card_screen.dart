@@ -590,7 +590,9 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                               } else {
                                 if (formKey.currentState!.validate()) {
                                   var fundWalletReq = FundWalletReq(
-                                    amount: int.parse(amountController.text),
+                                    amount:
+                                        num.tryParse(amountController.text) ??
+                                            0.0,
                                     walletCurrencyCode: depositController.text,
                                   );
                                   if (!currentFocus.hasPrimaryFocus) {

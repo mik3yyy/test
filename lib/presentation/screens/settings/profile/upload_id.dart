@@ -12,6 +12,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackb
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
@@ -59,6 +60,11 @@ class _UploadIdState extends ConsumerState<UploadId> {
     final selectedImage = useState<String>("");
 
     ref.listen<RequestState>(editIdProvider, (_, value) {
+      if (value is Loading) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
       if (value is Success<UploadIdRes>) {
         ref.refresh(getAllIdentification);
         Navigator.pop(context);
@@ -75,7 +81,7 @@ class _UploadIdState extends ConsumerState<UploadId> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
         title: const AppBarTitle(title: "Upload ID", color: Colors.black),
         leading: const BackButton(color: Colors.black),
         centerTitle: true,

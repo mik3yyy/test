@@ -12,6 +12,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/ban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
@@ -69,6 +70,9 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     ref.listen<RequestState>(getBankDetailsProvider, (_, value) {
       if (value is Loading) {
         errorState.value = false;
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
       }
 
       if (value is Success<BankDetailsRes>) {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
+import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_screen.dart';
@@ -217,10 +219,10 @@ class Navigation extends HookConsumerWidget {
               isIcon: false,
               image: AppImage.logOut,
               onPressed: () {
-                // ref
-                //     .read(localAuthStateProvider.notifier)
-                //     .resetbiometrics(false);
                 PreferenceManager.clear();
+                ref
+                    .read(sessionStateStreamProvider)
+                    .add(SessionState.stopListening);
                 context.navigateReplaceRoot(const SigninScreen());
               },
             ),

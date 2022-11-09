@@ -329,7 +329,7 @@ class AppDialog {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
         builder: (context) {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.55,
+            height: MediaQuery.of(context).size.height * 0.70,
             child: Padding(
               padding: EdgeInsets.only(
                 left: 20.w,

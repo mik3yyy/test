@@ -17,6 +17,7 @@ class SplashScreen extends HookConsumerWidget {
     }, const []);
     return AnimatedSplashScreen(
       duration: 3500,
+      animationDuration: const Duration(milliseconds: 500),
       splash: Transform.scale(
         scale: 2,
         child: Image(

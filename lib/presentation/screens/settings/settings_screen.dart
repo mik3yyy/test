@@ -22,7 +22,7 @@ class SettingScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 70,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
         title: Text(
           'Settings',
           style: AppText.header2(context, Colors.black, 20.sp),

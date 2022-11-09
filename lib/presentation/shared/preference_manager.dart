@@ -98,6 +98,7 @@ class PreferenceManager {
     PreferenceManager.authToken = "";
     PreferenceManager.refreshToken = "";
     PreferenceManager.pseudoToken = "";
+    PreferenceManager.isloggedIn = false;
   }
 
   static Future<void> init() async {

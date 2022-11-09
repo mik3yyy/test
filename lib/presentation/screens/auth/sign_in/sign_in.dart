@@ -131,7 +131,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                             AppText.header2(context, AppColors.appColor, 20.sp),
                         textAlign: TextAlign.center,
                       ),
-                      Space(180.h),
+                      Space(150.h),
 
                       //email
                       TextFormInput(

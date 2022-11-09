@@ -241,7 +241,7 @@ class KYDatePicker extends StatelessWidget {
         type: DateTimePickerType.date,
         dateMask: 'dd-MM-yyyy',
         firstDate: DateTime(1900),
-        lastDate: DateTime(3100),
+        lastDate: DateTime.now(),
         decoration: InputDecoration(
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(3),
