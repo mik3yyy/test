@@ -58,7 +58,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey.shade100,
           title: const AppBarTitle(
               title: "Forgot Password", color: AppColors.appColor),
           leading: const BackButton(color: Colors.black),
@@ -108,8 +108,12 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                           : () async {
                               final pref =
                                   await SharedPreferences.getInstance();
-                              pref.setString(Constants.email, controller.text);
-                              if (formKey.currentState!.validate()) {
+
+                              if (controller.text.isEmpty) {
+                                return;
+                              } else if (formKey.currentState!.validate()) {
+                                pref.setString(
+                                    Constants.email, controller.text);
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }

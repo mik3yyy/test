@@ -44,7 +44,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
         title: const AppBarTitle(title: "Security", color: Colors.black),
         leading: const BackButton(color: Colors.black),
         centerTitle: true,

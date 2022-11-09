@@ -16,7 +16,7 @@ class FundWalletReq {
     required this.walletCurrencyCode,
   });
 
-  int amount;
+  num amount;
   // String depositCurrencyCode;
   String walletCurrencyCode;
 

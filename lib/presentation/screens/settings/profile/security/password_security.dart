@@ -19,7 +19,7 @@ class ChangePasswordSecurity extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
         title: const AppBarTitle(title: "Change Password", color: Colors.black),
         leading: const BackButton(color: Colors.black),
         centerTitle: true,

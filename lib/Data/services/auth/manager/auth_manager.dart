@@ -92,8 +92,6 @@ class AuthManager extends IAuthManager {
     final res = await _userService.signIn(signinReq);
 
     if (res.data != null) {
-      PreferenceManager.isFirstLaunch = true;
-      PreferenceManager.isloggedIn = true;
       PreferenceManager.authToken = res.data!.tokens!.authToken!;
       PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
     }

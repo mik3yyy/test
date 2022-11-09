@@ -229,7 +229,11 @@ class CreateAccountScreen extends HookConsumerWidget {
                         onPressed: vm is Loading
                             ? null
                             : () {
-                                if (formKey.currentState!.validate()) {
+                                if ((emailPhoneController.text.isEmpty) ||
+                                    (fistNameController.text.isEmpty) ||
+                                    (lastNameController.text.isEmpty)) {
+                                  return;
+                                } else if (formKey.currentState!.validate()) {
                                   if (toggleState.state == false) {
                                     return AppSnackBar.showInfoSnackBar(context,
                                         message:
@@ -267,6 +271,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                           ),
                         ],
                       ),
+                      Space(40.h),
                     ],
                   ),
                 ),

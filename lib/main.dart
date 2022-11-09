@@ -27,14 +27,20 @@ Future<void> main() async {
   await initializeCore(environment: Environment.prod);
   runZonedGuarded<Future<void>>(() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    final sessionStateStream = StreamController<SessionState>();
     eventBus.on<UnAuthenticated>().listen((event) async {
-      navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
-      AuthenicatedState.showMessage(navigator.key.currentContext!,
-          "Your session has timed out, please login again", buttonText: "Ok",
-          buttonClicked: () {
-        Navigator.pop(navigator.key.currentContext!);
-        PreferenceManager.clear();
-      });
+      if (PreferenceManager.authToken.isEmpty) {
+        return;
+      } else {
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
+        AuthenicatedState.showMessage(navigator.key.currentContext!,
+            "Your session has timed out, please login again", buttonText: "Ok",
+            buttonClicked: () {
+          Navigator.pop(navigator.key.currentContext!);
+          sessionStateStream.add(SessionState.stopListening);
+          PreferenceManager.clear();
+        });
+      }
     });
 
     runApp(const ProviderScope(child: MyApp()));
@@ -70,6 +76,7 @@ class MyApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appSession = ref.watch(appSessionConfigProvider);
     final analytics = ref.watch(analyticsProvider);
+
     // final locale = ref.watch(localeProvider);
     return ScreenUtilInit(
       designSize: const Size(428, 926),

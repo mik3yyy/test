@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/account_info.dart';
@@ -44,6 +45,11 @@ class _TransferState extends ConsumerState<Transfer>
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
+      if (value is Loading) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
       if (value is Error) {
         context.loaderOverlay.hide();
       }
@@ -148,11 +154,11 @@ class _TransferState extends ConsumerState<Transfer>
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 0.2,
+                                    blurRadius: 4,
                                     offset: const Offset(
-                                        0, 7), // changes position of shadow
+                                        0, 2), // changes position of shadow
                                   ),
                                 ],
                               ),

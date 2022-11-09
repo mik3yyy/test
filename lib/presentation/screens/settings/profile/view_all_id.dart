@@ -21,7 +21,7 @@ class ViewIdentification extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.grey.shade100,
         title: const AppBarTitle(title: "Identification", color: Colors.black),
         leading: const BackButton(color: Colors.black),
         centerTitle: true,
@@ -56,6 +56,7 @@ class ViewIdentification extends HookConsumerWidget {
         ),
         child: Column(
           children: [
+            const Space(20),
             identification.when(
                 data: (data) {
                   if (data.data!.identifications.isEmpty) {

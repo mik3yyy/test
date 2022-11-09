@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_n
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_id_vm.dart';
@@ -35,6 +36,11 @@ class _UploadIDTermsState extends ConsumerState<UploadIDTerms> {
   Widget build(BuildContext context) {
     final vm = ref.watch(userIdProvider);
     ref.listen<RequestState>(userIdProvider, (_, value) {
+      if (value is Loading) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
       if (value is Success<UploadIdRes>) {
         ref.refresh(getAllIdentification);
         Navigator.pop(context);

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
@@ -38,7 +38,12 @@ class CurrencyScreen extends HookConsumerWidget {
     final countryCodeController = useTextEditingController();
     final languageController = useTextEditingController();
 
-    ref.listen<RequestState>(setCurrencyProvider, (T, value) {
+    ref.listen<RequestState>(setCurrencyProvider, (_, value) {
+      if (value is Loading) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
       if (value is Success) {
         context.navigate(ReferralCodeScreen());
         return AppSnackBar.showSuccessSnackBar(
@@ -47,195 +52,181 @@ class CurrencyScreen extends HookConsumerWidget {
         );
       }
       if (value is Error) {
-        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
     });
-    return LoaderOverlay(
-      useDefaultLoading: false,
-      overlayWidget: const Center(
-        child: SpinKitWave(
-          color: AppColors.appColor,
-          size: 50.0,
-        ),
-      ),
-      child: Scaffold(
-        body: SafeArea(
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
-                child: Column(
-                  children: [
-                    Text(
-                      "Currency",
-                      style:
-                          AppText.header3(context, AppColors.appColor, 20.sp),
-                      textAlign: TextAlign.center,
-                    ),
+    return Scaffold(
+      body: SafeArea(
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
+              child: Column(
+                children: [
+                  Text(
+                    "Currency",
+                    style: AppText.header3(context, AppColors.appColor, 20.sp),
+                    textAlign: TextAlign.center,
+                  ),
 
-                    Space(160.h),
+                  Space(160.h),
 
-                    // country
-                    InkWell(
-                      onTap: () {
-                        pushNewScreen(context,
-                            screen: SelectCountryScreen(
-                                countryName: countryController,
-                                countryCode: countryCodeController),
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.slideRight);
-                        // countryBuild(
-                        //   context,
-                        //   countryController,
-                        // );
-                      },
-                      child: TextFormInput(
-                        enabled: false,
-                        labelText: 'Country',
-                        controller: countryController,
-                        capitalization: TextCapitalization.none,
-                        suffixIcon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.textColor,
-                        ),
-                        validator: (value) {
-                          if (countryController.text.isEmpty &&
-                              value!.isEmpty) {
-                            return "Country is required";
-                          }
-                          return null;
-                        },
-                        obscureText: false,
+                  // country
+                  InkWell(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen: SelectCountryScreen(
+                              countryName: countryController,
+                              countryCode: countryCodeController),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.slideRight);
+                      // countryBuild(
+                      //   context,
+                      //   countryController,
+                      // );
+                    },
+                    child: TextFormInput(
+                      enabled: false,
+                      labelText: 'Country',
+                      controller: countryController,
+                      capitalization: TextCapitalization.none,
+                      suffixIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.textColor,
                       ),
-                    ),
-                    Space(32.h),
-
-                    // currency
-                    GestureDetector(
-                      onTap: () {
-                        // context.navigate()
-                        pushNewScreen(context,
-                            screen: SelectCurrencyScreen(
-                              currencyCode: currencyController,
-                              routeName: 'addFunds',
-                            ),
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.slideRight);
+                      validator: (value) {
+                        if (countryController.text.isEmpty && value!.isEmpty) {
+                          return "Country is required";
+                        }
+                        return null;
                       },
-                      child: TextFormInput(
-                        enabled: false,
-                        labelText: 'Currency',
-                        controller: currencyController,
-                        capitalization: TextCapitalization.none,
-                        suffixIcon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.textColor,
-                        ),
-                        validator: (value) {
-                          if (currencyController.text.isEmpty &&
-                              value!.isEmpty) {
-                            return "Currency is required";
-                          }
-                          return null;
-                        },
-                        obscureText: false,
-                      ),
+                      obscureText: false,
                     ),
-                    Space(32.h),
+                  ),
+                  Space(32.h),
 
-                    // language
-                    GestureDetector(
-                      onTap: () {
-                        pushNewScreen(context,
-                            screen: SelectLanguage(
-                              languageName: languageController,
-                            ),
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.slideRight);
-                      },
-                      child: TextFormInput(
-                        enabled: false,
-                        labelText: 'Language',
-                        controller: languageController,
-                        capitalization: TextCapitalization.none,
-                        suffixIcon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.textColor,
-                        ),
-                        validator: (value) {
-                          if (languageController.text.isEmpty &&
-                              value!.isEmpty) {
-                            return "Language is required";
-                          }
-                          return null;
-                        },
-                        obscureText: false,
+                  // currency
+                  GestureDetector(
+                    onTap: () {
+                      // context.navigate()
+                      pushNewScreen(context,
+                          screen: SelectCurrencyScreen(
+                            currencyCode: currencyController,
+                            routeName: 'addFunds',
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.slideRight);
+                    },
+                    child: TextFormInput(
+                      enabled: false,
+                      labelText: 'Currency',
+                      controller: currencyController,
+                      capitalization: TextCapitalization.none,
+                      suffixIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.textColor,
                       ),
+                      validator: (value) {
+                        if (currencyController.text.isEmpty && value!.isEmpty) {
+                          return "Currency is required";
+                        }
+                        return null;
+                      },
+                      obscureText: false,
                     ),
-                    Space(190.h),
-                    CustomButton(
-                      buttonWidth: 244.w,
-                      buttonText: vm is Loading
-                          ? loading(
-                              Colors.white,
-                            )
-                          : buttonText(context, "Process"),
-                      bgColor: AppColors.appColor,
-                      borderColor: AppColors.appColor,
-                      textColor: Colors.white,
-                      onPressed: vm is Loading
-                          ? null
-                          : () {
-                              if (formKey.currentState!.validate()) {
-                                ref
-                                    .read(setCurrencyProvider.notifier)
-                                    .setCurrency(
-                                        currencyController.text,
-                                        languageController.text,
-                                        countryController.text);
-                                context.loaderOverlay.show();
-                              }
-                            },
+                  ),
+                  Space(32.h),
+
+                  // language
+                  GestureDetector(
+                    onTap: () {
+                      pushNewScreen(context,
+                          screen: SelectLanguage(
+                            languageName: languageController,
+                          ),
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.slideRight);
+                    },
+                    child: TextFormInput(
+                      enabled: false,
+                      labelText: 'Language',
+                      controller: languageController,
+                      capitalization: TextCapitalization.none,
+                      suffixIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: AppColors.textColor,
+                      ),
+                      validator: (value) {
+                        if (languageController.text.isEmpty && value!.isEmpty) {
+                          return "Language is required";
+                        }
+                        return null;
+                      },
+                      obscureText: false,
                     ),
-                    Space(30.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              context.navigate(const AppWebView(
-                                url: Constants.privacyPolicy,
-                                successMsg: '',
-                                webViewRoute: WebViewRoute.privacy,
-                              ));
-                            },
-                            child: Text(
-                              'Privacy Policy ',
-                              style: AppText.body4(context, AppColors.appColor),
-                            )),
-                        Text(
-                          ' | ',
-                          style: AppText.body4(context, AppColors.appColor),
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              context.navigate(const AppWebView(
-                                url: Constants.terms,
-                                successMsg: '',
-                                webViewRoute: WebViewRoute.terms,
-                              ));
-                            },
-                            child: Text(
-                              'Terms',
-                              style: AppText.body4(context, AppColors.appColor),
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                  Space(190.h),
+                  CustomButton(
+                    buttonWidth: 244.w,
+                    buttonText: vm is Loading
+                        ? loading(
+                            Colors.white,
+                          )
+                        : buttonText(context, "Process"),
+                    bgColor: AppColors.appColor,
+                    borderColor: AppColors.appColor,
+                    textColor: Colors.white,
+                    onPressed: vm is Loading
+                        ? null
+                        : () {
+                            if (formKey.currentState!.validate()) {
+                              ref
+                                  .read(setCurrencyProvider.notifier)
+                                  .setCurrency(
+                                      currencyController.text,
+                                      languageController.text,
+                                      countryController.text);
+                              context.loaderOverlay.show();
+                            }
+                          },
+                  ),
+                  Space(30.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            context.navigate(const AppWebView(
+                              url: Constants.privacyPolicy,
+                              successMsg: '',
+                              webViewRoute: WebViewRoute.privacy,
+                            ));
+                          },
+                          child: Text(
+                            'Privacy Policy ',
+                            style: AppText.body4(context, AppColors.appColor),
+                          )),
+                      Text(
+                        ' | ',
+                        style: AppText.body4(context, AppColors.appColor),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            context.navigate(const AppWebView(
+                              url: Constants.terms,
+                              successMsg: '',
+                              webViewRoute: WebViewRoute.terms,
+                            ));
+                          },
+                          child: Text(
+                            'Terms',
+                            style: AppText.body4(context, AppColors.appColor),
+                          )),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
