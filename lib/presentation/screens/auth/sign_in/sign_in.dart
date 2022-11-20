@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +48,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     super.initState();
 
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
-
     ref.read(deviceInfoProvider.notifier).deviceId();
     ref.read(deviceInfoProvider.notifier).timeZone();
   }
@@ -63,6 +64,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     ref.listen<RequestState>(signInProvider, (T, value) {
+      if (value is Loading) {
+        context.loaderOverlay.show();
+      } else {}
       if (value is Success<SigninRes>) {
         //REFRESH THE PROVIDERS
         // ref.refresh(providers);
@@ -74,7 +78,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
             setState(() {
               isLoading = false;
             });
-
             context.loaderOverlay.hide();
             navigator.key.currentContext!.navigateReplaceRoot(MainScreen(
               menuScreenContext: context,
@@ -84,7 +87,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       }
       if (value is Error) {
         isLoading = false;
-        context.loaderOverlay.hide();
+
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -95,7 +98,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         setState(() {
           isLoading = true;
         });
-        context.loaderOverlay.show();
       }
       if (value.success) {}
     });
@@ -240,17 +242,21 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                       setState(() {
                                         isLoading = true;
                                       });
-                                      ref
-                                          .read(credentialProvider.notifier)
-                                          .storeCredential(
-                                              Constants.userPassword,
-                                              passwordController.text);
+
+                                      ///CHECK IF USERPASSWORD IS SAVED
+                                      if (!PreferenceManager.isSaved) {
+                                        ref
+                                            .read(credentialProvider.notifier)
+                                            .storeCredential(
+                                                Constants.userPassword,
+                                                passwordController.text);
+                                      }
+
+                                      /// CHECK END HERE
 
                                       ref
                                           .read(signInProvider.notifier)
                                           .signIn(signinReq);
-
-                                      context.loaderOverlay.show();
                                     }
                                   },
                           ),
@@ -297,14 +303,15 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           Text('Don’t have an account? ',
                               style:
                                   AppText.body4(context, AppColors.hintColor)),
-                          InkWell(
-                            onTap: () =>
-                                context.navigate(CreateAccountScreen()),
-                            child: Text(
-                              ' Sign up',
-                              style: AppText.body4(context, AppColors.appColor),
-                            ),
-                          ),
+                          TextButton(
+                              style: TextButton.styleFrom(),
+                              onPressed: () =>
+                                  context.navigate(CreateAccountScreen()),
+                              child: Text(
+                                ' Sign up',
+                                style:
+                                    AppText.body4(context, AppColors.appColor),
+                              )),
                         ],
                       ),
                     ],

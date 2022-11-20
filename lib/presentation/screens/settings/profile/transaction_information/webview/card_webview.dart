@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
@@ -49,7 +50,7 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
         title: Row(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Space(60),
+            Space(60.w),
             AppBarTitle(
                 title: widget.webViewRoute == WebViewRoute.privacy
                     ? "Privacy Policy"

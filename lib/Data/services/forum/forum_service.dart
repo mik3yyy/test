@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/req/create_post_req.dart';
@@ -23,9 +24,11 @@ class ForumService {
   final Reader _read;
   final Ref ref;
   ForumService(this._read, this.ref) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      if (kDebugMode) ...[PrettyDioLogger()],
+    ]);
   }
 
   //create Post

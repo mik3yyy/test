@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
@@ -7,6 +8,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dar
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
@@ -52,7 +54,7 @@ class UserService {
     _read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
-      PrettyDioLogger(),
+      if (kDebugMode) ...[PrettyDioLogger()],
       DioCacheInterceptor(options: ref.watch(cacheOptions)),
     ]);
 
@@ -355,7 +357,7 @@ class UserService {
   }
 
   // set transaction pin
-  Future<bool> transactionPin(
+  Future<ResendOtpRes> transactionPin(
       String transactionPin, String confirmTransactionPin) async {
     const url = '/auth/transaction-pin/set-pin';
     try {
@@ -367,7 +369,7 @@ class UserService {
         },
       );
 
-      final result = response.data = true;
+      final result = ResendOtpRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

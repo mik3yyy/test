@@ -123,13 +123,13 @@ class ReferralCodeScreen extends HookConsumerWidget {
                                 },
                         ),
                         Space(30.w),
-                        InkWell(
-                          onTap: () => context.navigate(const SuccessScreen()),
-                          child: Text(
-                            'Skip',
-                            style: AppText.body4(context, AppColors.appColor),
-                          ),
-                        ),
+                        TextButton(
+                            onPressed: () =>
+                                context.navigate(const SuccessScreen()),
+                            child: Text(
+                              'Skip',
+                              style: AppText.body4(context, AppColors.appColor),
+                            ))
                       ],
                     ),
                     Space(30.h),

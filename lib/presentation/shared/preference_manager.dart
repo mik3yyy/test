@@ -7,6 +7,8 @@ class PreferenceManager {
       prefs.setBool("enableBioMetrics", enableBioMetrics);
   static bool get enableBioMetrics =>
       prefs.getBool("enableBioMetrics") ?? false;
+  static set isSaved(bool isSaved) => prefs.setBool("isSaved", isSaved);
+  static bool get isSaved => prefs.getBool("isSaved") ?? false;
 
   static set enableTransactionBioMetrics(bool enableTransactionBioMetrics) =>
       prefs.setBool("enableTransactionBioMetrics", enableTransactionBioMetrics);

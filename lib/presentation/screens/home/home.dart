@@ -85,7 +85,6 @@ class _HomePageState extends ConsumerState<HomePage>
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        ref.refresh(userProfileProvider);
         ref.refresh(currencyTransactionProvider(
             value.value!.data!.wallet!.currencyCode!));
       }

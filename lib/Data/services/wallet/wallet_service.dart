@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/wallet/models/res/create_wallet_res.dart';
@@ -42,7 +43,7 @@ class WalletService {
     _read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
-      PrettyDioLogger(),
+      if (kDebugMode) ...[PrettyDioLogger()],
       DioCacheInterceptor(options: ref.watch(cacheOptions)),
     ]);
   }

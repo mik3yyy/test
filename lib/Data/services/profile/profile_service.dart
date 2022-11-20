@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
@@ -43,7 +44,7 @@ class ProfileService {
     _read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
-      PrettyDioLogger(),
+      if (kDebugMode) ...[PrettyDioLogger()],
       DioCacheInterceptor(options: ref.watch(cacheOptions)),
     ]);
   }
