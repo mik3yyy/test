@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
@@ -119,7 +120,7 @@ class AuthManager extends IAuthManager {
 
   // transaction pin
   @override
-  Future<bool> transactionPin(
+  Future<ResendOtpRes> transactionPin(
       String transactionPin, String confirmTransactionPin) async {
     final res = await _userService.transactionPin(
         transactionPin, confirmTransactionPin);

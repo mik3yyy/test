@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
@@ -42,8 +43,8 @@ class _TransactionPinScreenState extends ConsumerState<TransactionPinScreen> {
     final pinController = useTextEditingController();
     final confirmPinController = useTextEditingController();
     ref.listen<RequestState>(transactionPinProvider, (T, value) {
-      if (value is Success<bool>) {
-        if (value.value == true) {
+      if (value is Success<ResendOtpRes>) {
+        if (value.value?.status == "success") {
           context.loaderOverlay.hide();
           ScreenView.showPinSuccessDialog(
               context, "Your Transaction Pin has been set",

@@ -25,7 +25,6 @@ class SignInVm extends RequestStateNotifier<SigninRes> {
   SignInVm(this.ref);
 
   Future<RequestState<SigninRes>> signIn(SigninReq signinReq) {
-    // PreferenceManager.isFirstLaunch = false;
     ref.read(authControllerProvider.notifier).setAuth(false);
     return makeRequest(() async {
       final res = await ref.read(authManagerProvider).signIn(signinReq);
@@ -33,6 +32,7 @@ class SignInVm extends RequestStateNotifier<SigninRes> {
         ref.refresh(getAccountDetailsProvider);
         ref.refresh(userProfileProvider);
         PreferenceManager.isloggedIn = true;
+        PreferenceManager.isFirstLaunch = false;
         ref.read(sessionStateStreamProvider).add(SessionState.startListening);
       }
       return res;

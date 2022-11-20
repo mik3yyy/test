@@ -113,6 +113,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       onChanged: (value) async {
                         toggle.state = !toggle.state;
                         PreferenceManager.enableBioMetrics = toggle.state;
+                        PreferenceManager.isSaved = toggle.state;
 
                         if (toggle.state == true) {
                           showOkAlertDialog(

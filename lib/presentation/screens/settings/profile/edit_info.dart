@@ -123,42 +123,39 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         AppText.body2Bold(context, AppColors.appColor, 20.sp),
                   ),
                 )
-              : Padding(
-                  padding: EdgeInsets.only(top: 20.h, right: 20.w),
-                  child: InkWell(
-                    onTap: vm is Loading
-                        ? null
-                        : () async {
-                            if (formKey.currentState!.validate()) {
-                              var updateProfile = UpdateProfileReq(
-                                firstName: fistNameController.text,
-                                lastName: lastNameCountroller.text,
-                                email: emailCountroller.text,
-                                address: addressCountroller.text,
-                                gender: genderCountroller.text,
-                                phoneCode: phoneCode,
-                                phoneNumber: phoneNoCountroller.text,
-                                dateOfBirth: formatDate(dobCountroller.text),
-                                city: cityCountroller.text,
-                                country: countryCountroller.text,
-                                state: stateCountroller.text,
-                              );
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
-
-                              ref
-                                  .read(updateProfileProvider.notifier)
-                                  .updateProfile(updateProfile);
+              : TextButton(
+                  onPressed: vm is Loading
+                      ? null
+                      : () async {
+                          if (formKey.currentState!.validate()) {
+                            var updateProfile = UpdateProfileReq(
+                              firstName: fistNameController.text,
+                              lastName: lastNameCountroller.text,
+                              email: emailCountroller.text,
+                              address: addressCountroller.text,
+                              gender: genderCountroller.text,
+                              phoneCode: phoneCode,
+                              phoneNumber: phoneNoCountroller.text,
+                              dateOfBirth: formatDate(dobCountroller.text),
+                              city: cityCountroller.text,
+                              country: countryCountroller.text,
+                              state: stateCountroller.text,
+                            );
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
                             }
-                          },
-                    child: Text(
-                      'Save',
-                      style:
-                          AppText.body2Bold(context, AppColors.appColor, 20.sp),
-                    ),
+
+                            ref
+                                .read(updateProfileProvider.notifier)
+                                .updateProfile(updateProfile);
+                          }
+                        },
+                  child: Text(
+                    'Save',
+                    style:
+                        AppText.body2Bold(context, AppColors.appColor, 20.sp),
                   ),
-                ),
+                )
         ],
         centerTitle: true,
         automaticallyImplyLeading: false,
