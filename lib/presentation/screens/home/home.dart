@@ -16,6 +16,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/refreshToken/refresh_token_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/currency_transactions_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/set_wallet_as_default_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../components/app text theme/app_text_theme.dart';
@@ -42,8 +43,10 @@ class _HomePageState extends ConsumerState<HomePage>
   @override
   void initState() {
     super.initState();
-    ref.read(refreshControllerProvider.notifier).refreshToken();
-    WidgetsBinding.instance?.addObserver(this);
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      ref.read(refreshControllerProvider.notifier).refreshToken();
+    });
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -58,34 +61,29 @@ class _HomePageState extends ConsumerState<HomePage>
     if (isBackground) {
       log("$isBackground");
     }
-
-    /* if (isBackground) {
-      // service.stop();
-    } else {
-      // service.start();
-    }*/
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(savedUserProvider.notifier).getUserDb();
-      // ref.read(walletDataProvider.notifier).getData();
     });
     final savedUser = ref.watch(savedUserProvider);
     final defaultWallet = ref.watch(userProfileProvider);
     final setwallet = ref.watch(setWalletAsDefaultProvider);
+    final transactions = ref.watch(walletTransactionProvider);
     final currency = useTextEditingController();
 
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        ref.refresh(currencyTransactionProvider(
+        ref.invalidate(userProfileProvider);
+        ref.invalidate(currencyTransactionProvider(
             value.value!.data!.wallet!.currencyCode!));
       }
 
@@ -101,7 +99,9 @@ class _HomePageState extends ConsumerState<HomePage>
         backgroundColor: AppColors.appColor,
         body: SafeArea(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            InnerPageLoadingIndicator(loadingStream: setwallet is Loading),
+            InnerPageLoadingIndicator(
+                loadingStream:
+                    setwallet is Loading || transactions.isRefreshing),
             Padding(
               padding: EdgeInsets.only(
                 left: 20.w,

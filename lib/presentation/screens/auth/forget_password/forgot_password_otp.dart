@@ -124,8 +124,7 @@ class ForgetPasswordOTPScreen extends HookConsumerWidget {
                       length: 4,
                       onCompleted: (value) {
                         ref.read(toggleStateProvider.notifier).state =
-                            toggleState == false ? true : false;
-                        toggleState = true;
+                            toggleState ? true : false;
                       },
                       onChanged: (String value) {},
                     ),

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
@@ -90,13 +91,10 @@ class _AppWebViewState extends ConsumerState<AppWebView> {
           switch (widget.webViewRoute) {
             case WebViewRoute.fundCard:
               if (navigation.url.contains('payment-success')) {
-                // final index = navigation.url.toString().lastIndexOf('=');
-                // final reference =
-                //     navigation.url.toString().substring(index + 1);
-
-                ref.refresh(getAccountDetailsProvider);
-                ref.refresh(userProfileProvider);
-                ref.refresh(walletTransactionProvider);
+                ref.invalidate(getAccountDetailsProvider);
+                ref.invalidate(userProfileProvider);
+                ref.invalidate(walletTransactionProvider);
+                ref.invalidate(remoteNotificationListProvider);
                 Navigator.pop(context);
                 AppDialog.showSuccessMessageDialog(
                   context,

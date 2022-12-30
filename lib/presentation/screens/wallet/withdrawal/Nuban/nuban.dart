@@ -12,20 +12,22 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/ban
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/model/bank/bank_details_res/bank_details_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/withdrawal/withdrawal_res.dart/withdrawal_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/bank_details.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/nuban_view_model.dart/nuban_withdrawal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/Nuban/select_bank.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/input/decimal_input.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -47,13 +49,15 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  bool savedRecipients = false;
+
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
     final getBankDetails = ref.watch(getBankDetailsProvider);
     final nuban = ref.watch(nubanWithdrawalProvider);
     final walletBalance = ref.watch(getAccountDetailsProvider);
-    final toggle = ref.watch(toggleStateProvider.state);
+    // var toggle = ref.watch(toggleStateProvider);
     final descriptionController = useTextEditingController();
     final bankAccountController = useTextEditingController();
     final accountNameController = useTextEditingController();
@@ -70,9 +74,6 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
     ref.listen<RequestState>(getBankDetailsProvider, (_, value) {
       if (value is Loading) {
         errorState.value = false;
-        ScreenView.showLoadingView(context);
-      } else {
-        ScreenView.hideLoadingView(context);
       }
 
       if (value is Success<BankDetailsRes>) {
@@ -93,7 +94,10 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
       if (value is Success<WithdrawRes>) {
         context.loaderOverlay.hide();
 
-        ref.refresh(userProfileProvider);
+        ///REFRESH THE USER PROVIDER
+        ref.invalidate(userProfileProvider);
+        ref.invalidate(remoteNotificationListProvider);
+        ref.invalidate(walletTransactionProvider);
         AppDialog.showSuccessMessageDialog(
           context,
           value.value!.message!,
@@ -212,8 +216,15 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   labelText: 'Enter amount',
-                                  keyboardType: TextInputType.number,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                          decimal: true),
                                   controller: amountController,
+                                  inputFormatter: [
+                                    FilteringTextInputFormatter.deny(
+                                        RegExp('[ ]')),
+                                    DecimalTextInputFormatter(decimalRange: 2),
+                                  ],
                                   obscureText: false,
                                   onChanged: (value) {
                                     if (value.isEmpty) {
@@ -304,6 +315,18 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                           controller: bankAccountController,
                           obscureText: false,
                           textLength: 10,
+                          suffixIcon: getBankDetails is Loading
+                              ? const Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 25, right: 10, bottom: 10, top: 30),
+                                  child: SizedBox(
+                                      height: 15,
+                                      width: 15,
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.appColor,
+                                      )),
+                                )
+                              : const SizedBox.shrink(),
                           validator: (value) => null,
                           onChanged: (value) {
                             verifyState.value = value;
@@ -326,7 +349,7 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                            acctName.value,
+                            getBankDetails is Loading ? "" : acctName.value,
                             style: AppText.body2(
                                 context,
                                 errorState.value ? Colors.red : Colors.green,
@@ -355,9 +378,11 @@ class _NubanWithdrawState extends ConsumerState<NubanWithdraw> {
                             const Spacer(),
                             Switch.adaptive(
                                 activeColor: Colors.greenAccent,
-                                value: toggle.state,
+                                value: savedRecipients,
                                 onChanged: (value) {
-                                  toggle.state = !toggle.state;
+                                  setState(() {
+                                    savedRecipients = value;
+                                  });
                                 }),
                           ],
                         ),
@@ -455,7 +480,7 @@ class HeaderTitle extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       color: AppColors.appColor.withOpacity(0.05),
       child: Padding(
-        padding: EdgeInsets.only(right: 210.w),
+        padding: EdgeInsets.only(right: 180.w),
         child: Center(
           child: Text(
             'Withdraw From Wallets',
@@ -465,4 +490,11 @@ class HeaderTitle extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget loadingDetails(Color color) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 30),
+    child: loadingDetails(AppColors.appColor),
+  );
 }

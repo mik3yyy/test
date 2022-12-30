@@ -28,9 +28,9 @@ class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
   });
   @override
   Widget build(BuildContext context) {
-    final toggle = ref.watch(toggleStateProvider.state);
-    final apple = ref.watch(apppleToggleStateProvider.state);
-    final google = ref.watch(googleToggleStateProvider.state);
+    var toggle = ref.watch(toggleStateProvider);
+    var apple = ref.watch(apppleToggleStateProvider);
+    var google = ref.watch(googleToggleStateProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -118,9 +118,9 @@ class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
                             const Spacer(),
                             Switch.adaptive(
                                 activeColor: Colors.greenAccent,
-                                value: google.state,
+                                value: google,
                                 onChanged: (value) {
-                                  google.state = !google.state;
+                                  google = !google;
                                 }),
                           ],
                         ),
@@ -135,9 +135,9 @@ class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
                             const Spacer(),
                             Switch.adaptive(
                                 activeColor: Colors.greenAccent,
-                                value: apple.state,
+                                value: apple,
                                 onChanged: (value) {
-                                  apple.state = !apple.state;
+                                  apple = !apple;
                                 }),
                           ],
                         ),
@@ -152,9 +152,9 @@ class _ViewVirtualCardState extends ConsumerState<ViewVirtualCard> {
                           const Spacer(),
                           Switch.adaptive(
                               activeColor: Colors.greenAccent,
-                              value: toggle.state,
+                              value: toggle,
                               onChanged: (value) {
-                                toggle.state = !toggle.state;
+                                toggle = !toggle;
                               }),
                         ],
                       ),

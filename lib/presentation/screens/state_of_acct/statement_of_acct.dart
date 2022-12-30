@@ -68,9 +68,9 @@ class AccountHistoryButton extends StatelessWidget {
       child: TextButton(
         child: Text(text, style: AppText.body2(context, Colors.black54, 20.sp)),
         style: TextButton.styleFrom(
-          primary: Colors.white,
+          foregroundColor: Colors.white,
           backgroundColor: Colors.grey.shade100,
-          onSurface: Colors.grey.shade100,
+          disabledForegroundColor: Colors.grey.shade100,
         ),
         onPressed: onPressed,
       ),

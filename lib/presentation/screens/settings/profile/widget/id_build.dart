@@ -35,7 +35,7 @@ class _IDbuildState extends ConsumerState<IDbuild> {
   Widget build(BuildContext context) {
     ref.listen<RequestState>(deleteIdProvider, (_, value) {
       if (value is Success<UploadIdRes>) {
-        ref.refresh(getAllIdentification);
+        ref.invalidate(getAllIdentification);
 
         // AppSnackBar.showSuccessSnackBar(context,
         //     message: value.value!.message.toString());

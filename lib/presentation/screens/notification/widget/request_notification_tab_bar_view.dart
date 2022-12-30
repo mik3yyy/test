@@ -40,12 +40,12 @@ class _RequestNotificationTabBarViewState
           } else {
             return RefreshIndicator(
               onRefresh: () async {
-                ref.refresh(remoteReqNotificationListProvider);
+                ref.invalidate(remoteReqNotificationListProvider);
               },
               child: SizedBox(
                 height: 450.h,
                 child: Scrollbar(
-                  isAlwaysShown: true,
+                  thumbVisibility: true,
                   controller: _scrollController,
                   child: ListView.separated(
                     controller: _scrollController,
@@ -83,7 +83,7 @@ class _RequestNotificationTabBarViewState
           return Center(
             child: TextButton.icon(
                 onPressed: () {
-                  ref.refresh(remoteReqNotificationListProvider);
+                  ref.invalidate(remoteReqNotificationListProvider);
                 },
                 icon: const Icon(Icons.replay),
                 label: const Text("Retry")),

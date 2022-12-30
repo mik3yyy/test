@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +44,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   @override
   void initState() {
     super.initState();
-
     ref.read(localAuthStateProvider.notifier).hasBiometrics();
     ref.read(deviceInfoProvider.notifier).deviceId();
     ref.read(deviceInfoProvider.notifier).timeZone();
@@ -62,7 +59,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
     final emailPhoneController = useTextEditingController();
     final passwordController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
-
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Loading) {
         context.loaderOverlay.show();
@@ -87,7 +83,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       }
       if (value is Error) {
         isLoading = false;
-
+        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -199,9 +195,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                             textAlign: TextAlign.center,
                           ),
                           style: TextButton.styleFrom(
-                            primary: AppColors.appColor,
+                            foregroundColor: AppColors.appColor,
                             backgroundColor: Colors.transparent,
-                            onSurface: Colors.grey,
+                            disabledForegroundColor: Colors.grey,
                           ),
                         ),
                       ),

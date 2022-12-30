@@ -8,10 +8,9 @@ class ErrorInterceptor extends InterceptorsWrapper {
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
     err = await HttpUtils.buildErrorResponse(err);
 
-    if (err.response?.requestOptions.path != "/auth/sign-in") {
-      if (err.response?.statusCode == 401) {
-        eventBus.fire(UnAuthenticated());
-      }
+    if (err.response?.requestOptions.path != "/auth/sign-in" &&
+        err.response?.statusCode == 401) {
+      eventBus.fire(UnAuthenticated());
     }
     return super.onError(err, handler);
   }

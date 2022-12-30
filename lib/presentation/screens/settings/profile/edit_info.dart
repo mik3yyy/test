@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
@@ -37,18 +36,18 @@ class EditInfo extends StatefulHookConsumerWidget {
 }
 
 class _EditInfoState extends ConsumerState<EditInfo> {
-  String phoneCode = "";
-  String isCode = "";
+  // String phoneCode = "";
+  // String isCode = "";
 
-  seperatePhoneAndDialCode() {
-    for (var country in Countries.allCountries) {
-      if (country.values.contains(widget.userValue.data.user.countryName)) {
-        phoneCode = country["dial_code"].toString();
-        isCode = country["code"].toString();
-        // print(country["dial_code"]);
-      }
-    }
-  }
+  // seperatePhoneAndDialCode() {
+  //   for (var country in Countries.allCountries) {
+  //     if (country.values.contains(widget.userValue.data.user.countryName)) {
+  //       phoneCode = country["dial_code"].toString();
+  //       isCode = country["code"].toString();
+  //       // print(country["dial_code"]);
+  //     }
+  //   }
+  // }
 
   final formKey = GlobalKey<FormState>();
 
@@ -57,7 +56,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
 
   @override
   void initState() {
-    seperatePhoneAndDialCode();
+    // seperatePhoneAndDialCode();
     super.initState();
   }
 
@@ -65,8 +64,8 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
-    final phoneNo =
-        useState<phone.PhoneNumber>(phone.PhoneNumber(isoCode: isCode));
+    // final phoneNo =
+    //     useState<phone.PhoneNumber>(phone.PhoneNumber(isoCode: isCode));
     final fistNameController = useTextEditingController(
         text: widget.userValue.data.user.firstName!.capitalize());
     final lastNameCountroller = useTextEditingController(
@@ -96,7 +95,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
       }
 
       if (value is Success<bool>) {
-        ref.refresh(userProfileProvider);
+        ref.invalidate(userProfileProvider);
         Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,
@@ -134,7 +133,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                               email: emailCountroller.text,
                               address: addressCountroller.text,
                               gender: genderCountroller.text,
-                              phoneCode: phoneCode,
+                              phoneCode: "",
                               phoneNumber: phoneNoCountroller.text,
                               dateOfBirth: formatDate(dobCountroller.text),
                               city: cityCountroller.text,
@@ -214,6 +213,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         obscureText: false,
                         validator: (value) => validateLastName(value),
                       ),
+                      Space(20.h),
                       Row(
                         children: [
                           Text(
@@ -267,15 +267,15 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         validator: (value) => validateEmail(value),
                       ),
                       Space(20.h),
-                      IntlPhoneNumber(
-                        initialNo: phoneNo,
-                        numberChanged: (phone.PhoneNumber value) {
-                          setState(() {
-                            phoneCode = value.dialCode!;
-                          });
-                        },
-                        phoneController: phoneNoCountroller,
-                      ),
+                      // IntlPhoneNumber(
+                      //   initialNo: phoneNo,
+                      //   numberChanged: (phone.PhoneNumber value) {
+                      //     setState(() {
+                      //       phoneCode = value.dialCode!;
+                      //     });
+                      //   },
+                      //   phoneController: phoneNoCountroller,
+                      // ),
                       // phone.InternationalPhoneNumberInput(
                       //   validator: (p0) => null,
                       //   onInputChanged: (phone.PhoneNumber number) {
@@ -312,9 +312,11 @@ class _EditInfoState extends ConsumerState<EditInfo> {
 
                       //   // onSaved: (PhoneNumber number) {},
                       // ),
-                      Space(20.h),
+
                       DateTimePicker(
-                        enabled: dobCountroller.text.isEmpty ? true : false,
+                        enabled:
+                            getDate(widget.userValue.data.user.dateOfBirth),
+
                         controller: dobCountroller,
                         type: DateTimePickerType.date,
                         dateMask: 'MM-dd-yyyy',
@@ -330,12 +332,13 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                             focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            suffix: dobCountroller.text.isEmpty
-                                ? const SizedBox()
-                                : const Icon(
-                                    Icons.lock,
-                                    size: 20,
-                                  )),
+                            suffix:
+                                getDate(widget.userValue.data.user.dateOfBirth)
+                                    ? const SizedBox()
+                                    : const Icon(
+                                        Icons.lock,
+                                        size: 20,
+                                      )),
                         // icon: Icon(Icons.event),
                         dateLabelText: 'Date of Birth',
 
@@ -478,5 +481,15 @@ class _IntlPhoneNumberState extends ConsumerState<IntlPhoneNumber> {
           const TextInputType.numberWithOptions(signed: true, decimal: false),
       inputBorder: InputBorder.none,
     );
+  }
+}
+
+bool getDate(DateTime? value) {
+  if (value == null) {
+    return true;
+  } else if (value.toIso8601String().isEmpty) {
+    return true;
+  } else {
+    return false;
   }
 }

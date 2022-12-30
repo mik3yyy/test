@@ -11,7 +11,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final messageServiceProvider = Provider<MessageService>((ref) {
-  return MessageService((ref.read), ref);
+  return MessageService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -37,11 +37,11 @@ final cacheOptions = Provider((ref) => CacheOptions(
 // );
 
 class MessageService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
 
   MessageService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       PrettyDioLogger(),
@@ -53,7 +53,7 @@ class MessageService {
     const url = '/messaging/contacts';
 
     try {
-      final response = await _read(dioProvider).post(
+      final response = await _read.read(dioProvider).post(
         url,
         data: {
           'email': email,
@@ -74,7 +74,7 @@ class MessageService {
   Future<ContactList> getContacts() async {
     const url = '/messaging/contacts';
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(
@@ -97,7 +97,7 @@ class MessageService {
   Future<DialogRes> getDialogMessages(int id) async {
     final url = '/messaging/dialogs/$id';
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,6 +18,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_tran
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/input/decimal_input.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
@@ -41,20 +45,14 @@ class _ToWalletState extends ConsumerState<ToWallet> {
     final toCurrencyController = useTextEditingController();
 
     ref.listen<RequestState>(transferToWalletProvider, (T, value) {
-      if (value is Loading) {
-      } else {}
       if (value is Success) {
         AppDialog.showSuccessMessageDialog(
           context,
           'Funds transferred successfully',
           onpressed: () => Navigator.pop(context),
         );
-        //Refreshing user account details, so the new balance can reflect on the screen
-
-        ref.refresh(userProfileProvider);
       }
       if (value is Error) {
-        // context.loaderOverlay.hide();
         AppDialog.showErrorMessageDialog(context, value.error.toString());
       }
     });
@@ -83,6 +81,10 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                 labelText: 'Enter amount',
                 obscureText: false,
                 color: Colors.white,
+                inputFormatter: [
+                  FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                  DecimalTextInputFormatter(decimalRange: 2),
+                ],
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 controller: amountController,
@@ -207,25 +209,45 @@ class _ToWalletState extends ConsumerState<ToWallet> {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
+                          var value = num.parse(amountController.text);
+                          var userBalance =
+                              num.parse(saveduser.balance.toString());
+
+                          if ((userBalance < value) || (value == 0)) {
+                            AppDialog.showErrorMessageDialog(context,
+                                "Amount cannot be more than available amount or zero");
+                            return;
+                          }
 
                           if (PreferenceManager.enableTransactionBioMetrics) {
-                            // print(object)
-                            // ref
-                            //     .read(localAuthStateProvider.notifier)
-                            //     .authenticateTransaction();
-
                             ref
                                 .read(localAuthStateProvider.notifier)
                                 .authenticateTransaction()
                                 .then((value) {
-                              ref
-                                  .read(transferToWalletProvider.notifier)
-                                  .transferToWallet(
-                                    "${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)}",
-                                    toCurrencyController.text,
-                                    num.parse(amountController.text),
-                                    value,
-                                  );
+                              if (Platform.isAndroid) {
+                                if (value ==
+                                    "Could not be Authenticated. Try again") {
+                                  return;
+                                } else {
+                                  ref
+                                      .read(transferToWalletProvider.notifier)
+                                      .transferToWallet(
+                                        "${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)}",
+                                        toCurrencyController.text,
+                                        num.parse(amountController.text),
+                                        value,
+                                      );
+                                }
+                              } else {
+                                ref
+                                    .read(transferToWalletProvider.notifier)
+                                    .transferToWallet(
+                                      "${defaultWallet.maybeWhen(data: (data) => data.data.defaultWallet.currencyCode, orElse: () => saveduser.countryCode)}",
+                                      toCurrencyController.text,
+                                      num.parse(amountController.text),
+                                      value,
+                                    );
+                              }
                             });
                           } else {
                             showModalBottomSheet(

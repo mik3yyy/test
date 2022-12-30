@@ -28,9 +28,8 @@ class CreatePasswordScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(createPasswordProvider);
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
-    final toggleConfirmPassword =
-        ref.watch(passwordConfirmToggleStateProvider.state);
+    var togglePassword = ref.watch(passwordToggleStateProvider);
+    var toggleConfirmPassword = ref.watch(passwordConfirmToggleStateProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     final passwordController = useTextEditingController();
@@ -94,15 +93,15 @@ class CreatePasswordScreen extends HookConsumerWidget {
 
                       return null;
                     },
-                    obscureText: togglePassword.state,
+                    obscureText: togglePassword,
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        togglePassword.state = !togglePassword.state;
+                        togglePassword = !togglePassword;
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 0.h),
                         child: Icon(
-                          togglePassword.state
+                          togglePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
                           color: AppColors.appColor,
@@ -128,16 +127,15 @@ class CreatePasswordScreen extends HookConsumerWidget {
                       // validator has to return something :)
                       return null;
                     },
-                    obscureText: toggleConfirmPassword.state,
+                    obscureText: toggleConfirmPassword,
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        toggleConfirmPassword.state =
-                            !toggleConfirmPassword.state;
+                        toggleConfirmPassword = !toggleConfirmPassword;
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 0.h),
                         child: Icon(
-                          toggleConfirmPassword.state
+                          toggleConfirmPassword
                               ? Icons.visibility_off
                               : Icons.visibility,
                           color: AppColors.appColor,

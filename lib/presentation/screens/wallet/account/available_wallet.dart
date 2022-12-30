@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +13,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/format_currency.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
@@ -48,7 +47,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -60,9 +59,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet>
 
     // final isBackground = state == AppLifecycleState.inactive;
 
-    if (isBackground) {
-      log("list of wallet screen $isBackground");
-    }
+    if (isBackground) {}
 
     /* if (isBackground) {
       // service.stop();
@@ -73,7 +70,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -124,6 +121,7 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet>
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  InnerPageLoadingIndicator(loadingStream: wallet.isRefreshing),
                   Container(
                     height: 40.h,
                     width: MediaQuery.of(context).size.width,
@@ -278,28 +276,25 @@ class _AvailableWalletState extends ConsumerState<AvailableWallet>
                                 ),
                               );
                             }),
-                        wallet is AsyncLoading
-                            ? const SizedBox.shrink()
-                            : Center(
-                                child: CustomButton(
-                                    buttonText:
-                                        buttonText(context, "Create Wallet"),
-                                    bgColor: AppColors.appColor,
-                                    borderColor: AppColors.appColor,
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      pushNewScreen(context,
-                                          screen: SelectCurrencyScreen(
-                                            currencyCode: currency,
-                                            routeName: 'createWallet',
-                                          ),
-                                          withNavBar: false,
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation
-                                                  .slideRight);
-                                    },
-                                    buttonWidth: 320),
-                              ),
+
+                        Center(
+                          child: CustomButton(
+                              buttonText: buttonText(context, "Create Wallet"),
+                              bgColor: AppColors.appColor,
+                              borderColor: AppColors.appColor,
+                              textColor: Colors.white,
+                              onPressed: () {
+                                pushNewScreen(context,
+                                    screen: SelectCurrencyScreen(
+                                      currencyCode: currency,
+                                      routeName: 'createWallet',
+                                    ),
+                                    withNavBar: false,
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.slideRight);
+                              },
+                              buttonWidth: 320),
+                        ),
                       ],
                     ),
                   ),
@@ -331,7 +326,7 @@ class _OptionsModalSheetState extends ConsumerState<OptionsModalSheet> {
   Widget build(BuildContext context) {
     ref.listen<RequestState>(setWalletAsDefaultProvider, (prev, value) {
       if (value is Success<SetWalletAsDefaultRes>) {
-        ref.refresh(userProfileProvider);
+        ref.invalidate(userProfileProvider);
         context.loaderOverlay.hide();
       }
 

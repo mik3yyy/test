@@ -36,7 +36,7 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
 
   @override
   Widget build(BuildContext context) {
-    final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
+    var transactionPinToggle = ref.watch(transactionPinStateProvider);
     final fistNameController = useTextEditingController();
     final currencyController = useTextEditingController();
 
@@ -178,19 +178,18 @@ class _WithdrawFromWalletState extends ConsumerState<WithdrawFromWallet> {
                       keyboardType: TextInputType.text,
                       // textAlign: TextAlign.start,
                       controller: fistNameController,
-                      obscureText: transactionPinToggle.state,
+                      obscureText: transactionPinToggle,
                       validator: (value) => validatePassword(value),
                       suffixIcon: SizedBox(
                         width: 55.w,
                         child: GestureDetector(
                           onTap: () {
-                            transactionPinToggle.state =
-                                !transactionPinToggle.state;
+                            transactionPinToggle = !transactionPinToggle;
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
                             child: Icon(
-                              transactionPinToggle.state
+                              transactionPinToggle
                                   ? Icons.visibility_off_outlined
                                   : Icons.visibility_outlined,
                               color: Colors.grey.shade300,

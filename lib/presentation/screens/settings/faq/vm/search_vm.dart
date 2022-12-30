@@ -9,7 +9,7 @@ final faqSearchQueryStateProvider = StateProvider.autoDispose<String>((ref) {
 
 // USED TO GET THE LIST OF BANKS FROM THE SERVER
 final remoteFaqProvider = FutureProvider.autoDispose((ref) async {
-  ref.maintainState = true;
+  ref.keepAlive();
   return ref.watch(allPost);
 });
 

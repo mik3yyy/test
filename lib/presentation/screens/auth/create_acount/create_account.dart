@@ -38,7 +38,7 @@ class CreateAccountScreen extends HookConsumerWidget {
 
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
-    var toggleState = ref.watch(toggleStateProvider.state);
+    var toggleState = ref.watch(toggleStateProvider.notifier).state;
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success<bool>) {
         PreferenceManager.email = emailPhoneController.text;
@@ -170,9 +170,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(3.r),
                               ),
-                              value: toggleState.state,
+                              value: toggleState,
                               onChanged: (value) {
-                                toggleState.state = value!;
+                                toggleState = value!;
                               }),
                           Expanded(
                             child: Column(
@@ -234,7 +234,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                                     (lastNameController.text.isEmpty)) {
                                   return;
                                 } else if (formKey.currentState!.validate()) {
-                                  if (toggleState.state == false) {
+                                  if (toggleState == false) {
                                     return AppSnackBar.showInfoSnackBar(context,
                                         message:
                                             "Select the checkbox to continue");

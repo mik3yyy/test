@@ -31,7 +31,7 @@ class AddContactScreen extends HookConsumerWidget {
         context.loaderOverlay.hide();
       }
       if (state is Success<ContactRes>) {
-        ref.refresh(allContactsProvider);
+        ref.invalidate(allContactsProvider);
         Navigator.pop(context);
         AppSnackBar.showSuccessSnackBar(context,
             message: "contact added successfully");

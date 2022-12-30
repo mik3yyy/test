@@ -47,7 +47,7 @@ class _ViewSinglePostScreenState extends ConsumerState<ViewSinglePostScreen> {
           });
         }
 
-        ref.refresh(fetchSinglePost(widget.postId));
+        ref.invalidate(fetchSinglePost(widget.postId));
       }
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,
@@ -62,7 +62,7 @@ class _ViewSinglePostScreenState extends ConsumerState<ViewSinglePostScreen> {
           PreferenceManager.isPostUnLike = false;
         });
 
-        ref.refresh(fetchSinglePost(widget.postId));
+        ref.invalidate(fetchSinglePost(widget.postId));
       }
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,

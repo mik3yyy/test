@@ -16,7 +16,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
 
 final withdrawServiceProvider = Provider<WithdrawalService>((ref) {
-  return WithdrawalService((ref.read), ref);
+  return WithdrawalService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -26,12 +26,13 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     baseUrl: AppConfig.coreBaseUrl)));
 
 class WithdrawalService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   WithdrawalService(this._read, this.ref) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read
+        .read(dioProvider)
+        .interceptors
+        .addAll([ApiInterceptor(), ErrorInterceptor(), PrettyDioLogger()]);
   }
 
   // Fetch list of Banks
@@ -39,10 +40,10 @@ class WithdrawalService {
     const url = '/payments/withdrawals/nuban/banks';
 
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
       final result = BankRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -60,11 +61,11 @@ class WithdrawalService {
     const url = '/payments/withdrawals/nuban/get-account-details';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: getBankAccountDetails.toJson(),
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: getBankAccountDetails.toJson(),
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
       final result = BankDetailsRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -85,11 +86,11 @@ class WithdrawalService {
     const url = '/payments/withdrawals/nuban/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: nubanReq.toJson(),
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: nubanReq.toJson(),
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
 
       final result = WithdrawRes.fromJson(response.data);
       return result;
@@ -109,10 +110,10 @@ class WithdrawalService {
     const url = '/payments/withdrawals/nuban/beneficiary-accounts';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
 
       final result = BeneficiaryAccount.fromJson(response.data);
       return result;
@@ -130,11 +131,11 @@ class WithdrawalService {
     const url = '/payments/withdrawals/aba/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: abaReq.toJson(),
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: abaReq.toJson(),
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
       final result = WithdrawRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -153,10 +154,10 @@ class WithdrawalService {
     const url = '/payments/withdrawals/aba/beneficiary-accounts';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
 
       final result = BeneficiaryAccount.fromJson(response.data);
       return result;
@@ -174,11 +175,11 @@ class WithdrawalService {
     const url = '/payments/withdrawals/iban/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: ibanReq.toJson(),
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: ibanReq.toJson(),
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
       final result = WithdrawRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -197,10 +198,10 @@ class WithdrawalService {
     const url = '/payments/withdrawals/iban/beneficiary-accounts';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
 
       final result = BeneficiaryAccount.fromJson(response.data);
       return result;
@@ -218,10 +219,10 @@ class WithdrawalService {
     const url = '/payments/withdrawals/sepa/initiate-withdrawal';
     // final token = PreferenceManager.authToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: sepaReq.toJson(),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: sepaReq.toJson(),
+          );
       final result = WithdrawRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {

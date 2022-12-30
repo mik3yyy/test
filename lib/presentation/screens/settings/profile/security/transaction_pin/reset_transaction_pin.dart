@@ -49,8 +49,8 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
   Widget build(BuildContext context) {
     final vm = ref.watch(resetPinProvider);
 
-    final togglePassword = ref.watch(pinToggleStateProvider.state);
-    final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
+    var togglePassword = ref.watch(pinToggleStateProvider);
+    var toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider);
 
     ref.listen<RequestState>(resetPinProvider, (T, value) {
       if (value is Success) {
@@ -139,15 +139,17 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                               }
                               return null;
                             },
-                            obscureText: togglePassword.state,
+                            obscureText: togglePassword,
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                togglePassword.state = !togglePassword.state;
+                                ref
+                                    .read(pinToggleStateProvider.notifier)
+                                    .state = togglePassword ? false : true;
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(bottom: 0.h),
                                 child: Icon(
-                                  togglePassword.state
+                                  togglePassword
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                   color: AppColors.appColor,
@@ -176,16 +178,18 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                               // validator has to return something :)
                               return null;
                             },
-                            obscureText: toggleConfirmPin.state,
+                            obscureText: toggleConfirmPin,
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                toggleConfirmPin.state =
-                                    !toggleConfirmPin.state;
+                                ref
+                                    .read(
+                                        pinConfirmToggleStateProvider.notifier)
+                                    .state = toggleConfirmPin ? false : true;
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(bottom: 0.h),
                                 child: Icon(
-                                  toggleConfirmPin.state
+                                  toggleConfirmPin
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                   color: AppColors.appColor,

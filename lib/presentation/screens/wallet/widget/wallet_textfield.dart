@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
@@ -16,6 +17,7 @@ class WalletTextField extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.onTap,
+      this.inputFormatter,
       this.maxLines,
       this.enabled,
       this.readOnly = false,
@@ -43,6 +45,7 @@ class WalletTextField extends StatelessWidget {
   final bool? readOnly;
   final String? initialValue;
   final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatter;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,7 @@ class WalletTextField extends StatelessWidget {
         controller: controller,
         cursorColor: AppColors.appColor,
         autovalidateMode: autovalidateMode,
+        inputFormatters: inputFormatter,
         obscureText: obscureText,
         keyboardType: keyboardType,
         enabled: enabled,

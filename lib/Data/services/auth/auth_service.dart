@@ -27,7 +27,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../model/auth/res/failure_res.dart';
 
 final userServiceProvider = Provider<UserService>((ref) {
-  return UserService((ref.read), ref);
+  return UserService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -48,10 +48,10 @@ final cacheOptions = Provider((ref) => CacheOptions(
 CancelToken cancelToken = CancelToken();
 
 class UserService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   UserService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       if (kDebugMode) ...[PrettyDioLogger()],
@@ -81,7 +81,7 @@ class UserService {
   ) async {
     const url = '/auth/create-account';
     try {
-      final response = await _read(dioProvider).post(
+      final response = await _read.read(dioProvider).post(
         url,
         data: {
           "first_name": firstName,
@@ -108,10 +108,10 @@ class UserService {
   Future<VerifyRes> verifyAccount(VerifyAccount verify) async {
     const url = '/auth/verify-account';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: verify.toJson(),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: verify.toJson(),
+          );
       final result = VerifyRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -128,8 +128,9 @@ class UserService {
   Future<bool> resendOtp(String emailPhone) async {
     const url = '/auth/resend-verification-code';
     try {
-      final response =
-          await _read(dioProvider).post(url, data: {"email_phone": emailPhone});
+      final response = await _read
+          .read(dioProvider)
+          .post(url, data: {"email_phone": emailPhone});
       final result = response.data = true;
       return result;
     } on DioError catch (e) {
@@ -150,7 +151,7 @@ class UserService {
     const url = '/auth/create-password';
     final pseudoToken = PreferenceManager.pseudoToken;
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: {
             "password": password,
             "confirm_password": confirmPassword,
@@ -173,7 +174,7 @@ class UserService {
   Future<CurrencyRes> getCurrency() async {
     const url = '/currencies/all';
     try {
-      final response = await _read(dioProvider).get(url);
+      final response = await _read.read(dioProvider).get(url);
       final stringList = CurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
@@ -185,7 +186,7 @@ class UserService {
   Future<ConvertCurrencyRes> convertCurrency(String from, String to) async {
     final url = '/currencies/convert/$from/$to';
     try {
-      final response = await _read(dioProvider).get(url);
+      final response = await _read.read(dioProvider).get(url);
       final stringList = ConvertCurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
@@ -197,7 +198,7 @@ class UserService {
   Future<CountryRes> getCountry() async {
     const url = '/misc/countries/all';
     try {
-      final response = await _read(dioProvider).get(url);
+      final response = await _read.read(dioProvider).get(url);
       final stringList = CountryRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
@@ -218,7 +219,7 @@ class UserService {
     const url = '/misc/statement-of-account-ranged';
     try {
       final response =
-          await _read(dioProvider).post(url, data: statementReq.toJson());
+          await _read.read(dioProvider).post(url, data: statementReq.toJson());
       final result = StatementOfAccount.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -237,7 +238,7 @@ class UserService {
     const url = '/misc/statement-of-account-ranged/download';
     try {
       final response =
-          await _read(dioProvider).post(url, data: statementReq.toJson());
+          await _read.read(dioProvider).post(url, data: statementReq.toJson());
       final result = DownloadStatement.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -253,9 +254,9 @@ class UserService {
   Future<StatementOfAccount> statementOfAccount() async {
     const url = '/misc/statement-of-account';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+          );
       final result = StatementOfAccount.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -274,7 +275,7 @@ class UserService {
     const url = '/auth/set-currency';
     try {
       final pseudoToken = PreferenceManager.pseudoToken;
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: {
             "currency": currency,
             "language": language,
@@ -299,7 +300,7 @@ class UserService {
     const url = '/auth/sign-in';
     try {
       final response =
-          await _read(dioProvider).post(url, data: signinReq.toJson());
+          await _read.read(dioProvider).post(url, data: signinReq.toJson());
 
       final result = SigninRes.fromJson(response.data);
       return result;
@@ -318,7 +319,7 @@ class UserService {
       String emailPhone, CancelToken cancelToken) async {
     const url = '/auth/forgot-password/send-code';
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: {"email_phone": emailPhone}, cancelToken: cancelToken);
       final result = response.data = true;
       return result;
@@ -337,7 +338,7 @@ class UserService {
       String password, String confirmPassword) async {
     const url = '/auth/forgot-password/reset-password';
     try {
-      final response = await _read(dioProvider).post(url, data: {
+      final response = await _read.read(dioProvider).post(url, data: {
         "email_phone": emailPhone,
         "code": otpCode,
         "password": password,
@@ -361,7 +362,7 @@ class UserService {
       String transactionPin, String confirmTransactionPin) async {
     const url = '/auth/transaction-pin/set-pin';
     try {
-      final response = await _read(dioProvider).post(
+      final response = await _read.read(dioProvider).post(
         url,
         data: {
           "pin": transactionPin,
@@ -386,7 +387,7 @@ class UserService {
     const url = '/auth/handle-referral';
     final pseudoToken = PreferenceManager.pseudoToken;
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: {
             "ref_code": refCode,
           },
@@ -409,8 +410,9 @@ class UserService {
   Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq) async {
     const url = '/auth/refresh-tokens';
     try {
-      final response =
-          await _read(dioProvider).post(url, data: refreshTokenReq.toJson());
+      final response = await _read
+          .read(dioProvider)
+          .post(url, data: refreshTokenReq.toJson());
       final result = RefreshTokenRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -426,8 +428,9 @@ class UserService {
   Future<SigninOutRes> signOut(String deviceId) async {
     const url = '/auth/sign-out';
     try {
-      final response =
-          await _read(dioProvider).post(url, data: {"device_id": deviceId});
+      final response = await _read
+          .read(dioProvider)
+          .post(url, data: {"device_id": deviceId});
       final result = SigninOutRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -444,7 +447,8 @@ class UserService {
       String password, String reason) async {
     const url = '/auth/deactivate-account';
     try {
-      final response = await _read(dioProvider)
+      final response = await _read
+          .read(dioProvider)
           .post(url, data: {"password": password, "reason": reason});
       final result = DeactivateAccountRes.fromJson(response.data);
       return result;

@@ -48,12 +48,11 @@ class UploadId extends StatefulHookConsumerWidget {
 
 class _UploadIdState extends ConsumerState<UploadId> {
   final formKey = GlobalKey<FormState>();
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
+  bool idNumber = false;
 
   @override
   Widget build(BuildContext context) {
     final editId = ref.watch(editIdProvider);
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
     final idTypeController = useTextEditingController(text: widget.idType);
     final idNoController = useTextEditingController(text: widget.idNumber);
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -66,7 +65,7 @@ class _UploadIdState extends ConsumerState<UploadId> {
         ScreenView.hideLoadingView(context);
       }
       if (value is Success<UploadIdRes>) {
-        ref.refresh(getAllIdentification);
+        ref.invalidate(getAllIdentification);
         Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,
@@ -109,14 +108,16 @@ class _UploadIdState extends ConsumerState<UploadId> {
                   labelText: 'ID number',
                   keyboardType: TextInputType.name,
                   controller: idNoController,
-                  obscureText: togglePassword.state,
+                  obscureText: idNumber,
                   validator: (value) => validateIdNo(value),
                   suffixIcon: InkWell(
                     onTap: () {
-                      togglePassword.state = !togglePassword.state;
+                      setState(() {
+                        idNumber = !idNumber;
+                      });
                     },
                     child: Icon(
-                      togglePassword.state
+                      idNumber
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
                       color: Colors.grey.shade300,

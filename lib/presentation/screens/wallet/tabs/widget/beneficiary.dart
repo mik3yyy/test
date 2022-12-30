@@ -30,74 +30,82 @@ class _BeneficiaryViewState extends ConsumerState<BeneficiaryView> {
         data: (value) {
           return value.data!.walletBeneficiaries!.isEmpty
               ? const SizedBox.shrink()
-              : Container(
-                  color: AppColors.appColor.withOpacity(0.09),
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Space(10.h),
-                        SizedBox(
-                          // color: Colors.red,
-                          height: 100,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: value.data!.walletBeneficiaries!.length,
-                            itemBuilder: (context, index) {
-                              final item =
-                                  value.data!.walletBeneficiaries![index];
+              : Column(
+                  children: [
+                    Container(
+                      color: AppColors.appColor.withOpacity(0.09),
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Space(10.h),
+                            SizedBox(
+                              // color: Colors.red,
+                              height: 100,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    value.data!.walletBeneficiaries!.length,
+                                itemBuilder: (context, index) {
+                                  final item =
+                                      value.data!.walletBeneficiaries![index];
 
-                              return Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        widget.accountNoController.text =
-                                            item.beneficiary!.accountNumber!;
-                                        widget.friendNameController.text =
-                                            '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 80.h,
-                                      width: 80.w,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey.shade100,
+                                  return Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            widget.accountNoController.text =
+                                                item.beneficiary!
+                                                    .accountNumber!;
+                                            widget.friendNameController.text =
+                                                '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}';
+                                          });
+                                        },
+                                        child: Container(
+                                          height: 80.h,
+                                          width: 80.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.grey.shade100,
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            '${item.beneficiary!.firstName?[0]}',
+                                            style: AppText.body2(
+                                                context,
+                                                AppColors.appColor
+                                                    .withOpacity(0.5),
+                                                40.sp),
+                                          )),
+                                        ),
                                       ),
-                                      child: Center(
-                                          child: Text(
-                                        '${item.beneficiary!.firstName?[0]}',
-                                        style: AppText.body2(
-                                            context,
-                                            AppColors.appColor.withOpacity(0.5),
-                                            40.sp),
-                                      )),
-                                    ),
-                                  ),
-                                  Space(10.h),
-                                  Expanded(
-                                    child: Text(
-                                      '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}',
-                                      style: AppText.body2(
-                                          context, AppColors.appColor, 16.sp),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(width: 20.w);
-                            },
-                          ),
+                                      Space(10.h),
+                                      Expanded(
+                                        child: Text(
+                                          '${item.beneficiary!.firstName} ${item.beneficiary!.lastName}',
+                                          style: AppText.body2(context,
+                                              AppColors.appColor, 16.sp),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(width: 20.w);
+                                },
+                              ),
+                            ),
+                            Space(0.h),
+                          ],
                         ),
-                        Space(30.h),
-                      ],
+                      ),
                     ),
-                  ),
+                    Space(20.h),
+                  ],
                 );
         },
         // error: (Object error, StackTrace? stackTrace) {

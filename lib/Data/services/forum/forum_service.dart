@@ -11,7 +11,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final forumServiceProvider = Provider<ForumService>((ref) {
-  return ForumService((ref.read), ref);
+  return ForumService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -21,10 +21,10 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     baseUrl: AppConfig.coreBaseUrl)));
 
 class ForumService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   ForumService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       if (kDebugMode) ...[PrettyDioLogger()],
@@ -35,11 +35,11 @@ class ForumService {
   Future<GetPostsRes> createPost(CreatePostReq createPostReq) async {
     const url = '/forum/posts';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: createPostReq.toJson(),
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: createPostReq.toJson(),
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = GetPostsRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -56,10 +56,10 @@ class ForumService {
   Future<GetPostsRes> getTop10Posts() async {
     const url = '/forum/posts/top';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = GetPostsRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -76,10 +76,10 @@ class ForumService {
   Future<GetPostsRes> getAllPosts() async {
     const url = '/forum/posts';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = GetPostsRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -96,13 +96,13 @@ class ForumService {
   Future<GetPostsRes> getAllPostsPaginated(num page) async {
     const url = '/forum/posts/paginated';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        queryParameters: {
-          'page': page,
-        },
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            queryParameters: {
+              'page': page,
+            },
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = GetPostsRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -119,11 +119,11 @@ class ForumService {
   Future<SinglePostRes> fetchSinglePost(String postId) async {
     const url = '/forum/posts/fetch-one';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {"post_id": postId},
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {"post_id": postId},
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = SinglePostRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -140,11 +140,11 @@ class ForumService {
   Future<bool> reactToPost(String postId, String reaction) async {
     const url = '/forum/posts/react';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {"post_id": postId, "reaction": reaction},
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {"post_id": postId, "reaction": reaction},
+            options: Options(headers: {"requireToken": true}),
+          );
 
       return response.data = true;
     } on DioError catch (e) {
@@ -161,11 +161,11 @@ class ForumService {
   Future<bool> unReactToPost(String postId) async {
     const url = '/forum/posts/react/un-react';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {"post_id": postId},
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {"post_id": postId},
+            options: Options(headers: {"requireToken": true}),
+          );
       return response.data = true;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

@@ -27,7 +27,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(routeStateProvider.notifier);
     });
     // controller = PersistentTabController(initialIndex: 0);

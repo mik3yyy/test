@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
@@ -26,7 +24,8 @@ class UploadImage {
     final _picker = ImagePicker();
     if (Platform.isAndroid) {}
 
-    final XFile? image = await _picker.pickImage(source: imageSource);
+    final XFile? image = await _picker.pickImage(
+        source: imageSource, preferredCameraDevice: CameraDevice.front);
 
     if (image == null) {
       return;
@@ -35,6 +34,8 @@ class UploadImage {
     final imageFile = File(image.path);
     ref.read(userPhotoProvider.notifier).uploadProfilePhoto(image.path);
     final appDir = await path_provider.getApplicationDocumentsDirectory();
+
+    /// convert to jpg
 
     // This is the saved image path
     // You can use it to display the saved image later

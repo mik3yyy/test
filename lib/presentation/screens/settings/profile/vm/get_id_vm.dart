@@ -3,7 +3,7 @@ import 'package:kayndrexsphere_mobile/Data/services/profile/repo/profile_reposit
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 
 final getAllIdentification = FutureProvider.autoDispose((ref) {
-  ref.maintainState = true;
+  ref.keepAlive();
   ref.watch(userProfileProvider);
   return ref.watch(profilehManagerProvider).getID();
 });

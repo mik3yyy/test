@@ -140,6 +140,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
           stickyAuth: false,
         ),
       );
+
       if (isAuthenticated) {
         final pin = await ref
             .read(credentialProvider.notifier)
@@ -149,7 +150,9 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
         return "Could not be Authenticated. Try again";
       }
     } on PlatformException catch (e) {
-      state = state.copyWith(error: e.message);
+      if (mounted) {
+        state = state.copyWith(error: e.message);
+      }
       throw e.toString();
     }
   }

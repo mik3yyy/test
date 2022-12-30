@@ -36,7 +36,7 @@ class _IbanViewState extends ConsumerState<IbanView> {
   // final transactionPinStateProvider = StateProvider<bool>((ref) => true);
   @override
   Widget build(BuildContext context) {
-    final toggle = ref.watch(toggleStateProvider.state);
+    var toggle = ref.watch(toggleStateProvider);
     final iban = ref.watch(ibanWithdrawalProvider);
     // final transactionPinToggle = ref.watch(transactionPinStateProvider.state);
     final senderAddressController = useTextEditingController();
@@ -58,7 +58,7 @@ class _IbanViewState extends ConsumerState<IbanView> {
     // listen to either success or failure response
     ref.listen<RequestState>(ibanWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
-        ref.refresh(getAccountDetailsProvider);
+        ref.invalidate(getAccountDetailsProvider);
 
         AppDialog.showSuccessMessageDialog(
           context,
@@ -250,9 +250,9 @@ class _IbanViewState extends ConsumerState<IbanView> {
               const Spacer(),
               Switch.adaptive(
                   activeColor: Colors.greenAccent,
-                  value: toggle.state,
+                  value: toggle,
                   onChanged: (value) {
-                    toggle.state = !toggle.state;
+                    toggle = !toggle;
                   }),
             ],
           ),

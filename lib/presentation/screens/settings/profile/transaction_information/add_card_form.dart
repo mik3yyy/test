@@ -69,7 +69,7 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
   @override
   Widget build(BuildContext context) {
     final card = ref.watch(addCardProvider);
-    final toggle = ref.watch(toggleStateProvider.state);
+    var toggle = ref.watch(toggleStateProvider);
     final depositCurrencyController = useTextEditingController();
     final walletCurrencyController = useTextEditingController();
     final amountController = useTextEditingController();
@@ -301,9 +301,9 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
                             ),
                             Switch.adaptive(
                                 activeColor: Colors.greenAccent,
-                                value: toggle.state,
+                                value: toggle,
                                 onChanged: (value) {
-                                  toggle.state = !toggle.state;
+                                  toggle = !toggle;
                                 }),
                           ],
                         ),
@@ -334,7 +334,7 @@ class _AddCardFormState extends ConsumerState<AddCardForm> {
                                 expiration: _expiryDateController.text,
                                 cvv: _cvvCodeController.text,
                                 amount: amountController.text,
-                                saveCard: toggle.state,
+                                saveCard: toggle,
                                 depositCurrencyCode:
                                     depositCurrencyController.text,
                                 walletCurrencyCode:

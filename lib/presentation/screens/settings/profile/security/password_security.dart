@@ -65,8 +65,7 @@ class ChangePasswordSecurity extends StatelessWidget {
                     ),
                     Space(10.h),
                     const Divider(
-                      color: Colors.black,
-                      thickness: 0.4,
+                      thickness: 1,
                     ),
                     Space(20.h),
                     ProfileCard(
@@ -85,8 +84,7 @@ class ChangePasswordSecurity extends StatelessWidget {
                     ),
                     Space(10.h),
                     const Divider(
-                      color: Colors.black,
-                      thickness: 0.4,
+                      thickness: 1,
                     ),
                   ],
                 ),

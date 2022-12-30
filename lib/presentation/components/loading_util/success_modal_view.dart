@@ -106,9 +106,9 @@ class SuccessDialog extends ModalRoute<void> {
             buttonClicked?.call();
           },
           style: TextButton.styleFrom(
-            primary: Colors.white,
+            foregroundColor: Colors.white,
             backgroundColor: AppColors.appColor,
-            onSurface: AppColors.appColor,
+            disabledBackgroundColor: AppColors.appColor,
           ),
           child: Text(
             buttonText,

@@ -19,7 +19,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
 final profileProvider = Provider<ProfileService>((ref) {
-  return ProfileService((ref.read), ref);
+  return ProfileService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -38,10 +38,10 @@ final cacheOptions = Provider((ref) => CacheOptions(
     ));
 
 class ProfileService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   ProfileService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       if (kDebugMode) ...[PrettyDioLogger()],
@@ -55,7 +55,7 @@ class ProfileService {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // final token = prefs.getString(Constants.token);
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(
@@ -81,10 +81,10 @@ class ProfileService {
     const url = '/profile/edit-personal-info';
 
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: updateProfileReq.toJson(),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: updateProfileReq.toJson(),
+          );
       return response.data != null;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
@@ -100,8 +100,9 @@ class ProfileService {
   Future<bool> changePassword(ChangePasswordReq changePasswordReq) async {
     const url = '/auth/change-password';
     try {
-      final response =
-          await _read(dioProvider).post(url, data: changePasswordReq.toJson());
+      final response = await _read
+          .read(dioProvider)
+          .post(url, data: changePasswordReq.toJson());
       final result = response.data = true;
       return result;
     } on DioError catch (e) {
@@ -119,7 +120,8 @@ class ProfileService {
       ChangeTransactionPinReq changeTransactionPinReq) async {
     const url = '/auth/transaction-pin/change-pin';
     try {
-      final response = await _read(dioProvider)
+      final response = await _read
+          .read(dioProvider)
           .post(url, data: changeTransactionPinReq.toJson());
       final result = response.data = true;
       return result;
@@ -138,7 +140,7 @@ class ProfileService {
     const url = '/auth/transaction-pin/forgot-pin';
     try {
       final response =
-          await _read(dioProvider).post(url, data: {"route": "email"});
+          await _read.read(dioProvider).post(url, data: {"route": "email"});
       final result = response.data = true;
       return result;
     } on DioError catch (e) {
@@ -155,7 +157,7 @@ class ProfileService {
   Future<bool> resetPin(String otpCode, String pin, String confirmPin) async {
     const url = '/auth/transaction-pin/reset-pin';
     try {
-      final response = await _read(dioProvider).post(url, data: {
+      final response = await _read.read(dioProvider).post(url, data: {
         "route": "email",
         "code": otpCode,
         "new_pin": pin,
@@ -186,7 +188,7 @@ class ProfileService {
           contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
     });
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
       return response.data != null;
     } on DioError catch (e) {
@@ -216,7 +218,7 @@ class ProfileService {
       "id_type": idType
     });
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
 
       return UploadIdRes.fromJson(response.data);
@@ -248,7 +250,7 @@ class ProfileService {
       "id_type": idType
     });
     try {
-      final response = await _read(dioProvider).post(url,
+      final response = await _read.read(dioProvider).post(url,
           data: formData, options: Options(headers: {"requireToken": true}));
 
       return UploadIdRes.fromJson(response.data);
@@ -265,9 +267,9 @@ class ProfileService {
   Future<UploadIdRes> deleteId(String id) async {
     final url = '/profile/delete-id/$id';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+          );
       final result = UploadIdRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -283,7 +285,7 @@ class ProfileService {
   Future<SavedId> getID() async {
     const url = '/profile/get-ids';
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(

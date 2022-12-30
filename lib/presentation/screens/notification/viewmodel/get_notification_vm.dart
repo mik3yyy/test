@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/repo/notification_manager.dart';
 import 'package:kayndrexsphere_mobile/Data/services/notification/res/get_notification.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
+// import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 
 final allnotificationSearchQueryProvider =
     StateProvider.autoDispose<String>((ref) {
@@ -9,8 +9,7 @@ final allnotificationSearchQueryProvider =
 });
 
 final remoteNotificationListProvider = FutureProvider.autoDispose((ref) {
-  ref.maintainState = true;
-  ref.watch(userProfileProvider);
+  ref.keepAlive();
   return ref.watch(notificationServiceManagerProvider).getNotification();
 });
 

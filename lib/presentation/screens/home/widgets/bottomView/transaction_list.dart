@@ -16,9 +16,6 @@ class DashBoardTransactionList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final transactions = ref.watch(walletTransactionProvider);
-    // final transX = ref.watch(walletDataProvider);
-    if (transactions is AsyncLoading) {}
-    transactions is AsyncLoading;
     return transactions.when(
         error: (error, stackTrace) => Padding(
               padding: EdgeInsets.symmetric(
@@ -26,12 +23,12 @@ class DashBoardTransactionList extends HookConsumerWidget {
               ),
               child: TextButton.icon(
                 style: TextButton.styleFrom(
-                  primary: Colors.white,
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.grey.shade500,
-                  onSurface: Colors.grey,
+                  disabledForegroundColor: Colors.grey,
                 ),
                 onPressed: () {
-                  ref.refresh(walletTransactionProvider);
+                  ref.invalidate(walletTransactionProvider);
                 },
                 icon: const Icon(Icons.restart_alt),
                 label: const Text('Retry'),
@@ -45,7 +42,7 @@ class DashBoardTransactionList extends HookConsumerWidget {
             );
           } else {
             return RefreshIndicator(onRefresh: () async {
-              ref.refresh(walletTransactionProvider);
+              ref.invalidate(walletTransactionProvider);
             }, child: LayoutBuilder(builder: (context, constraints) {
               // final height = constraints.maxHeight;
               final width = constraints.maxWidth;
@@ -88,14 +85,10 @@ class DashBoardTransactionList extends HookConsumerWidget {
                                 )),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 45,
                           )
                         ],
                       );
-                      // return Container(
-                      //   height: 100,
-                      //   color: Colors.red,
-                      // );
                     }
                   },
                   separatorBuilder: (BuildContext context, int index) {

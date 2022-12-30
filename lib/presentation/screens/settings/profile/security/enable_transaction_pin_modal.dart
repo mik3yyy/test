@@ -5,15 +5,15 @@ import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/global/transaction_pin_toggle.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
+import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keyboard.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/custom_keypad/pin_keyboard_controller.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class EnableTransactionPin extends StatefulHookConsumerWidget {
-  final bool isEnable;
-  const EnableTransactionPin({Key? key, this.isEnable = false})
+  final ValueNotifier<bool> createdPin;
+  const EnableTransactionPin({Key? key, required this.createdPin})
       : super(key: key);
 
   @override
@@ -43,9 +43,7 @@ class _EnableTransactionPinState extends ConsumerState<EnableTransactionPin> {
   bool isObscure = true;
   @override
   Widget build(BuildContext context) {
-    final setPin = ref.watch(setPinStateProvider.state);
     final code = _inputList.join("");
-
     final result =
         RegExp(r".{1}").allMatches(code).map((e) => e.group(0)).join(' ');
 
@@ -89,10 +87,11 @@ class _EnableTransactionPinState extends ConsumerState<EnableTransactionPin> {
             controller: _pinKeyboardController,
             onConfirm: (value) {
               if (value.length == 4) {
+                widget.createdPin.value = true;
                 setState(() {
-                  setPin.state = true;
+                  PreferenceManager.enableTransactionBioMetrics =
+                      widget.createdPin.value;
                 });
-
                 ref
                     .read(credentialProvider.notifier)
                     .storeCredential(Constants.transactionPin, value);

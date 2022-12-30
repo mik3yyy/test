@@ -8,14 +8,11 @@ import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart'
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 final signInProvider =
     StateNotifierProvider.autoDispose<SignInVm, RequestState<SigninRes>>((ref) {
-  // ref.refresh(getAccountDetailsProvider);
-  // ref.refresh(userProfileProvider);
-  // ref.refresh(walletTransactionProvider);
-  // PreferenceManager.isloggedIn = true;
   return SignInVm(ref);
 });
 
@@ -29,8 +26,9 @@ class SignInVm extends RequestStateNotifier<SigninRes> {
     return makeRequest(() async {
       final res = await ref.read(authManagerProvider).signIn(signinReq);
       if (res.status == "success") {
-        ref.refresh(getAccountDetailsProvider);
-        ref.refresh(userProfileProvider);
+        ref.invalidate(getAccountDetailsProvider);
+        ref.invalidate(userProfileProvider);
+        ref.invalidate(walletTransactionProvider);
         PreferenceManager.isloggedIn = true;
         PreferenceManager.isFirstLaunch = false;
         ref.read(sessionStateStreamProvider).add(SessionState.startListening);

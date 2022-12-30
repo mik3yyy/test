@@ -27,17 +27,17 @@ class ProfileImage extends HookConsumerWidget {
   Widget build(BuildContext context, ref) {
     // final avatar = PreferenceManager.userAvatarUrl;
     // final upload = ref.watch(uploadFileState);
-    final userAvatar = ref.watch(profileImage.state);
+    final userAvatar = ref.watch(profileImage);
     final savedUser = ref.watch(savedUserProvider);
 
     return AbsorbPointer(
       absorbing: ignoreClick,
       child: Stack(
         children: [
-          userAvatar.state.isNotEmpty
+          userAvatar.isNotEmpty
               ? CircleAvatar(
                   radius: avatar,
-                  backgroundImage: FileImage(File(userAvatar.state)),
+                  backgroundImage: FileImage(File(userAvatar)),
                 )
               : SizedBox(
                   height: height,

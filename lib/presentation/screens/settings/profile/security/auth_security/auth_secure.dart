@@ -51,8 +51,8 @@ class CredentialsNotifier extends StateNotifier<String> {
         aOptions: const AndroidOptions(
           encryptedSharedPreferences: true,
         ),
-        iOptions:
-            const IOSOptions(accessibility: IOSAccessibility.first_unlock));
+        iOptions: const IOSOptions(
+            accessibility: KeychainAccessibility.first_unlock));
   }
 
   Future<String?> getCredential(String key) async {
@@ -61,8 +61,8 @@ class CredentialsNotifier extends StateNotifier<String> {
         aOptions: const AndroidOptions(
           encryptedSharedPreferences: true,
         ),
-        iOptions:
-            const IOSOptions(accessibility: IOSAccessibility.first_unlock));
+        iOptions: const IOSOptions(
+            accessibility: KeychainAccessibility.first_unlock));
     state = value!;
 
     return value;
@@ -74,8 +74,8 @@ class CredentialsNotifier extends StateNotifier<String> {
         aOptions: const AndroidOptions(
           encryptedSharedPreferences: true,
         ),
-        iOptions:
-            const IOSOptions(accessibility: IOSAccessibility.first_unlock));
+        iOptions: const IOSOptions(
+            accessibility: KeychainAccessibility.first_unlock));
   }
 
   void clear() async {

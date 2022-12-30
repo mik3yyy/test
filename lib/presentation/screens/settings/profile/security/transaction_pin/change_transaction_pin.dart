@@ -31,9 +31,9 @@ class ResetTransactionPin extends HookConsumerWidget {
     final confirmController = useTextEditingController();
     final controller = useTextEditingController();
     final oldPasswordController = useTextEditingController();
-    final togglePassword = ref.watch(pinToggleStateProvider.state);
-    final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
-    final toggleOldPin = ref.watch(oldPinToggleStateProvider.state);
+    var togglePassword = ref.watch(pinToggleStateProvider);
+    var toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider);
+    var toggleOldPin = ref.watch(oldPinToggleStateProvider);
     final vn = ref.watch(changeTransactionPinProvider);
     ref.listen<RequestState>(changeTransactionPinProvider, (_, value) {
       if (value is Loading) {
@@ -97,22 +97,23 @@ class ResetTransactionPin extends HookConsumerWidget {
                         controller: oldPasswordController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Transaction pin is requied";
+                            return "Transaction pin is required";
                           }
                           if (value.length > 4) {
                             return 'Transaction pin must not be more than 4 numbers';
                           }
                           return null;
                         },
-                        obscureText: toggleOldPin.state,
+                        obscureText: toggleOldPin,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            toggleOldPin.state = !toggleOldPin.state;
+                            ref.read(oldPinToggleStateProvider.notifier).state =
+                                toggleOldPin ? false : true;
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
                             child: Icon(
-                              toggleOldPin.state
+                              toggleOldPin
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                               color: AppColors.appColor,
@@ -138,15 +139,16 @@ class ResetTransactionPin extends HookConsumerWidget {
                           }
                           return null;
                         },
-                        obscureText: togglePassword.state,
+                        obscureText: togglePassword,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            togglePassword.state = !togglePassword.state;
+                            ref.read(pinToggleStateProvider.notifier).state =
+                                togglePassword ? false : true;
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
                             child: Icon(
-                              togglePassword.state
+                              togglePassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                               color: AppColors.appColor,
@@ -174,15 +176,17 @@ class ResetTransactionPin extends HookConsumerWidget {
 
                           return null;
                         },
-                        obscureText: toggleConfirmPin.state,
+                        obscureText: toggleConfirmPin,
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            toggleConfirmPin.state = !toggleConfirmPin.state;
+                            ref
+                                .read(pinConfirmToggleStateProvider.notifier)
+                                .state = toggleConfirmPin ? false : true;
                           },
                           child: Padding(
                             padding: EdgeInsets.only(bottom: 0.h),
                             child: Icon(
-                              toggleConfirmPin.state
+                              toggleConfirmPin
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                               color: AppColors.appColor,

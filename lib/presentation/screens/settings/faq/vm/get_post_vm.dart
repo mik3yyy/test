@@ -5,7 +5,7 @@ import 'package:kayndrexsphere_mobile/Data/services/forum/repo/forum_repo.dart';
 
 final topPost = FutureProvider.autoDispose<GetPostsRes>((ref) async {
   // final topPostRepository = ref.read(forumManagerProvider);
-  ref.maintainState = true;
+  ref.keepAlive();
   return ref.watch(forumManagerProvider).getTop10Posts();
 });
 

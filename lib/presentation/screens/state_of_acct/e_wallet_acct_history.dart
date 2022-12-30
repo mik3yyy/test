@@ -110,9 +110,9 @@ class _EWalletAccountHistoryState extends ConsumerState<EWalletAccountHistory>
                           }
                         },
                         style: TextButton.styleFrom(
-                          primary: Colors.white,
+                          foregroundColor: Colors.white,
                           backgroundColor: AppColors.appColor,
-                          onSurface: AppColors.appColor,
+                          disabledForegroundColor: AppColors.appColor,
                         ),
                         child: range is Loading
                             ? const SizedBox(

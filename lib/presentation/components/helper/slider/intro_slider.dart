@@ -832,13 +832,13 @@ class IntroSliderState extends State<IntroSlider>
             ? Platform.isIOS
                 ? CupertinoScrollbar(
                     controller: scrollController,
-                    isAlwaysShown: verticalScrollbarBehavior ==
+                    thumbVisibility: verticalScrollbarBehavior ==
                         scrollbarBehavior.SHOW_ALWAYS,
                     child: listView,
                   )
                 : Scrollbar(
                     controller: scrollController,
-                    isAlwaysShown: verticalScrollbarBehavior ==
+                    thumbVisibility: verticalScrollbarBehavior ==
                         scrollbarBehavior.SHOW_ALWAYS,
                     child: listView,
                   )

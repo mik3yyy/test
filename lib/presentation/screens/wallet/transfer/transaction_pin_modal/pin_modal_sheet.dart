@@ -100,6 +100,7 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
               if (value.length == 4) {
                 switch (widget.routeName) {
                   case ModalRouteName.toWallet:
+                    Navigator.pop(context);
                     ref
                         .read(transferToWalletProvider.notifier)
                         .transferToWallet(
@@ -108,10 +109,10 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                           widget.transferAmount,
                           value,
                         );
-                    Navigator.pop(context);
 
                     break;
                   case ModalRouteName.toFriend:
+                    Navigator.pop(context);
                     ref
                         .read(transferToWalletProvider.notifier)
                         .transferToAnotherUser(
@@ -121,7 +122,7 @@ class _PinModalSheetState extends ConsumerState<PinModalSheet> {
                           value,
                           widget.saveBeneficiary,
                         );
-                    Navigator.pop(context);
+
                     break;
                   default:
                 }

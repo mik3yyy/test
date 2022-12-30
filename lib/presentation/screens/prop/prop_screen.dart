@@ -84,10 +84,11 @@ class PropScreen extends HookConsumerWidget {
                                             child: TextButton(
                                               child: const Text('Add Contact'),
                                               style: TextButton.styleFrom(
-                                                primary: Colors.white,
+                                                foregroundColor: Colors.white,
                                                 backgroundColor:
                                                     AppColors.appColor,
-                                                onSurface: Colors.grey,
+                                                disabledForegroundColor:
+                                                    Colors.grey,
                                               ),
                                               onPressed: () {
                                                 pushNewScreen(

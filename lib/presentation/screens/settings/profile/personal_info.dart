@@ -54,7 +54,7 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
 
     ref.listen<RequestState>(userPhotoProvider, (T, value) {
       if (value is Success<bool>) {
-        ref.refresh(userProfileProvider);
+        ref.invalidate(userProfileProvider);
         AppSnackBar.showSuccessSnackBar(context,
             message: "Image uploaded successfully");
       }
@@ -208,16 +208,16 @@ class _PersonalInfoState extends ConsumerState<PersonalInfo> {
                               thickness: 0.4,
                             ),
                             Space(30.h),
-                            PersonalInfoCard(
-                                color: Colors.black,
-                                title: 'Phone Number',
-                                subTitle: user.phoneNumer.toString()),
-                            Space(7.h),
-                            const Divider(
-                              color: Colors.black38,
-                              thickness: 0.4,
-                            ),
-                            Space(30.h),
+                            // PersonalInfoCard(
+                            //     color: Colors.black,
+                            //     title: 'Phone Number',
+                            //     subTitle: user.phoneNumer.toString()),
+                            // Space(7.h),
+                            // const Divider(
+                            //   color: Colors.black38,
+                            //   thickness: 0.4,
+                            // ),
+                            // Space(30.h),
                             PersonalInfoCard(
                                 color: Colors.black,
                                 title: 'Date of Birth',

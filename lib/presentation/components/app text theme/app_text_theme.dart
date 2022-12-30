@@ -105,7 +105,7 @@ class AppText {
 
   static TextStyle label(BuildContext context, Color color) {
     return Theme.of(context).textTheme.labelSmall!.copyWith(
-        fontSize: 19.5.sp,
+        fontSize: 17.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
         color: color);

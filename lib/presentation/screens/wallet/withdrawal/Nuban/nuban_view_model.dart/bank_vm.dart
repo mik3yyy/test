@@ -9,7 +9,7 @@ final bankSearchQueryStateProvider = StateProvider.autoDispose<String>((ref) {
 
 // USED TO GET THE LIST OF BANKS FROM THE SERVER.
 final bankListSearchProvider = FutureProvider.autoDispose((ref) {
-  ref.maintainState = true;
+  ref.keepAlive();
   return ref.watch(withdrawManagerProvider).fetchBank();
 });
 

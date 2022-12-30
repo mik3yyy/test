@@ -42,7 +42,7 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
   Widget build(BuildContext context) {
     final aba = ref.watch(abaWithdrawalProvider);
     final walletBalance = ref.watch(getAccountDetailsProvider);
-    final toggle = ref.watch(toggleStateProvider.state);
+    var toggle = ref.watch(toggleStateProvider);
     final routNumberController = useTextEditingController();
     final swiftCodeController = useTextEditingController();
     final descriptionController = useTextEditingController();
@@ -420,9 +420,9 @@ class _ABAWithdrawalState extends ConsumerState<ABAWithdrawal> {
                             const Spacer(),
                             Switch.adaptive(
                                 activeColor: Colors.greenAccent,
-                                value: toggle.state,
+                                value: toggle,
                                 onChanged: (value) {
-                                  toggle.state = !toggle.state;
+                                  toggle = !toggle;
                                 }),
                           ],
                         ),

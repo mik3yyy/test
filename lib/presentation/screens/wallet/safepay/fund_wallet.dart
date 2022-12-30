@@ -26,7 +26,7 @@ class _WithdrawState extends ConsumerState<FundVirtualCard> {
 
   @override
   Widget build(BuildContext context) {
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
+    var togglePassword = ref.watch(passwordToggleStateProvider);
 
     return Scaffold(
       body: WalletViewWidget(
@@ -140,12 +140,12 @@ class _WithdrawState extends ConsumerState<FundVirtualCard> {
                     color: Colors.white,
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        togglePassword.state = !togglePassword.state;
+                        togglePassword = !togglePassword;
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 0.h),
                         child: Icon(
-                          togglePassword.state
+                          togglePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
                           color: AppColors.appColor,

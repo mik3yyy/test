@@ -9,10 +9,12 @@ final currencySearchQueryStateProvider =
 });
 
 // USED TO GET THE LIST OF BANKS FROM THE SERVER
-final remoteCurrencyProvider = FutureProvider.autoDispose((ref) async {
-  ref.maintainState = true;
-  return ref.watch(authManagerProvider).getCurrency();
-});
+final remoteCurrencyProvider = FutureProvider.autoDispose(
+  (ref) async {
+    ref.keepAlive();
+    return ref.watch(authManagerProvider).getCurrency();
+  },
+);
 
 // USED TO FILTER THE LIST OF BANKS
 final currencySearchResultProvider =

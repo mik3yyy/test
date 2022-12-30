@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/database/user/user_database.dart';
@@ -34,7 +36,7 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
       StateProvider<bool>((ref) => PreferenceManager.revealBalance);
   @override
   Widget build(BuildContext context) {
-    final toggleAmount = ref.watch(toggleAmountProvider.state);
+    var toggleAmount = ref.watch(toggleAmountProvider);
     var formatter = NumberFormat("#,##0.00");
     return Container(
       height: 150.h,
@@ -67,8 +69,8 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
               Space(85.w),
               InkWell(
                 onTap: () {
-                  toggleAmount.state = !toggleAmount.state;
-                  PreferenceManager.revealBalance = toggleAmount.state;
+                  toggleAmount = !toggleAmount;
+                  PreferenceManager.revealBalance = toggleAmount;
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
@@ -101,9 +103,39 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
                   style: AppText.header1(context, AppColors.appColor, 40.sp),
                 ),
           Space(8.h),
-          Text(
-            'Kayndrexsphere Account Number: ${widget.defaultWallet.maybeWhen(data: (v) => v.data.user.accountNumber, orElse: () => widget.savedUser.accountNumber ?? "0000")}',
-            style: AppText.body2(context, AppColors.appColor, 17.sp),
+          InkWell(
+            onTap: () async {
+              await HapticFeedback.mediumImpact();
+              Clipboard.setData(
+                      ClipboardData(text: widget.savedUser.accountNumber))
+                  .then((_) {
+                Fluttertoast.showToast(
+                    msg: "Copied",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                    fontSize: 16.sp);
+                // ScaffoldMessenger.of(context)
+                //     .showSnackBar(const SnackBar(content: Text('Copied')));
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Kayndrexsphere Account Number: ${widget.defaultWallet.maybeWhen(data: (v) => v.data.user.accountNumber, orElse: () => widget.savedUser.accountNumber ?? "0000")}',
+                  style: AppText.body2(context, AppColors.appColor, 17.sp),
+                ),
+                Space(5.w),
+                const Icon(
+                  Icons.content_copy,
+                  size: 15,
+                )
+              ],
+            ),
           ),
         ],
       ),

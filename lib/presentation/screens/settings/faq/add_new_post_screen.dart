@@ -53,8 +53,8 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
       if (value is Success<GetPostsRes>) {
         context.loaderOverlay.hide();
         Navigator.of(context).pop();
-        ref.refresh(allPost);
-        ref.refresh(topPost);
+        ref.invalidate(allPost);
+        ref.invalidate(topPost);
         return AppSnackBar.showSuccessSnackBar(context,
             message: value.value!.message!);
       }
@@ -102,78 +102,80 @@ class _AddNewPostScreenState extends ConsumerState<AddNewPostScreen> {
                       right: 25.w,
                       top: 20.h,
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Add post',
-                          style: AppText.robotoStyle(
-                            context,
-                            AppColors.textColor,
-                            16,
-                            FontWeight.w700,
-                          ),
-                        ),
-                        Space(15.h),
-                        ForumTextFormField(
-                          hint: "Post Title",
-                          height: 75.h,
-                          maxLines: 5,
-                          controller: postTitle,
-                        ),
-                        Space(14.h),
-                        ForumTextFormField(
-                          hint: "Post Body",
-                          height: 250.h,
-                          maxLines: 15,
-                          controller: postText,
-                        ),
-                        Space(60.h),
-                        CustomButton(
-                          onPressed:
-                              postText.text.isEmpty && postTitle.text.isEmpty
-                                  ? null
-                                  : () {
-                                      var createPostReq = CreatePostReq(
-                                        title: postTitle.text.trim(),
-                                        text: postText.text.trim(),
-                                      );
-                                      ref
-                                          .read(createPostVm.notifier)
-                                          .createPost(createPostReq);
-                                      context.loaderOverlay.show();
-                                    },
-                          buttonText: vm is Loading
-                              ? loading(
-                                  Colors.white,
-                                )
-                              : buttonText(context, "Post"),
-                          bgColor:
-                              postText.text.isEmpty || postTitle.text.isEmpty
-                                  ? AppColors.appColor.withOpacity(0.3)
-                                  : AppColors.appColor,
-                          textColor: AppColors.whiteColor,
-                          buttonWidth: MediaQuery.of(context).size.width,
-                          borderColor: postText.text.isEmpty ||
-                                  postTitle.text.isEmpty == true
-                              ? AppColors.appColor.withOpacity(0.3)
-                              : AppColors.appColor,
-                        ),
-                        Space(20.h),
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'Cancel',
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Add post',
                             style: AppText.robotoStyle(
                               context,
                               AppColors.textColor,
-                              14.sp,
-                              FontWeight.w500,
+                              16,
+                              FontWeight.w700,
                             ),
                           ),
-                        ),
-                      ],
+                          Space(15.h),
+                          ForumTextFormField(
+                            hint: "Post Title",
+                            height: 75.h,
+                            maxLines: 5,
+                            controller: postTitle,
+                          ),
+                          Space(14.h),
+                          ForumTextFormField(
+                            hint: "Post Body",
+                            height: 250.h,
+                            maxLines: 15,
+                            controller: postText,
+                          ),
+                          Space(60.h),
+                          CustomButton(
+                            onPressed:
+                                postText.text.isEmpty && postTitle.text.isEmpty
+                                    ? null
+                                    : () {
+                                        var createPostReq = CreatePostReq(
+                                          title: postTitle.text.trim(),
+                                          text: postText.text.trim(),
+                                        );
+                                        ref
+                                            .read(createPostVm.notifier)
+                                            .createPost(createPostReq);
+                                        context.loaderOverlay.show();
+                                      },
+                            buttonText: vm is Loading
+                                ? loading(
+                                    Colors.white,
+                                  )
+                                : buttonText(context, "Post"),
+                            bgColor:
+                                postText.text.isEmpty || postTitle.text.isEmpty
+                                    ? AppColors.appColor.withOpacity(0.3)
+                                    : AppColors.appColor,
+                            textColor: AppColors.whiteColor,
+                            buttonWidth: MediaQuery.of(context).size.width,
+                            borderColor: postText.text.isEmpty ||
+                                    postTitle.text.isEmpty == true
+                                ? AppColors.appColor.withOpacity(0.3)
+                                : AppColors.appColor,
+                          ),
+                          Space(20.h),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Cancel',
+                              style: AppText.robotoStyle(
+                                context,
+                                AppColors.textColor,
+                                14.sp,
+                                FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ))

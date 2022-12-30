@@ -16,7 +16,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final walletServiceProvider = Provider<WalletService>((ref) {
-  return WalletService((ref.read), ref);
+  return WalletService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -36,11 +36,11 @@ final cacheOptions = Provider((ref) => CacheOptions(
     ));
 
 class WalletService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
 
   WalletService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       if (kDebugMode) ...[PrettyDioLogger()],
@@ -53,13 +53,13 @@ class WalletService {
     const url = '/wallets/create';
     // final pseudoToken = PreferenceManager.pseudoToken;
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {
-          'currency': currency,
-        },
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {
+              'currency': currency,
+            },
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = CreateWalletRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -76,10 +76,10 @@ class WalletService {
   Future<UserAccountDetails> getUserAccountDetails() async {
     const url = '/wallets/mine';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = UserAccountDetails.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -96,13 +96,13 @@ class WalletService {
   Future<SetWalletAsDefaultRes> setWalletAsDefault(String currency) async {
     const url = '/wallets/set-default';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {
-          'currency_code': currency,
-        },
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {
+              'currency_code': currency,
+            },
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = SetWalletAsDefaultRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -124,7 +124,7 @@ class WalletService {
   ) async {
     const url = '/wallets/transfer-funds/to-my-other-wallet';
     try {
-      final response = await _read(dioProvider).post(url, data: {
+      final response = await _read.read(dioProvider).post(url, data: {
         "from_currency": fromCurrency,
         "to_currency": toCurrency,
         "transfer_amount": transferAmount,
@@ -148,7 +148,7 @@ class WalletService {
       num transferAmount, String transactionPin, bool saveAsBeneficary) async {
     const url = '/wallets/transfer-funds/to-another-user';
     try {
-      final response = await _read(dioProvider).post(url, data: {
+      final response = await _read.read(dioProvider).post(url, data: {
         "account_no": accountNo,
         "transfer_currency": transferCurrency,
         "transfer_amount": transferAmount,
@@ -172,13 +172,13 @@ class WalletService {
   Future<VerifyAcctNoRes> verifyAcctNo(String accountNo) async {
     const url = '/wallets/verify-account-no';
     try {
-      final response = await _read(dioProvider).post(
-        url,
-        data: {
-          'account_no': accountNo,
-        },
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: {
+              'account_no': accountNo,
+            },
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = VerifyAcctNoRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -195,10 +195,10 @@ class WalletService {
   Future<UserSavedWalletBeneficiaryRes> userSavedWalletBeneficiary() async {
     const url = '/wallets/beneficiaries';
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        options: Options(headers: {"requireToken": true}),
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            options: Options(headers: {"requireToken": true}),
+          );
       final result = UserSavedWalletBeneficiaryRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -214,7 +214,7 @@ class WalletService {
   Future<WalletTransactions> getTransactions() async {
     const url = '/wallets/transactions';
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(
@@ -239,7 +239,7 @@ class WalletService {
   Future<CurrencyTransaction> currencyTransactions(String currency) async {
     final url = '/wallets/transactions/$currency';
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(

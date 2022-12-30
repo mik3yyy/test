@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_config.dart';
@@ -44,9 +42,9 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
 
 /// Firebase Analytics Provider
 
-final analyticsProvider = Provider((ref) {
-  return FirebaseAnalytics.instance;
-});
+// final analyticsProvider = Provider((ref) {
+//   return FirebaseAnalytics
+// });
 
 final sessionStateStreamProvider = Provider((ref) {
   return StreamController<SessionState>();

@@ -37,7 +37,7 @@ class _SelectWalletToCreateState extends ConsumerState<SelectWalletToCreate> {
     ref.listen<RequestState>(createWalletProvider, (T, value) {
       if (value is Success<CreateWalletRes>) {
         context.loaderOverlay.hide();
-        ref.refresh(getAccountDetailsProvider);
+        ref.invalidate(getAccountDetailsProvider);
         Navigator.pop(context);
 
         return AppSnackBar.showSuccessSnackBar(context,

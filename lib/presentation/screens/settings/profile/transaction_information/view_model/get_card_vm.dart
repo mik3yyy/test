@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.da
 final getCardProvider =
     StateNotifierProvider.autoDispose<GetCardVM, RequestState<GetCardRes>>(
         (ref) {
-  ref.maintainState = true;
+  ref.keepAlive();
   return GetCardVM(ref);
 });
 

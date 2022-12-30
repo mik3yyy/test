@@ -32,6 +32,8 @@ class SettingScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics()),
         child: Column(
           children: const [
             Navigation(),

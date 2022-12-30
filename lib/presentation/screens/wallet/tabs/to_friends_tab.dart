@@ -1,4 +1,7 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,11 +17,13 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/enable_
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/widget/beneficiary.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/tabs/widget/beneficiary_checkbox.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/transfer/transaction_pin_modal/pin_modal_sheet.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/user_saved_beneficary_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/verify_acct_no_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transfer_vm.dart.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/widget/wallet_textfield.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/dialog/dialog.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/input/decimal_input.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../components/app text theme/app_text_theme.dart';
@@ -69,7 +74,9 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
           onpressed: () => Navigator.pop(context),
         );
 
-        ref.refresh(userProfileProvider);
+        if (saveBeneficiary.value) {
+          ref.invalidate(usersavedWalletBeneficirayProvider);
+        }
       }
       if (value is Error) {
         AppDialog.showErrorMessageDialog(context, value.error.toString());
@@ -171,6 +178,10 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                     controller: amountController,
                     keyboardType:
                         const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatter: [
+                      FilteringTextInputFormatter.deny(RegExp('[ ]')),
+                      DecimalTextInputFormatter(decimalRange: 2),
+                    ],
                     validator: (String? value) {
                       if (value!.isEmpty) {
                         return "Amount is required";
@@ -213,25 +224,41 @@ class _FriendsTabState extends ConsumerState<FriendsTab> {
                                     if (!currentFocus.hasPrimaryFocus) {
                                       currentFocus.unfocus();
                                     }
+                                    var value =
+                                        num.parse(amountController.text);
+                                    var userBalance =
+                                        num.parse(saveduser.balance.toString());
 
+                                    if ((userBalance < value) || (value == 0)) {
+                                      AppDialog.showErrorMessageDialog(context,
+                                          "Amount cannot be more than available amount or zero");
+                                      return;
+                                    }
                                     if (PreferenceManager
                                         .enableTransactionBioMetrics) {
                                       ref
                                           .read(localAuthStateProvider.notifier)
                                           .authenticateTransaction()
                                           .then((value) {
-                                        ref
-                                            .read(transferToWalletProvider
-                                                .notifier)
-                                            .transferToAnotherUser(
-                                              accountNoController.text,
-                                              currencyController.text,
-                                              num.tryParse(
-                                                      amountController.text) ??
-                                                  0.0,
-                                              value,
-                                              saveBeneficiary.value,
-                                            );
+                                        if (Platform.isAndroid) {
+                                          if (value ==
+                                              "Could not be Authenticated. Try again") {
+                                            return;
+                                          } else {
+                                            ref
+                                                .read(transferToWalletProvider
+                                                    .notifier)
+                                                .transferToAnotherUser(
+                                                  accountNoController.text,
+                                                  currencyController.text,
+                                                  num.tryParse(amountController
+                                                          .text) ??
+                                                      0.0,
+                                                  value,
+                                                  saveBeneficiary.value,
+                                                );
+                                          }
+                                        }
                                       });
                                     } else {
                                       showModalBottomSheet(

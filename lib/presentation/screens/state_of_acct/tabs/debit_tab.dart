@@ -47,7 +47,7 @@ class DebitTabView extends HookConsumerWidget {
               return Center(
                 child: TextButton.icon(
                     onPressed: () {
-                      ref.refresh(remoteStatement);
+                      ref.invalidate(remoteStatement);
                     },
                     icon: const Icon(Icons.replay),
                     label: const Text("Retry")),

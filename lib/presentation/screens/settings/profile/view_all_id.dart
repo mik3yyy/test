@@ -89,9 +89,9 @@ class ViewIdentification extends HookConsumerWidget {
                                   );
                                 },
                                 style: TextButton.styleFrom(
-                                  primary: Colors.white,
+                                  foregroundColor: Colors.white,
                                   backgroundColor: AppColors.appColor,
-                                  onSurface: Colors.grey,
+                                  disabledForegroundColor: Colors.grey,
                                 ),
                                 child: Text(
                                   "Add ID",

@@ -14,11 +14,10 @@ class EditForm extends StatelessWidget {
       this.suffixIcon,
       this.prefixIcon,
       this.focusNode,
-      // this.textAlign,
+      this.inputFormatter,
       this.onTap,
       this.readOnly = false,
       this.enabled,
-      this.inputter,
       this.textLength,
       this.keyboardType,
       this.onEditingComplete,
@@ -41,13 +40,13 @@ class EditForm extends StatelessWidget {
   final int? textLength;
   final void Function(String)? onChanged;
   final void Function()? onTap;
-  final List<TextInputFormatter>? inputter;
+  final List<TextInputFormatter>? inputFormatter;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
         onTap: onTap,
-        inputFormatters: inputter,
+        inputFormatters: inputFormatter,
         enabled: enabled,
         readOnly: readOnly,
         maxLength: textLength,
@@ -68,6 +67,7 @@ class EditForm extends StatelessWidget {
           errorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.red),
           ),
+
           focusedErrorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
           ),
@@ -77,7 +77,7 @@ class EditForm extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 0.h),
           // floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
-          labelStyle: AppText.body2(context, Colors.black38, 20.sp),
+          labelStyle: AppText.body2(context, Colors.black38, 17.sp),
           // border: const OutlineInputBorder(borderSide: BorderSide())
         ),
         validator: validator);

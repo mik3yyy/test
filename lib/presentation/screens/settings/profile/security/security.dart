@@ -1,7 +1,9 @@
 // import 'package:adaptive_dialog/adaptive_dialog.dart';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
@@ -28,18 +30,12 @@ class SecurityScreen extends StatefulHookConsumerWidget {
 }
 
 class _SecurityScreenState extends ConsumerState<SecurityScreen> {
-  final toggleStateProvider = StateProvider<bool>((ref) {
-    return false;
-  });
-
-  bool valueChanged = false;
+  bool isOpen = false;
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProfileProvider).value;
-    final toggle = ref.watch(toggleStateProvider.state);
-    final togglePin = ref.watch(togglePinStateProvider.state);
-    final setPin = ref.watch(setPinStateProvider.state);
+    final createdPin = useState(false);
 
     return Scaffold(
       appBar: AppBar(
@@ -75,8 +71,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               ),
               Space(10.h),
               const Divider(
-                color: Colors.black,
-                thickness: 0.4,
+                thickness: 1,
               ),
               Space(20.h),
               ProfileCard(
@@ -94,8 +89,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               ),
               Space(10.h),
               const Divider(
-                color: Colors.black,
-                thickness: 0.4,
+                thickness: 1,
               ),
               Space(30.h),
 
@@ -111,11 +105,10 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       activeColor: Colors.greenAccent,
                       value: PreferenceManager.enableBioMetrics,
                       onChanged: (value) async {
-                        toggle.state = !toggle.state;
-                        PreferenceManager.enableBioMetrics = toggle.state;
-                        PreferenceManager.isSaved = toggle.state;
+                        PreferenceManager.enableBioMetrics = value;
+                        PreferenceManager.isSaved = value;
 
-                        if (toggle.state == true) {
+                        if (value) {
                           showOkAlertDialog(
                             context: context,
                             message: 'Please restart the app for this changes',
@@ -126,13 +119,10 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
 
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userEmail,
-                              user == null ? "" : user.data.user.email!
-
-                              // user.data.user.email.toString()
-                              );
+                              user == null ? "" : user.data.user.email!);
                           ref.read(credentialProvider.notifier).storeCredential(
                               Constants.userPassword, password!);
-                        } else if (toggle.state == false) {
+                        } else {
                           showOkAlertDialog(
                             context: context,
                             message: 'Please restart the app for this changes',
@@ -159,11 +149,9 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       activeColor: Colors.greenAccent,
                       value: PreferenceManager.enableTransactionBioMetrics,
                       onChanged: (value) async {
-                        togglePin.state = !togglePin.state;
-                        // PreferenceManager.enableTransactionBioMetrics =
-                        //     togglePin.state;
-
-                        if (togglePin.state) {
+                        ref.read(togglePinStateProvider.notifier).state ==
+                            value;
+                        if (value) {
                           showModalBottomSheet(
                               context: context,
                               isDismissible: true,
@@ -173,31 +161,17 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                                       top: Radius.circular(20))),
                               builder: (context) {
                                 return EnableTransactionPin(
-                                  isEnable: PreferenceManager
-                                      .enableTransactionBioMetrics,
+                                  createdPin: createdPin,
                                 );
-                              }).whenComplete(() {
-                            if (setPin.state) {
-                              setState(() {
-                                PreferenceManager.enableTransactionBioMetrics =
-                                    true;
-                                togglePin.state = true;
                               });
-                            } else {
-                              setState(() {
-                                PreferenceManager.enableTransactionBioMetrics =
-                                    false;
-                                togglePin.state = false;
-                              });
-                            }
-                          });
-                        } else if (togglePin.state == false) {
+                        } else {
+                          createdPin.value = false;
                           setState(() {
                             ref
                                 .read(credentialProvider.notifier)
                                 .deleteCredential(Constants.transactionPin);
                             PreferenceManager.enableTransactionBioMetrics =
-                                false;
+                                createdPin.value;
                           });
                         }
                       }),

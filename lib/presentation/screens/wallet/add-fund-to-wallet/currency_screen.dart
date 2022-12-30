@@ -10,6 +10,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/get_currency_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/notification/viewmodel/get_notification_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/create_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -39,7 +41,9 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
     ref.listen<RequestState>(createWalletProvider, (prev, value) {
       if (value is Success<CreateWalletRes>) {
         context.loaderOverlay.hide();
-        ref.refresh(getAccountDetailsProvider);
+        ref.invalidate(getAccountDetailsProvider);
+        ref.invalidate(userProfileProvider);
+        ref.invalidate(remoteNotificationListProvider);
         Navigator.pop(context);
       }
 
@@ -88,7 +92,7 @@ class _SelectCurrencyScreenState extends ConsumerState<SelectCurrencyScreen> {
                             label: const Text('Retry'),
                             icon: const Icon(Icons.replay),
                             onPressed: () {
-                              ref.refresh(remoteCurrencyProvider);
+                              ref.invalidate(remoteCurrencyProvider);
                             }),
                       );
                     },

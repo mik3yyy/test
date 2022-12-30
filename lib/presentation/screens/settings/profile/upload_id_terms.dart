@@ -42,7 +42,7 @@ class _UploadIDTermsState extends ConsumerState<UploadIDTerms> {
         ScreenView.hideLoadingView(context);
       }
       if (value is Success<UploadIdRes>) {
-        ref.refresh(getAllIdentification);
+        ref.invalidate(getAllIdentification);
         Navigator.pop(context);
         Navigator.pop(context);
 
@@ -116,9 +116,9 @@ class _UploadIDTermsState extends ConsumerState<UploadIDTerms> {
                           }
                         },
                   style: TextButton.styleFrom(
-                    primary: Colors.white,
+                    foregroundColor: Colors.white,
                     backgroundColor: AppColors.appColor,
-                    onSurface: Colors.grey,
+                    disabledForegroundColor: Colors.grey,
                   ),
                   child: vm is Loading
                       ? loading(

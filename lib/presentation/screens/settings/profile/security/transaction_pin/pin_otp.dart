@@ -210,7 +210,7 @@ class _PinOTPScreenState extends ConsumerState<PinOTPScreen> {
                                     withNavBar:
                                         true, // OPTIONAL VALUE. True by default.
                                     pageTransitionAnimation:
-                                        PageTransitionAnimation.fade,
+                                        PageTransitionAnimation.cupertino,
                                   );
                                   // context.navigate(ResetPinScreen(
                                   //   otpCode: verifyController.text,

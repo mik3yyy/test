@@ -41,7 +41,7 @@ class _SwiftCodeViewState extends ConsumerState<SwiftCodeView> {
 
   @override
   Widget build(BuildContext context) {
-    final selection = ref.watch(toggleSelectionProvider.state);
+    var selection = ref.watch(toggleSelectionProvider);
 
     /// listens to Sepa withraw
     ref.listen<RequestState>(sepaWithdrawalProvider, (previous, value) {
@@ -120,41 +120,39 @@ class _SwiftCodeViewState extends ConsumerState<SwiftCodeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ToggleSelection(
-                            textColor: selection.state == 'IBAN'
+                            textColor: selection == 'IBAN'
                                 ? AppColors.appColor
                                 : Colors.grey[400]!,
-                            borderColor: selection.state == 'IBAN'
+                            borderColor: selection == 'IBAN'
                                 ? AppColors.appColor
                                 : Colors.grey[200]!,
-                            color: selection.state == 'IBAN'
+                            color: selection == 'IBAN'
                                 ? Colors.grey[200]!
                                 : Colors.grey[100]!,
                             name: 'IBAN',
                             onPressed: () {
-                              selection.state = 'IBAN';
+                              selection = 'IBAN';
                             },
                           ),
                           ToggleSelection(
-                            textColor: selection.state == 'SEPA'
+                            textColor: selection == 'SEPA'
                                 ? AppColors.appColor
                                 : Colors.grey[400]!,
-                            borderColor: selection.state == 'SEPA'
+                            borderColor: selection == 'SEPA'
                                 ? AppColors.appColor
                                 : Colors.grey[200]!,
-                            color: selection.state == 'SEPA'
+                            color: selection == 'SEPA'
                                 ? Colors.grey[200]!
                                 : Colors.grey[100]!,
                             name: 'SEPA',
                             onPressed: () {
-                              selection.state = 'SEPA';
+                              selection = 'SEPA';
                             },
                           ),
                         ],
                       ),
                       Space(20.h),
-                      selection.state == "IBAN"
-                          ? const IbanView()
-                          : const SepaView()
+                      selection == "IBAN" ? const IbanView() : const SepaView()
                     ],
                   ),
                 ),
@@ -185,7 +183,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
 
   @override
   Widget build(BuildContext context) {
-    final toggle = ref.watch(toggleStateProvider.state);
+    var toggle = ref.watch(toggleStateProvider);
     final walletBalance = ref.watch(getAccountDetailsProvider);
     final sepa = ref.watch(sepaWithdrawalProvider);
     final senderAddressController = useTextEditingController();
@@ -211,7 +209,7 @@ class _SepaViewState extends ConsumerState<SepaView> {
     // listen to either success or failure response
     ref.listen<RequestState>(sepaWithdrawalProvider, (previous, value) {
       if (value is Success<WithdrawRes>) {
-        ref.refresh(getAccountDetailsProvider);
+        ref.invalidate(getAccountDetailsProvider);
         AppDialog.showSuccessMessageDialog(
           context,
           value.value!.message!,
@@ -609,9 +607,9 @@ class _SepaViewState extends ConsumerState<SepaView> {
               const Spacer(),
               Switch.adaptive(
                   activeColor: Colors.greenAccent,
-                  value: toggle.state,
+                  value: toggle,
                   onChanged: (value) {
-                    toggle.state = !toggle.state;
+                    toggle = !toggle;
                   }),
             ],
           ),

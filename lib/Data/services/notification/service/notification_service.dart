@@ -11,7 +11,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  return NotificationService((ref.read), ref);
+  return NotificationService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -31,10 +31,10 @@ final cacheOptions = Provider((ref) => CacheOptions(
     ));
 
 class NotificationService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   NotificationService(this._read, this.ref) {
-    _read(dioProvider).interceptors.addAll([
+    _read.read(dioProvider).interceptors.addAll([
       ApiInterceptor(),
       ErrorInterceptor(),
       if (kDebugMode) ...[PrettyDioLogger()],
@@ -47,7 +47,7 @@ class NotificationService {
     const url = '/notifications';
 
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(
@@ -71,7 +71,7 @@ class NotificationService {
     const url = '/payments/withdrawals';
 
     try {
-      final response = await _read(dioProvider).get(url,
+      final response = await _read.read(dioProvider).get(url,
           options: ref
               .watch(cacheOptions)
               .copyWith(

@@ -117,7 +117,7 @@ class _TransactionInformationScreenState
                           return Center(
                             child: TextButton.icon(
                                 onPressed: () {
-                                  ref.refresh(getCardProvider);
+                                  ref.invalidate(getCardProvider);
                                 },
                                 icon: const Icon(Icons.replay),
                                 label: const Text("Retry")),

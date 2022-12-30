@@ -5,7 +5,7 @@ import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dar
 import '../../wallet/vm/get_account_details_vm.dart';
 
 final providers = Provider((ref) {
-  ref.refresh(getAccountDetailsProvider);
-  ref.refresh(userProfileProvider);
+  ref.invalidate(getAccountDetailsProvider);
+  ref.invalidate(userProfileProvider);
   return PreferenceManager.isFirstLaunch = false;
 });

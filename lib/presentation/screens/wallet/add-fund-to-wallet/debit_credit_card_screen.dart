@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
@@ -30,6 +31,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wa
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/add-fund-to-wallet/vm/fund_wallet_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/convert_currency_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/utils/input/decimal_input.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -56,14 +58,12 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
         text: userData?.data.defaultWallet.currencyCode);
     final currencyController = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
-
     final amountController = useTextEditingController();
-
     final fromCurrency = useTextEditingController();
     final toCurrency = useTextEditingController();
-
     final rate = useState("0.0");
-    final from = useState("0.0");
+    final from = useState<num>(0.0);
+    var formatter = NumberFormat("#,##0.00");
     final convert = ref.watch(conversionProvider);
 
     ref.listen<RequestState>(conversionProvider, (previous, value) {
@@ -136,15 +136,15 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                       ),
                     ),
                   ),
-                  Space(27.h),
+                  Space(40.h),
                   Padding(
                     padding: EdgeInsets.only(left: 23.w, right: 23.w),
                     child: Text(
-                      'Minimum amount is £1.00 or it’s equivalence when converting to another currency',
-                      style: AppText.body2(context, Colors.black, 18.sp),
+                      'Minimum amount is £1.00 or its equivalence when converting to another currency. E-wallet funding is free however your card issuer may charge you a fee.',
+                      style: AppText.body2(context, Colors.black54, 17.sp),
                     ),
                   ),
-                  Space(40.h),
+                  Space(60.h),
                   Padding(
                     padding: EdgeInsets.only(left: 23.w, right: 23.w),
                     child: Form(
@@ -226,6 +226,11 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                           decimal: true),
                                   // textAlign: TextAlign.start,
                                   controller: amountController,
+                                  inputFormatter: [
+                                    FilteringTextInputFormatter.deny(
+                                        RegExp('[ ]')),
+                                    DecimalTextInputFormatter(decimalRange: 2),
+                                  ],
                                   obscureText: false,
                                   validator: (value) => null,
                                 ),
@@ -514,9 +519,7 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                   autovalidateMode:
                                                       AutovalidateMode
                                                           .onUserInteraction,
-                                                  labelText: convert is Loading
-                                                      ? "---"
-                                                      : 'Enter amount',
+                                                  labelText: 'Enter amount',
 
                                                   // textAlign: TextAlign.start,
                                                   controller:
@@ -532,24 +535,12 @@ class _DebitCreditCardScreenState extends ConsumerState<DebitCreditCardScreen> {
                                                                 rate.value) ??
                                                             0);
 
-                                                    from.value = res.toString();
+                                                    from.value = res;
                                                   },
                                                 ),
                                               ),
-                                              // Text(
-                                              //   // salesPrice.toString(),
-                                              //   ((num.tryParse(from.value) ?? 0) *
-                                              //           (num.tryParse(rate.value) ??
-                                              //               0))
-                                              //       .toString(),
-                                              //   style: TextStyle(
-                                              //     color: const Color(0xFF2C2C2C),
-                                              //     fontSize: 14.sp,
-                                              //     fontWeight: FontWeight.w700,
-                                              //   ),
-                                              // ),
                                               Text(
-                                                from.value,
+                                                formatter.format(from.value),
                                                 style: AppText.body2(context,
                                                     Colors.black, 20.sp),
                                               ),

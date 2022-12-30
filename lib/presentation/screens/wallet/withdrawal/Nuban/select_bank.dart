@@ -104,7 +104,7 @@ class _SelectBankScreenState extends ConsumerState<SelectBankScreen> {
                           label: const Text('Retry'),
                           icon: const Icon(Icons.replay),
                           onPressed: () {
-                            ref.refresh(bankListSearchProvider);
+                            ref.invalidate(bankListSearchProvider);
                           }),
                     );
                   })

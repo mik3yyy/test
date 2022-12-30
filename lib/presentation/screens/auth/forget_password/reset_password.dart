@@ -38,16 +38,17 @@ class ResetPasswordScreen extends HookConsumerWidget {
     final confirmController = useTextEditingController();
     final controller = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
-    final togglePassword = ref.watch(pinToggleStateProvider.state);
-    final toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider.state);
+    var togglePassword = ref.watch(pinToggleStateProvider);
+    var toggleConfirmPin = ref.watch(pinConfirmToggleStateProvider);
 
     ref.listen<RequestState>(resetPasswordProvider, (T, value) async {
       final pref = await SharedPreferences.getInstance();
       final email = pref.getString(Constants.email);
       if (value is Success) {
-        context.navigate(SigninScreen(
+        context.navigateReplaceRoot(SigninScreen(
           email: email.toString(),
         ));
+
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Password reset successfully",
@@ -116,15 +117,16 @@ class ResetPasswordScreen extends HookConsumerWidget {
 
                         return null;
                       },
-                      obscureText: togglePassword.state,
+                      obscureText: togglePassword,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          togglePassword.state = !togglePassword.state;
+                          ref.read(pinToggleStateProvider.notifier).state =
+                              togglePassword ? false : true;
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            togglePassword.state
+                            togglePassword
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: AppColors.appColor,
@@ -149,15 +151,17 @@ class ResetPasswordScreen extends HookConsumerWidget {
                         // validator has to return something :)
                         return null;
                       },
-                      obscureText: toggleConfirmPin.state,
+                      obscureText: toggleConfirmPin,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          toggleConfirmPin.state = !toggleConfirmPin.state;
+                          ref
+                              .read(pinConfirmToggleStateProvider.notifier)
+                              .state = toggleConfirmPin ? false : true;
                         },
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 0.h),
                           child: Icon(
-                            toggleConfirmPin.state
+                            toggleConfirmPin
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: AppColors.appColor,

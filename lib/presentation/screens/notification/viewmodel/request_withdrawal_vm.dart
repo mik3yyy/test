@@ -9,7 +9,7 @@ final notificationReqSearchQueryProvider =
 });
 
 final remoteReqNotificationListProvider = FutureProvider.autoDispose((ref) {
-  ref.maintainState = true;
+  ref.keepAlive();
   ref.watch(userProfileProvider);
   return ref.watch(notificationServiceManagerProvider).getWithdrawalRequest();
 });

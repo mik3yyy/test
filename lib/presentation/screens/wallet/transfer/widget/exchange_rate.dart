@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
@@ -35,7 +36,8 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
     final toCurrency = useTextEditingController();
     final fromExchangeCurrency = useTextEditingController();
     final rate = useState("0.0");
-    final from = useState("0.0");
+    final from = useState<num>(0.0);
+    var formatter = NumberFormat("#,##0.00");
     final convert = ref.watch(conversionProvider);
 
     ref.listen<RequestState>(conversionProvider, (previous, value) {
@@ -223,9 +225,7 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
                                             decimal: true),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
-                                    labelText: convert is Loading
-                                        ? "---"
-                                        : 'Enter amount',
+                                    labelText: 'Enter amount',
 
                                     // textAlign: TextAlign.start,
                                     controller: fromExchangeCurrency,
@@ -236,12 +236,12 @@ class _ExchangeRateState extends ConsumerState<ExchangeRate> {
                                       final res = (num.tryParse(value) ?? 0) *
                                           (num.tryParse(rate.value) ?? 0);
 
-                                      from.value = res.toString();
+                                      from.value = res;
                                     },
                                   ),
                                 ),
                                 Text(
-                                  from.value,
+                                  formatter.format(from.value),
                                   style: AppText.body2(
                                       context, Colors.black, 20.sp),
                                 ),

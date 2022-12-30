@@ -85,8 +85,8 @@ class _WithdrawState extends ConsumerState<Withdraw> {
   ];
   @override
   Widget build(BuildContext context) {
-    final togglePassword = ref.watch(passwordToggleStateProvider.state);
-    final selection = ref.watch(toggleSelectionProvider.state);
+    var togglePassword = ref.watch(passwordToggleStateProvider);
+    var selection = ref.watch(toggleSelectionProvider);
 
     final selected = useState('');
 
@@ -229,33 +229,33 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ToggleSelection(
-                            textColor: selection.state == 'IBAN'
+                            textColor: selection == 'IBAN'
                                 ? AppColors.appColor
                                 : Colors.grey[400]!,
-                            borderColor: selection.state == 'IBAN'
+                            borderColor: selection == 'IBAN'
                                 ? AppColors.appColor
                                 : Colors.grey[200]!,
-                            color: selection.state == 'IBAN'
+                            color: selection == 'IBAN'
                                 ? Colors.grey[200]!
                                 : Colors.grey[100]!,
                             name: 'IBAN',
                             onPressed: () {
-                              selection.state = 'IBAN';
+                              selection = 'IBAN';
                             },
                           ),
                           ToggleSelection(
-                            textColor: selection.state == 'SEPA'
+                            textColor: selection == 'SEPA'
                                 ? AppColors.appColor
                                 : Colors.grey[400]!,
-                            borderColor: selection.state == 'SEPA'
+                            borderColor: selection == 'SEPA'
                                 ? AppColors.appColor
                                 : Colors.grey[200]!,
-                            color: selection.state == 'SEPA'
+                            color: selection == 'SEPA'
                                 ? Colors.grey[200]!
                                 : Colors.grey[100]!,
                             name: 'SEPA',
                             onPressed: () {
-                              selection.state = 'SEPA';
+                              selection = 'SEPA';
                             },
                           ),
                         ],
@@ -434,7 +434,7 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      selection.state == 'IBAN'
+                      selection == 'IBAN'
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -592,12 +592,12 @@ class _WithdrawState extends ConsumerState<Withdraw> {
                   color: Colors.white,
                   suffixIcon: GestureDetector(
                     onTap: () {
-                      togglePassword.state = !togglePassword.state;
+                      togglePassword = !togglePassword;
                     },
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 0.h),
                       child: Icon(
-                        togglePassword.state
+                        togglePassword
                             ? Icons.visibility_off
                             : Icons.visibility,
                         color: AppColors.appColor,

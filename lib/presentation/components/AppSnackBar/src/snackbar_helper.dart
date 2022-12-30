@@ -331,7 +331,7 @@ extension FlashBarShortcuts on BuildContext {
             );
             child = TextButtonTheme(
               data: TextButtonThemeData(
-                style: TextButton.styleFrom(primary: $actionColor),
+                style: TextButton.styleFrom(foregroundColor: $actionColor),
               ),
               child: child,
             );
@@ -541,7 +541,7 @@ extension FlashDialogShortcuts on BuildContext {
             );
             child = TextButtonTheme(
               data: TextButtonThemeData(
-                style: TextButton.styleFrom(primary: $actionColor),
+                style: TextButton.styleFrom(foregroundColor: $actionColor),
               ),
               child: child,
             );

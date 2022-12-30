@@ -14,7 +14,7 @@ import '../../make_payment/fund_wallet/fund_wallet_req.dart';
 import '../../make_payment/fund_wallet/web_res.dart';
 
 final cardServiceProvider = Provider<CardService>((ref) {
-  return CardService((ref.read), ref);
+  return CardService((ref), ref);
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
@@ -24,12 +24,13 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     baseUrl: AppConfig.coreBaseUrl)));
 
 class CardService {
-  final Reader _read;
+  final Ref _read;
   final Ref ref;
   CardService(this._read, this.ref) {
-    _read(dioProvider).interceptors.add(ApiInterceptor());
-    _read(dioProvider).interceptors.add(ErrorInterceptor());
-    _read(dioProvider).interceptors.add(PrettyDioLogger());
+    _read
+        .read(dioProvider)
+        .interceptors
+        .addAll([ApiInterceptor(), ErrorInterceptor(), PrettyDioLogger()]);
   }
 
   // FSavd Card
@@ -38,7 +39,7 @@ class CardService {
 
     try {
       final response =
-          await _read(dioProvider).post(url, data: addCardreq.toJson()
+          await _read.read(dioProvider).post(url, data: addCardreq.toJson()
               // options: Options(headers: {"Authentication": "Bearer $token"})
               );
       final result = AddCardRes.fromJson(response.data);
@@ -57,10 +58,10 @@ class CardService {
     const url = '/cards';
 
     try {
-      final response = await _read(dioProvider).get(
-        url,
-        // options: Options(headers: {"Authentication": "Bearer $token"})
-      );
+      final response = await _read.read(dioProvider).get(
+            url,
+            // options: Options(headers: {"Authentication": "Bearer $token"})
+          );
       final result = GetCardRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -78,9 +79,10 @@ class CardService {
     const url = '/cards/set-default';
 
     try {
-      final response = await _read(dioProvider).post(url, data: {"card": cardID}
-          // options: Options(headers: {"Authentication": "Bearer $token"})
-          );
+      final response =
+          await _read.read(dioProvider).post(url, data: {"card": cardID}
+              // options: Options(headers: {"Authentication": "Bearer $token"})
+              );
       final result = GetCardRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
@@ -97,14 +99,14 @@ class CardService {
     const url = '/payments/deposits/new/initiate-web';
     try {
       final response =
-          await _read(dioProvider).post(url, data: fundWalletReq.toJson());
+          await _read.read(dioProvider).post(url, data: fundWalletReq.toJson());
       final result = StripeWebRes.fromJson(response.data);
 
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
         if (e.response?.statusCode == 500) {
-          throw "Transfer amount due must add up to at least £0.30";
+          throw "An Error occurred please try again";
         } else {
           Failure result = Failure.fromJson(e.response!.data);
           throw result.message!;
@@ -121,7 +123,7 @@ class CardService {
 
     try {
       final response =
-          await _read(dioProvider).post(url, data: addCardReq.toJson()
+          await _read.read(dioProvider).post(url, data: addCardReq.toJson()
               // options: Options(headers: {"Authentication": "Bearer $token"})
               );
       final result = AddCardRes.fromJson(response.data);
