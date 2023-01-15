@@ -8,9 +8,11 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/reset_password_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -47,6 +49,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
       if (value is Success) {
         context.navigateReplaceRoot(SigninScreen(
           email: email.toString(),
+          account: Account.existingAccount,
         ));
 
         return AppSnackBar.showSuccessSnackBar(
@@ -188,6 +191,10 @@ class ResetPasswordScreen extends HookConsumerWidget {
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
+                                ref
+                                    .read(credentialProvider.notifier)
+                                    .storeCredential(Constants.userPassword,
+                                        controller.text);
                                 ref
                                     .read(resetPasswordProvider.notifier)
                                     .resetPassword(

@@ -4,6 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/device_id.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
@@ -74,6 +76,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
     }
   }
 
+  ///  AUTHENTICATE A USER HERE
   Future<bool> authenticate() async {
     final password = await ref
         .read(credentialProvider.notifier)
@@ -82,6 +85,7 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
         .read(credentialProvider.notifier)
         .getCredential(Constants.userEmail);
     final device = ref.watch(deviceInfoProvider);
+    final loginState = ref.watch(accountStateProvider);
 
     try {
       final isAuthenticated = await auth.authenticate(
@@ -102,13 +106,20 @@ class LocalAuthNotifier extends StateNotifier<LocalAuthState> {
 
       if (state.isAuthenticated) {
         var signinReq = SigninReq(
-            emailPhone: email!,
-            password: password!,
+            emailPhone: email ?? "",
+            password: password ?? "",
             timezone: device.timeZone,
             deviceId: device.deviceId);
-
-        await ref.read(signInProvider.notifier).signIn(signinReq);
-
+        switch (loginState) {
+          case Account.existingAccount:
+            ref.read(verifyAuthProvider.notifier).verifyAuth(signinReq);
+            ref.read(userEmail.notifier).state = email!;
+            break;
+          case Account.newAccount:
+            ref.read(signInProvider.notifier).signIn(signinReq);
+            break;
+          default:
+        }
         if (mounted) {
           state = state.copyWith(success: true);
         }

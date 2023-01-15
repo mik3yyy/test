@@ -10,6 +10,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/verify_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_account_vm.dart';
@@ -265,7 +266,9 @@ class CreateAccountScreen extends HookConsumerWidget {
                           TextButton(
                               style: TextButton.styleFrom(),
                               onPressed: () =>
-                                  context.navigate(const SigninScreen()),
+                                  context.navigate(const SigninScreen(
+                                    account: Account.none,
+                                  )),
                               child: Text(
                                 ' Sign In',
                                 style:

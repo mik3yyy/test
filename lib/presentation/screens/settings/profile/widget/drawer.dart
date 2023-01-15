@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/notification/notification_screen.dart';
@@ -223,7 +224,9 @@ class Navigation extends HookConsumerWidget {
                 ref
                     .read(sessionStateStreamProvider)
                     .add(SessionState.stopListening);
-                context.navigateReplaceRoot(const SigninScreen());
+                context.navigateReplaceRoot(const SigninScreen(
+                  account: Account.existingAccount,
+                ));
               },
             ),
             const Divider(

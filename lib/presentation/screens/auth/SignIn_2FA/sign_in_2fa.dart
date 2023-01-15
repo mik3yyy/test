@@ -1,64 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
-import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_password.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/resend_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/verify_account_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
-import '../vm/resend_otp_vm.dart';
 
-class VerifyAccountScreen extends HookConsumerWidget {
+class Verify2FA extends StatefulHookConsumerWidget {
   final String emailAdress;
-  VerifyAccountScreen({Key? key, required this.emailAdress}) : super(key: key);
-  final toggleStateProvider = StateProvider<bool>((ref) {
-    return false;
-  });
-
-  final formKey = GlobalKey<FormState>();
+  const Verify2FA({super.key, required this.emailAdress});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(verifyAccountProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _Verify2FAState();
+}
 
-    final emailController = useTextEditingController(text: emailAdress);
-    final verifyController = useTextEditingController();
+class _Verify2FAState extends ConsumerState<Verify2FA> {
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController verifyController = TextEditingController();
 
-    var toggleState = ref.watch(toggleStateProvider);
-    ref.listen<RequestState>(verifyAccountProvider, (_, value) {
-      if (value is Loading) {
+  @override
+  Widget build(BuildContext context) {
+    final vm = ref.watch(verify2FAProvider);
+    final resend2FA = ref.watch(resend2FAProvider);
+    final email = ref.watch(userEmail.notifier);
+
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    ref.listen<RequestState>(verify2FAProvider, (T, value) {
+      if (value is Loading<SigninRes>) {
         ScreenView.showLoadingView(context);
       } else {
         ScreenView.hideLoadingView(context);
       }
-      if (value is Success) {
-        context.navigate(CreatePasswordScreen());
-        return AppSnackBar.showSuccessSnackBar(
-          context,
-          message: "Account Verified",
-        );
+      if (value is Success<SigninRes>) {
+        //REFRESH THE PROVIDERS
+        //  ref.refresh(providers);
+        context.loaderOverlay.hide();
+        navigator.key.currentContext!.navigateReplaceRoot(MainScreen(
+          menuScreenContext: context,
+        ));
       }
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
     });
-    ref.listen<RequestState>(resendOtpProvider, (T, value) {
-      if (value is Success) {
+    ref.listen<RequestState>(resend2FAProvider, (T, value) {
+      if (value is Loading<LoginRes>) {
+        ScreenView.showLoadingView(context);
+      } else {
+        ScreenView.hideLoadingView(context);
+      }
+      if (value is Success<LoginRes>) {
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Check Your Mail for Verification Code",
@@ -85,18 +96,19 @@ class VerifyAccountScreen extends HookConsumerWidget {
                   ),
                   Space(12.h),
                   Text(
-                    "Enter 4-digit code we have sent to",
+                    "Enter 6-digit code we have sent to",
                     style: AppText.header2(context, AppColors.appColor, 20.sp),
                     textAlign: TextAlign.center,
                   ),
                   Space(5.h),
                   Text(
-                    emailAdress,
+                    widget.emailAdress,
                     style: AppText.header2(context, AppColors.appColor, 20.sp),
                     textAlign: TextAlign.center,
                   ),
                   Space(120.h),
                   PinCodeTextField(
+                    autoDisposeControllers: false,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (String? value) {
                       if (value!.isEmpty) {
@@ -125,11 +137,26 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     keyboardType: TextInputType.phone,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     appContext: context,
-                    length: 4,
+                    length: 6,
                     onCompleted: (value) {
-                      ref.read(toggleStateProvider.notifier).state =
-                          toggleState == false ? true : false;
-                      toggleState = true;
+                      if (value.length == 6) {
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+                        String userEmail() {
+                          if (widget.emailAdress.isEmpty) {
+                            return email.state;
+                          } else {
+                            return widget.emailAdress;
+                          }
+                        }
+
+                        var verify2FA = The2FaReq(
+                            email: userEmail(), code: verifyController.text);
+                        ref
+                            .read(verify2FAProvider.notifier)
+                            .verify2FA(verify2FA);
+                      }
                     },
                     onChanged: (String value) {},
                   ),
@@ -139,17 +166,29 @@ class VerifyAccountScreen extends HookConsumerWidget {
                     children: [
                       Text('Didn’t receive the code?',
                           style: AppText.body4(context, AppColors.hintColor)),
-                      InkWell(
-                        onTap: () {
-                          ref
-                              .read(resendOtpProvider.notifier)
-                              .resendOtp(emailAdress);
-                        },
-                        child: Text(
-                          ' Resend Code',
-                          style: AppText.body4(context, AppColors.appColor),
-                        ),
-                      ),
+                      TextButton(
+                          onPressed: () {
+                            String userEmail() {
+                              if (widget.emailAdress.isEmpty) {
+                                return email.state;
+                              } else {
+                                return widget.emailAdress;
+                              }
+                            }
+
+                            ref
+                                .read(resend2FAProvider.notifier)
+                                .resend2FA(userEmail());
+                          },
+                          child: resend2FA is Loading
+                              ? loading(
+                                  AppColors.appColor,
+                                )
+                              : Text(
+                                  ' Resend Code',
+                                  style: AppText.body4(
+                                      context, AppColors.appColor),
+                                )),
                     ],
                   ),
                   Space(160.h),
@@ -167,12 +206,23 @@ class VerifyAccountScreen extends HookConsumerWidget {
                         ? null
                         : () {
                             if (formKey.currentState!.validate()) {
-                              var verifyAccount = VerifyAccount(
-                                  emailPhone: emailController.text,
-                                  verificationCode: verifyController.text);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                              String userEmail() {
+                                if (widget.emailAdress.isEmpty) {
+                                  return email.state;
+                                } else {
+                                  return widget.emailAdress;
+                                }
+                              }
+
+                              var verify2FA = The2FaReq(
+                                  email: userEmail(),
+                                  code: verifyController.text);
                               ref
-                                  .read(verifyAccountProvider.notifier)
-                                  .verifyAccount(verifyAccount);
+                                  .read(verify2FAProvider.notifier)
+                                  .verify2FA(verify2FA);
                             }
                           },
                   ),

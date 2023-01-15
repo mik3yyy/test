@@ -105,8 +105,10 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
                       activeColor: Colors.greenAccent,
                       value: PreferenceManager.enableBioMetrics,
                       onChanged: (value) async {
-                        PreferenceManager.enableBioMetrics = value;
-                        PreferenceManager.isSaved = value;
+                        setState(() {
+                          PreferenceManager.enableBioMetrics = value;
+                          PreferenceManager.isSaved = value;
+                        });
 
                         if (value) {
                           showOkAlertDialog(

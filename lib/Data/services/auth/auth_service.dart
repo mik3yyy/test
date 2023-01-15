@@ -4,10 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
@@ -296,13 +298,68 @@ class UserService {
   }
 
   // sign in
-  Future<SigninRes> signIn(SigninReq signinReq) async {
+  Future<LoginRes> signIn(SigninReq signinReq) async {
+    const url = '/auth/sign-in-new';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: signinReq.toJson());
+
+      final result = LoginRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // sign in New User
+  Future<SigninRes> signInNewUser(SigninReq signinReq) async {
     const url = '/auth/sign-in';
     try {
       final response =
           await _read.read(dioProvider).post(url, data: signinReq.toJson());
 
       final result = SigninRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // 2FA Verification
+  Future<SigninRes> verify2FA(The2FaReq verifyReq) async {
+    const url = '/auth/verify-2fa';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: verifyReq.toJson());
+
+      final result = SigninRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  Future<LoginRes> resend2FA(String email) async {
+    const url = '/auth/resend-2fa';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: {"email": email});
+      final result = LoginRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

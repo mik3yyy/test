@@ -14,7 +14,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forgot_password_otp.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/forgot_password_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -117,10 +116,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
-                                ref
-                                    .read(credentialProvider.notifier)
-                                    .storeCredential(Constants.userPassword,
-                                        controller.text);
+
                                 ref
                                     .read(forgotPasswordProvider.notifier)
                                     .forgotPassword(controller.text);

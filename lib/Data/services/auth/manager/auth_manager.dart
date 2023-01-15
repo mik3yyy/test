@@ -3,9 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
@@ -89,13 +91,13 @@ class AuthManager extends IAuthManager {
 
   // sign in
   @override
-  Future<SigninRes> signIn(SigninReq signinReq) async {
+  Future<LoginRes> signIn(SigninReq signinReq) async {
     final res = await _userService.signIn(signinReq);
 
-    if (res.data != null) {
-      PreferenceManager.authToken = res.data!.tokens!.authToken!;
-      PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
-    }
+    // if (res.data != null) {
+    //   PreferenceManager.authToken = res.data!.tokens!.authToken!;
+    //   PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+    // }
 
     return res;
   }
@@ -167,4 +169,30 @@ class AuthManager extends IAuthManager {
   @override
   Future<DownloadStatement> downloadRange(StatementReq statementReq) async =>
       await _userService.downloadRange(statementReq);
+
+  @override
+  Future<SigninRes> verify2FA(The2FaReq verifyReq) async {
+    final res = await _userService.verify2FA(verifyReq);
+    if (res.data != null) {
+      PreferenceManager.authToken = res.data!.tokens!.authToken!;
+      PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+    }
+    return res;
+  }
+
+  @override
+  Future<SigninRes> signInNewUser(SigninReq signinReq) async {
+    final res = await _userService.signInNewUser(signinReq);
+    if (res.data != null) {
+      PreferenceManager.authToken = res.data!.tokens!.authToken!;
+      PreferenceManager.refreshToken = res.data!.tokens!.refreshToken!;
+    }
+    return res;
+  }
+
+  @override
+  Future<LoginRes> resend2FA(String email) async {
+    final res = await _userService.resend2FA(email);
+    return res;
+  }
 }

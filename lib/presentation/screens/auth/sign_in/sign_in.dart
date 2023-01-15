@@ -7,13 +7,17 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/sign_in_2fa.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/forget_password/forget_password.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerprint_auth.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
@@ -30,7 +34,9 @@ import 'device_id.dart';
 
 class SigninScreen extends StatefulHookConsumerWidget {
   final String? email;
-  const SigninScreen({Key? key, this.email}) : super(key: key);
+  final Account account;
+  const SigninScreen({Key? key, this.email, required this.account})
+      : super(key: key);
 
   @override
   _SigninScreenState createState() => _SigninScreenState();
@@ -44,28 +50,38 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(localAuthStateProvider.notifier).hasBiometrics();
-    ref.read(deviceInfoProvider.notifier).deviceId();
-    ref.read(deviceInfoProvider.notifier).timeZone();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(localAuthStateProvider.notifier).hasBiometrics();
+      ref.read(deviceInfoProvider.notifier).deviceId();
+      ref.read(deviceInfoProvider.notifier).timeZone();
+      ref.read(accountStateProvider.notifier).state = widget.account;
+    });
   }
 
   bool toogle = true;
 
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(signInProvider);
+    final verify = ref.watch(verifyAuthProvider);
+    final newUser = ref.watch(verifyAuthProvider);
     // final email = PreferenceManager.email;
     final device = ref.watch(deviceInfoProvider);
     final emailPhoneController = useTextEditingController();
     final passwordController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
+
+    /// SEND TO MAIN SCREEN HAS A NEW USER
+
     ref.listen<RequestState>(signInProvider, (T, value) {
       if (value is Loading) {
         context.loaderOverlay.show();
-      } else {}
+      } else {
+        context.loaderOverlay.hide();
+      }
       if (value is Success<SigninRes>) {
-        //REFRESH THE PROVIDERS
-        // ref.refresh(providers);
+        setState(() {
+          isLoading = false;
+        });
         if (value.value!.data!.user.transactionPinAddedAt == null) {
           context.loaderOverlay.hide();
           context.navigate(const TransactionPinScreen());
@@ -74,7 +90,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
             setState(() {
               isLoading = false;
             });
-            context.loaderOverlay.hide();
             navigator.key.currentContext!.navigateReplaceRoot(MainScreen(
               menuScreenContext: context,
             ));
@@ -82,8 +97,34 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         }
       }
       if (value is Error) {
-        isLoading = false;
+        setState(() {
+          isLoading = false;
+        });
+        return AppSnackBar.showErrorSnackBar(context,
+            message: value.error.toString());
+      }
+    });
+
+    /// SEND TO 2FA VERIFICATION SCREEN
+
+    ref.listen<RequestState>(verifyAuthProvider, (T, value) {
+      if (value is Loading) {
+        context.loaderOverlay.show();
+      } else {
         context.loaderOverlay.hide();
+      }
+      if (value is Success<LoginRes>) {
+        setState(() {
+          isLoading = false;
+        });
+        context.loaderOverlay.hide();
+        context.navigate(Verify2FA(emailAdress: emailPhoneController.text));
+      }
+      if (value is Error) {
+        setState(() {
+          isLoading = false;
+        });
+        // context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -95,7 +136,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
           isLoading = true;
         });
       }
-      if (value.success) {}
     });
     return LoaderOverlay(
       useDefaultLoading: false,
@@ -186,7 +226,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: TextButton(
-                          onPressed: vm is Loading
+                          onPressed: (verify is Loading) || (newUser is Loading)
                               ? null
                               : () => context.navigate(ForgotPasswordScreen()),
                           child: Text(
@@ -215,7 +255,8 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                             bgColor: AppColors.appColor,
                             borderColor: AppColors.appColor,
                             textColor: Colors.white,
-                            onPressed: vm is Loading
+                            onPressed: (verify is Loading) ||
+                                    (newUser is Loading)
                                 ? null
                                 : () async {
                                     if (!currentFocus.hasPrimaryFocus) {
@@ -249,10 +290,22 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                       }
 
                                       /// CHECK END HERE
-
-                                      ref
-                                          .read(signInProvider.notifier)
-                                          .signIn(signinReq);
+                                      switch (widget.account) {
+                                        case Account.existingAccount:
+                                          ref
+                                              .read(verifyAuthProvider.notifier)
+                                              .verifyAuth(signinReq);
+                                          break;
+                                        case Account.newAccount:
+                                          ref
+                                              .read(signInProvider.notifier)
+                                              .signIn(signinReq);
+                                          break;
+                                        default:
+                                      }
+                                      // ref
+                                      //     .read(signInProvider.notifier)
+                                      //     .signIn(signinReq);
                                     }
                                   },
                           ),

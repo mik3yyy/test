@@ -4,14 +4,16 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/auth.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/splash_screen/splash_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/initialize_core/init_app_core.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'presentation/route/navigator.dart';
@@ -21,8 +23,9 @@ import 'presentation/utils/alert_dialog/show_unauthenicated_dialog.dart';
 // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 EventBus eventBus = EventBus();
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initializeCore(environment: Environment.dev);
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await initializeCore(environment: Environment.prod);
   runZonedGuarded<Future<void>>(() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     final sessionStateStream = StreamController<SessionState>();
@@ -30,7 +33,9 @@ Future<void> main() async {
       if (PreferenceManager.authToken.isEmpty) {
         return;
       } else {
-        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen(
+          account: Account.existingAccount,
+        ));
         AuthenicatedState.showMessage(navigator.key.currentContext!,
             "Your session has timed out, please login again", buttonText: "Ok",
             buttonClicked: () {
@@ -66,16 +71,25 @@ Future<void> main() async {
   //     });
 }
 
-class MyApp extends HookConsumerWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulHookConsumerWidget {
+  const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appSession = ref.watch(appSessionConfigProvider);
-    // final analytics = ref.watch(analyticsProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
+}
 
-    // final locale = ref.watch(localeProvider);
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 3000), () async {
+      FlutterNativeSplash.remove();
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appSession = ref.watch(appSessionConfigProvider);
     return ScreenUtilInit(
         designSize: const Size(428, 926),
         minTextAdapt: true,
@@ -102,7 +116,7 @@ class MyApp extends HookConsumerWidget {
 
                 // AppLocalizations.delegate, // Add this line
               ],
-              home: const SplashScreen(),
+              home: const AuthHomePage(),
               builder: (context, widget) {
                 //add this line
                 // ScreenUtil.setContext(context);
