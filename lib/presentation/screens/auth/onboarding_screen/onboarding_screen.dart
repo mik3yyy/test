@@ -113,7 +113,7 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 _current == 2
                     ? TextButton(
                         onPressed: () => navigator.key.currentContext!
-                            .navigate(CreateAccountScreen()),
+                            .navigate(const CreateAccountScreen()),
                         style: TextButton.styleFrom(),
                         child: Text(
                           "Continue",
@@ -173,7 +173,7 @@ class ImageWidget extends HookConsumerWidget {
                 const Spacer(),
                 TextButton(
                     onPressed: () => navigator.key.currentContext!
-                        .navigate(CreateAccountScreen()),
+                        .navigate(const CreateAccountScreen()),
                     child: Text(
                       "Skip",
                       style: AppText.label(context, AppColors.appColor),

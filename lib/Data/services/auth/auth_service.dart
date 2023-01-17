@@ -298,13 +298,13 @@ class UserService {
   }
 
   // sign in
-  Future<LoginRes> signIn(SigninReq signinReq) async {
+  Future<GenericRes> signIn(SigninReq signinReq) async {
     const url = '/auth/sign-in-new';
     try {
       final response =
           await _read.read(dioProvider).post(url, data: signinReq.toJson());
 
-      final result = LoginRes.fromJson(response.data);
+      final result = GenericRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
@@ -354,12 +354,12 @@ class UserService {
     }
   }
 
-  Future<LoginRes> resend2FA(String email) async {
+  Future<GenericRes> resend2FA(String email) async {
     const url = '/auth/resend-2fa';
     try {
       final response =
           await _read.read(dioProvider).post(url, data: {"email": email});
-      final result = LoginRes.fromJson(response.data);
+      final result = GenericRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

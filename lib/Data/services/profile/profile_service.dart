@@ -1,13 +1,17 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_email_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/saved_id.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/security_question_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -176,8 +180,95 @@ class ProfileService {
     }
   }
 
+  // CHANGE EMAIL
+  Future<GenericRes> changeEmail(ChangeEmailReq changeEmailReq) async {
+    const url = '/profile/change-email';
+
+    try {
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: changeEmailReq.toJson(),
+          );
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // VERIFY CHANGE EMAIL
+  Future<GenericRes> verifyChangeEmail2FA(String code) async {
+    const url = '/profile/verify-change-email-2fa';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: {"code": code});
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  } // RESEND VERIFICATION CODE TO CHANGE EMAIL
+
+  Future<GenericRes> resendEmailChangeCode(String email) async {
+    const url = '/profile/resend-change-email-2fa';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: {"email": email});
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  /// SECURITY QUESTION
+  Future<GenericRes> securityQuestion(SecurityQuesReq securityQuesReq) async {
+    const url = '/profile/set-security-question';
+
+    try {
+      final response = await _read.read(dioProvider).post(
+            url,
+            data: securityQuesReq.toJson(),
+          );
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // UPDATE IMAGE
+
   Future<bool> updateImage(String filePath) async {
-    const url = '/profile/upload-picture';
+    String url = "";
+
+    if (Platform.isIOS) {
+      url = '/profile/upload-iphone-picture';
+    } else {
+      url = '/profile/upload-picture';
+    }
+
+    log("This is image URL : $url");
 
     File file = File(filePath);
     final mimeTypeData =

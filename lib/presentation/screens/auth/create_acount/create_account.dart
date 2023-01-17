@@ -23,23 +23,25 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
-class CreateAccountScreen extends HookConsumerWidget {
-  CreateAccountScreen({Key? key}) : super(key: key);
-  final toggleStateProvider = StateProvider<bool>((ref) {
-    return false;
-  });
-
-  final formKey = GlobalKey<FormState>();
+class CreateAccountScreen extends StatefulHookConsumerWidget {
+  const CreateAccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
+  final formKey = GlobalKey<FormState>();
+  bool toogle = false;
+  @override
+  Widget build(BuildContext context) {
     final vm = ref.watch(createAccountProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
     final fistNameController = useTextEditingController();
 
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
-    var toggleState = ref.watch(toggleStateProvider.notifier).state;
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success<bool>) {
         PreferenceManager.email = emailPhoneController.text;
@@ -171,9 +173,11 @@ class CreateAccountScreen extends HookConsumerWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(3.r),
                               ),
-                              value: toggleState,
+                              value: toogle,
                               onChanged: (value) {
-                                toggleState = value!;
+                                setState(() {
+                                  toogle = !toogle;
+                                });
                               }),
                           Expanded(
                             child: Column(
@@ -235,7 +239,7 @@ class CreateAccountScreen extends HookConsumerWidget {
                                     (lastNameController.text.isEmpty)) {
                                   return;
                                 } else if (formKey.currentState!.validate()) {
-                                  if (toggleState == false) {
+                                  if (toogle == false) {
                                     return AppSnackBar.showInfoSnackBar(context,
                                         message:
                                             "Select the checkbox to continue");

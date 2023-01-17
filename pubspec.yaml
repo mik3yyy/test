@@ -59,7 +59,7 @@ dependencies:
   url_launcher: ^6.0.20
   webview_flutter: ^2.0.14
   cached_network_image: ^3.2.0
-  image_picker: ^0.8.5
+  image_picker: ^0.8.6
   mime: ^1.0.2
   http_parser: ^4.0.1
   date_time_picker: ^2.1.0

@@ -4,12 +4,13 @@
 
 import 'dart:convert';
 
-LoginRes loginResFromJson(String str) => LoginRes.fromJson(json.decode(str));
+GenericRes genericResFromJson(String str) =>
+    GenericRes.fromJson(json.decode(str));
 
-String loginResToJson(LoginRes data) => json.encode(data.toJson());
+String genericResToJson(GenericRes data) => json.encode(data.toJson());
 
-class LoginRes {
-  LoginRes({
+class GenericRes {
+  GenericRes({
     this.message,
     this.status,
   });
@@ -17,7 +18,7 @@ class LoginRes {
   String? message;
   String? status;
 
-  factory LoginRes.fromJson(Map<String, dynamic> json) => LoginRes(
+  factory GenericRes.fromJson(Map<String, dynamic> json) => GenericRes(
         message: json["message"],
         status: json["status"],
       );

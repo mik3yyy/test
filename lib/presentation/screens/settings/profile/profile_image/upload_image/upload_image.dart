@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/upload_pp_vm.dart';
@@ -21,27 +22,31 @@ class UploadImage {
   void getImage(
     ImageSource imageSource,
   ) async {
-    final _picker = ImagePicker();
-    if (Platform.isAndroid) {}
+    try {
+      final _picker = ImagePicker();
+      if (Platform.isAndroid) {}
 
-    final XFile? image = await _picker.pickImage(
-        source: imageSource, preferredCameraDevice: CameraDevice.front);
+      final XFile? image = await _picker.pickImage(
+          source: imageSource, preferredCameraDevice: CameraDevice.front);
 
-    if (image == null) {
-      return;
+      if (image == null) {
+        return;
+      }
+
+      final imageFile = File(image.path);
+      ref.read(userPhotoProvider.notifier).uploadProfilePhoto(image.path);
+      final appDir = await path_provider.getApplicationDocumentsDirectory();
+
+      /// convert to jpg
+
+      // This is the saved image path
+      // You can use it to display the saved image later
+      final localPath = path.join(appDir.path, imageFile.path);
+      PreferenceManager.avatarUrl = localPath;
+      ref.read(profileImage.notifier).state = imageFile.path;
+    } on PlatformException catch (e) {
+      throw e.toString();
     }
-
-    final imageFile = File(image.path);
-    ref.read(userPhotoProvider.notifier).uploadProfilePhoto(image.path);
-    final appDir = await path_provider.getApplicationDocumentsDirectory();
-
-    /// convert to jpg
-
-    // This is the saved image path
-    // You can use it to display the saved image later
-    final localPath = path.join(appDir.path, imageFile.path);
-    PreferenceManager.avatarUrl = localPath;
-    ref.read(profileImage.notifier).state = imageFile.path;
 
     // print("I PRINTED PROFILEIMAGE $localPath");
   }

@@ -91,7 +91,7 @@ class AuthManager extends IAuthManager {
 
   // sign in
   @override
-  Future<LoginRes> signIn(SigninReq signinReq) async {
+  Future<GenericRes> signIn(SigninReq signinReq) async {
     final res = await _userService.signIn(signinReq);
 
     // if (res.data != null) {
@@ -191,7 +191,7 @@ class AuthManager extends IAuthManager {
   }
 
   @override
-  Future<LoginRes> resend2FA(String email) async {
+  Future<GenericRes> resend2FA(String email) async {
     final res = await _userService.resend2FA(email);
     return res;
   }

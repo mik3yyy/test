@@ -11,9 +11,11 @@ import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_titl
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/email_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/enable_transaction_pin_modal.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/global/transaction_pin_toggle.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/password_security.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/security_question/security_question.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/transaction_pin/transaction_pin.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
@@ -58,6 +60,24 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               Space(20.h),
               ProfileCard(
                 color: Colors.black,
+                title: 'Email',
+                subTitle: 'Change or reset your email address',
+                image: AppImage.email,
+                onPressed: () {
+                  pushNewScreen(
+                    context,
+                    screen: const EmailScreen(),
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              Space(10.h),
+              const Divider(
+                thickness: 1,
+              ),
+              Space(10.h),
+              ProfileCard(
+                color: Colors.black,
                 title: 'Password',
                 subTitle: 'Change or Retrieve forgotten password',
                 image: AppImage.setPassword,
@@ -73,7 +93,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               const Divider(
                 thickness: 1,
               ),
-              Space(20.h),
+              Space(10.h),
               ProfileCard(
                 color: Colors.black,
                 title: 'Transaction PIN',
@@ -91,6 +111,25 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               const Divider(
                 thickness: 1,
               ),
+              Space(10.h),
+              ProfileCard(
+                color: Colors.black,
+                title: 'Security Question',
+                subTitle: 'Set your security question, hint & answer',
+                image: AppImage.securityQues,
+                onPressed: () {
+                  pushNewScreen(
+                    context,
+                    screen: const SecurityQuestionView(),
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                },
+              ),
+              Space(10.h),
+              const Divider(
+                thickness: 1,
+              ),
+
               Space(30.h),
 
               ///ENABLE BIOMETRIC FOR AUTHENTICATION

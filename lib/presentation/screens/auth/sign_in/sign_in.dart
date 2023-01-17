@@ -23,6 +23,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerpr
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/change_email.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -113,12 +114,15 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
       } else {
         context.loaderOverlay.hide();
       }
-      if (value is Success<LoginRes>) {
+      if (value is Success<GenericRes>) {
         setState(() {
           isLoading = false;
         });
         context.loaderOverlay.hide();
-        context.navigate(Verify2FA(emailAdress: emailPhoneController.text));
+        context.navigate(Verify2FA(
+          emailAdress: emailPhoneController.text,
+          verifyRoute: VerifyRoute.loginUser,
+        ));
       }
       if (value is Error) {
         setState(() {
@@ -355,7 +359,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           TextButton(
                               style: TextButton.styleFrom(),
                               onPressed: () =>
-                                  context.navigate(CreateAccountScreen()),
+                                  context.navigate(const CreateAccountScreen()),
                               child: Text(
                                 ' Sign up',
                                 style:

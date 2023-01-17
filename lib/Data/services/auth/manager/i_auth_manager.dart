@@ -33,13 +33,13 @@ abstract class IAuthManager {
   Future<CurrencyRes> getCurrency();
   Future<CountryRes> getCountry();
   Future<bool> setCurrency(String currency, String language, String country);
-  Future<LoginRes> signIn(SigninReq signinReq);
+  Future<GenericRes> signIn(SigninReq signinReq);
   Future<SigninRes> verify2FA(The2FaReq verifyReq);
   Future<SigninRes> signInNewUser(SigninReq signinReq);
   Future<bool> forgotPassword(String emailPhone, CancelToken cancelToken);
   Future<SigninRes> resetPassword(String emailPhone, String otpCode,
       String password, String confirmPassword);
-  Future<LoginRes> resend2FA(String email);
+  Future<GenericRes> resend2FA(String email);
   Future<ResendOtpRes> transactionPin(
       String transactionPin, String confirmTransactionPin);
   Future<bool> referralCode(String refCode);

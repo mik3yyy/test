@@ -244,7 +244,7 @@ class ProfileCard extends StatelessWidget {
             const Spacer(),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black38,
+              color: Colors.black,
               size: 15.sp,
             ),
           ],

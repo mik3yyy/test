@@ -13,17 +13,17 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_tran
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
 final verifyAuthProvider =
-    StateNotifierProvider.autoDispose<VerifyAuthVm, RequestState<LoginRes>>(
+    StateNotifierProvider.autoDispose<VerifyAuthVm, RequestState<GenericRes>>(
         (ref) {
   return VerifyAuthVm(ref);
 });
 
-class VerifyAuthVm extends RequestStateNotifier<LoginRes> {
+class VerifyAuthVm extends RequestStateNotifier<GenericRes> {
   final Ref ref;
 
   VerifyAuthVm(this.ref);
 
-  Future<RequestState<LoginRes>> verifyAuth(SigninReq signinReq) {
+  Future<RequestState<GenericRes>> verifyAuth(SigninReq signinReq) {
     ref.read(authControllerProvider.notifier).setAuth(false);
     return makeRequest(() async {
       final res = await ref.read(authManagerProvider).signIn(signinReq);

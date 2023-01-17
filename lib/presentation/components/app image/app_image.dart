@@ -98,8 +98,9 @@ class AppImage {
   static const resetTransactionPin = "assets/images/reset_transaction_pin.png";
   static const setPassword = "assets/images/password_icon.png";
   static const noPostYetImg = "assets/images/no_post_yet.png";
+  static const securityQues = "assets/images/shield.png";
+  static const email = "assets/images/email.png";
 
-  //
   //
   //APPLE AND GOOGLE PAY ICON
   static const applePay = "assets/images/apple.png";

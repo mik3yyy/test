@@ -1,9 +1,12 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_email_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_password_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/change_transactionpin_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/req/update_profile_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/saved_id.dart';
+import 'package:kayndrexsphere_mobile/Data/model/profile/res/security_question_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/image/convert_image.dart';
 import 'package:kayndrexsphere_mobile/Data/services/profile/repo/i_profile_repository.dart';
@@ -102,4 +105,20 @@ class ProfileRepository extends IProfileManager {
   @override
   Future<UploadIdRes> deleteId(String id) async =>
       await _profileService.deleteId(id);
+
+  @override
+  Future<GenericRes> changeEmail(ChangeEmailReq changeEmailReq) async =>
+      await _profileService.changeEmail(changeEmailReq);
+
+  @override
+  Future<GenericRes> verifyChangeEmail2FA(String code) async =>
+      await _profileService.verifyChangeEmail2FA(code);
+
+  @override
+  Future<GenericRes> resendEmailChangeCode(String email) async =>
+      await _profileService.resendEmailChangeCode(email);
+
+  @override
+  Future<GenericRes> securityQuestion(SecurityQuesReq securityQuesReq) async =>
+      await _profileService.securityQuestion(securityQuesReq);
 }

@@ -5,7 +5,7 @@ String? validateEmail(String? value) {
       r"{0,253}[a-zA-Z0-9])?)*$";
   final RegExp regex = RegExp(pattern);
   if (value == null || !regex.hasMatch(value)) {
-    return 'Not a valid email.';
+    return 'Enter a valid email address.';
   } else {
     return null;
   }
