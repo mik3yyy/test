@@ -10,9 +10,9 @@ class Constants {
   static const stripePublishableKey =
       "pk_test_51Kf3xlIK0uyzlLuMFE6NbmNXMCCujzhCCS9tawsdSOqfRlgIFxUdWZTfhKsFp4BK8tCInssJGhSM5uydz5nSQl1O00BgqojuB2";
 
-  static const privacyPolicy = "https://kayndrex.com/blog/15/";
-  static const terms = "https://kayndrex.com/blog/117/";
-  static const language = "https://kayndrex.com/blog/v2/";
+  static const privacyPolicy = "https://kayndrexsphere.vercel.app/home";
+  static const terms = "https://kayndrexsphere.vercel.app/termsandconditions";
+  static const language = "https://kayndrexsphere.vercel.app/language";
 
   static const transaction = "transactionsBox";
   static const walletKey = "walletKey";

@@ -11,7 +11,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/widgets/user_wal
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/name_image_header.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-
 import '../../../components/app text theme/app_text_theme.dart';
 
 class AmountDisplay extends StatefulHookConsumerWidget {
@@ -69,7 +68,8 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
               Space(85.w),
               InkWell(
                 onTap: () {
-                  toggleAmount = !toggleAmount;
+                  ref.read(toggleAmountProvider.notifier).state =
+                      toggleAmount ? false : true;
                   PreferenceManager.revealBalance = toggleAmount;
                 },
                 child: Padding(
@@ -117,8 +117,6 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
                     backgroundColor: Colors.black,
                     textColor: Colors.white,
                     fontSize: 16.sp);
-                // ScaffoldMessenger.of(context)
-                //     .showSnackBar(const SnackBar(content: Text('Copied')));
               });
             },
             child: Row(

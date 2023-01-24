@@ -36,10 +36,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   bool toogle = false;
   @override
   Widget build(BuildContext context) {
-    final vm = ref.watch(createAccountProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
+    final vm = ref.watch(createAccountProvider);
     final fistNameController = useTextEditingController();
-
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
     ref.listen<RequestState>(createAccountProvider, (T, value) {

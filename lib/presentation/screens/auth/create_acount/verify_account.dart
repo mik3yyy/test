@@ -46,7 +46,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
         ScreenView.hideLoadingView(context);
       }
       if (value is Success) {
-        context.navigate(CreatePasswordScreen());
+        context.navigate(const CreatePasswordScreen());
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Account Verified",

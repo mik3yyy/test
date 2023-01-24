@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart' as phone;
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/profile_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/helper/country/list_of_countries.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
@@ -36,27 +39,26 @@ class EditInfo extends StatefulHookConsumerWidget {
 }
 
 class _EditInfoState extends ConsumerState<EditInfo> {
-  // String phoneCode = "";
-  // String isCode = "";
-
-  // seperatePhoneAndDialCode() {
-  //   for (var country in Countries.allCountries) {
-  //     if (country.values.contains(widget.userValue.data.user.countryName)) {
-  //       phoneCode = country["dial_code"].toString();
-  //       isCode = country["code"].toString();
-  //       // print(country["dial_code"]);
-  //     }
-  //   }
-  // }
-
+  String phoneCode = "";
+  String isCode = "";
   final formKey = GlobalKey<FormState>();
 
   final List<String> _gender = ['male', 'female'];
   String? _radioSelected;
 
+  seperatePhoneAndDialCode() {
+    for (var country in Countries.allCountries) {
+      if (country.values.contains(widget.userValue.data.user.countryName)) {
+        phoneCode = country["dial_code"].toString();
+        isCode = country["code"].toString();
+        // print(country["dial_code"]);
+      }
+    }
+  }
+
   @override
   void initState() {
-    // seperatePhoneAndDialCode();
+    seperatePhoneAndDialCode();
     super.initState();
   }
 
@@ -64,8 +66,8 @@ class _EditInfoState extends ConsumerState<EditInfo> {
   Widget build(BuildContext context) {
     final vm = ref.watch(updateProfileProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
-    // final phoneNo =
-    //     useState<phone.PhoneNumber>(phone.PhoneNumber(isoCode: isCode));
+    final phoneNo =
+        useState<phone.PhoneNumber>(phone.PhoneNumber(isoCode: isCode));
     final fistNameController = useTextEditingController(
         text: widget.userValue.data.user.firstName!.capitalize());
     final lastNameCountroller = useTextEditingController(
@@ -126,6 +128,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                   onPressed: vm is Loading
                       ? null
                       : () async {
+                          log("Here is the Code $phoneCode");
                           if (formKey.currentState!.validate()) {
                             var updateProfile = UpdateProfileReq(
                               firstName: fistNameController.text,
@@ -133,7 +136,7 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                               email: emailCountroller.text,
                               address: addressCountroller.text,
                               gender: genderCountroller.text,
-                              phoneCode: "",
+                              phoneCode: phoneCode,
                               phoneNumber: phoneNoCountroller.text,
                               dateOfBirth: formatDate(dobCountroller.text),
                               city: cityCountroller.text,
@@ -267,15 +270,15 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                         validator: (value) => validateEmail(value),
                       ),
                       Space(20.h),
-                      // IntlPhoneNumber(
-                      //   initialNo: phoneNo,
-                      //   numberChanged: (phone.PhoneNumber value) {
-                      //     setState(() {
-                      //       phoneCode = value.dialCode!;
-                      //     });
-                      //   },
-                      //   phoneController: phoneNoCountroller,
-                      // ),
+                      IntlPhoneNumber(
+                        initialNo: phoneNo,
+                        numberChanged: (phone.PhoneNumber value) {
+                          setState(() {
+                            phoneCode = value.dialCode!;
+                          });
+                        },
+                        phoneController: phoneNoCountroller,
+                      ),
                       // phone.InternationalPhoneNumberInput(
                       //   validator: (p0) => null,
                       //   onInputChanged: (phone.PhoneNumber number) {
@@ -457,28 +460,31 @@ class _IntlPhoneNumberState extends ConsumerState<IntlPhoneNumber> {
     return phone.InternationalPhoneNumberInput(
       validator: (p0) => null,
       onInputChanged: widget.numberChanged,
+      textStyle: TextStyle(fontSize: 20.sp),
       onInputValidated: (bool value) => true,
       selectorConfig: const phone.SelectorConfig(
-        selectorType: phone.PhoneInputSelectorType.DROPDOWN,
+        selectorType: phone.PhoneInputSelectorType.DIALOG,
         leadingPadding: 0,
         trailingSpace: false,
         setSelectorButtonAsPrefixIcon: false,
       ),
-      spaceBetweenSelectorAndTextField: 0,
-      ignoreBlank: true,
+      spaceBetweenSelectorAndTextField: 12,
+      ignoreBlank: false,
       autoValidateMode: AutovalidateMode.onUserInteraction,
       selectorTextStyle: const TextStyle(color: Colors.black),
       initialValue: widget.initialNo.value,
       textFieldController: widget.phoneController,
       formatInput: false,
       inputDecoration: const InputDecoration(
+        isDense: true,
         hintText: "Phone number",
+        hintStyle: TextStyle(fontSize: 15),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
       ),
       keyboardType:
-          const TextInputType.numberWithOptions(signed: true, decimal: false),
+          const TextInputType.numberWithOptions(signed: false, decimal: false),
       inputBorder: InputBorder.none,
     );
   }

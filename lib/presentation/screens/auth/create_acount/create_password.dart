@@ -19,17 +19,23 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 
-class CreatePasswordScreen extends HookConsumerWidget {
-  CreatePasswordScreen({Key? key}) : super(key: key);
-  final formKey = GlobalKey<FormState>();
-  final passwordToggleStateProvider = StateProvider<bool>((ref) => true);
-  final passwordConfirmToggleStateProvider = StateProvider<bool>((ref) => true);
+class CreatePasswordScreen extends StatefulHookConsumerWidget {
+  const CreatePasswordScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CreatePasswordScreenState();
+}
+
+class _CreatePasswordScreenState extends ConsumerState<CreatePasswordScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  bool password = true;
+  bool confirm = true;
+
+  @override
+  Widget build(BuildContext context) {
     final vm = ref.watch(createPasswordProvider);
-    var togglePassword = ref.watch(passwordToggleStateProvider);
-    var toggleConfirmPassword = ref.watch(passwordConfirmToggleStateProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     final passwordController = useTextEditingController();
@@ -93,17 +99,17 @@ class CreatePasswordScreen extends HookConsumerWidget {
 
                       return null;
                     },
-                    obscureText: togglePassword,
+                    obscureText: password,
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        togglePassword = !togglePassword;
+                        setState(() {
+                          password = !password;
+                        });
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 0.h),
                         child: Icon(
-                          togglePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          password ? Icons.visibility_off : Icons.visibility,
                           color: AppColors.appColor,
                         ),
                       ),
@@ -127,17 +133,17 @@ class CreatePasswordScreen extends HookConsumerWidget {
                       // validator has to return something :)
                       return null;
                     },
-                    obscureText: toggleConfirmPassword,
+                    obscureText: confirm,
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        toggleConfirmPassword = !toggleConfirmPassword;
+                        setState(() {
+                          confirm = !confirm;
+                        });
                       },
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 0.h),
                         child: Icon(
-                          toggleConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          confirm ? Icons.visibility_off : Icons.visibility,
                           color: AppColors.appColor,
                         ),
                       ),

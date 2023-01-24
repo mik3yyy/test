@@ -3,12 +3,14 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/reset_email_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/forgotten_email_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
@@ -403,6 +405,47 @@ class UserService {
       });
 
       final result = SigninRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // Forgotten Email
+  Future<ForgettenEmailRes> forgotEmail(
+      String phoneNumber, String phoneCode) async {
+    const url = '/auth/forgot-email/send-code';
+    try {
+      final response = await _read.read(dioProvider).post(url, data: {
+        "phone_number": phoneNumber,
+        "phone_code": phoneCode,
+      });
+
+      final result = ForgettenEmailRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  // Reset Email
+  Future<GenericRes> resetEmail(ResetEmailReq resetEmailReq) async {
+    const url = '/auth/forgot-email/reset-email';
+    try {
+      final response =
+          await _read.read(dioProvider).post(url, data: resetEmailReq.toJson());
+
+      final result = GenericRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

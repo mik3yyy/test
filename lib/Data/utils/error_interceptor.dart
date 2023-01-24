@@ -9,6 +9,7 @@ class ErrorInterceptor extends InterceptorsWrapper {
     err = await HttpUtils.buildErrorResponse(err);
 
     if (err.response?.requestOptions.path != "/auth/sign-in" &&
+        err.response?.requestOptions.path != "/auth/sign-in-new" &&
         err.response?.statusCode == 401) {
       eventBus.fire(UnAuthenticated());
     }

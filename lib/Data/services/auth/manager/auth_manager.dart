@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/reset_email_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/forgotten_email_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
@@ -193,6 +195,20 @@ class AuthManager extends IAuthManager {
   @override
   Future<GenericRes> resend2FA(String email) async {
     final res = await _userService.resend2FA(email);
+    return res;
+  }
+
+  @override
+  Future<ForgettenEmailRes> forgotEmail(
+      String phoneNumber, String phoneCode) async {
+    final res = await _userService.forgotEmail(phoneNumber, phoneCode);
+    PreferenceManager.twoFaToken = res.data.the2FaToken;
+    return res;
+  }
+
+  @override
+  Future<GenericRes> resetEmail(ResetEmailReq resetEmailReq) async {
+    final res = await _userService.resetEmail(resetEmailReq);
     return res;
   }
 }

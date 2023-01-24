@@ -49,15 +49,15 @@ class PreferenceManager {
       prefs.setString("defaultWallet", defaultWallet);
   static String get defaultWallet => prefs.getString("defaultWallet") ?? '';
 
-  // //* Error message
-  // static set errorMessage(String errorMessage) =>
-  //     prefs.setString("errorMessage", errorMessage);
-  // static String get errorMessage => prefs.getString("errorMessage") ?? '';
-
   //* auth token
   static set authToken(String authToken) =>
       prefs.setString("authToken", authToken);
   static String get authToken => prefs.getString("authToken") ?? '';
+
+  //* 2FA Token
+  static set twoFaToken(String twoFaToken) =>
+      prefs.setString("twoFaToken", twoFaToken);
+  static String get twoFaToken => prefs.getString("twoFaToken") ?? '';
   //* Device ID
   static set deviceId(String deviceId) => prefs.setString("deviceId", deviceId);
   static String get deviceId => prefs.getString("deviceId") ?? '';

@@ -6,6 +6,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_im
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/profile.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/forgot_email_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/change_email.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
@@ -46,7 +47,7 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
                 onPressed: () {
                   pushNewScreen(
                     context,
-                    screen: const EmailScreen(),
+                    screen: const ForgotEmailScreen(),
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },

@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/deactivate_account/deactivate_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/create_password_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/req/reset_email_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/sign_in_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/forgotten_email_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/resendotp_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/sigout_res.dart';
@@ -39,9 +41,11 @@ abstract class IAuthManager {
   Future<bool> forgotPassword(String emailPhone, CancelToken cancelToken);
   Future<SigninRes> resetPassword(String emailPhone, String otpCode,
       String password, String confirmPassword);
+  Future<ForgettenEmailRes> forgotEmail(String phoneNumber, String phoneCode);
   Future<GenericRes> resend2FA(String email);
   Future<ResendOtpRes> transactionPin(
       String transactionPin, String confirmTransactionPin);
+  Future<GenericRes> resetEmail(ResetEmailReq resetEmailReq);
   Future<bool> referralCode(String refCode);
   Future<RefreshTokenRes> getAuthTOken(RefreshTokenReq refreshTokenReq);
   Future<SigninOutRes> signOut(String deviceId);
