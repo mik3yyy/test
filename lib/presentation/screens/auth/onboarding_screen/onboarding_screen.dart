@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/create_account.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -113,7 +114,9 @@ class _CarouselWithIndicatorState extends State<OnBoardingScreen> {
                 _current == 2
                     ? TextButton(
                         onPressed: () => navigator.key.currentContext!
-                            .navigate(const CreateAccountScreen()),
+                                .navigate(const CreateAccountScreen(
+                              account: Account.newAccount,
+                            )),
                         style: TextButton.styleFrom(),
                         child: Text(
                           "Continue",
@@ -173,7 +176,9 @@ class ImageWidget extends HookConsumerWidget {
                 const Spacer(),
                 TextButton(
                     onPressed: () => navigator.key.currentContext!
-                        .navigate(const CreateAccountScreen()),
+                            .navigate(const CreateAccountScreen(
+                          account: Account.newAccount,
+                        )),
                     child: Text(
                       "Skip",
                       style: AppText.label(context, AppColors.appColor),

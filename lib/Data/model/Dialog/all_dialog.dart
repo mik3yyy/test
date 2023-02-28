@@ -1,64 +1,67 @@
 // To parse this JSON data, do
 //
-//     final dialogRes = dialogResFromJson(jsonString);
+//     final allDialog = allDialogFromJson(jsonString);
 
 import 'dart:convert';
 
-DialogRes dialogResFromJson(String str) => DialogRes.fromJson(json.decode(str));
+AllDialog allDialogFromJson(String str) => AllDialog.fromJson(json.decode(str));
 
-String dialogResToJson(DialogRes data) => json.encode(data.toJson());
+String allDialogToJson(AllDialog data) => json.encode(data.toJson());
 
-class DialogRes {
-  DialogRes({
-    this.status,
+class AllDialog {
+  AllDialog({
     this.message,
+    this.status,
     this.data,
   });
 
-  String? status;
   String? message;
-  Data? data;
+  String? status;
+  List<Datum>? data;
 
-  factory DialogRes.fromJson(Map<String, dynamic> json) => DialogRes(
-        status: json["status"],
+  factory AllDialog.fromJson(Map<String, dynamic> json) => AllDialog(
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        status: json["status"],
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
         "message": message,
-        "data": data?.toJson(),
+        "status": status,
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
-class Data {
-  Data({
+class Datum {
+  Datum({
     this.dialog,
     this.title,
     this.img,
     this.privateDialogOtherUser,
-    required this.messages,
+    this.lastMessage,
   });
 
   Dialog? dialog;
   String? title;
   dynamic img;
   PrivateDialogOtherUser? privateDialogOtherUser;
-  List<Message> messages;
+  LastMessage? lastMessage;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         dialog: json["dialog"] == null ? null : Dialog.fromJson(json["dialog"]),
-        title: json["title"] ?? "",
+        title: json["title"],
         img: json["img"],
         privateDialogOtherUser: json["private_dialog_other_user"] == null
             ? null
             : PrivateDialogOtherUser.fromJson(
                 json["private_dialog_other_user"]),
-        messages: json["messages"] == null
-            ? []
-            : List<Message>.from(
-                json["messages"].map((x) => Message.fromJson(x))),
+        lastMessage: json["last_message"] == null
+            ? null
+            : LastMessage.fromJson(json["last_message"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,7 +69,7 @@ class Data {
         "title": title,
         "img": img,
         "private_dialog_other_user": privateDialogOtherUser?.toJson(),
-        "messages": List<dynamic>.from(messages.map((x) => x.toJson())),
+        "last_message": lastMessage?.toJson(),
       };
 }
 
@@ -86,19 +89,19 @@ class Dialog {
   int? id;
   String? uuid;
   int? isRoom;
-  String? name;
-  String? description;
+  dynamic name;
+  dynamic description;
   dynamic dialogImg;
   DateTime? createdAt;
   DateTime? updatedAt;
   PrivateDialogOtherUser? initiator;
 
   factory Dialog.fromJson(Map<String, dynamic> json) => Dialog(
-        id: json["id"] ?? 0,
-        uuid: json["uuid"] ?? "",
-        isRoom: json["is_room"] ?? 0,
-        name: json["name"] ?? "",
-        description: json["description"] ?? "",
+        id: json["id"],
+        uuid: json["uuid"],
+        isRoom: json["is_room"],
+        name: json["name"],
+        description: json["description"],
         dialogImg: json["dialog_img"],
         createdAt: json["created_at"] == null
             ? null
@@ -106,7 +109,9 @@ class Dialog {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        initiator: PrivateDialogOtherUser.fromJson(json["initiator"]),
+        initiator: json["initiator"] == null
+            ? null
+            : PrivateDialogOtherUser.fromJson(json["initiator"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -164,43 +169,40 @@ class PrivateDialogOtherUser {
   String? language;
   DateTime? transactionPinAddedAt;
   DateTime? verifiedAt;
-  num? isBanned;
-  ProfilePicture? profilePicture;
+  int? isBanned;
   String? timezone;
   DateTime? createdAt;
   DateTime? updatedAt;
-  num? deactivatedNumber;
+  dynamic deactivatedNumber;
+  ProfilePicture? profilePicture;
 
   factory PrivateDialogOtherUser.fromJson(Map<String, dynamic> json) =>
       PrivateDialogOtherUser(
-        firstName: json["first_name"] ?? "unavailable",
-        lastName: json["last_name"] ?? "unavailable",
-        gender: json["gender"] ?? "unavailable",
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        gender: json["gender"],
         dateOfBirth: json["date_of_birth"] == null
             ? null
             : DateTime.parse(json["date_of_birth"]),
-        accountNumber: json["account_number"] ?? "",
-        refCode: json["ref_code"] ?? "unavailable",
-        email: json["email"] ?? "unavailable",
+        accountNumber: json["account_number"],
+        refCode: json["ref_code"],
+        email: json["email"],
         phoneNumber: json["phone_number"] == null
             ? null
             : PhoneNumber.fromJson(json["phone_number"]),
-        address: json["address"] ?? "unavailable",
-        city: json["city"] ?? "unavailable",
-        state: json["state"] ?? "unavailable",
-        countryName: json["country_name"] ?? "unavailable",
-        currencyCode: json["currency_code"] ?? "",
-        language: json["language"] ?? "",
+        address: json["address"],
+        city: json["city"],
+        state: json["state"],
+        countryName: json["country_name"],
+        currencyCode: json["currency_code"],
+        language: json["language"],
         transactionPinAddedAt: json["transaction_pin_added_at"] == null
             ? null
             : DateTime.parse(json["transaction_pin_added_at"]),
         verifiedAt: json["verified_at"] == null
             ? null
             : DateTime.parse(json["verified_at"]),
-        isBanned: json["is_banned"] ?? 0,
-        profilePicture: json["profile_picture"] == null
-            ? null
-            : ProfilePicture.fromJson(json["profile_picture"]),
+        isBanned: json["is_banned"],
         timezone: json["timezone"],
         createdAt: json["created_at"] == null
             ? null
@@ -208,14 +210,17 @@ class PrivateDialogOtherUser {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        deactivatedNumber: json["deactivated_number"] ?? 0,
+        deactivatedNumber: json["deactivated_number"],
+        profilePicture: json["profile_picture"] == null
+            ? null
+            : ProfilePicture.fromJson(json["profile_picture"]),
       );
 
   Map<String, dynamic> toJson() => {
         "first_name": firstName,
         "last_name": lastName,
         "gender": gender,
-        "date_of_birth": dateOfBirth,
+        "date_of_birth": dateOfBirth?.toIso8601String(),
         "account_number": accountNumber,
         "ref_code": refCode,
         "email": email,
@@ -229,11 +234,11 @@ class PrivateDialogOtherUser {
         "transaction_pin_added_at": transactionPinAddedAt?.toIso8601String(),
         "verified_at": verifiedAt?.toIso8601String(),
         "is_banned": isBanned,
-        "profile_picture": profilePicture,
         "timezone": timezone,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "deactivated_number": deactivatedNumber,
+        "profile_picture": profilePicture,
       };
 }
 
@@ -243,8 +248,8 @@ class PhoneNumber {
     this.phoneNumber,
   });
 
-  dynamic phoneCode;
-  dynamic phoneNumber;
+  String? phoneCode;
+  String? phoneNumber;
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
         phoneCode: json["phone_code"],
@@ -257,8 +262,8 @@ class PhoneNumber {
       };
 }
 
-class Message {
-  Message({
+class LastMessage {
+  LastMessage({
     this.id,
     this.dialogId,
     this.message,
@@ -284,14 +289,14 @@ class Message {
   List<dynamic>? attachments;
   PrivateDialogOtherUser? from;
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
-        id: json["id"] ?? 0,
-        dialogId: json["dialog_id"] ?? 0,
-        message: json["message"] ?? "",
+  factory LastMessage.fromJson(Map<String, dynamic> json) => LastMessage(
+        id: json["id"],
+        dialogId: json["dialog_id"],
+        message: json["message"],
         sentAt:
             json["sent_at"] == null ? null : DateTime.parse(json["sent_at"]),
-        ipAddress: json["ip_address"] ?? "",
-        userAgent: json["user_agent"] ?? "",
+        ipAddress: json["ip_address"],
+        userAgent: json["user_agent"],
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -301,7 +306,7 @@ class Message {
         sentByMe: json["sent_by_me"],
         attachments: json["attachments"] == null
             ? []
-            : List<dynamic>.from(json["attachments"].map((x) => x)),
+            : List<dynamic>.from(json["attachments"]!.map((x) => x)),
         from: json["from"] == null
             ? null
             : PrivateDialogOtherUser.fromJson(json["from"]),
@@ -317,7 +322,9 @@ class Message {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "sent_by_me": sentByMe,
-        "attachments": List<dynamic>.from(attachments!.map((x) => x)),
+        "attachments": attachments == null
+            ? []
+            : List<dynamic>.from(attachments!.map((x) => x)),
         "from": from?.toJson(),
       };
 }

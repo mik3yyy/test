@@ -94,6 +94,10 @@ class PreferenceManager {
       prefs.setBool("isPostUnLike", isUnLiked);
   static bool get isPostUnLike => prefs.getBool("isPostUnLike") ?? false;
 
+  static set pusherVal(String pusherVal) =>
+      prefs.setString("pusherVal", pusherVal);
+  static String get pusherVal => prefs.getString("pusherVal") ?? '';
+
   static void clear() {
     // prefs.clear();
     PreferenceManager.isFirstLaunch = false;

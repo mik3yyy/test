@@ -11,8 +11,8 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 enum Account {
   newAccount('NewAccount'),
-  existingAccount('ExistingAccount'),
-  none('None');
+  existingAccount('ExistingAccount');
+  // none('None');
 
   const Account(this.message);
   final String message;

@@ -124,8 +124,8 @@ class ViewIdentification extends HookConsumerWidget {
                 },
 
                 ///CHECK FOR ERROR HERE
-                error: (e, s) => const LoadingIDs(),
-                loading: () => const LoadingIDs())
+                error: (e, s) => const LoadingDisplay(),
+                loading: () => const LoadingDisplay())
           ],
         ),
       ),
@@ -133,8 +133,8 @@ class ViewIdentification extends HookConsumerWidget {
   }
 }
 
-class LoadingIDs extends StatelessWidget {
-  const LoadingIDs({Key? key}) : super(key: key);
+class LoadingDisplay extends StatelessWidget {
+  const LoadingDisplay({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

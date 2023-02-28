@@ -23,6 +23,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/fingerpr
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/sign_in_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/main_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/auth_security/auth_secure.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/forgot_email_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/change_email.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -118,7 +119,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         setState(() {
           isLoading = false;
         });
-        context.loaderOverlay.hide();
         context.navigate(Verify2FA(
           emailAdress: emailPhoneController.text,
           verifyRoute: VerifyRoute.loginUser,
@@ -128,7 +128,7 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         setState(() {
           isLoading = false;
         });
-        // context.loaderOverlay.hide();
+        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
@@ -227,26 +227,27 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                         ),
                       ),
                       Space(32.h),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          onPressed: (verify is Loading) || (newUser is Loading)
-                              ? null
-                              : () => context.navigate(ForgotPasswordScreen()),
-                          child: Text(
-                            "Forgot Password?",
-                            style: AppText.body4(context, AppColors.appColor),
-                            textAlign: TextAlign.center,
-                          ),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.appColor,
-                            backgroundColor: Colors.transparent,
-                            disabledForegroundColor: Colors.grey,
-                          ),
-                        ),
-                      ),
 
-                      Space(160.h),
+                      // Align(
+                      //   alignment: Alignment.bottomRight,
+                      //   child: TextButton(
+                      //     onPressed: (verify is Loading) || (newUser is Loading)
+                      //         ? null
+                      //         : () => context.navigate(ForgotPasswordScreen()),
+                      //     child: Text(
+                      //       "Forgot Password?",
+                      //       style: AppText.body4(context, AppColors.appColor),
+                      //       textAlign: TextAlign.center,
+                      //     ),
+                      //     style: TextButton.styleFrom(
+                      //       foregroundColor: AppColors.appColor,
+                      //       backgroundColor: Colors.transparent,
+                      //       disabledForegroundColor: Colors.grey,
+                      //     ),
+                      //   ),
+                      // ),
+
+                      Space(130.h),
 
                       Row(
                         mainAxisAlignment: PreferenceManager.hasBiometrics
@@ -263,9 +264,6 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                                     (newUser is Loading)
                                 ? null
                                 : () async {
-                                    if (!currentFocus.hasPrimaryFocus) {
-                                      currentFocus.unfocus();
-                                    }
                                     if ((emailPhoneController.text.isEmpty) ||
                                         (passwordController.text.isEmpty)) {
                                       return;
@@ -349,7 +347,49 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                               : const SizedBox.shrink()
                         ],
                       ),
-                      Space(20.h),
+                      Space(40.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: (verify is Loading) ||
+                                    (newUser is Loading)
+                                ? null
+                                : () =>
+                                    context.navigate(const ForgotEmailScreen(
+                                      forgotEmailRoute: ForgotEmailRoute.signIn,
+                                    )),
+                            child: Text(
+                              "Forgot Email?",
+                              style: AppText.body4(context, AppColors.appColor),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.appColor,
+                              backgroundColor: Colors.transparent,
+                              disabledForegroundColor: Colors.grey,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: (verify is Loading) ||
+                                    (newUser is Loading)
+                                ? null
+                                : () =>
+                                    context.navigate(ForgotPasswordScreen()),
+                            child: Text(
+                              "Forgot Password?",
+                              style: AppText.body4(context, AppColors.appColor),
+                              textAlign: TextAlign.center,
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.appColor,
+                              backgroundColor: Colors.transparent,
+                              disabledForegroundColor: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                      Space(40.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -359,7 +399,9 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                           TextButton(
                               style: TextButton.styleFrom(),
                               onPressed: () =>
-                                  context.navigate(const CreateAccountScreen()),
+                                  context.navigate(CreateAccountScreen(
+                                    account: widget.account,
+                                  )),
                               child: Text(
                                 ' Sign up',
                                 style:

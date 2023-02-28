@@ -104,23 +104,25 @@ class ReferralCodeScreen extends HookConsumerWidget {
                     Row(
                       children: [
                         Space(97.w),
-                        CustomButton(
-                          buttonWidth: 190.w,
-                          buttonText: buttonText(context, "Done"),
-                          bgColor: AppColors.appColor,
-                          borderColor: AppColors.appColor,
-                          textColor: Colors.white,
-                          onPressed: vm is Loading
-                              ? null
-                              : () {
-                                  if (formKey.currentState!.validate()) {
-                                    fieldFocusNode.unfocus();
-                                    ref
-                                        .read(refCodeProvider.notifier)
-                                        .refCode(controller.text);
-                                    context.loaderOverlay.show();
-                                  }
-                                },
+                        Expanded(
+                          child: CustomButton(
+                            buttonWidth: 190.w,
+                            buttonText: buttonText(context, "Done"),
+                            bgColor: AppColors.appColor,
+                            borderColor: AppColors.appColor,
+                            textColor: Colors.white,
+                            onPressed: vm is Loading
+                                ? null
+                                : () {
+                                    if (formKey.currentState!.validate()) {
+                                      fieldFocusNode.unfocus();
+                                      ref
+                                          .read(refCodeProvider.notifier)
+                                          .refCode(controller.text);
+                                      context.loaderOverlay.show();
+                                    }
+                                  },
+                          ),
                         ),
                         Space(30.w),
                         TextButton(

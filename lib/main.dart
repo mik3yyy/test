@@ -25,7 +25,7 @@ EventBus eventBus = EventBus();
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await initializeCore(environment: Environment.prod);
+  await initializeCore(environment: Environment.dev);
   runZonedGuarded<Future<void>>(() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     final sessionStateStream = StreamController<SessionState>();

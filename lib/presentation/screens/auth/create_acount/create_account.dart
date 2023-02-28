@@ -24,7 +24,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
 class CreateAccountScreen extends StatefulHookConsumerWidget {
-  const CreateAccountScreen({super.key});
+  final Account account;
+  const CreateAccountScreen({super.key, required this.account});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -270,7 +271,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                               style: TextButton.styleFrom(),
                               onPressed: () =>
                                   context.navigate(const SigninScreen(
-                                    account: Account.none,
+                                    account: Account.existingAccount,
                                   )),
                               child: Text(
                                 ' Sign In',

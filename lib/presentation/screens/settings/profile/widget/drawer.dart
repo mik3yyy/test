@@ -51,14 +51,13 @@ class Navigation extends HookConsumerWidget {
             DrawerList(
               color: Colors.black,
               title: 'My Prop',
-              comingSoon: true,
+              comingSoon: false,
               isIcon: false,
               image: AppImage.prop,
               onPressed: () {
-                // context.navigate(const PropScreen());
                 pushNewScreen(
                   context,
-                  withNavBar: true,
+                  withNavBar: false,
                   screen: const PropScreen(),
                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                 );

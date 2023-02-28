@@ -13,14 +13,18 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/forgot_email_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/vm/reset_email_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/validator.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ResetEmailScreen extends StatefulHookConsumerWidget {
-  const ResetEmailScreen({super.key});
+  final ForgotEmailRoute forgotEmailRoute;
+  const ResetEmailScreen({super.key, required this.forgotEmailRoute});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -57,9 +61,17 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
 
     ref.listen<RequestState>(resetEmailProvider, (T, value) {
       if (value is Success<GenericRes>) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
+        if (widget.forgotEmailRoute == ForgotEmailRoute.profile) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        } else {
+          context.navigateReplace(SigninScreen(
+            account: Account.existingAccount,
+            email: newEmail.text,
+          ));
+        }
+
         return AppSnackBar.showSuccessSnackBar(context,
             message: value.value!.message.toString());
       }

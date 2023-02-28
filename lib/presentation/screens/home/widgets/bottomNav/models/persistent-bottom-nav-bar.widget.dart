@@ -93,44 +93,48 @@ class PersistentBottomNavBar extends StatelessWidget {
                           child: getNavBarStyle()!,
                         ),
                       )
-                : Container(
-                    decoration: getNavBarDecoration(
-                      decoration: navBarDecoration,
-                      showBorder: false,
-                      color: navBarEssentials!.backgroundColor,
-                      opacity: navBarEssentials!
-                          .items![navBarEssentials!.selectedIndex!].opacity,
-                    ),
-                    child: ClipRRect(
-                      borderRadius:
-                          navBarDecoration!.borderRadius ?? BorderRadius.zero,
-                      child: BackdropFilter(
-                        filter: navBarEssentials!
-                                .items![navBarEssentials!.selectedIndex!]
-                                .filter ??
-                            ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
-                        child: Container(
-                          decoration: getNavBarDecoration(
-                            showOpacity: false,
-                            decoration: navBarDecoration,
-                            color: navBarEssentials!.backgroundColor,
-                            opacity: navBarEssentials!
-                                .items![navBarEssentials!.selectedIndex!]
-                                .opacity,
-                          ),
-                          child: SafeArea(
-                            top: false,
-                            right: false,
-                            left: false,
-                            bottom: navBarEssentials!.navBarHeight == 0.0 ||
-                                    (hideNavigationBar ?? false)
-                                ? false
-                                : confineToSafeArea ?? true,
-                            child: getNavBarStyle()!,
+                : Stack(
+                    children: [
+                      Container(
+                        decoration: getNavBarDecoration(
+                          decoration: navBarDecoration,
+                          showBorder: false,
+                          color: navBarEssentials!.backgroundColor,
+                          opacity: navBarEssentials!
+                              .items![navBarEssentials!.selectedIndex!].opacity,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: navBarDecoration!.borderRadius ??
+                              BorderRadius.zero,
+                          child: BackdropFilter(
+                            filter: navBarEssentials!
+                                    .items![navBarEssentials!.selectedIndex!]
+                                    .filter ??
+                                ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                            child: Container(
+                              decoration: getNavBarDecoration(
+                                showOpacity: false,
+                                decoration: navBarDecoration,
+                                color: navBarEssentials!.backgroundColor,
+                                opacity: navBarEssentials!
+                                    .items![navBarEssentials!.selectedIndex!]
+                                    .opacity,
+                              ),
+                              child: SafeArea(
+                                top: false,
+                                right: false,
+                                left: false,
+                                bottom: navBarEssentials!.navBarHeight == 0.0 ||
+                                        (hideNavigationBar ?? false)
+                                    ? false
+                                    : confineToSafeArea ?? true,
+                                child: getNavBarStyle()!,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
       );
 

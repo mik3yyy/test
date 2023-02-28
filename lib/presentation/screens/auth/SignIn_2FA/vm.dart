@@ -46,7 +46,7 @@ class Verify2FAVM extends RequestStateNotifier<SigninRes> {
 }
 
 final accountStateProvider = StateProvider<Account>((ref) {
-  return Account.none;
+  return Account.newAccount;
 });
 
 final userEmail = StateProvider<String>((ref) {

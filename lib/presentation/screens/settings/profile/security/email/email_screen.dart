@@ -47,7 +47,9 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
                 onPressed: () {
                   pushNewScreen(
                     context,
-                    screen: const ForgotEmailScreen(),
+                    screen: const ForgotEmailScreen(
+                      forgotEmailRoute: ForgotEmailRoute.profile,
+                    ),
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },

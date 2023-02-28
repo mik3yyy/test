@@ -49,7 +49,7 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
     final emailChange = ref.watch(verifyEmailChangeProvider);
     final resend2FA = ref.watch(resend2FAProvider);
     final resendEmail2FA = ref.watch(resendEmail2FAProvider);
-    final email = ref.watch(userEmail.notifier);
+    final emailX = ref.watch(userEmail.notifier);
 
     /// VERIFICATION CODE FOR SIGN IN
     ref.listen<RequestState>(verify2FAProvider, (T, value) {
@@ -207,7 +207,7 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                           }
                           String userEmail() {
                             if (widget.emailAdress.isEmpty) {
-                              return email.state;
+                              return emailX.state;
                             } else {
                               return widget.emailAdress;
                             }
@@ -242,7 +242,7 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                             onPressed: () {
                               String userEmail() {
                                 if (widget.emailAdress.isEmpty) {
-                                  return email.state;
+                                  return emailX.state;
                                 } else {
                                   return widget.emailAdress;
                                 }
@@ -294,7 +294,7 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                                 }
                                 String userEmail() {
                                   if (widget.emailAdress.isEmpty) {
-                                    return email.state;
+                                    return emailX.state;
                                   } else {
                                     return widget.emailAdress;
                                   }

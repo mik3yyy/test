@@ -18,8 +18,11 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/secu
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/vm/forgotten_email_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
+enum ForgotEmailRoute { signIn, profile }
+
 class ForgotEmailScreen extends StatefulHookConsumerWidget {
-  const ForgotEmailScreen({super.key});
+  final ForgotEmailRoute forgotEmailRoute;
+  const ForgotEmailScreen({super.key, required this.forgotEmailRoute});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -50,7 +53,9 @@ class _ForgotEmailScreenState extends ConsumerState<ForgotEmailScreen> {
 
     ref.listen<RequestState>(forgottenEmailProvider, (T, value) {
       if (value is Success<ForgettenEmailRes>) {
-        context.navigate(const ResetEmailScreen());
+        context.navigate(ResetEmailScreen(
+          forgotEmailRoute: widget.forgotEmailRoute,
+        ));
         return AppSnackBar.showSuccessSnackBar(context,
             message: value.value!.message.toString());
       }

@@ -2,39 +2,33 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart'
-    as all_dialog;
-import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart';
+import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/add_contact_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/chat_screen.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/view_contacts.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/For-search/get_all_dialogs_vm.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_dialog_messages_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/For-search/search_contacts.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_contacts_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/widget/loading-display/loading_display.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-import '../../components/app image/app_image.dart';
-
-class PropScreen extends HookConsumerWidget {
-  const PropScreen({Key? key}) : super(key: key);
+class ViewAllContact extends HookConsumerWidget {
+  const ViewAllContact({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
-    final dialogs = ref.watch(alldialogsProvider);
-    final searchDialog = ref.watch(dialogInputProvider);
+    final allContacts = ref.watch(allContactsProvider);
+    final allContactsX = ref.watch(contactInputProvider);
     return Scaffold(
         backgroundColor: AppColors.appColor,
         appBar: AppBar(
           leading: const BackButton(),
           centerTitle: true,
-          title: const AppBarTitle(title: "Messages", color: Colors.white),
+          title: const AppBarTitle(title: "Contacts", color: Colors.white),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -47,7 +41,7 @@ class PropScreen extends HookConsumerWidget {
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: SearchBox(
                     onTextEntered: (value) => ref
-                        .read(alldialgSearchQueryProvider.notifier)
+                        .read(allContactSearchQueryProvider.notifier)
                         .state = value,
                   )),
               const Space(20),
@@ -66,16 +60,17 @@ class PropScreen extends HookConsumerWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          dialogs.when(
+                          allContacts.when(
                               data: (data) {
-                                if (searchDialog.value == null) {
+                                if (allContactsX.value == null) {
                                   return const Center(
                                     child: CircularProgressIndicator(),
                                   );
                                 }
-
-                                if (data.data!.isEmpty) {
+                                if (data.data.contacts.isEmpty) {
                                   return Center(
                                     child: Padding(
                                       padding: EdgeInsets.only(
@@ -127,19 +122,19 @@ class PropScreen extends HookConsumerWidget {
                                   return Column(
                                     children: [
                                       const Space(20),
-                                      viewContacts(context),
+                                      addContact(context),
                                       const Space(30),
                                       SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.62,
                                         child: ListView.separated(
-                                          itemCount: searchDialog.value!.length,
+                                          itemCount: allContactsX.value!.length,
                                           itemBuilder: (context, index) {
-                                            final dialog =
-                                                searchDialog.value![index];
-                                            return DialogBuild(
-                                              message: dialog,
+                                            final contact =
+                                                allContactsX.value![index];
+                                            return ContactBiuld(
+                                              contact: contact,
                                             );
                                           },
                                           separatorBuilder: (context, index) {
@@ -155,6 +150,7 @@ class PropScreen extends HookConsumerWidget {
                               },
                               error: (e, s) => const ContactLoading(),
                               loading: () => const ContactLoading()),
+                          // Space(100.h),
                         ],
                       ),
                     ),
@@ -167,7 +163,7 @@ class PropScreen extends HookConsumerWidget {
   }
 }
 
-Widget viewContacts(BuildContext context) {
+Widget addContact(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     children: [
@@ -175,116 +171,73 @@ Widget viewContacts(BuildContext context) {
           onTap: () {
             pushNewScreen(
               context,
-              screen: const ViewAllContact(),
+              screen: AddContactScreen(),
               pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           },
-          child: Row(
-            children: [
-              Text(
-                "Contacts",
-                textAlign: TextAlign.center,
-                style: AppText.header2(context, AppColors.appColor, 16.sp),
-              ),
-              Space(15.w),
-              const Icon(
-                Icons.contacts_rounded,
-                color: AppColors.appColor,
-              ),
-            ],
+          child: const Icon(
+            Icons.person_add,
+            color: AppColors.appColor,
           )),
       const Space(20),
+      Image.asset(
+        AppImage.moreIcon,
+        color: AppColors.appColor,
+      )
     ],
   );
 }
 
-class DialogBuild extends HookConsumerWidget {
-  final all_dialog.Datum message;
-  const DialogBuild({Key? key, required this.message}) : super(key: key);
+class ContactBiuld extends StatelessWidget {
+  final ContactElement contact;
+  const ContactBiuld({Key? key, required this.contact}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
-    final currentUser = ref.watch(savedUserProvider);
-    return InkWell(
-      onTap: () {
-        pushNewScreen(context,
-            screen: ChatScreen(
-              datum: message,
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
+      color: Colors.grey.shade100,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ContactsImage(
+            contacts: contact,
+          ),
+          const Space(10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${contact.contact!.firstName!.capitalize()} ${contact.contact!.lastName!.capitalize()}",
+                  textAlign: TextAlign.center,
+                  style: AppText.header2(context, AppColors.appColor, 18.sp),
+                ),
+                const Space(3),
+                Text(
+                  contact.contact!.email.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppText.header2(
+                      context, AppColors.appColor.withOpacity(0.5), 16.sp),
+                ),
+              ],
             ),
-            withNavBar: false,
-            pageTransitionAnimation: PageTransitionAnimation.cupertino);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        color: Colors.grey.shade100,
-        child:
-            // const Space(20),
-            Row(
-          children: [
-            DialogContactImage(datum: message),
-            const Space(10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${message.privateDialogOtherUser!.firstName!.capitalize().toString()} ${message.privateDialogOtherUser!.lastName!.capitalize().toString()}",
-                    textAlign: TextAlign.center,
-                    style: AppText.header2(context, AppColors.appColor, 19.sp),
-                  ),
-                  const Space(5),
-                  Row(
-                    children: [
-                      if (currentUser.email ==
-                          message.lastMessage!.from!.email) ...[
-                        Text(
-                          "You:",
-                          textAlign: TextAlign.center,
-                          style: AppText.header2(context,
-                              AppColors.appColor.withOpacity(0.6), 16.sp),
-                        ),
-                      ] else ...[
-                        Text(
-                          "${message.lastMessage!.from!.firstName.toString()} :",
-                          textAlign: TextAlign.center,
-                          style: AppText.header2(context,
-                              AppColors.appColor.withOpacity(0.6), 19.sp),
-                        ),
-                      ],
-                      const Space(5),
-                      Flexible(
-                        child: Text(
-                          message.lastMessage!.message.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: AppText.header2(context,
-                              AppColors.appColor.withOpacity(0.6), 16.sp),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey.shade400,
-              size: 20,
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class DialogContactImage extends StatelessWidget {
-  final Datum datum;
-  const DialogContactImage({Key? key, required this.datum}) : super(key: key);
+class ContactsImage extends StatelessWidget {
+  final ContactElement contacts;
+  const ContactsImage({Key? key, required this.contacts}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (datum.privateDialogOtherUser!.profilePicture == null) {
+    if (contacts.contact?.profilePicture == null) {
       return SizedBox(
         height: 40,
         width: 40,
@@ -294,8 +247,7 @@ class DialogContactImage extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       );
-    } else if (datum
-        .privateDialogOtherUser!.profilePicture!.imageUrl!.isEmpty) {
+    } else if (contacts.contact!.profilePicture!.imageUrl!.isEmpty) {
       return SizedBox(
         height: 40,
         width: 40,
@@ -324,8 +276,7 @@ class DialogContactImage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            imageUrl: datum.privateDialogOtherUser!.profilePicture!.imageUrl
-                .toString(),
+            imageUrl: contacts.contact!.profilePicture!.imageUrl!.toString(),
           ),
         ),
       );

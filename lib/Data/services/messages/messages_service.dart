@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart';
+import 'package:kayndrexsphere_mobile/Data/model/Dialog/create_dialog_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/dialog_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
@@ -94,6 +97,29 @@ class MessageService {
     }
   }
 
+  Future<AllDialog> getAllDialog() async {
+    const url = '/messaging/dialogs/';
+    try {
+      final response = await _read.read(dioProvider).get(url,
+          options: ref
+              .watch(cacheOptions)
+              .copyWith(
+                policy: CachePolicy.refresh,
+              )
+              .toOptions());
+
+      final result = AllDialog.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
   Future<DialogRes> getDialogMessages(int id) async {
     final url = '/messaging/dialogs/$id';
     try {
@@ -106,6 +132,48 @@ class MessageService {
               .toOptions());
 
       final result = DialogRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  /// CREATE DIALOG
+  Future<CreateDialogRes> createDialog(String email, String message) async {
+    const url = '/messaging/dialogs/';
+    try {
+      final response = await _read.read(dioProvider).post(
+        url,
+        data: {"email": email, "message": message},
+      );
+
+      final result = CreateDialogRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        throw e.error;
+      }
+    }
+  }
+
+  /// SEND MESSAGES
+  Future<GenericRes> sendMessage(int id, String message) async {
+    const url = '/messaging/dialogs/send-message';
+    try {
+      final response = await _read.read(dioProvider).post(
+        url,
+        data: {"dialog_id": id, "message": message},
+      );
+
+      final result = GenericRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {

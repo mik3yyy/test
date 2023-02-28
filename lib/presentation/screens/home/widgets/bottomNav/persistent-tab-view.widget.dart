@@ -403,32 +403,32 @@ class _PersistentTabViewState extends State<PersistentTabView> {
               },
             ),
           ),
-          Positioned(
-            bottom: widget.decoration!.borderRadius != BorderRadius.zero
-                ? 25.0
-                : 10.0,
-            right: 10.0,
-            child: widget.floatingActionButton!,
-          ),
+          // Positioned(
+          //   bottom: widget.decoration!.borderRadius != BorderRadius.zero
+          //       ? 25.0
+          //       : 10.0,
+          //   right: 10.0,
+          //   child: widget.floatingActionButton!,
+          // ),
         ],
       );
     } else if (widget.navBarStyle == NavBarStyle.style15) {
       return Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          SizedBox.expand(
-            child: CustomTabView(
-              routeAndNavigatorSettings: _routeAndNavigatorSettings,
-              builder: (BuildContext screenContext) {
-                _contextList[index] = screenContext;
-                if (_sendScreenContext) {
-                  _sendScreenContext = false;
-                  widget.selectedTabScreenContext!(_contextList[index]);
-                }
-                return Material(elevation: 0, child: widget.screens[index]);
-              },
-            ),
-          ),
+          // SizedBox.expand(
+          //   child: CustomTabView(
+          //     routeAndNavigatorSettings: _routeAndNavigatorSettings,
+          //     builder: (BuildContext screenContext) {
+          //       _contextList[index] = screenContext;
+          //       if (_sendScreenContext) {
+          //         _sendScreenContext = false;
+          //         widget.selectedTabScreenContext!(_contextList[index]);
+          //       }
+          //       return Material(elevation: 0, child: widget.screens[index]);
+          //     },
+          //   ),
+          // ),
           _navBarHeight == 0
               ? const SizedBox.shrink()
               : Positioned(
