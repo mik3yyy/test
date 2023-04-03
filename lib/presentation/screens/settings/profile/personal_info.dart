@@ -335,7 +335,7 @@ class UserAvatar extends StatelessWidget {
           ),
           errorWidget: (context, url, error) => Text(
             initials,
-            style: themeData.textTheme.caption!.copyWith(
+            style: themeData.textTheme.labelSmall!.copyWith(
               fontSize: initialsSize,
               color: const Color(0xff6F7070),
             ),

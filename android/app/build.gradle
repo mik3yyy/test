@@ -39,13 +39,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 33
-        
-    lintOptions {
-        disable 'InvalidPackage'
-        // disable "Instantiatable"
-        // checkReleaseBuilds false
-        // abortOnError false
-    }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -103,6 +97,9 @@ android {
            signingConfig signingConfigs.release
        }
    }
+    lint {
+        disable 'InvalidPackage'
+    }
 }
 
 flutter {
@@ -112,7 +109,7 @@ flutter {
 dependencies {
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-crashlytics:18.3.1'
 }

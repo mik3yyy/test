@@ -45,7 +45,7 @@ class DeviceIDNotifier extends StateNotifier<DeviceState> {
     try {
       if (Platform.isAndroid) {
         deviceInfo.androidInfo.then((value) {
-          state = state.copyWith(deviceId: value.androidId.toString());
+          state = state.copyWith(deviceId: value.id);
         });
 
         // return androidInfo.androidId.toString();
@@ -54,8 +54,6 @@ class DeviceIDNotifier extends StateNotifier<DeviceState> {
           state =
               state.copyWith(deviceId: value.identifierForVendor.toString());
         });
-
-        // return iosInfo.identifierForVendor.toString();
       } else {
         return;
       }

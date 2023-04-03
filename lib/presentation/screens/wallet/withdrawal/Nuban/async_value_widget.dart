@@ -24,7 +24,7 @@ class ErrorMessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       errorMessage,
-      style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.red),
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.red),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:kayndrexsphere_mobile/Data/model/Dialog/dialog_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_res.dart';
-import 'package:kayndrexsphere_mobile/Data/services/messages/message_repository/meaage_interface.dart';
+import 'package:kayndrexsphere_mobile/Data/services/messages/message_repository/message_interface.dart';
 import 'package:kayndrexsphere_mobile/Data/services/messages/messages_service.dart';
 
 final messageManagerProvider = Provider((ref) {
@@ -35,9 +35,26 @@ class MessageManager extends MessageInterface {
       await messageService.createDialog(email, message);
 
   @override
-  Future<GenericRes> sendMessage(int id, String message) async =>
-      await messageService.sendMessage(id, message);
+  Future<GenericRes> sendMessage(
+          int id, String message, String filePath) async =>
+      await messageService.sendMessage(id, message, filePath);
 
   @override
   Future<AllDialog> getAllDialog() async => await messageService.getAllDialog();
+
+  @override
+  Future<GenericRes> blockContact(int id) async =>
+      await messageService.blockContact(id);
+
+  @override
+  Future<GenericRes> deleteContact(int id) async =>
+      await messageService.deleteContact(id);
+
+  @override
+  Future<GenericRes> renameContact(String contactName, int id) async =>
+      await messageService.renameContact(contactName, id);
+
+  @override
+  Future<GenericRes> unblockContact(int id) async =>
+      await messageService.unblockContact(id);
 }

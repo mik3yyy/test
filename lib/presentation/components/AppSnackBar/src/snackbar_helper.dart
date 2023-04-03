@@ -383,13 +383,13 @@ extension FlashBarShortcuts on BuildContext {
                 title: title == null
                     ? null
                     : DefaultTextStyle(
-                        style: inverseTheme.textTheme.headline6!
+                        style: inverseTheme.textTheme.bodyMedium!
                             .copyWith(color: $titleColor)
                             .merge(titleStyle),
                         child: title,
                       ),
                 content: DefaultTextStyle(
-                  style: inverseTheme.textTheme.subtitle1!.merge(contentStyle),
+                  style: inverseTheme.textTheme.titleSmall!.merge(contentStyle),
                   child: content,
                 ),
                 shouldIconPulse: shouldIconPulse,
@@ -526,11 +526,11 @@ extension FlashDialogShortcuts on BuildContext {
           final $titleStyle = titleStyle ??
               flashTheme.titleStyle ??
               dialogTheme.titleTextStyle ??
-              theme.textTheme.headline6!;
+              theme.textTheme.bodyMedium!;
           final $contentStyle = contentStyle ??
               flashTheme.contentStyle ??
               dialogTheme.contentTextStyle ??
-              theme.textTheme.subtitle1!;
+              theme.textTheme.titleSmall!;
           final $actionColor = actionColor ??
               flashTheme.actionColor ??
               theme.colorScheme.primary;
@@ -790,7 +790,7 @@ class FlashBarThemeData {
 
   /// Default value for [Flash.backgroundColor].
   ///
-  /// If null, [Flash] will default to inversion of [ThemeData.backgroundColor].
+  /// If null, [Flash] will default to inversion of [ThemeData].
   final Color? backgroundColor;
 
   /// Default value for [Flash.backgroundGradient].

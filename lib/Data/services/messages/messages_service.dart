@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/create_dialog_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/dialog_res.dart';
@@ -10,7 +13,9 @@ import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
+import 'package:mime/mime.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final messageServiceProvider = Provider<MessageService>((ref) {
@@ -18,8 +23,8 @@ final messageServiceProvider = Provider<MessageService>((ref) {
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
-    receiveTimeout: 100000,
-    connectTimeout: 100000,
+    receiveTimeout: const Duration(milliseconds: 100000),
+    connectTimeout: const Duration(milliseconds: 100000),
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 
@@ -69,7 +74,8 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -92,10 +98,100 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
+
+  /// RENAME CONTACT
+  Future<GenericRes> renameContact(String contactName, int id) async {
+    final url = '/messaging/contacts/rename/$id';
+    try {
+      final response = await _read.read(dioProvider).post(
+        url,
+        data: {
+          "contact_name": contactName,
+        },
+      );
+
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
+      }
+    }
+  }
+
+  /// DELETE CONTACT
+  Future<GenericRes> deleteContact(int id) async {
+    final url = '/messaging/delete/$id';
+    try {
+      final response = await _read.read(dioProvider).post(
+            url,
+          );
+
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
+      }
+    }
+  }
+
+  /// BLOCK CONTACT
+  Future<GenericRes> blockContact(int id) async {
+    final url = '/messaging/contacts/block/$id';
+    try {
+      final response = await _read.read(dioProvider).post(
+            url,
+          );
+
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
+      }
+    }
+  }
+
+  /// UNBLOCK CONTACT
+  Future<GenericRes> unblockContact(int id) async {
+    final url = '/messaging/contacts/unblock/$id';
+    try {
+      final response = await _read.read(dioProvider).post(
+            url,
+          );
+
+      final result = GenericRes.fromJson(response.data);
+      return result;
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.data != "") {
+        Failure result = Failure.fromJson(e.response!.data);
+        throw result.message!;
+      } else {
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
+      }
+    }
+  }
+
+  /// GET ALL DIALOGS
 
   Future<AllDialog> getAllDialog() async {
     const url = '/messaging/dialogs/';
@@ -115,7 +211,8 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -138,7 +235,8 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -159,19 +257,31 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
 
   /// SEND MESSAGES
-  Future<GenericRes> sendMessage(int id, String message) async {
+  Future<GenericRes> sendMessage(
+      int id, String message, String filePath) async {
     const url = '/messaging/dialogs/send-message';
+    File file = File(filePath);
+    final mimeTypeData =
+        lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
+
+    FormData formData = FormData.fromMap({
+      "dialog_id": id,
+      "message": message,
+      "attachment": await MultipartFile.fromFile(file.path,
+          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+    });
     try {
       final response = await _read.read(dioProvider).post(
-        url,
-        data: {"dialog_id": id, "message": message},
-      );
+            url,
+            data: formData,
+          );
 
       final result = GenericRes.fromJson(response.data);
       return result;
@@ -180,7 +290,8 @@ class MessageService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }

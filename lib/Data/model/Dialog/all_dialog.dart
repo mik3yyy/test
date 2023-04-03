@@ -53,7 +53,7 @@ class Datum {
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         dialog: json["dialog"] == null ? null : Dialog.fromJson(json["dialog"]),
-        title: json["title"],
+        title: json["title"] ?? "",
         img: json["img"],
         privateDialogOtherUser: json["private_dialog_other_user"] == null
             ? null

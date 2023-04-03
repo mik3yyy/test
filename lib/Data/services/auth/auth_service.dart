@@ -23,6 +23,7 @@ import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_to
 import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_token_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -35,8 +36,8 @@ final userServiceProvider = Provider<UserService>((ref) {
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
-    receiveTimeout: 100000,
-    connectTimeout: 100000,
+    receiveTimeout: const Duration(milliseconds: 100000),
+    connectTimeout: const Duration(milliseconds: 100000),
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 final cacheProvider =
@@ -103,7 +104,8 @@ class UserService {
 
         throw result.status!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -123,7 +125,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -142,7 +145,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -169,7 +173,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -182,7 +187,8 @@ class UserService {
       final stringList = CurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
-      throw e.error;
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -194,7 +200,8 @@ class UserService {
       final stringList = ConvertCurrencyRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
-      throw e.error;
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -206,7 +213,8 @@ class UserService {
       final stringList = CountryRes.fromJson(response.data);
       return stringList;
     } on DioError catch (e) {
-      throw e.error;
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 
@@ -231,7 +239,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -250,7 +259,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -268,7 +278,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -294,7 +305,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -313,7 +325,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -332,7 +345,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -351,7 +365,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -368,7 +383,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -387,7 +403,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -411,7 +428,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -433,7 +451,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -452,7 +471,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -477,7 +497,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -500,7 +521,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -520,7 +542,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message ?? "";
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -538,7 +561,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -557,7 +581,8 @@ class UserService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }

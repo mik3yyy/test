@@ -14,6 +14,6 @@ class SendMessageVM extends RequestStateNotifier<GenericRes> {
 
   SendMessageVM(Ref ref) : _messageManager = ref.read(messageManagerProvider);
 
-  void sendMessage(int id, String message) =>
-      makeRequest(() => _messageManager.sendMessage(id, message));
+  void sendMessage(int id, String message, String filePath) =>
+      makeRequest(() => _messageManager.sendMessage(id, message, filePath));
 }

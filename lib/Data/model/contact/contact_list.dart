@@ -59,9 +59,11 @@ class ContactElement {
     this.createdAt,
     this.updatedAt,
     this.contact,
+    this.contactName,
   });
 
   int? id;
+  String? contactName;
   int? isBlocked;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -70,6 +72,7 @@ class ContactElement {
   factory ContactElement.fromJson(Map<String, dynamic> json) => ContactElement(
         id: json["id"],
         isBlocked: json["is_blocked"],
+        contactName: json["contact_name"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         contact: ContactContact.fromJson(json["contact"]),
@@ -78,6 +81,7 @@ class ContactElement {
   Map<String, dynamic> toJson() => {
         "id": id,
         "is_blocked": isBlocked,
+        "contact_name": contactName,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "contact": contact?.toJson(),

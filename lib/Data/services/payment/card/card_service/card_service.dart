@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/failure_res.dart';
 
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/req/add_card_req.dart';
@@ -6,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/card_res.da
 import 'package:kayndrexsphere_mobile/Data/services/payment/card/res/get_card.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:riverpod/riverpod.dart';
@@ -18,8 +20,8 @@ final cardServiceProvider = Provider<CardService>((ref) {
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
-    receiveTimeout: 100000,
-    connectTimeout: 100000,
+    receiveTimeout: const Duration(milliseconds: 100000),
+    connectTimeout: const Duration(milliseconds: 100000),
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 
@@ -27,10 +29,11 @@ class CardService {
   final Ref _read;
   final Ref ref;
   CardService(this._read, this.ref) {
-    _read
-        .read(dioProvider)
-        .interceptors
-        .addAll([ApiInterceptor(), ErrorInterceptor(), PrettyDioLogger()]);
+    _read.read(dioProvider).interceptors.addAll([
+      ApiInterceptor(),
+      ErrorInterceptor(),
+      if (kDebugMode) ...[PrettyDioLogger()]
+    ]);
   }
 
   // FSavd Card
@@ -49,7 +52,8 @@ class CardService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -69,7 +73,8 @@ class CardService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -90,7 +95,8 @@ class CardService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -112,7 +118,8 @@ class CardService {
           throw result.message!;
         }
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -133,7 +140,8 @@ class CardService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }

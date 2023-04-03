@@ -252,7 +252,7 @@ class KYDatePicker extends StatelessWidget {
           hintText: hint,
           hintStyle: Theme.of(context)
               .textTheme
-              .bodyText2
+              .bodySmall
               ?.copyWith(color: Colors.grey),
           border: InputBorder.none,
           contentPadding:

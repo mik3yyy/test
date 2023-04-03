@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
-import 'package:kayndrexsphere_mobile/Data/utils/http_utils.dart';
 import 'package:kayndrexsphere_mobile/main.dart';
 
 ///chnage to extend interceptor
 class ErrorInterceptor extends InterceptorsWrapper {
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    err = await HttpUtils.buildErrorResponse(err);
+    // var res = await HttpUtils.buildErrorResponse(err);
+
+    // print("Here ${err.error}");
 
     if (err.response?.requestOptions.path != "/auth/sign-in" &&
         err.response?.requestOptions.path != "/auth/sign-in-new" &&

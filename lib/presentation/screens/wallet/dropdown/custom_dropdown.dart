@@ -148,7 +148,6 @@ class SelectFormField extends FormField<String> {
     TextAlignVertical? textAlignVertical,
     bool autofocus = false,
     bool readOnly = false,
-    ToolbarOptions? toolbarOptions,
     bool? showCursor,
     bool obscureText = false,
     bool autocorrect = true,
@@ -258,7 +257,7 @@ class SelectFormField extends FormField<String> {
                 textDirection: textDirection,
                 textCapitalization: textCapitalization,
                 autofocus: autofocus,
-                toolbarOptions: toolbarOptions,
+
                 readOnly: true,
                 showCursor: showCursor,
                 obscureText: obscureText,
@@ -620,7 +619,7 @@ class _SelectFormFieldState extends FormFieldState<String> {
   RelativeRect _buttonMenuPosition(BuildContext poContext) {
     final RenderBox loBar = poContext.findRenderObject() as RenderBox;
     final RenderBox loOverlay =
-        Overlay.of(poContext)?.context.findRenderObject() as RenderBox;
+        Overlay.of(poContext).context.findRenderObject() as RenderBox;
     const Offset loOffset = Offset.zero;
 
     final RelativeRect loPosition = RelativeRect.fromRect(

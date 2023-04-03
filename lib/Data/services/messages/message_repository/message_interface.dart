@@ -10,6 +10,10 @@ abstract class MessageInterface {
   Future<ContactList> getContacts();
   Future<DialogRes> getDialogMessages(int id);
   Future<CreateDialogRes> createDialog(String email, String message);
-  Future<GenericRes> sendMessage(int id, String message);
+  Future<GenericRes> sendMessage(int id, String message, String filePath);
   Future<AllDialog> getAllDialog();
+  Future<GenericRes> renameContact(String contactName, int id);
+  Future<GenericRes> deleteContact(int id);
+  Future<GenericRes> blockContact(int id);
+  Future<GenericRes> unblockContact(int id);
 }

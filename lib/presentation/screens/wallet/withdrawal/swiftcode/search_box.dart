@@ -22,7 +22,7 @@ class SearchBox extends StatelessWidget {
             hintText: hintText,
             hintStyle: Theme.of(context)
                 .textTheme
-                .bodyText2
+                .bodyMedium
                 ?.copyWith(color: Colors.grey),
             border: InputBorder.none,
             contentPadding:

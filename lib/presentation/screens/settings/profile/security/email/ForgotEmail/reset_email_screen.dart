@@ -58,6 +58,7 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
     final resetEmail = ref.watch(resetEmailProvider);
     final code = useTextEditingController();
     final newEmail = useTextEditingController();
+    final newPassword = useTextEditingController();
 
     ref.listen<RequestState>(resetEmailProvider, (T, value) {
       if (value is Success<GenericRes>) {
@@ -113,7 +114,7 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
                     Space(20.w),
                     Expanded(
                       child: Text(
-                        """Please ensure that your account exist with the phone you provided.
+                        """Please ensure that your account exist with the phone number you provided.
                         """,
                         style: AppText.body2(context, Colors.black45, 17.sp),
                       ),
@@ -136,8 +137,6 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
                   obscureText: false,
                 ),
 
-                const Space(25),
-
                 TextFormInput(
                   keyboardType: TextInputType.emailAddress,
                   capitalization: TextCapitalization.none,
@@ -148,6 +147,20 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
                     FilteringTextInputFormatter.deny(RegExp('[ ]'))
                   ],
                   validator: (value) => validateEmail(value),
+                  obscureText: false,
+                ),
+                const Space(25),
+
+                TextFormInput(
+                  keyboardType: TextInputType.emailAddress,
+                  capitalization: TextCapitalization.none,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  labelText: 'Enter new password',
+                  controller: newEmail,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                  ],
+                  validator: (value) => validatePassword(value),
                   obscureText: false,
                 ),
 
@@ -164,6 +177,9 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
                     onPressed: resetEmail is Loading
                         ? null
                         : () {
+                            if (code.text.isEmpty) {
+                              return;
+                            }
                             if (formKey.currentState!.validate()) {
                               if (!currentFocus.hasPrimaryFocus) {
                                 currentFocus.unfocus();
@@ -171,6 +187,7 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
                               var reset = ResetEmailReq(
                                   code: code.text,
                                   newEmail: newEmail.text,
+                                  newpassowrd: newPassword.text,
                                   the2FaToken: PreferenceManager.twoFaToken);
 
                               ref

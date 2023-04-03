@@ -228,7 +228,7 @@ class DialogBuild extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${message.privateDialogOtherUser!.firstName!.capitalize().toString()} ${message.privateDialogOtherUser!.lastName!.capitalize().toString()}",
+                    "${message.title!.capitalize() == "" ? "${message.privateDialogOtherUser?.firstName!.capitalize()} ${message.privateDialogOtherUser?.lastName!.capitalize()}" : message.title!.capitalize()} ",
                     textAlign: TextAlign.center,
                     style: AppText.header2(context, AppColors.appColor, 19.sp),
                   ),

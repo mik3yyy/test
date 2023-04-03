@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/get_top_post
 import 'package:kayndrexsphere_mobile/Data/services/forum/model/res/single_post_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/api_interceptor.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -15,8 +16,8 @@ final forumServiceProvider = Provider<ForumService>((ref) {
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
-    receiveTimeout: 100000,
-    connectTimeout: 100000,
+    receiveTimeout: const Duration(milliseconds: 100000),
+    connectTimeout: const Duration(milliseconds: 100000),
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 
@@ -47,7 +48,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -67,7 +69,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -87,7 +90,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -110,7 +114,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -131,7 +136,7 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        throw e.message ?? "";
       }
     }
   }
@@ -152,7 +157,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -172,7 +178,8 @@ class ForumService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }

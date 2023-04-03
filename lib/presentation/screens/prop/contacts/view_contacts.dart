@@ -2,27 +2,44 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNav/persistent_tab_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/add_contact_screen.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/contact_build.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/vm/block_contact_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/vm/delete_contact._vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/vm/rename_contact_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/contacts/vm/unblock_contact_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/For-search/search_contacts.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_contacts_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/widget/loading-display/loading_display.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swiftcode/search_box.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
-class ViewAllContact extends HookConsumerWidget {
-  const ViewAllContact({Key? key}) : super(key: key);
+class ViewAllContact extends StatefulHookConsumerWidget {
+  const ViewAllContact({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _ViewAllContactState();
+}
+
+class _ViewAllContactState extends ConsumerState<ViewAllContact> {
+  final List<String> items = ["Block, Unblock, Delete"];
+
+  @override
+  Widget build(BuildContext context) {
     final allContacts = ref.watch(allContactsProvider);
     final allContactsX = ref.watch(contactInputProvider);
+    final unblock = ref.watch(unBlockContactProvider);
+    final block = ref.watch(blockContactProvider);
+    final deleteContact = ref.watch(deleteContactProvider);
+    final renameContact = ref.watch(renameContactProvider);
     return Scaffold(
         backgroundColor: AppColors.appColor,
         appBar: AppBar(
@@ -36,6 +53,11 @@ class ViewAllContact extends HookConsumerWidget {
           bottom: false,
           child: Column(
             children: [
+              InnerPageLoadingIndicator(
+                  loadingStream: unblock is Loading ||
+                      block is Loading ||
+                      deleteContact is Loading ||
+                      renameContact is Loading),
               const Space(20),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -133,8 +155,12 @@ class ViewAllContact extends HookConsumerWidget {
                                           itemBuilder: (context, index) {
                                             final contact =
                                                 allContactsX.value![index];
-                                            return ContactBiuld(
+                                            return ContactBuild(
                                               contact: contact,
+                                              isLoading: unblock is Loading ||
+                                                  block is Loading ||
+                                                  deleteContact is Loading ||
+                                                  renameContact is Loading,
                                             );
                                           },
                                           separatorBuilder: (context, index) {
@@ -180,55 +206,8 @@ Widget addContact(BuildContext context) {
             color: AppColors.appColor,
           )),
       const Space(20),
-      Image.asset(
-        AppImage.moreIcon,
-        color: AppColors.appColor,
-      )
     ],
   );
-}
-
-class ContactBiuld extends StatelessWidget {
-  final ContactElement contact;
-  const ContactBiuld({Key? key, required this.contact}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
-      color: Colors.grey.shade100,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ContactsImage(
-            contacts: contact,
-          ),
-          const Space(10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${contact.contact!.firstName!.capitalize()} ${contact.contact!.lastName!.capitalize()}",
-                  textAlign: TextAlign.center,
-                  style: AppText.header2(context, AppColors.appColor, 18.sp),
-                ),
-                const Space(3),
-                Text(
-                  contact.contact!.email.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: AppText.header2(
-                      context, AppColors.appColor.withOpacity(0.5), 16.sp),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class ContactsImage extends StatelessWidget {

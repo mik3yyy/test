@@ -13,10 +13,11 @@ class MyEvent {
     this.message,
   });
 
-  SMS? message;
+  final Message? message;
 
   factory MyEvent.fromJson(Map<String, dynamic> json) => MyEvent(
-        message: json["message"] == null ? null : SMS.fromJson(json["message"]),
+        message:
+            json["message"] == null ? null : Message.fromJson(json["message"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -24,8 +25,8 @@ class MyEvent {
       };
 }
 
-class SMS {
-  SMS({
+class Message {
+  Message({
     this.id,
     this.dialogId,
     this.message,
@@ -39,19 +40,19 @@ class SMS {
     this.dialog,
   });
 
-  int? id;
-  int? dialogId;
-  String? message;
-  DateTime? sentAt;
-  String? ipAddress;
-  String? userAgent;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  List<dynamic>? attachments;
-  From? from;
-  Dialog? dialog;
+  final int? id;
+  final int? dialogId;
+  final String? message;
+  final DateTime? sentAt;
+  final String? ipAddress;
+  final String? userAgent;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final List<Attachment>? attachments;
+  final From? from;
+  final Dialog? dialog;
 
-  factory SMS.fromJson(Map<String, dynamic> json) => SMS(
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
         id: json["id"],
         dialogId: json["dialog_id"],
         message: json["message"],
@@ -67,7 +68,8 @@ class SMS {
             : DateTime.parse(json["updated_at"]),
         attachments: json["attachments"] == null
             ? []
-            : List<dynamic>.from(json["attachments"]!.map((x) => x)),
+            : List<Attachment>.from(
+                json["attachments"]!.map((x) => Attachment.fromJson(x))),
         from: json["from"] == null ? null : From.fromJson(json["from"]),
         dialog: json["dialog"] == null ? null : Dialog.fromJson(json["dialog"]),
       );
@@ -83,9 +85,53 @@ class SMS {
         "updated_at": updatedAt?.toIso8601String(),
         "attachments": attachments == null
             ? []
-            : List<dynamic>.from(attachments!.map((x) => x)),
+            : List<dynamic>.from(attachments!.map((x) => x.toJson())),
         "from": from?.toJson(),
         "dialog": dialog?.toJson(),
+      };
+}
+
+class Attachment {
+  Attachment({
+    this.url,
+    this.pos,
+    this.createdAt,
+    this.updatedAt,
+    this.fileName,
+    this.fileType,
+    this.thumbnailUrl,
+  });
+
+  final String? url;
+  final int? pos;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? fileName;
+  final String? fileType;
+  final String? thumbnailUrl;
+
+  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+        url: json["url"],
+        pos: json["pos"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        fileName: json["file_name"],
+        fileType: json["file_type"],
+        thumbnailUrl: json["thumbnail_url"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "url": url,
+        "pos": pos,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "file_name": fileName,
+        "file_type": fileType,
+        "thumbnail_url": thumbnailUrl,
       };
 }
 
@@ -102,15 +148,15 @@ class Dialog {
     this.initiator,
   });
 
-  int? id;
-  String? uuid;
-  int? isRoom;
-  dynamic name;
-  dynamic description;
-  dynamic dialogImg;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  From? initiator;
+  final int? id;
+  final String? uuid;
+  final int? isRoom;
+  final dynamic name;
+  final dynamic description;
+  final dynamic dialogImg;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final From? initiator;
 
   factory Dialog.fromJson(Map<String, dynamic> json) => Dialog(
         id: json["id"],
@@ -168,28 +214,28 @@ class From {
     this.profilePicture,
   });
 
-  String? firstName;
-  String? lastName;
-  dynamic gender;
-  dynamic dateOfBirth;
-  String? accountNumber;
-  String? refCode;
-  String? email;
-  PhoneNumber? phoneNumber;
-  dynamic address;
-  dynamic city;
-  dynamic state;
-  String? countryName;
-  String? currencyCode;
-  String? language;
-  DateTime? transactionPinAddedAt;
-  DateTime? verifiedAt;
-  int? isBanned;
-  String? timezone;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  dynamic deactivatedNumber;
-  dynamic profilePicture;
+  final String? firstName;
+  final String? lastName;
+  final dynamic gender;
+  final dynamic dateOfBirth;
+  final String? accountNumber;
+  final String? refCode;
+  final String? email;
+  final PhoneNumber? phoneNumber;
+  final dynamic address;
+  final dynamic city;
+  final dynamic state;
+  final String? countryName;
+  final String? currencyCode;
+  final String? language;
+  final DateTime? transactionPinAddedAt;
+  final DateTime? verifiedAt;
+  final int? isBanned;
+  final String? timezone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final dynamic deactivatedNumber;
+  final ProfilePicture? profilePicture;
 
   factory From.fromJson(Map<String, dynamic> json) => From(
         firstName: json["first_name"],
@@ -223,7 +269,9 @@ class From {
             ? null
             : DateTime.parse(json["updated_at"]),
         deactivatedNumber: json["deactivated_number"],
-        profilePicture: json["profile_picture"],
+        profilePicture: json["profile_picture"] == null
+            ? null
+            : ProfilePicture.fromJson(json["profile_picture"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -258,8 +306,8 @@ class PhoneNumber {
     this.phoneNumber,
   });
 
-  dynamic phoneCode;
-  dynamic phoneNumber;
+  final dynamic phoneCode;
+  final dynamic phoneNumber;
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
         phoneCode: json["phone_code"],
@@ -269,5 +317,37 @@ class PhoneNumber {
   Map<String, dynamic> toJson() => {
         "phone_code": phoneCode,
         "phone_number": phoneNumber,
+      };
+}
+
+class ProfilePicture {
+  ProfilePicture({
+    this.imageUrl,
+    this.thumbnailUrl,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  String? imageUrl;
+  String? thumbnailUrl;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory ProfilePicture.fromJson(Map<String, dynamic> json) => ProfilePicture(
+        imageUrl: json["image_url"] ?? "",
+        thumbnailUrl: json["thumbnail_url"] ?? "",
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "image_url": imageUrl ?? "",
+        "thumbnail_url": thumbnailUrl ?? "",
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

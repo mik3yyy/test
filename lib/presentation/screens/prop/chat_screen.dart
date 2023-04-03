@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,8 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/attachment/attachment_image_widget.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/attachment/pick_attachment.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/chat_model.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/my_event.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/send_message.dart';
@@ -71,8 +73,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         if (event.data.isEmpty) {
           return;
         } else {
-          Map<String, dynamic> resmap = json.decode(event.data);
-          log("from delay $resmap");
+          var resmap = json.decode(event.data);
+          log("from Android delay $resmap");
           var res = MyEvent.fromJson(resmap);
           log("HERE IS RESULT : ${res.message} ");
           ref.read(localMsgProvider.notifier).addFromPusher(res);
@@ -82,15 +84,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         if (event.data == "{}") {
           return;
         } else {
-          Map<String, dynamic> resmap = json.decode(event.data);
-          log("from delay $resmap");
+          var resmap = json.decode(event.data);
+          log("from IOS delay $resmap");
           var res = MyEvent.fromJson(resmap);
           log("HERE IS RESULT : ${res.message} ");
           ref.read(localMsgProvider.notifier).addFromPusher(res);
         }
       }
     } catch (e) {
-      throw e.toString();
+      if (mounted) {
+        throw e.toString();
+      }
     }
   }
 
@@ -112,6 +116,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final message = useTextEditingController();
     final screenW = MediaQuery.of(context).size.width;
     final screenH = MediaQuery.of(context).size.height;
+    final pickedFile = useState("");
 
     ref.listen<RequestState>(sendMessageProvider, (T, value) {
       if (value is Success<GenericRes>) {}
@@ -191,6 +196,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
+                                            if (message
+                                                .attachments.isNotEmpty) ...[
+                                              // Text(message.attachments,
+                                              //     style: AppText.body2(
+                                              //         context,
+                                              //         Colors.grey.shade400,
+                                              //         5.sp))
+
+                                              SendersAttachment(
+                                                height: 120,
+                                                width: 120,
+                                                imageUrl: message.attachments,
+                                              )
+                                            ],
                                             Container(
                                               padding: const EdgeInsets.all(10),
                                               constraints: BoxConstraints(
@@ -236,6 +255,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            if (message
+                                                .attachments.isNotEmpty) ...[
+                                              // Text(message.attachments,
+                                              //     style: AppText.body2(
+                                              //         context,
+                                              //         Colors.grey.shade400,
+                                              //         5.sp))
+
+                                              ViewAttachment(
+                                                height: 120,
+                                                width: 120,
+                                                imageUrl: message.attachments,
+                                              )
+                                            ],
                                             Container(
                                               padding: const EdgeInsets.all(10),
                                               constraints: BoxConstraints(
@@ -287,47 +320,99 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.white,
                   width: screenW,
-                  child: Container(
-                    width: 320.w,
-                    margin: EdgeInsets.only(bottom: 13.w, top: 10),
-                    padding: EdgeInsets.only(left: 13.w, right: 13.w),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(7.r),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.attach_file),
-                        Flexible(
-                          child: TextFormField(
-                            controller: message,
-                            decoration: const InputDecoration(
-                              hintText: 'Send Message',
-                              border: InputBorder.none,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (pickedFile.value.isNotEmpty) ...[
+                        Space(30.h),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              height: 50,
+                              width: 50,
+                              color: Colors.grey.shade300,
+                              child: Image.file(
+                                File(pickedFile.value),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            onTap: () {
-                              if (scrollController.hasClients) {
-                                // final position =
-                                //     scrollController.position.maxScrollExtent;
-                                scrollController.animateTo(
-                                  1800.9090909090909,
-                                  duration: const Duration(seconds: 1),
-                                  curve: Curves.easeOut,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            ref.read(sendMessageProvider.notifier).sendMessage(
-                                widget.datum.dialog!.id!, message.text);
-                            message.clear();
-                          },
-                          icon: const Icon(Icons.send),
-                        ),
+                            Positioned(
+                              // left: 40,
+                              right: -5,
+                              top: -10,
+                              child: InkWell(
+                                onTap: () {
+                                  pickedFile.value = "";
+                                },
+                                child: const CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: Colors.red,
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
                       ],
-                    ),
+                      Container(
+                        // width: screenW / 2,
+                        margin: EdgeInsets.only(bottom: 13.w, top: 10),
+                        padding: EdgeInsets.only(left: 13.w, right: 13.w),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(7.r),
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                                onPressed: () async {
+                                  var result = await ref
+                                      .read(fileProvider)
+                                      .addAttachment();
+                                  pickedFile.value = result;
+                                },
+                                icon: const Icon(Icons.attach_file)),
+                            Flexible(
+                              child: TextFormField(
+                                controller: message,
+                                decoration: const InputDecoration(
+                                  hintText: 'Send Message',
+                                  border: InputBorder.none,
+                                ),
+                                onTap: () {
+                                  if (scrollController.hasClients) {
+                                    // final position =
+                                    //     scrollController.position.maxScrollExtent;
+                                    scrollController.animateTo(
+                                      1800.9090909090909,
+                                      duration: const Duration(seconds: 1),
+                                      curve: Curves.easeOut,
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                ref
+                                    .read(sendMessageProvider.notifier)
+                                    .sendMessage(widget.datum.dialog!.id!,
+                                        message.text, pickedFile.value);
+                                pickedFile.value = "";
+                                message.clear();
+                              },
+                              icon: const Icon(Icons.send),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

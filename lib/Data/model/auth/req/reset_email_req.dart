@@ -10,16 +10,19 @@ class ResetEmailReq {
   ResetEmailReq({
     required this.code,
     required this.newEmail,
+    required this.newpassowrd,
     required this.the2FaToken,
   });
 
   String code;
   String newEmail;
+  String newpassowrd;
   String the2FaToken;
 
   Map<String, dynamic> toJson() => {
         "code": code,
         "new_email": newEmail,
         "2fa_token": the2FaToken,
+        "new_password": newpassowrd
       };
 }

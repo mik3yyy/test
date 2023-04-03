@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppText {
   static TextStyle header1(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.headline1!.copyWith(
+    return Theme.of(context).textTheme.bodyMedium!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w800,
         fontFamily: 'Avenir LTStd',
@@ -11,7 +11,7 @@ class AppText {
   }
 
   static TextStyle header2(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.headline1!.copyWith(
+    return Theme.of(context).textTheme.bodyMedium!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w700,
         fontFamily: 'Avenir LTStd',
@@ -19,7 +19,7 @@ class AppText {
   }
 
   static TextStyle header3(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.headline1!.copyWith(
+    return Theme.of(context).textTheme.bodyMedium!.copyWith(
           fontSize: size,
           fontWeight: FontWeight.w900,
           fontFamily: 'Avenir LTStd',
@@ -44,7 +44,7 @@ class AppText {
   }
 
   static TextStyle body2(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.bodyText1!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
@@ -52,7 +52,7 @@ class AppText {
   }
 
   static TextStyle uploadTerms(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.bodyText1!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w400,
         height: 1.7,
@@ -61,7 +61,7 @@ class AppText {
   }
 
   static TextStyle body2Bold(BuildContext context, Color color, double size) {
-    return Theme.of(context).textTheme.bodyText1!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
         fontSize: size,
         fontWeight: FontWeight.w800,
         fontFamily: 'Avenir LTStd',
@@ -78,7 +78,7 @@ class AppText {
 
   static TextStyle debitCard(
       BuildContext context, Color color, double size, double spacing) {
-    return Theme.of(context).textTheme.bodyText1!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
         fontSize: size,
         letterSpacing: spacing,
         fontWeight: FontWeight.w400,
@@ -87,7 +87,7 @@ class AppText {
   }
 
   static TextStyle body3(BuildContext context, Color color) {
-    return Theme.of(context).textTheme.bodyText2!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
         fontSize: 16.5.sp,
         fontWeight: FontWeight.w400,
         fontFamily: 'Avenir LTStd',
@@ -95,7 +95,7 @@ class AppText {
   }
 
   static TextStyle buttonText(BuildContext context, Color color) {
-    return Theme.of(context).textTheme.bodyText2!.copyWith(
+    return Theme.of(context).textTheme.bodySmall!.copyWith(
           fontSize: 20.sp,
           fontWeight: FontWeight.w700,
           fontFamily: 'Avenir LTStd',

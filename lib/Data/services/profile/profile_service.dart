@@ -14,6 +14,7 @@ import 'package:kayndrexsphere_mobile/Data/model/profile/res/saved_id.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/security_question_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/profile/res/upload_id_res.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
+import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../model/auth/res/failure_res.dart';
@@ -27,8 +28,8 @@ final profileProvider = Provider<ProfileService>((ref) {
 });
 
 final dioProvider = Provider((ref) => Dio(BaseOptions(
-    receiveTimeout: 100000,
-    connectTimeout: 100000,
+    receiveTimeout: const Duration(milliseconds: 100000),
+    connectTimeout: const Duration(milliseconds: 100000),
     // contentType: "application/json-patch+json",
     baseUrl: AppConfig.coreBaseUrl)));
 final cacheProvider =
@@ -75,7 +76,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -95,7 +97,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -114,7 +117,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -134,7 +138,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -152,7 +157,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -175,7 +181,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -196,7 +203,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -214,7 +222,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   } // RESEND VERIFICATION CODE TO CHANGE EMAIL
@@ -231,7 +240,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -252,7 +262,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -289,7 +300,8 @@ class ProfileService {
       } else {
         // print(Constants.errorMessage);
         // throw Constants.errorMessage;
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -318,7 +330,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -350,7 +363,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -368,7 +382,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }
@@ -391,7 +406,8 @@ class ProfileService {
         Failure result = Failure.fromJson(e.response!.data);
         throw result.message!;
       } else {
-        throw e.error;
+        final errorMessage = DioExceptions.fromDioError(e).toString();
+        throw errorMessage;
       }
     }
   }

@@ -1,33 +1,23 @@
 class HttpErrorStrings {
-  // ignore: constant_identifier_names
-  static const String CONNECTION_TIMEOUT_ACTIVE =
+  static const String connectionTimeoutActive =
       'Unable to make connection at the moment this may be caused by an unstable network or connection to the server, please try again later.';
 
-  // ignore: constant_identifier_names
-  static const String CONNECTION_TIMEOUT_NOT_ACTIVE =
+  static const String connectionTimeoutNotActive =
       'Looks like you have no active connection at the moment, please try again when you have an active connection.';
 
-  // ignore: constant_identifier_names
-  static const String SEND_TIMEOUT =
+  static const String sendTimeout =
       'Looks like you have an unstable network at the moment, please try again when network stabilizes.';
 
-  // ignore: constant_identifier_names
-  static const String RECEIVE_TIMEOUT =
+  static const String receiveTimeout =
       'Unable to connect to server at the moment';
 
-  // ignore: constant_identifier_names
-  static const String BAD_RESPONSE =
+  static const String badResponse =
       'Unable to complete request at the moment. Please contact our customer care';
 
-  // ignore: constant_identifier_names
-  static const String OPERATION_CANCELLED = 'Operation was cancelled';
+  static const String operationCancelled = 'Operation was cancelled';
 
-  // ignore: constant_identifier_names
-  static const String DEFAULT =
+  static const String genericRes =
       'Looks like you are not connected to any active network. Please connect and try again';
-
-  // ignore: constant_identifier_names
-  static const String UNKNOWN = 'Unknown error occurred';
-  // ignore: constant_identifier_names
-  static const String UnAuthorized = 'Username or Password is Incorrect';
+  static const String uknown = 'Unknown error occurred';
+  static const String unAuthorized = 'Username or Password is Incorrect';
 }

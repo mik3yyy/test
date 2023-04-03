@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -37,13 +36,23 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
   RemoteMessageNotifier(this.ref) : super(LocalMessagesState.initial());
 
   void getRemoteList(int uuid) async {
+    List<String> attachment = [];
     try {
       final res =
           await ref.read(messageManagerProvider).getDialogMessages(uuid);
       final messageList = res.data!.messages;
-      for (var msg in messageList) {
+
+      for (var msg in messageList!) {
+        if (msg.attachments!.isNotEmpty) {
+          for (var val in msg.attachments!) {
+            attachment.add(val.url.toString());
+          }
+        }
         var newList = ChatModel(
             id: msg.id!.toInt(),
+            attachments: msg.attachments!.isEmpty
+                ? ""
+                : msg.attachments![0].thumbnailUrl!,
             dialogId: msg.dialogId!.toInt(),
             message: msg.message.toString(),
             sentAt: msg.sentAt!,
@@ -61,8 +70,19 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
   }
 
   void addFromPusher(MyEvent msg) async {
+    List<String> attachment = [];
+
+    if (msg.message!.attachments!.isNotEmpty) {
+      for (var val in msg.message!.attachments!) {
+        attachment.add(val.url.toString());
+      }
+    }
+
     var newList = ChatModel(
         id: msg.message!.id!.toInt(),
+        attachments: msg.message!.attachments!.isEmpty
+            ? ""
+            : msg.message!.attachments![0].thumbnailUrl!,
         dialogId: msg.message!.dialogId!.toInt(),
         message: msg.message!.message.toString(),
         sentAt: msg.message!.sentAt!,
