@@ -10,22 +10,19 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/verify_account.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_account_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
-import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
 class CreateAccountScreen extends StatefulHookConsumerWidget {
-  final Account account;
-  const CreateAccountScreen({super.key, required this.account});
+  const CreateAccountScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -44,7 +41,6 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final emailPhoneController = useTextEditingController();
     ref.listen<RequestState>(createAccountProvider, (T, value) {
       if (value is Success<bool>) {
-        PreferenceManager.email = emailPhoneController.text;
         context.navigate(VerifyAccountScreen(
           emailAdress: emailPhoneController.text,
         ));
@@ -269,10 +265,23 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                   AppText.body4(context, AppColors.hintColor)),
                           TextButton(
                               style: TextButton.styleFrom(),
-                              onPressed: () =>
-                                  context.navigate(const SigninScreen(
-                                    account: Account.existingAccount,
-                                  )),
+                              onPressed: () {
+                                context.navigate(const SigninScreen());
+                                // print(widget.account);
+                                // switch (widget.account) {
+                                //   case Account.existingAccount:
+                                //     context.navigate(const SigninScreen(
+                                //       account: Account.existingAccount,
+                                //     ));
+                                //     break;
+                                //   case Account.newAccount:
+
+                                //     ));
+
+                                //     break;
+                                //   default:
+                                // }
+                              },
                               child: Text(
                                 ' Sign In',
                                 style:

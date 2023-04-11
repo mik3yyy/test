@@ -9,6 +9,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/create_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/forgotten_email_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
@@ -79,7 +80,7 @@ class UserService {
   }
 
   // create account
-  Future<bool> createAccount(
+  Future<CreatAccountRes> createAccount(
     String firstName,
     String lastName,
     String emailPhone,
@@ -95,7 +96,7 @@ class UserService {
         },
       );
 
-      final result = response.data = true;
+      final result = CreatAccountRes.fromJson(response.data);
 
       return result;
     } on DioError catch (e) {
@@ -322,8 +323,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -342,8 +347,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -380,8 +389,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -400,8 +413,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -425,8 +442,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -468,8 +489,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -578,8 +603,12 @@ class UserService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error Ocurred. Please try again";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;

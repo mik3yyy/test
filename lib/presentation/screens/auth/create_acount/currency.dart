@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loadi
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/referral_code.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/select_language/select_language.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/set_currency_vm.dart';
@@ -45,7 +45,7 @@ class CurrencyScreen extends HookConsumerWidget {
         ScreenView.hideLoadingView(context);
       }
       if (value is Success) {
-        context.navigate(ReferralCodeScreen());
+        context.navigate(const SuccessScreen());
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Registration completed successfully!",

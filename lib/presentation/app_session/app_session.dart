@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_config.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
 
@@ -18,8 +17,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       if (PreferenceManager.isloggedIn == true) {
         // stop listening, as user will already be in auth page
         ref.read(sessionStateStreamProvider).add(SessionState.stopListening);
-        navigator.key.currentContext!.navigateReplaceRoot(
-            const SigninScreen(account: Account.existingAccount));
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         PreferenceManager.clear();
 
         log("INACTIVE");
@@ -31,8 +29,7 @@ final appSessionConfigProvider = Provider<SessionConfig>((ref) {
       if (PreferenceManager.isloggedIn == true) {
         // stop listening, as user will already be in auth page
         ref.read(sessionStateStreamProvider).add(SessionState.stopListening);
-        navigator.key.currentContext!.navigateReplaceRoot(
-            const SigninScreen(account: Account.existingAccount));
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         PreferenceManager.clear();
         log("APPFOCUS");
       } else {

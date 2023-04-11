@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart' as toast;
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 
 import '../../app text theme/app_text_theme.dart';
@@ -120,5 +121,16 @@ class AppSnackBar {
         );
       },
     );
+  }
+
+  static showAppToast(toast.ToastGravity? gravity, {String message = ""}) {
+    toast.Fluttertoast.showToast(
+        msg: message,
+        toastLength: toast.Toast.LENGTH_SHORT,
+        gravity: gravity,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black38,
+        textColor: Colors.white,
+        fontSize: 16.sp);
   }
 }

@@ -16,4 +16,5 @@ abstract class MessageInterface {
   Future<GenericRes> deleteContact(int id);
   Future<GenericRes> blockContact(int id);
   Future<GenericRes> unblockContact(int id);
+  Future<String> downloadAttachment(String url, String fileType);
 }

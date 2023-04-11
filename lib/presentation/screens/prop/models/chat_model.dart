@@ -7,6 +7,7 @@ class ChatModel {
   String lastName;
   String email;
   String attachments;
+  String fileType;
 
   ChatModel(
       {required this.id,
@@ -16,5 +17,6 @@ class ChatModel {
       required this.firstName,
       required this.lastName,
       required this.email,
-      required this.attachments});
+      required this.attachments,
+      required this.fileType});
 }

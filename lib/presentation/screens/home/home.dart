@@ -43,9 +43,10 @@ class _HomePageState extends ConsumerState<HomePage>
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1000), () {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(refreshControllerProvider.notifier).refreshToken();
     });
+
     WidgetsBinding.instance.addObserver(this);
   }
 

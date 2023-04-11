@@ -23,7 +23,13 @@ class ViewAttachment extends StatelessWidget {
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                     color: Colors.grey.shade200,
-                    child: const CircularProgressIndicator()),
+                    child: const SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Padding(
+                          padding: EdgeInsets.all(30.0),
+                          child: CircularProgressIndicator(),
+                        ))),
                 errorWidget: (context, url, error) => Container(
                     color: Colors.grey.shade200,
                     child: const CircularProgressIndicator()),

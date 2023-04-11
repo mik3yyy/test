@@ -8,7 +8,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/reset_password_vm.dart';
@@ -49,7 +48,6 @@ class ResetPasswordScreen extends HookConsumerWidget {
       if (value is Success) {
         context.navigateReplaceRoot(SigninScreen(
           email: email.toString(),
-          account: Account.existingAccount,
         ));
 
         return AppSnackBar.showSuccessSnackBar(

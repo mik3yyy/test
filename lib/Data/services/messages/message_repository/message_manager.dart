@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/create_dialog_res.dart';
@@ -57,4 +58,8 @@ class MessageManager extends MessageInterface {
   @override
   Future<GenericRes> unblockContact(int id) async =>
       await messageService.unblockContact(id);
+
+  @override
+  Future<String> downloadAttachment(String url, String fileType) async =>
+      await messageService.downloadAttachment(url, fileType);
 }

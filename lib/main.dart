@@ -12,7 +12,6 @@ import 'package:kayndrexsphere_mobile/Data/utils/app_config/environment.dart';
 import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/auth.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/initialize_core/init_app_core.dart';
 import 'package:kayndrexsphere_mobile/presentation/shared/preference_manager.dart';
@@ -33,9 +32,7 @@ Future<void> main() async {
       if (PreferenceManager.authToken.isEmpty) {
         return;
       } else {
-        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen(
-          account: Account.existingAccount,
-        ));
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         AuthenicatedState.showMessage(navigator.key.currentContext!,
             "Your session has timed out, please login again", buttonText: "Ok",
             buttonClicked: () {

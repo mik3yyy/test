@@ -5,18 +5,8 @@ import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/SignIn_2FA/vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
-
-enum Account {
-  newAccount('NewAccount'),
-  existingAccount('ExistingAccount');
-  // none('None');
-
-  const Account(this.message);
-  final String message;
-}
 
 class SuccessScreen extends StatefulHookConsumerWidget {
   const SuccessScreen({super.key});
@@ -53,11 +43,9 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
               borderColor: AppColors.appColor,
               textColor: Colors.white,
               onPressed: () {
-                ref.read(accountStateProvider.notifier).state =
-                    Account.newAccount;
-                context.navigate(const SigninScreen(
-                  account: Account.newAccount,
-                ));
+                // ref.read(accountStateProvider.notifier).state =
+                //     Account.newAccount;
+                context.navigate(const SigninScreen());
               },
             ),
           ],

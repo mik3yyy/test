@@ -24,7 +24,6 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_vie
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
@@ -176,8 +175,6 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                         if (value.length < 4) {
                           return null;
                         }
-
-                        // validator has to return something :)
                         return null;
                       },
                       pinTheme: PinTheme(

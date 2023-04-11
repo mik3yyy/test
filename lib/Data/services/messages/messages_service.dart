@@ -17,6 +17,7 @@ import 'package:kayndrexsphere_mobile/Data/utils/error_handler.dart';
 import 'package:kayndrexsphere_mobile/Data/utils/error_interceptor.dart';
 import 'package:mime/mime.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 final messageServiceProvider = Provider<MessageService>((ref) {
   return MessageService((ref), ref);
@@ -274,8 +275,10 @@ class MessageService {
     FormData formData = FormData.fromMap({
       "dialog_id": id,
       "message": message,
-      "attachment": await MultipartFile.fromFile(file.path,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "attachment": filePath.isNotEmpty
+          ? await MultipartFile.fromFile(file.path,
+              contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
+          : "",
     });
     try {
       final response = await _read.read(dioProvider).post(
@@ -293,6 +296,69 @@ class MessageService {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
       }
+    }
+  }
+
+  // Future<String> downloadAttachment(
+  //     String url, String downloadDirectory) async {
+  //   var downloadedImagePath = '$downloadDirectory/image.jpg';
+  //   try {
+  //     final response = await _read.read(dioProvider).download(
+  //           url,
+  //           downloadedImagePath,
+  //         );
+  //     log(response.data.toString());
+  //     return downloadedImagePath;
+  //   } on DioError catch (e) {
+  //     final errorMessage = DioExceptions.fromDioError(e).toString();
+  //     throw errorMessage;
+  //   }
+  // }
+
+  // Future<String> _prepareSaveDir() async {
+  //   final _localPath = (await _findLocalPath())!;
+  //   final savedDir = Directory(_localPath);
+  //   bool hasExisted = await savedDir.exists();
+  //   if (!hasExisted) {
+  //     savedDir.create();
+  //   }
+
+  //   return _localPath;
+  // }
+
+  Future<String?> _findLocalPath() async {
+    // await _prepareSaveDir();
+    if (Platform.isAndroid) {
+      return "/storage/emulated/0/Download/";
+    } else {
+      //getApplicationSupportDirectory()
+      var directory = await getApplicationDocumentsDirectory();
+      return directory.path + Platform.pathSeparator + 'Download';
+    }
+  }
+
+  /// Download file to device
+  Future<String> downloadAttachment(String url, String fileType) async {
+    final _localPath = (await _findLocalPath())!;
+
+    // Checks file type before downloading
+    String fileEx() {
+      if (fileType == "image") {
+        return "image.jpg";
+      } else {
+        return "file.pdf";
+      }
+    }
+
+    try {
+      await _read.read(dioProvider).download(
+            url,
+            _localPath + "/" + fileEx(),
+          );
+      return _localPath;
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw errorMessage;
     }
   }
 }

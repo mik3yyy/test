@@ -24,6 +24,12 @@
 		<string>1</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		<key>UISupportsDocumentBrowser</key>
+		<true/>
+		<key>LSSupportsOpeningDocumentsInPlace</key>
+		<true/>
+		<key>UIFileSharingEnabled</key>
+		<true/>
 		<key>NSCameraUsageDescription</key>
 		<string>Please grant camera access</string>
 		<key>NSFaceIDUsageDescription</key>
@@ -55,5 +61,7 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
 	</dict>
 </plist>

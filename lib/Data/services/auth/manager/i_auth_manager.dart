@@ -7,6 +7,7 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/req/two_fa_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/convert_currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/country_res.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/create_account_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/currency_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/forgotten_email_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
@@ -22,7 +23,7 @@ import 'package:kayndrexsphere_mobile/Data/services/auth/refreshToken/refresh_to
 import '../../../model/auth/res/signin_res.dart';
 
 abstract class IAuthManager {
-  Future<bool> createAccount(
+  Future<CreatAccountRes> createAccount(
       {required String firstName,
       required String lastName,
       required emailPhone});

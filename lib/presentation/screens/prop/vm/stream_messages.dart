@@ -53,6 +53,8 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
             attachments: msg.attachments!.isEmpty
                 ? ""
                 : msg.attachments![0].thumbnailUrl!,
+            fileType:
+                msg.attachments!.isEmpty ? "" : msg.attachments![0].fileType!,
             dialogId: msg.dialogId!.toInt(),
             message: msg.message.toString(),
             sentAt: msg.sentAt!,
@@ -83,6 +85,9 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
         attachments: msg.message!.attachments!.isEmpty
             ? ""
             : msg.message!.attachments![0].thumbnailUrl!,
+        fileType: msg.message!.attachments!.isEmpty
+            ? ""
+            : msg.message!.attachments![0].fileType!,
         dialogId: msg.message!.dialogId!.toInt(),
         message: msg.message!.message.toString(),
         sentAt: msg.message!.sentAt!,

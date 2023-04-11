@@ -14,7 +14,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.da
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/forgot_email_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/security/email/ForgotEmail/vm/reset_email_vm.dart';
@@ -68,7 +67,6 @@ class _ResetEmailScreenState extends ConsumerState<ResetEmailScreen> {
           Navigator.pop(context);
         } else {
           context.navigateReplace(SigninScreen(
-            account: Account.existingAccount,
             email: newEmail.text,
           ));
         }

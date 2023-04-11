@@ -10,7 +10,6 @@ import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_title.dart';
 import 'package:kayndrexsphere_mobile/presentation/route/navigator.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/deactivate_account/view_model/view_model.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/widget/edit_form.dart';
@@ -51,9 +50,7 @@ class _DeactivateAccountState extends ConsumerState<DeactivateAccount> {
         context.loaderOverlay.hide();
       }
       if (state is Success<DeactivateAccountRes>) {
-        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen(
-          account: Account.existingAccount,
-        ));
+        navigator.key.currentContext!.navigateReplaceRoot(const SigninScreen());
         PreferenceManager.clear();
 
         return AppSnackBar.showSuccessSnackBar(context,

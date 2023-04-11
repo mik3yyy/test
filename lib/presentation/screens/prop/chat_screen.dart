@@ -5,14 +5,17 @@ import 'dart:developer';
 import 'dart:io' show File, Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/Dialog/all_dialog.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
@@ -20,10 +23,12 @@ import 'package:kayndrexsphere_mobile/presentation/screens/prop/attachment/attac
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/attachment/pick_attachment.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/chat_model.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/my_event.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/download_file.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/send_message.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/stream_messages.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user_profile/user_profile_db.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 import '../../components/app text theme/app_text_theme.dart';
@@ -42,6 +47,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   dynamic eventVal = "";
   String uuid = "";
   String start = "";
+  int isSelected = 0;
   List<ChatModel> receivedMsgs = [];
 
   // void _scrollToBottom() {
@@ -98,6 +104,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
+  Future<String> getDownloadFolderPath() async {
+    return await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);
+  }
+
+  Future<bool> getStoragePremission() async {
+    return await Permission.storage.request().isGranted;
+  }
+
   @override
   void initState() {
     start = "start";
@@ -113,14 +128,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final savedUser = ref.watch(savedUserProvider);
     final newMessages = ref.watch(localMsgProvider);
-    final message = useTextEditingController();
+    final download = ref.watch(downloadAttachmentProvider);
+    final message = useTextEditingController(text: "");
     final screenW = MediaQuery.of(context).size.width;
     final screenH = MediaQuery.of(context).size.height;
     final pickedFile = useState("");
 
-    ref.listen<RequestState>(sendMessageProvider, (T, value) {
+    ref.listen<RequestState>(sendMessageProvider, (_, value) {
       if (value is Success<GenericRes>) {}
       if (value is Error) {}
+    });
+    ref.listen<RequestState>(downloadAttachmentProvider, (_, value) {
+      if (value is Success<String>) {
+        setState(() => isSelected = 0);
+        AppSnackBar.showAppToast(ToastGravity.CENTER,
+            message: "File Downloaded");
+      }
+      if (value is Error) {
+        setState(() => isSelected = 0);
+      }
     });
 
     return Scaffold(
@@ -163,11 +189,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           height: screenH,
                           padding:
                               const EdgeInsets.fromLTRB(120, 250, 120, 250),
-                          child: Text(
-                            "Loading Chats",
-                            textAlign: TextAlign.center,
-                            style: AppText.header2(
-                                context, AppColors.appColor, 17.sp),
+                          child: Center(
+                            child: Text(
+                              "Loading Chats",
+                              textAlign: TextAlign.center,
+                              style: AppText.header2(
+                                  context, AppColors.appColor, 17.sp),
+                            ),
                           ),
                         )
                       : Padding(
@@ -198,16 +226,46 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           children: [
                                             if (message
                                                 .attachments.isNotEmpty) ...[
-                                              // Text(message.attachments,
-                                              //     style: AppText.body2(
-                                              //         context,
-                                              //         Colors.grey.shade400,
-                                              //         5.sp))
+                                              Row(
+                                                children: [
+                                                  if (isSelected ==
+                                                          message.id &&
+                                                      download is Loading) ...[
+                                                    const SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                    Space(20.w)
+                                                  ] else ...[
+                                                    IconButton(
+                                                        color: Colors.black,
+                                                        onPressed: () async {
+                                                          if (await getStoragePremission()) {
+                                                            setState(() =>
+                                                                isSelected =
+                                                                    message.id);
 
-                                              SendersAttachment(
-                                                height: 120,
-                                                width: 120,
-                                                imageUrl: message.attachments,
+                                                            ref
+                                                                .read(downloadAttachmentProvider
+                                                                    .notifier)
+                                                                .downloadAttachment(
+                                                                    message
+                                                                        .attachments,
+                                                                    message
+                                                                        .fileType);
+                                                          }
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.download))
+                                                  ],
+                                                  SendersAttachment(
+                                                    height: 120,
+                                                    width: 120,
+                                                    imageUrl:
+                                                        message.attachments,
+                                                  ),
+                                                ],
                                               )
                                             ],
                                             Container(
@@ -257,16 +315,46 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           children: [
                                             if (message
                                                 .attachments.isNotEmpty) ...[
-                                              // Text(message.attachments,
-                                              //     style: AppText.body2(
-                                              //         context,
-                                              //         Colors.grey.shade400,
-                                              //         5.sp))
-
-                                              ViewAttachment(
-                                                height: 120,
-                                                width: 120,
-                                                imageUrl: message.attachments,
+                                              Row(
+                                                children: [
+                                                  ViewAttachment(
+                                                    height: 120,
+                                                    width: 120,
+                                                    imageUrl:
+                                                        message.attachments,
+                                                  ),
+                                                  if (isSelected ==
+                                                          message.id ||
+                                                      download is Loading) ...[
+                                                    Space(20.w),
+                                                    const SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                    Space(20.w)
+                                                  ] else ...[
+                                                    IconButton(
+                                                        color: Colors.black,
+                                                        onPressed: () async {
+                                                          if (await getStoragePremission()) {
+                                                            setState(() =>
+                                                                isSelected =
+                                                                    message.id);
+                                                            ref
+                                                                .read(downloadAttachmentProvider
+                                                                    .notifier)
+                                                                .downloadAttachment(
+                                                                    message
+                                                                        .attachments,
+                                                                    message
+                                                                        .fileType);
+                                                          }
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.download))
+                                                  ],
+                                                ],
                                               )
                                             ],
                                             Container(
@@ -386,26 +474,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   border: InputBorder.none,
                                 ),
                                 onTap: () {
-                                  if (scrollController.hasClients) {
-                                    // final position =
-                                    //     scrollController.position.maxScrollExtent;
-                                    scrollController.animateTo(
-                                      1800.9090909090909,
-                                      duration: const Duration(seconds: 1),
-                                      curve: Curves.easeOut,
-                                    );
-                                  }
+                                  // if (scrollController.hasClients) {
+                                  //   // final position =
+                                  //   //     scrollController.position.maxScrollExtent;
+                                  //   scrollController.animateTo(
+                                  //     1800.9090909090909,
+                                  //     duration: const Duration(seconds: 1),
+                                  //     curve: Curves.easeOut,
+                                  //   );
+                                  // }
                                 },
                               ),
                             ),
                             IconButton(
                               onPressed: () async {
-                                ref
-                                    .read(sendMessageProvider.notifier)
-                                    .sendMessage(widget.datum.dialog!.id!,
-                                        message.text, pickedFile.value);
-                                pickedFile.value = "";
-                                message.clear();
+                                if (message.text.isEmpty &&
+                                    pickedFile.value.isNotEmpty) {
+                                  AppSnackBar.showAppToast(ToastGravity.CENTER,
+                                      message: "Add a message");
+                                } else {
+                                  ref
+                                      .read(sendMessageProvider.notifier)
+                                      .sendMessage(widget.datum.dialog!.id!,
+                                          message.text, pickedFile.value);
+                                  pickedFile.value = "";
+                                  message.clear();
+                                }
                               },
                               icon: const Icon(Icons.send),
                             ),

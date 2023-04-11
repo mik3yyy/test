@@ -6,7 +6,6 @@ import 'package:kayndrexsphere_mobile/Data/model/auth/res/signin_res.dart';
 import 'package:kayndrexsphere_mobile/Data/services/auth/manager/auth_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/app_session/app_session.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/app_session/session_timeout_manager.dart';
-import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/success.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/vm/get_profile_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/get_account_details_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/vm/wallet_transactions.dart';
@@ -45,9 +44,9 @@ class Verify2FAVM extends RequestStateNotifier<SigninRes> {
   }
 }
 
-final accountStateProvider = StateProvider<Account>((ref) {
-  return Account.newAccount;
-});
+// final accountStateProvider = StateProvider<Account>((ref) {
+//   return Account.newAccount;
+// });
 
 final userEmail = StateProvider<String>((ref) {
   return "";

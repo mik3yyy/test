@@ -15,6 +15,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/home/widgets/bottomNa
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/create_dialog_screen.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/create_account_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_contacts_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_dialog_messages_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class AddContactScreen extends HookConsumerWidget {
@@ -28,6 +29,7 @@ class AddContactScreen extends HookConsumerWidget {
     ref.listen<RequestState>(addContactProvider, (_, state) {
       if (state is Success<ContactRes>) {
         ref.invalidate(allContactsProvider);
+        ref.invalidate(alldialogsProvider);
         pushNewScreen(context,
             screen: CreateDialogScreen(contactEmail: emailController.text),
             withNavBar: false,
