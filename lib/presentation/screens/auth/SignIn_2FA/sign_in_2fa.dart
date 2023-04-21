@@ -48,7 +48,6 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
     final emailChange = ref.watch(verifyEmailChangeProvider);
     final resend2FA = ref.watch(resend2FAProvider);
     final resendEmail2FA = ref.watch(resendEmail2FAProvider);
-    final emailX = ref.watch(userEmail.notifier);
 
     /// VERIFICATION CODE FOR SIGN IN
     ref.listen<RequestState>(verify2FAProvider, (T, value) {
@@ -197,14 +196,17 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       appContext: context,
                       length: 6,
-                      onCompleted: (value) {
+                      onCompleted: (value) async {
+                        var email = await ref
+                            .read(credentialProvider.notifier)
+                            .getCredential(Constants.userEmail);
                         if (value.length == 6) {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
                           String userEmail() {
                             if (widget.emailAdress.isEmpty) {
-                              return emailX.state;
+                              return email ?? "";
                             } else {
                               return widget.emailAdress;
                             }
@@ -236,10 +238,13 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                         Text('Didn’t receive the code?',
                             style: AppText.body4(context, AppColors.hintColor)),
                         TextButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              var email = await ref
+                                  .read(credentialProvider.notifier)
+                                  .getCredential(Constants.userEmail);
                               String userEmail() {
                                 if (widget.emailAdress.isEmpty) {
-                                  return emailX.state;
+                                  return email ?? "";
                                 } else {
                                   return widget.emailAdress;
                                 }
@@ -284,14 +289,17 @@ class _Verify2FAState extends ConsumerState<Verify2FA> {
                       textColor: Colors.white,
                       onPressed: (vm is Loading) || (emailChange is Loading)
                           ? null
-                          : () {
+                          : () async {
                               if (formKey.currentState!.validate()) {
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
+                                var email = await ref
+                                    .read(credentialProvider.notifier)
+                                    .getCredential(Constants.userEmail);
                                 String userEmail() {
                                   if (widget.emailAdress.isEmpty) {
-                                    return emailX.state;
+                                    return email ?? "";
                                   } else {
                                     return widget.emailAdress;
                                   }

@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
@@ -25,13 +26,14 @@ class AddContactScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final addContact = ref.watch(addContactProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
+    final screenH = MediaQuery.of(context).size.height;
     final emailController = useTextEditingController();
     ref.listen<RequestState>(addContactProvider, (_, state) {
       if (state is Success<ContactRes>) {
         ref.invalidate(allContactsProvider);
         ref.invalidate(alldialogsProvider);
         pushNewScreen(context,
-            screen: CreateDialogScreen(contactEmail: emailController.text),
+            screen: CreateDialogScreen(contactId: state.value?.data?.id ?? 0),
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.slideRight);
 
@@ -71,26 +73,48 @@ class AddContactScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Space(200),
+                      const Space(60),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.black45,
+                          ),
+                          const Space(20),
+                          Flexible(
+                            child: Text(
+                              """Enter E-wallet account number of your friend connects you directly with them.
+                               """,
+                              style:
+                                  AppText.body2(context, Colors.black45, 19.sp),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Space(100),
                       Form(
                         key: formKey,
                         child: TextFormInput(
-                            labelText: " Enter Email ",
+                            labelText: " Enter E-Wallet account number",
                             controller: emailController,
+                            textLength: 8,
                             capitalization: TextCapitalization.none,
+                            keyboardType: TextInputType.number,
                             inputFormatters: [
                               FilteringTextInputFormatter.deny(RegExp('[ ]'))
                             ],
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "Email address is required";
+                                return "E-Wallet account number is required";
                               }
 
                               return null;
                             },
                             obscureText: false),
                       ),
-                      const Space(20),
+                      Space(screenH / 5),
                       Space(50.h),
                       CustomButton(
                         buttonWidth: 280.w,

@@ -1,7 +1,6 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io' show File, Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,7 +29,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/user
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../components/app text theme/app_text_theme.dart';
 
 class ChatScreen extends StatefulHookConsumerWidget {
@@ -80,20 +79,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           return;
         } else {
           var resmap = json.decode(event.data);
-          log("from Android delay $resmap");
+
           var res = MyEvent.fromJson(resmap);
-          log("HERE IS RESULT : ${res.message} ");
+
           ref.read(localMsgProvider.notifier).addFromPusher(res);
         }
       } else {
-        log("here is EVENT : $event");
         if (event.data == "{}") {
           return;
         } else {
           var resmap = json.decode(event.data);
-          log("from IOS delay $resmap");
+
           var res = MyEvent.fromJson(resmap);
-          log("HERE IS RESULT : ${res.message} ");
+
           ref.read(localMsgProvider.notifier).addFromPusher(res);
         }
       }
@@ -414,39 +412,113 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     children: [
                       if (pickedFile.value.isNotEmpty) ...[
                         Space(30.h),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              color: Colors.grey.shade300,
-                              child: Image.file(
-                                File(pickedFile.value),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Positioned(
-                              // left: 40,
-                              right: -5,
-                              top: -10,
-                              child: InkWell(
-                                onTap: () {
-                                  pickedFile.value = "";
-                                },
-                                child: const CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor: Colors.red,
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 15,
-                                    color: Colors.white,
-                                  ),
+                        if (pickedFile.value.contains("pdf")) ...[
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: SfPdfViewer.file(
+                                  File(pickedFile.value),
+                                  pageLayoutMode: PdfPageLayoutMode.single,
                                 ),
                               ),
-                            )
-                          ],
-                        )
+                              Positioned(
+                                // left: 40,
+                                right: -5,
+                                top: -10,
+                                child: InkWell(
+                                  onTap: () {
+                                    pickedFile.value = "";
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 10,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 15,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ] else ...[
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                height: 50,
+                                width: 50,
+                                color: Colors.grey.shade300,
+                                child: Image.file(
+                                  File(pickedFile.value),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                // left: 40,
+                                right: -5,
+                                top: -10,
+                                child: InkWell(
+                                  onTap: () {
+                                    pickedFile.value = "";
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 10,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 15,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ]
+
+                        // Thumbnail(
+                        //   mimeType: pickedFile.value,
+                        //   widgetSize: 100,
+                        //   decoration: WidgetDecoration(
+                        //     // backgroundColor: Colors.blueAccent,
+                        //     iconColor: Colors.red,
+                        //   ),
+                        // ),
+                        // PdfThumbnail.fromFile(
+                        //   pickedFile.value,
+                        //   currentPage: 1,
+                        // )
+                        // Transform.scale(
+                        //   scale: 2,
+                        //   child: PDFView(
+                        //     filePath: pickedFile.value,
+                        //     enableSwipe: true,
+                        //     swipeHorizontal: true,
+                        //     autoSpacing: false,
+                        //     pageFling: false,
+                        //     onRender: (_pages) {
+                        //       // setState(() {
+                        //       //   pages = _pages;
+                        //       //   isReady = true;
+                        //       // });
+                        //     },
+                        //     onError: (error) {
+                        //       print(error.toString());
+                        //     },
+                        //     onPageError: (page, error) {
+                        //       print('$page: ${error.toString()}');
+                        //     },
+                        //     onViewCreated:
+                        //         (PDFViewController pdfViewController) {
+                        //       // _controller.complete(pdfViewController);
+                        //     },
+                        //   ),
+                        //),
                       ],
                       Container(
                         // width: screenW / 2,

@@ -21,8 +21,8 @@ class MessageManager extends MessageInterface {
   });
 
   @override
-  Future<ContactRes> createContact(String email) async =>
-      await messageService.createContact(email);
+  Future<ContactRes> createContact(String accountNumber) async =>
+      await messageService.createContact(accountNumber);
 
   @override
   Future<ContactList> getContacts() async => await messageService.getContacts();
@@ -32,8 +32,8 @@ class MessageManager extends MessageInterface {
       await messageService.getDialogMessages(id);
 
   @override
-  Future<CreateDialogRes> createDialog(String email, String message) async =>
-      await messageService.createDialog(email, message);
+  Future<CreateDialogRes> createDialog(int contactId, String message) async =>
+      await messageService.createDialog(contactId, message);
 
   @override
   Future<GenericRes> sendMessage(

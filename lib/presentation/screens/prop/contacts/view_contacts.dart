@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
+import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20image/app_image.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
@@ -40,6 +42,50 @@ class _ViewAllContactState extends ConsumerState<ViewAllContact> {
     final block = ref.watch(blockContactProvider);
     final deleteContact = ref.watch(deleteContactProvider);
     final renameContact = ref.watch(renameContactProvider);
+
+    /// Listens to Contact Block
+    ref.listen<RequestState>(blockContactProvider, (_, state) {
+      if (state is Success<GenericRes>) {
+        AppSnackBar.showSuccessSnackBar(context,
+            message: state.value!.message.toString());
+      }
+      if (state is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
+      }
+    });
+
+    /// Listens to Contact unBlock
+    ref.listen<RequestState>(unBlockContactProvider, (_, state) {
+      if (state is Success<GenericRes>) {
+        AppSnackBar.showSuccessSnackBar(context,
+            message: state.value!.message.toString());
+      }
+      if (state is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
+      }
+    });
+
+    /// Listens to Delete Contact
+    ref.listen<RequestState>(deleteContactProvider, (_, state) {
+      if (state is Success<GenericRes>) {
+        AppSnackBar.showSuccessSnackBar(context,
+            message: state.value!.message.toString());
+      }
+      if (state is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
+      }
+    });
+
+    /// Listens to Renaming Contact
+    ref.listen<RequestState>(renameContactProvider, (_, state) {
+      if (state is Success<GenericRes>) {
+        AppSnackBar.showSuccessSnackBar(context,
+            message: state.value!.message.toString());
+      }
+      if (state is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
+      }
+    });
     return Scaffold(
         backgroundColor: AppColors.appColor,
         appBar: AppBar(
@@ -155,7 +201,10 @@ class _ViewAllContactState extends ConsumerState<ViewAllContact> {
                                           itemBuilder: (context, index) {
                                             final contact =
                                                 allContactsX.value![index];
+
                                             return ContactBuild(
+                                              // name: contact.contact!.firstName
+                                              // .toString(),
                                               contact: contact,
                                               isLoading: unblock is Loading ||
                                                   block is Loading ||

@@ -43,8 +43,7 @@ class AppSnackBar {
     showFlash(
       context: context,
       duration: const Duration(seconds: 7),
-
-      // persistent: false,
+      //persistent: false,
       builder: (context, controller) {
         return Flash.bar(
           controller: controller,

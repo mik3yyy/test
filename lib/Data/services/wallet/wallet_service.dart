@@ -65,8 +65,12 @@ class WalletService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -139,8 +143,12 @@ class WalletService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -165,8 +173,12 @@ class WalletService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -210,8 +222,12 @@ class WalletService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;

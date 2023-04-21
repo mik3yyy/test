@@ -94,8 +94,12 @@ class ProfileService {
       return response.data != null;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;

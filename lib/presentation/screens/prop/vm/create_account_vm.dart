@@ -13,6 +13,6 @@ class CreateContactVM extends RequestStateNotifier<ContactRes> {
 
   CreateContactVM(Ref ref) : _messageManager = ref.read(messageManagerProvider);
 
-  void addContact(String email) =>
-      makeRequest(() => _messageManager.createContact(email));
+  void addContact(String accountNumber) =>
+      makeRequest(() => _messageManager.createContact(accountNumber));
 }

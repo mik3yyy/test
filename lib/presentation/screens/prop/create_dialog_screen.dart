@@ -13,18 +13,18 @@ import 'package:kayndrexsphere_mobile/presentation/components/widget/appbar_titl
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/create_dialog.vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_contacts_vm.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/get_dialog_messages_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class CreateDialogScreen extends HookConsumerWidget {
-  final String contactEmail;
-  CreateDialogScreen({Key? key, required this.contactEmail}) : super(key: key);
+  final int contactId;
+  CreateDialogScreen({Key? key, required this.contactId}) : super(key: key);
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final createDialog = ref.watch(createDialogProvider);
     FocusScopeNode currentFocus = FocusScope.of(context);
-    final email = useTextEditingController(text: contactEmail);
     final message = useTextEditingController();
     ref.listen<RequestState>(createDialogProvider, (_, state) {
       if (state is Loading) {
@@ -36,6 +36,7 @@ class CreateDialogScreen extends HookConsumerWidget {
         Navigator.pop(context);
         Navigator.pop(context);
         ref.invalidate(allContactsProvider);
+        ref.invalidate(alldialogsProvider);
         AppSnackBar.showSuccessSnackBar(context,
             message: "contact added successfully");
       }
@@ -76,22 +77,6 @@ class CreateDialogScreen extends HookConsumerWidget {
                       children: [
                         Space(200.h),
                         TextFormInput(
-                            labelText: " Enter Email ",
-                            controller: email,
-                            capitalization: TextCapitalization.none,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp('[ ]'))
-                            ],
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Email address is required";
-                              }
-
-                              return null;
-                            },
-                            obscureText: false),
-                        Space(30.h),
-                        TextFormInput(
                             labelText: "Enter Dialog Title ",
                             controller: message,
                             capitalization: TextCapitalization.none,
@@ -123,7 +108,7 @@ class CreateDialogScreen extends HookConsumerWidget {
 
                               ref
                                   .read(createDialogProvider.notifier)
-                                  .createDialog(email.text, message.text);
+                                  .createDialog(contactId, message.text);
                             }
                           },
                         )

@@ -13,6 +13,6 @@ class CreateDialogVM extends RequestStateNotifier<CreateDialogRes> {
 
   CreateDialogVM(Ref ref) : _messageManager = ref.read(messageManagerProvider);
 
-  void createDialog(String email, String message) =>
-      makeRequest(() => _messageManager.createDialog(email, message));
+  void createDialog(int contactId, String message) =>
+      makeRequest(() => _messageManager.createDialog(contactId, message));
 }

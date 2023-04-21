@@ -86,12 +86,19 @@ class PropScreen extends HookConsumerWidget {
                                       child: Column(
                                         children: [
                                           Text(
-                                            "You have No contact\nAdd a new contact and connect with friends",
+                                            "You have No contact",
                                             textAlign: TextAlign.center,
-                                            style: AppText.header2(context,
-                                                AppColors.appColor, 19.sp),
+                                            style: AppText.header3(context,
+                                                AppColors.appColor, 20.sp),
                                           ),
-                                          const Space(20),
+                                          const Space(30),
+                                          Text(
+                                            "Add a new contact using E-wallet account number of your friend and connect with them directly ",
+                                            textAlign: TextAlign.center,
+                                            style: AppText.header2(
+                                                context, Colors.black45, 19.sp),
+                                          ),
+                                          const Space(70),
                                           SizedBox(
                                             height: 50,
                                             width: MediaQuery.of(context)

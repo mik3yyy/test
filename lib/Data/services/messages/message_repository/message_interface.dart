@@ -6,10 +6,10 @@ import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_res.dart';
 
 abstract class MessageInterface {
-  Future<ContactRes> createContact(String email);
+  Future<ContactRes> createContact(String accountNumber);
   Future<ContactList> getContacts();
   Future<DialogRes> getDialogMessages(int id);
-  Future<CreateDialogRes> createDialog(String email, String message);
+  Future<CreateDialogRes> createDialog(int contactId, String message);
   Future<GenericRes> sendMessage(int id, String message, String filePath);
   Future<AllDialog> getAllDialog();
   Future<GenericRes> renameContact(String contactName, int id);

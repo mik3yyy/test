@@ -58,22 +58,26 @@ class MessageService {
     ]);
   }
 
-  Future<ContactRes> createContact(String email) async {
+  Future<ContactRes> createContact(String accountNumber) async {
     const url = '/messaging/contacts';
 
     try {
       final response = await _read.read(dioProvider).post(
         url,
         data: {
-          'email': email,
+          'account_no': accountNumber,
         },
       );
       final result = ContactRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -120,8 +124,12 @@ class MessageService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -141,8 +149,12 @@ class MessageService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -162,8 +174,12 @@ class MessageService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -183,8 +199,12 @@ class MessageService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -243,20 +263,24 @@ class MessageService {
   }
 
   /// CREATE DIALOG
-  Future<CreateDialogRes> createDialog(String email, String message) async {
+  Future<CreateDialogRes> createDialog(int contactId, String message) async {
     const url = '/messaging/dialogs/';
     try {
       final response = await _read.read(dioProvider).post(
         url,
-        data: {"email": email, "message": message},
+        data: {"contact_id": contactId, "message": message},
       );
 
       final result = CreateDialogRes.fromJson(response.data);
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;
@@ -290,8 +314,12 @@ class MessageService {
       return result;
     } on DioError catch (e) {
       if (e.response != null && e.response!.data != "") {
-        Failure result = Failure.fromJson(e.response!.data);
-        throw result.message!;
+        if (e.response?.statusCode == 500 || (e.response?.statusCode == 404)) {
+          throw "An Error occurred";
+        } else {
+          Failure result = Failure.fromJson(e.response!.data);
+          throw result.message!;
+        }
       } else {
         final errorMessage = DioExceptions.fromDioError(e).toString();
         throw errorMessage;

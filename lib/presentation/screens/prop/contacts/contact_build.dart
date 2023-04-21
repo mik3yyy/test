@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
-import 'package:kayndrexsphere_mobile/Data/model/auth/res/new_sign_in_res.dart';
 import 'package:kayndrexsphere_mobile/Data/model/contact/contact_list.dart';
-import 'package:kayndrexsphere_mobile/presentation/components/AppSnackBar/snackbar/app_snackbar_view.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/extension/string_extension.dart';
@@ -52,49 +49,6 @@ class _ContactBuildState extends ConsumerState<ContactBuild> {
         "${widget.contact.contact!.firstName!.capitalize()} ${widget.contact.contact!.lastName!.capitalize()}";
     final name = useTextEditingController(text: userName);
 
-    /// Listens to Contact Block
-    ref.listen<RequestState>(blockContactProvider, (_, state) {
-      if (state is Success<GenericRes>) {
-        AppSnackBar.showSuccessSnackBar(context,
-            message: state.value!.message.toString());
-      }
-      if (state is Error) {
-        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
-      }
-    });
-
-    /// Listens to Contact unBlock
-    ref.listen<RequestState>(unBlockContactProvider, (_, state) {
-      if (state is Success<GenericRes>) {
-        AppSnackBar.showSuccessSnackBar(context,
-            message: state.value!.message.toString());
-      }
-      if (state is Error) {
-        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
-      }
-    });
-
-    /// Listens to Delete Contact
-    ref.listen<RequestState>(deleteContactProvider, (_, state) {
-      if (state is Success<GenericRes>) {
-        AppSnackBar.showSuccessSnackBar(context,
-            message: state.value!.message.toString());
-      }
-      if (state is Error) {
-        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
-      }
-    });
-
-    /// Listens to Renaming Contact
-    ref.listen<RequestState>(renameContactProvider, (_, state) {
-      if (state is Success<GenericRes>) {
-        AppSnackBar.showSuccessSnackBar(context,
-            message: state.value!.message.toString());
-      }
-      if (state is Error) {
-        AppSnackBar.showErrorSnackBar(context, message: state.error.toString());
-      }
-    });
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
       color: Colors.grey.shade100,
@@ -114,35 +68,42 @@ class _ContactBuildState extends ConsumerState<ContactBuild> {
                   children: [
                     SizedBox(
                       width: 200,
-                      child: RenameTextInput(
-                        controller: name,
-                        readOnly: isEdit,
-                        focusNode: myFocusNode,
-                        onTapOutside: (value) {
-                          if (myFocusNode.hasPrimaryFocus) {
-                            myFocusNode.unfocus();
-                          }
+                      child: isEdit
+                          ? Text(
+                              userName,
+                              style: AppText.header2(
+                                  context, AppColors.appColor, 18.sp),
+                            )
+                          : RenameTextInput(
+                              controller: name,
+                              readOnly: isEdit,
+                              focusNode: myFocusNode,
+                              onTapOutside: (value) {
+                                if (myFocusNode.hasPrimaryFocus) {
+                                  myFocusNode.unfocus();
+                                }
 
-                          setState(() {
-                            name.text = userName;
-                            isEdit = true;
-                          });
-                        },
-                        onEditingComplete: () {
-                          if (myFocusNode.hasPrimaryFocus) {
-                            myFocusNode.unfocus();
-                          }
-                          setState(() {
-                            isEdit = true;
-                          });
-                          ref
-                              .read(renameContactProvider.notifier)
-                              .renameContact(name.text, widget.contact.id!);
-                        },
-                        validator: (value) {
-                          return null;
-                        },
-                      ),
+                                setState(() {
+                                  name.text = userName;
+                                  isEdit = true;
+                                });
+                              },
+                              onEditingComplete: () {
+                                if (myFocusNode.hasPrimaryFocus) {
+                                  myFocusNode.unfocus();
+                                }
+                                setState(() {
+                                  isEdit = true;
+                                });
+                                ref
+                                    .read(renameContactProvider.notifier)
+                                    .renameContact(
+                                        name.text, widget.contact.id!);
+                              },
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
                     ),
                     // Text(
                     //   "${widget.contact.contact!.firstName!.capitalize()} ${widget.contact.contact!.lastName!.capitalize()}",
