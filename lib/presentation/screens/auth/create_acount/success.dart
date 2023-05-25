@@ -45,7 +45,9 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
               onPressed: () {
                 // ref.read(accountStateProvider.notifier).state =
                 //     Account.newAccount;
-                context.navigate(const SigninScreen());
+                context.navigate(const SigninScreen(
+                  transactionPin: false,
+                ));
               },
             ),
           ],

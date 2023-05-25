@@ -30,6 +30,7 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:video_player/video_player.dart';
 import '../../components/app text theme/app_text_theme.dart';
 
 class ChatScreen extends StatefulHookConsumerWidget {
@@ -41,6 +42,7 @@ class ChatScreen extends StatefulHookConsumerWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  VideoPlayerController? _videoPlayerController;
   ScrollController scrollController = ScrollController();
   PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
   dynamic eventVal = "";
@@ -81,7 +83,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           var resmap = json.decode(event.data);
 
           var res = MyEvent.fromJson(resmap);
-
           ref.read(localMsgProvider.notifier).addFromPusher(res);
         }
       } else {
@@ -115,7 +116,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     start = "start";
     // _scrollToBottom();
-    ref.read(localMsgProvider.notifier).getRemoteList(widget.datum.dialog!.id!);
+    // ref.read(localMsgProvider.notifier).getRemoteList(widget.datum.dialog!.id!);
     Future.delayed(const Duration(milliseconds: 2000), () {
       initialize();
     });
@@ -124,16 +125,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
     final savedUser = ref.watch(savedUserProvider);
-    final newMessages = ref.watch(localMsgProvider);
-    final download = ref.watch(downloadAttachmentProvider);
+    // final newMessages = ref.watch(localMsgProvider);
+    final sendMessage = ref.watch(sendMessageProvider);
+    final serverMsg = ref.watch(serverMsgProvider(widget.datum.dialog!.id!));
     final message = useTextEditingController(text: "");
     final screenW = MediaQuery.of(context).size.width;
     final screenH = MediaQuery.of(context).size.height;
     final pickedFile = useState("");
 
     ref.listen<RequestState>(sendMessageProvider, (_, value) {
-      if (value is Success<GenericRes>) {}
+      if (value is Success<GenericRes>) {
+        ref.invalidate(serverMsgProvider(widget.datum.dialog!.id!));
+      }
       if (value is Error) {}
     });
     ref.listen<RequestState>(downloadAttachmentProvider, (_, value) {
@@ -182,225 +187,176 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(45.r)),
                   ),
-                  child: (newMessages.isLoading)
-                      ? Container(
-                          height: screenH,
-                          padding:
-                              const EdgeInsets.fromLTRB(120, 250, 120, 250),
-                          child: Center(
-                            child: Text(
-                              "Loading Chats",
-                              textAlign: TextAlign.center,
-                              style: AppText.header2(
-                                  context, AppColors.appColor, 17.sp),
+                  child: serverMsg.when(
+                      data: (data) {
+                        if (data.data!.messages!.isEmpty) {
+                          return Container(
+                            height: screenH,
+                            padding:
+                                const EdgeInsets.fromLTRB(120, 250, 120, 250),
+                            child: Center(
+                              child: Text(
+                                "Loading Chats",
+                                textAlign: TextAlign.center,
+                                style: AppText.header2(
+                                    context, AppColors.appColor, 17.sp),
+                              ),
                             ),
-                          ),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, top: 20),
-                          child: ListView.separated(
-                            controller: scrollController,
-                            padding: const EdgeInsets.only(bottom: 40),
-                            itemCount: newMessages.chatmodel.length,
-                            itemBuilder: (context, index) {
-                              final message = newMessages.chatmodel[index];
-                              DateTime date = message.sentAt;
-                              // String dateCreated =
-                              //     DateFormat('dd/MM/yyyy hh:mm a').format(date);
-                              String formattedTime =
-                                  DateFormat('kk:mm:a').format(date);
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20),
+                            child: ListView.separated(
+                              controller: scrollController,
+                              padding: const EdgeInsets.only(bottom: 40),
+                              itemCount: data.data!.messages!.length,
+                              itemBuilder: (context, index) {
+                                final message = data.data!.messages![index];
+                                DateTime date = message.sentAt!;
+                                // String dateCreated =
+                                //     DateFormat('dd/MM/yyyy hh:mm a').format(date);
+                                String formattedTime =
+                                    DateFormat('kk:mm:a').format(date);
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (message.email == savedUser.email) ...[
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            if (message
-                                                .attachments.isNotEmpty) ...[
-                                              Row(
-                                                children: [
-                                                  if (isSelected ==
-                                                          message.id &&
-                                                      download is Loading) ...[
-                                                    const SizedBox(
-                                                        height: 20,
-                                                        width: 20,
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                    Space(20.w)
-                                                  ] else ...[
-                                                    IconButton(
-                                                        color: Colors.black,
-                                                        onPressed: () async {
-                                                          if (await getStoragePremission()) {
-                                                            setState(() =>
-                                                                isSelected =
-                                                                    message.id);
-
-                                                            ref
-                                                                .read(downloadAttachmentProvider
-                                                                    .notifier)
-                                                                .downloadAttachment(
-                                                                    message
-                                                                        .attachments,
-                                                                    message
-                                                                        .fileType);
-                                                          }
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.download))
-                                                  ],
-                                                  SendersAttachment(
-                                                    height: 120,
-                                                    width: 120,
-                                                    imageUrl:
-                                                        message.attachments,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                            Container(
-                                              padding: const EdgeInsets.all(10),
-                                              constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.6),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(16),
-                                                    topRight:
-                                                        Radius.circular(16),
-                                                    bottomLeft:
-                                                        Radius.circular(12),
-                                                    bottomRight:
-                                                        Radius.circular(0),
-                                                  )),
-                                              child: Text(
-                                                message.message.toString(),
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (message.from?.email ==
+                                        savedUser.email) ...[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              if (message
+                                                  .attachments!.isNotEmpty) ...[
+                                                SendersAttachment(
+                                                  height: 120,
+                                                  width: 120,
+                                                  file: message.attachments,
+                                                ),
+                                              ],
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.6),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(16),
+                                                      topRight:
+                                                          Radius.circular(16),
+                                                      bottomLeft:
+                                                          Radius.circular(12),
+                                                      bottomRight:
+                                                          Radius.circular(0),
+                                                    )),
+                                                child: Text(
+                                                  message.message.toString(),
+                                                ),
                                               ),
-                                            ),
-                                            const Space(10),
-                                            Text(formattedTime,
-                                                style: AppText.body2(
-                                                    context,
-                                                    Colors.grey.shade400,
-                                                    12.sp)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ] else ...[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            if (message
-                                                .attachments.isNotEmpty) ...[
-                                              Row(
-                                                children: [
-                                                  ViewAttachment(
-                                                    height: 120,
-                                                    width: 120,
-                                                    imageUrl:
-                                                        message.attachments,
-                                                  ),
-                                                  if (isSelected ==
-                                                          message.id ||
-                                                      download is Loading) ...[
-                                                    Space(20.w),
-                                                    const SizedBox(
-                                                        height: 20,
-                                                        width: 20,
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                    Space(20.w)
-                                                  ] else ...[
-                                                    IconButton(
-                                                        color: Colors.black,
-                                                        onPressed: () async {
-                                                          if (await getStoragePremission()) {
-                                                            setState(() =>
-                                                                isSelected =
-                                                                    message.id);
-                                                            ref
-                                                                .read(downloadAttachmentProvider
-                                                                    .notifier)
-                                                                .downloadAttachment(
-                                                                    message
-                                                                        .attachments,
-                                                                    message
-                                                                        .fileType);
-                                                          }
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.download))
-                                                  ],
-                                                ],
-                                              )
+                                              const Space(10),
+                                              Text(formattedTime,
+                                                  style: AppText.body2(
+                                                      context,
+                                                      Colors.grey.shade400,
+                                                      12.sp)),
                                             ],
-                                            Container(
-                                              padding: const EdgeInsets.all(10),
-                                              constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.6),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey[200],
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(16),
-                                                    topRight:
-                                                        Radius.circular(16),
-                                                    bottomLeft:
-                                                        Radius.circular(0),
-                                                    bottomRight:
-                                                        Radius.circular(12),
-                                                  )),
-                                              child: Text(
-                                                message.message.toString(),
+                                          ),
+                                        ],
+                                      ),
+                                    ] else ...[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              if (message
+                                                  .attachments!.isNotEmpty) ...[
+                                                ViewAttachment(
+                                                  height: 120,
+                                                  width: 120,
+                                                  file: message.attachments,
+                                                ),
+                                              ],
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.6),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(16),
+                                                      topRight:
+                                                          Radius.circular(16),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(12),
+                                                    )),
+                                                child: Text(
+                                                  message.message.toString(),
+                                                ),
                                               ),
-                                            ),
-                                            const Space(10),
-                                            Text(formattedTime,
-                                                style: AppText.body2(
-                                                    context,
-                                                    Colors.grey.shade400,
-                                                    12.sp)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ]
-                                ],
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                height: 20,
-                              );
-                            },
-                          ),
-                        ),
+                                              const Space(10),
+                                              Text(formattedTime,
+                                                  style: AppText.body2(
+                                                      context,
+                                                      Colors.grey.shade400,
+                                                      12.sp)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ]
+                                  ],
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 20,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      error: (error, stackTrace) => Text(error.toString()),
+                      loading: () => Container(
+                            height: screenH,
+                            padding:
+                                const EdgeInsets.fromLTRB(120, 250, 120, 250),
+                            child: Center(
+                              child: Text(
+                                "Loading Chats",
+                                textAlign: TextAlign.center,
+                                style: AppText.header2(
+                                    context, AppColors.appColor, 17.sp),
+                              ),
+                            ),
+                          )),
                 )),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -445,6 +401,40 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               )
                             ],
                           )
+                        ] else if (pickedFile.value.contains(".mp4")) ...[
+                          if (_videoPlayerController != null) ...[
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                FittedBox(
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: VideoPlayer(_videoPlayerController!),
+                                  ),
+                                ),
+                                Positioned(
+                                  // left: 40,
+                                  right: -5,
+                                  top: -10,
+                                  child: InkWell(
+                                    onTap: () {
+                                      pickedFile.value = "";
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 10,
+                                      backgroundColor: Colors.red,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ] else ...[
                           Stack(
                             clipBehavior: Clip.none,
@@ -480,45 +470,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             ],
                           )
                         ]
-
-                        // Thumbnail(
-                        //   mimeType: pickedFile.value,
-                        //   widgetSize: 100,
-                        //   decoration: WidgetDecoration(
-                        //     // backgroundColor: Colors.blueAccent,
-                        //     iconColor: Colors.red,
-                        //   ),
-                        // ),
-                        // PdfThumbnail.fromFile(
-                        //   pickedFile.value,
-                        //   currentPage: 1,
-                        // )
-                        // Transform.scale(
-                        //   scale: 2,
-                        //   child: PDFView(
-                        //     filePath: pickedFile.value,
-                        //     enableSwipe: true,
-                        //     swipeHorizontal: true,
-                        //     autoSpacing: false,
-                        //     pageFling: false,
-                        //     onRender: (_pages) {
-                        //       // setState(() {
-                        //       //   pages = _pages;
-                        //       //   isReady = true;
-                        //       // });
-                        //     },
-                        //     onError: (error) {
-                        //       print(error.toString());
-                        //     },
-                        //     onPageError: (page, error) {
-                        //       print('$page: ${error.toString()}');
-                        //     },
-                        //     onViewCreated:
-                        //         (PDFViewController pdfViewController) {
-                        //       // _controller.complete(pdfViewController);
-                        //     },
-                        //   ),
-                        //),
                       ],
                       Container(
                         // width: screenW / 2,
@@ -536,6 +487,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       .read(fileProvider)
                                       .addAttachment();
                                   pickedFile.value = result;
+                                  if (pickedFile.value.contains("mp4")) {
+                                    final _video = File(pickedFile.value);
+                                    if (_video.path.isEmpty) return;
+                                    _videoPlayerController =
+                                        VideoPlayerController.file(_video)
+                                          ..initialize();
+                                  }
                                 },
                                 icon: const Icon(Icons.attach_file)),
                             Flexible(
@@ -565,6 +523,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   AppSnackBar.showAppToast(ToastGravity.CENTER,
                                       message: "Add a message");
                                 } else {
+                                  if (!currentFocus.hasPrimaryFocus) {
+                                    currentFocus.unfocus();
+                                  }
                                   ref
                                       .read(sendMessageProvider.notifier)
                                       .sendMessage(widget.datum.dialog!.id!,
@@ -573,7 +534,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   message.clear();
                                 }
                               },
-                              icon: const Icon(Icons.send),
+                              icon: sendMessage is Loading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : const Icon(Icons.send),
                             ),
                           ],
                         ),

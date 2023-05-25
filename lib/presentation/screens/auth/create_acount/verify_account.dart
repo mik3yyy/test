@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/model/auth/req/verify_account_req.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/verify_account_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/loading_util/loading_util.dart';
@@ -45,7 +46,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
       } else {
         ScreenView.hideLoadingView(context);
       }
-      if (value is Success) {
+      if (value is Success<VerifyRes>) {
         context.navigate(const CreatePasswordScreen());
         return AppSnackBar.showSuccessSnackBar(
           context,
@@ -58,7 +59,7 @@ class VerifyAccountScreen extends HookConsumerWidget {
       }
     });
     ref.listen<RequestState>(resendOtpProvider, (T, value) {
-      if (value is Success) {
+      if (value is Success<bool>) {
         return AppSnackBar.showSuccessSnackBar(
           context,
           message: "Check Your Mail for Verification Code",

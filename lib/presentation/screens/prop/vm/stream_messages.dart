@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kayndrexsphere_mobile/Data/model/Dialog/dialog_res.dart';
 
 import 'package:kayndrexsphere_mobile/Data/services/messages/message_repository/message_manager.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/models/chat_model.dart';
@@ -50,9 +51,8 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
         }
         var newList = ChatModel(
             id: msg.id!.toInt(),
-            attachments: msg.attachments!.isEmpty
-                ? ""
-                : msg.attachments![0].thumbnailUrl ?? "",
+            attachments:
+                msg.attachments!.isEmpty ? "" : msg.attachments![0].url ?? "",
             fileType: msg.attachments!.isEmpty
                 ? ""
                 : msg.attachments![0].fileType ?? "",
@@ -99,3 +99,8 @@ class RemoteMessageNotifier extends StateNotifier<LocalMessagesState> {
     state = state.copyWith(chatmodel: [...state.chatmodel, newList]);
   }
 }
+
+final serverMsgProvider =
+    FutureProvider.family.autoDispose<DialogRes, int>((ref, uuid) async {
+  return ref.watch(messageManagerProvider).getDialogMessages(uuid);
+});

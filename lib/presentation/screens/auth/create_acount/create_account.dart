@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/constant/constant.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
+import 'package:kayndrexsphere_mobile/Data/model/auth/res/create_account_res.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/app%20text%20theme/app_text_theme.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/color/value.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/reusable_widget.dart/custom_button.dart';
@@ -14,6 +14,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/create_acount/ve
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/auth/vm/create_account_vm.dart';
 import 'package:kayndrexsphere_mobile/presentation/components/text%20field/text_form_field.dart';
+import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/transaction_information/webview/card_webview.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/wallet/shared/web_view_route_name.dart';
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
@@ -40,7 +41,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final lastNameController = useTextEditingController();
     final emailPhoneController = useTextEditingController();
     ref.listen<RequestState>(createAccountProvider, (T, value) {
-      if (value is Success<bool>) {
+      if (value is Success<CreatAccountRes>) {
         context.navigate(VerifyAccountScreen(
           emailAdress: emailPhoneController.text,
         ));
@@ -51,23 +52,16 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
         );
       }
       if (value is Error) {
-        context.loaderOverlay.hide();
         return AppSnackBar.showErrorSnackBar(context,
             message: value.error.toString());
       }
     });
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child: LoaderOverlay(
-        useDefaultLoading: false,
-        overlayWidget: const Center(
-          child: SpinKitWave(
-            color: AppColors.appColor,
-            size: 50.0,
-          ),
-        ),
-        child: Scaffold(
-          body: SafeArea(
+      child: Scaffold(
+        body: SafeArea(
+          child: AbsorbPointer(
+            absorbing: vm is Loading,
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -75,6 +69,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                   padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 50.h),
                   child: Column(
                     children: [
+                      InnerPageLoadingIndicator(loadingStream: vm is Loading),
                       Text(
                         "Create Account!",
                         style:

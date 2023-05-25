@@ -35,11 +35,10 @@ import 'device_id.dart';
 
 class SigninScreen extends StatefulHookConsumerWidget {
   final String? email;
+  final bool transactionPin;
 
-  const SigninScreen({
-    Key? key,
-    this.email,
-  }) : super(key: key);
+  const SigninScreen({Key? key, this.email, this.transactionPin = false})
+      : super(key: key);
 
   @override
   _SigninScreenState createState() => _SigninScreenState();
@@ -64,11 +63,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final email = PreferenceManager.email;
     final verify = ref.watch(verifyAuthProvider);
     final login = ref.watch(signInProvider);
     final device = ref.watch(deviceInfoProvider);
-    final emailPhoneController =
-        useTextEditingController(text: PreferenceManager.email);
+    final emailPhoneController = useTextEditingController(text: email);
     final passwordController = useTextEditingController();
     FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -278,19 +277,19 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
 
                                             /// CHECK END HERE
 
-                                            switch (PreferenceManager
-                                                .isFirstLaunch) {
+                                            switch (widget.transactionPin) {
                                               case false:
-                                                ref
-                                                    .read(verifyAuthProvider
-                                                        .notifier)
-                                                    .verifyAuth(signinReq);
-                                                break;
-                                              case true:
                                                 ref
                                                     .read(
                                                         signInProvider.notifier)
                                                     .signIn(signinReq);
+
+                                                break;
+                                              case true:
+                                                ref
+                                                    .read(verifyAuthProvider
+                                                        .notifier)
+                                                    .verifyAuth(signinReq);
                                                 break;
                                               default:
                                             }

@@ -13,8 +13,8 @@ class Attachment {
   Future<String> addAttachment() async {
     try {
       FilePickerResult? file = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['jpg', 'pdf', 'doc'],
+          type: FileType.any,
+          // allowedExtensions: ['jpg', 'pdf', 'doc'],
           allowCompression: false);
 
       if (file == null) {
