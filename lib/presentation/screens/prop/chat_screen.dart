@@ -51,12 +51,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   int isSelected = 0;
   List<ChatModel> receivedMsgs = [];
 
-  // void _scrollToBottom() {
-  //   if (scrollController.hasClients) {
-  //     scrollController.jumpTo(scrollController.position.maxScrollExtent);
-  //   }
-  // }
-
   void initialize() async {
     try {
       await pusher.init(
@@ -139,7 +133,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (value is Success<GenericRes>) {
         ref.invalidate(serverMsgProvider(widget.datum.dialog!.id!));
       }
-      if (value is Error) {}
+      if (value is Error) {
+        AppSnackBar.showErrorSnackBar(context, message: value.error.toString());
+      }
     });
     ref.listen<RequestState>(downloadAttachmentProvider, (_, value) {
       if (value is Success<String>) {
