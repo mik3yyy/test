@@ -143,7 +143,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
     ref.listen<RequestState>(downloadAttachmentProvider, (_, value) {
       if (value is Success<String>) {
-        setState(() => isSelected = 0);
         AppSnackBar.showAppToast(ToastGravity.CENTER,
             message: "File Downloaded");
       }
@@ -519,7 +518,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             IconButton(
                               onPressed: () async {
                                 if (message.text.isEmpty &&
-                                    pickedFile.value.isNotEmpty) {
+                                        pickedFile.value.isNotEmpty ||
+                                    message.text.isEmpty) {
                                   AppSnackBar.showAppToast(ToastGravity.CENTER,
                                       message: "Add a message");
                                 } else {

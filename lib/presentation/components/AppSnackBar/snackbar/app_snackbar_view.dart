@@ -128,7 +128,7 @@ class AppSnackBar {
         toastLength: toast.Toast.LENGTH_SHORT,
         gravity: gravity,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black38,
+        backgroundColor: Colors.black45,
         textColor: Colors.white,
         fontSize: 16.sp);
   }

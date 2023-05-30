@@ -373,6 +373,8 @@ class MessageService {
     String fileEx() {
       if (fileType == "image") {
         return "image.jpg";
+      } else if (fileType == "mp4") {
+        return "video.mp4";
       } else {
         return "file.pdf";
       }
