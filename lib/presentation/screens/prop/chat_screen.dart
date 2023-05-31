@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io' show File, Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -110,7 +111,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     start = "start";
     // _scrollToBottom();
-    // ref.read(localMsgProvider.notifier).getRemoteList(widget.datum.dialog!.id!);
+    ref.read(localMsgProvider.notifier).getRemoteList(widget.datum.dialog!.id!);
     Future.delayed(const Duration(milliseconds: 2000), () {
       initialize();
     });
@@ -121,9 +122,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
     final savedUser = ref.watch(savedUserProvider);
-    // final newMessages = ref.watch(localMsgProvider);
+    final newMessages = ref.watch(localMsgProvider);
     final sendMessage = ref.watch(sendMessageProvider);
-    final serverMsg = ref.watch(serverMsgProvider(widget.datum.dialog!.id!));
+    //final serverMsg = ref.watch(serverMsgProvider(widget.datum.dialog!.id!));
     final message = useTextEditingController(text: "");
     final screenW = MediaQuery.of(context).size.width;
     final screenH = MediaQuery.of(context).size.height;
@@ -182,176 +183,153 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(45.r)),
                   ),
-                  child: serverMsg.when(
-                      data: (data) {
-                        if (data.data!.messages!.isEmpty) {
-                          return Container(
-                            height: screenH,
-                            padding:
-                                const EdgeInsets.fromLTRB(120, 250, 120, 250),
-                            child: Center(
-                              child: Text(
-                                "Loading Chats",
-                                textAlign: TextAlign.center,
-                                style: AppText.header2(
-                                    context, AppColors.appColor, 17.sp),
-                              ),
+                  child: newMessages.isLoading
+                      ? Container(
+                          height: screenH,
+                          padding:
+                              const EdgeInsets.fromLTRB(120, 250, 120, 250),
+                          child: Center(
+                            child: Text(
+                              "Loading Chats",
+                              textAlign: TextAlign.center,
+                              style: AppText.header2(
+                                  context, AppColors.appColor, 17.sp),
                             ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 30, right: 30, top: 20),
-                            child: ListView.separated(
-                              controller: scrollController,
-                              padding: const EdgeInsets.only(bottom: 40),
-                              itemCount: data.data!.messages!.length,
-                              itemBuilder: (context, index) {
-                                final message = data.data!.messages![index];
-                                DateTime date = message.sentAt!;
-                                // String dateCreated =
-                                //     DateFormat('dd/MM/yyyy hh:mm a').format(date);
-                                String formattedTime =
-                                    DateFormat('kk:mm:a').format(date);
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, top: 20),
+                          child: ListView.separated(
+                            controller: scrollController,
+                            padding: const EdgeInsets.only(bottom: 40),
+                            itemCount: newMessages.chatmodel.length,
+                            itemBuilder: (context, index) {
+                              final message = newMessages.chatmodel[index];
+                              DateTime date = message.sentAt;
+                              // String dateCreated =
+                              //     DateFormat('dd/MM/yyyy hh:mm a').format(date);
+                              String formattedTime =
+                                  DateFormat('kk:mm:a').format(date);
 
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (message.from?.email ==
-                                        savedUser.email) ...[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              if (message
-                                                  .attachments!.isNotEmpty) ...[
-                                                SendersAttachment(
-                                                  height: 120,
-                                                  width: 120,
-                                                  file: message.attachments,
-                                                ),
-                                              ],
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                constraints: BoxConstraints(
-                                                    maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.6),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey[200],
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(16),
-                                                      topRight:
-                                                          Radius.circular(16),
-                                                      bottomLeft:
-                                                          Radius.circular(12),
-                                                      bottomRight:
-                                                          Radius.circular(0),
-                                                    )),
-                                                child: Text(
-                                                  message.message.toString(),
-                                                ),
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (message.email == savedUser.email) ...[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            if (message
+                                                .attachments!.isNotEmpty) ...[
+                                              SendersAttachment(
+                                                height: 120,
+                                                width: 120,
+                                                file: message.attachments,
                                               ),
-                                              const Space(10),
-                                              Text(formattedTime,
-                                                  style: AppText.body2(
-                                                      context,
-                                                      Colors.grey.shade400,
-                                                      12.sp)),
                                             ],
-                                          ),
-                                        ],
-                                      ),
-                                    ] else ...[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              if (message
-                                                  .attachments!.isNotEmpty) ...[
-                                                ViewAttachment(
-                                                  height: 120,
-                                                  width: 120,
-                                                  file: message.attachments,
-                                                ),
-                                              ],
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                constraints: BoxConstraints(
-                                                    maxWidth:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.6),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey[200],
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(16),
-                                                      topRight:
-                                                          Radius.circular(16),
-                                                      bottomLeft:
-                                                          Radius.circular(0),
-                                                      bottomRight:
-                                                          Radius.circular(12),
-                                                    )),
-                                                child: Text(
-                                                  message.message.toString(),
-                                                ),
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.6),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[200],
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(16),
+                                                    topRight:
+                                                        Radius.circular(16),
+                                                    bottomLeft:
+                                                        Radius.circular(12),
+                                                    bottomRight:
+                                                        Radius.circular(0),
+                                                  )),
+                                              child: Text(
+                                                message.message.toString(),
                                               ),
-                                              const Space(10),
-                                              Text(formattedTime,
-                                                  style: AppText.body2(
-                                                      context,
-                                                      Colors.grey.shade400,
-                                                      12.sp)),
+                                            ),
+                                            const Space(10),
+                                            Text(formattedTime,
+                                                style: AppText.body2(
+                                                    context,
+                                                    Colors.grey.shade400,
+                                                    12.sp)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ] else ...[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            if (message
+                                                .attachments!.isNotEmpty) ...[
+                                              ViewAttachment(
+                                                height: 120,
+                                                width: 120,
+                                                file: message.attachments,
+                                              ),
                                             ],
-                                          ),
-                                        ],
-                                      ),
-                                    ]
-                                  ],
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(
-                                  height: 20,
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      error: (error, stackTrace) => Text(error.toString()),
-                      loading: () => Container(
-                            height: screenH,
-                            padding:
-                                const EdgeInsets.fromLTRB(120, 250, 120, 250),
-                            child: Center(
-                              child: Text(
-                                "Loading Chats",
-                                textAlign: TextAlign.center,
-                                style: AppText.header2(
-                                    context, AppColors.appColor, 17.sp),
-                              ),
-                            ),
-                          )),
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.6),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[200],
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(16),
+                                                    topRight:
+                                                        Radius.circular(16),
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(12),
+                                                  )),
+                                              child: Text(
+                                                message.message.toString(),
+                                              ),
+                                            ),
+                                            const Space(10),
+                                            Text(formattedTime,
+                                                style: AppText.body2(
+                                                    context,
+                                                    Colors.grey.shade400,
+                                                    12.sp)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ]
+                                ],
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(
+                                height: 20,
+                              );
+                            },
+                          ),
+                        ),
                 )),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -481,6 +459,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   var result = await ref
                                       .read(fileProvider)
                                       .addAttachment();
+                                  log("result==> $result");
                                   pickedFile.value = result;
                                   if (pickedFile.value.contains("mp4")) {
                                     final _video = File(pickedFile.value);
@@ -603,3 +582,161 @@ class ChatContactImage extends StatelessWidget {
     }
   }
 }
+
+
+/*
+
+
+
+
+*newMessages.isLoading
+                        ? Container(
+                            height: screenH,
+                            padding:
+                                const EdgeInsets.fromLTRB(120, 250, 120, 250),
+                            child: Center(
+                              child: Text(
+                                "Loading Chats",
+                                textAlign: TextAlign.center,
+                                style: AppText.header2(
+                                    context, AppColors.appColor, 17.sp),
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20),
+                            child: ListView.separated(
+                              controller: scrollController,
+                              padding: const EdgeInsets.only(bottom: 40),
+                              itemCount: newMessages.chatmodel.length,
+                              itemBuilder: (context, index) {
+                                final message = newMessages.chatmodel[index];
+                                DateTime date = message.sentAt;
+                                // String dateCreated =
+                                //     DateFormat('dd/MM/yyyy hh:mm a').format(date);
+                                String formattedTime =
+                                    DateFormat('kk:mm:a').format(date);
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (message.email == savedUser.email) ...[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              if (message
+                                                  .attachments!.isNotEmpty) ...[
+                                                SendersAttachment(
+                                                  height: 120,
+                                                  width: 120,
+                                                  file: message.attachments,
+                                                ),
+                                              ],
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.6),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(16),
+                                                      topRight:
+                                                          Radius.circular(16),
+                                                      bottomLeft:
+                                                          Radius.circular(12),
+                                                      bottomRight:
+                                                          Radius.circular(0),
+                                                    )),
+                                                child: Text(
+                                                  message.message.toString(),
+                                                ),
+                                              ),
+                                              const Space(10),
+                                              Text(formattedTime,
+                                                  style: AppText.body2(
+                                                      context,
+                                                      Colors.grey.shade400,
+                                                      12.sp)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ] else ...[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              if (message
+                                                  .attachments!.isNotEmpty) ...[
+                                                ViewAttachment(
+                                                  height: 120,
+                                                  width: 120,
+                                                  file: message.attachments,
+                                                ),
+                                              ],
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                constraints: BoxConstraints(
+                                                    maxWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.6),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey[200],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(16),
+                                                      topRight:
+                                                          Radius.circular(16),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(12),
+                                                    )),
+                                                child: Text(
+                                                  message.message.toString(),
+                                                ),
+                                              ),
+                                              const Space(10),
+                                              Text(formattedTime,
+                                                  style: AppText.body2(
+                                                      context,
+                                                      Colors.grey.shade400,
+                                                      12.sp)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ]
+                                  ],
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: 20,
+                                );
+                              },
+                            ),
+                          ),
+                          */

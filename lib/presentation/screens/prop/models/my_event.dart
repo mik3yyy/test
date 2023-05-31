@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:kayndrexsphere_mobile/Data/model/Dialog/dialog_res.dart';
+
 MyEvent myEventFromJson(String str) => MyEvent.fromJson(json.decode(str));
 
 String myEventToJson(MyEvent data) => json.encode(data.toJson());
@@ -91,49 +93,49 @@ class Message {
       };
 }
 
-class Attachment {
-  Attachment({
-    this.url,
-    this.pos,
-    this.createdAt,
-    this.updatedAt,
-    this.fileName,
-    this.fileType,
-    this.thumbnailUrl,
-  });
+// class Attachment {
+//   Attachment({
+//     this.url,
+//     this.pos,
+//     this.createdAt,
+//     this.updatedAt,
+//     this.fileName,
+//     this.fileType,
+//     this.thumbnailUrl,
+//   });
 
-  final String? url;
-  final int? pos;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final String? fileName;
-  final String? fileType;
-  final String? thumbnailUrl;
+//   final String? url;
+//   final int? pos;
+//   final DateTime? createdAt;
+//   final DateTime? updatedAt;
+//   final String? fileName;
+//   final String? fileType;
+//   final String? thumbnailUrl;
 
-  factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
-        url: json["url"],
-        pos: json["pos"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        fileName: json["file_name"],
-        fileType: json["file_type"],
-        thumbnailUrl: json["thumbnail_url"],
-      );
+//   factory Attachment.fromJson(Map<String, dynamic> json) => Attachment(
+//         url: json["url"],
+//         pos: json["pos"],
+//         createdAt: json["created_at"] == null
+//             ? null
+//             : DateTime.parse(json["created_at"]),
+//         updatedAt: json["updated_at"] == null
+//             ? null
+//             : DateTime.parse(json["updated_at"]),
+//         fileName: json["file_name"],
+//         fileType: json["file_type"],
+//         thumbnailUrl: json["thumbnail_url"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "url": url,
-        "pos": pos,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "file_name": fileName,
-        "file_type": fileType,
-        "thumbnail_url": thumbnailUrl,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "url": url,
+//         "pos": pos,
+//         "created_at": createdAt?.toIso8601String(),
+//         "updated_at": updatedAt?.toIso8601String(),
+//         "file_name": fileName,
+//         "file_type": fileType,
+//         "thumbnail_url": thumbnailUrl,
+//       };
+// }
 
 class Dialog {
   Dialog({

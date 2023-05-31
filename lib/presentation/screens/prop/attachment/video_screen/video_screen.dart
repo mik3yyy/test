@@ -1,11 +1,9 @@
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kayndrexsphere_mobile/Data/controller/controller/generic_state_notifier.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/home/home.dart';
 import 'package:kayndrexsphere_mobile/presentation/screens/prop/vm/download_file.dart';
-import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
@@ -35,7 +33,7 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
         // videoListner();
         setState(() {});
 
-        // Ensure the first frame is shown after the video is initialized.
+        /// Ensure the first frame is shown after the video is initialized.
       });
     {}
 
@@ -94,15 +92,14 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
       body: Column(
         children: [
           InnerPageLoadingIndicator(loadingStream: isLoading),
-          Space(70.h),
-          Center(
-            child: _videoPlayerController.value.isInitialized
-                ? AspectRatio(
+          _videoPlayerController.value.isInitialized
+              ? Expanded(
+                  child: AspectRatio(
                     aspectRatio: _videoPlayerController.value.aspectRatio,
                     child: VideoPlayer(_videoPlayerController),
-                  )
-                : Container(),
-          ),
+                  ),
+                )
+              : Container(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
