@@ -10,8 +10,12 @@ import 'package:video_player/video_player.dart';
 class VideoScreen extends StatefulHookConsumerWidget {
   final String attachmentUrl;
   final bool isSender;
+
   const VideoScreen(
-      {super.key, required this.attachmentUrl, this.isSender = true});
+      {required this.attachmentUrl, this.isSender = true, Key? key})
+      : super(key: key);
+  // const VideoScreen(
+  //     {super.key, required this.attachmentUrl, this.isSender = true});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _VideoScreenState();

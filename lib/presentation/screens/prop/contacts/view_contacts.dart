@@ -25,7 +25,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/wallet/withdrawal/swi
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ViewAllContact extends StatefulHookConsumerWidget {
-  const ViewAllContact({super.key});
+  // const ViewAllContact({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ViewAllContactState();
@@ -201,16 +201,16 @@ class _ViewAllContactState extends ConsumerState<ViewAllContact> {
                                           itemBuilder: (context, index) {
                                             final contact =
                                                 allContactsX.value![index];
-
-                                            return ContactBuild(
-                                              // name: contact.contact!.firstName
-                                              // .toString(),
-                                              contact: contact,
-                                              isLoading: unblock is Loading ||
-                                                  block is Loading ||
-                                                  deleteContact is Loading ||
-                                                  renameContact is Loading,
-                                            );
+                                            //TODO: remove comment from contact build
+                                            // return ContactBuild(
+                                            //   // name: contact.contact!.firstName
+                                            //   // .toString(),
+                                            //   contact: contact,
+                                            //   isLoading: unblock is Loading ||
+                                            //       block is Loading ||
+                                            //       deleteContact is Loading ||
+                                            //       renameContact is Loading,
+                                            // );
                                           },
                                           separatorBuilder: (context, index) {
                                             return const SizedBox(

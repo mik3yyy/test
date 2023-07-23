@@ -23,7 +23,10 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class ResetEmailScreen extends StatefulHookConsumerWidget {
   final ForgotEmailRoute forgotEmailRoute;
-  const ResetEmailScreen({super.key, required this.forgotEmailRoute});
+
+  const ResetEmailScreen({required this.forgotEmailRoute, Key? key})
+      : super(key: key);
+  // const ResetEmailScreen({super.key, required this.forgotEmailRoute});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

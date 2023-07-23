@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -316,44 +316,44 @@ class _EditInfoState extends ConsumerState<EditInfo> {
                       //   // onSaved: (PhoneNumber number) {},
                       // ),
 
-                      DateTimePicker(
-                        enabled:
-                            getDate(widget.userValue.data.user.dateOfBirth),
+                      // DateTimePicker(
+                      //   enabled:
+                      //       getDate(widget.userValue.data.user.dateOfBirth),
 
-                        controller: dobCountroller,
-                        type: DateTimePickerType.date,
-                        dateMask: 'MM-dd-yyyy',
+                      //   controller: dobCountroller,
+                      //   type: DateTimePickerType.date,
+                      //   dateMask: 'MM-dd-yyyy',
 
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(3100),
-                        decoration: InputDecoration(
-                            label: Text(
-                              'Date of Birth',
-                              style:
-                                  AppText.body2(context, Colors.black38, 20.sp),
-                            ),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            suffix:
-                                getDate(widget.userValue.data.user.dateOfBirth)
-                                    ? const SizedBox()
-                                    : const Icon(
-                                        Icons.lock,
-                                        size: 20,
-                                      )),
-                        // icon: Icon(Icons.event),
-                        dateLabelText: 'Date of Birth',
+                      //   firstDate: DateTime(1900),
+                      //   lastDate: DateTime(3100),
+                      //   decoration: InputDecoration(
+                      //       label: Text(
+                      //         'Date of Birth',
+                      //         style:
+                      //             AppText.body2(context, Colors.black38, 20.sp),
+                      //       ),
+                      //       focusedBorder: const UnderlineInputBorder(
+                      //         borderSide: BorderSide(color: Colors.black),
+                      //       ),
+                      //       suffix:
+                      //           getDate(widget.userValue.data.user.dateOfBirth)
+                      //               ? const SizedBox()
+                      //               : const Icon(
+                      //                   Icons.lock,
+                      //                   size: 20,
+                      //                 )),
+                      //   // icon: Icon(Icons.event),
+                      //   dateLabelText: 'Date of Birth',
 
-                        onChanged: (val) => debugPrint(val),
-                        validator: (val) {
-                          if (val!.isEmpty) {
-                            return "update your Date of Birth";
-                          }
+                      //   onChanged: (val) => debugPrint(val),
+                      //   validator: (val) {
+                      //     if (val!.isEmpty) {
+                      //       return "update your Date of Birth";
+                      //     }
 
-                          return null;
-                        },
-                      ),
+                      //     return null;
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

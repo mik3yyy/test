@@ -23,7 +23,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 
 class CreateAccountScreen extends StatefulHookConsumerWidget {
-  const CreateAccountScreen({super.key});
+  const CreateAccountScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

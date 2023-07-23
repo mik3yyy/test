@@ -9,7 +9,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/auth/sign_in/sign_in.
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class SuccessScreen extends StatefulHookConsumerWidget {
-  const SuccessScreen({super.key});
+  const SuccessScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SuccessScreenState();

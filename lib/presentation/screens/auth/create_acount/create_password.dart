@@ -20,7 +20,7 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 import '../../../../Data/controller/controller/generic_state_notifier.dart';
 
 class CreatePasswordScreen extends StatefulHookConsumerWidget {
-  const CreatePasswordScreen({super.key});
+  const CreatePasswordScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

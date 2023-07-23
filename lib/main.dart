@@ -3,7 +3,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -69,7 +69,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulHookConsumerWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyAppState();
@@ -107,9 +107,9 @@ class _MyAppState extends ConsumerState<MyApp> {
               // locale: locale,
               // supportedLocales: L10n.all,
               localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
+                // GlobalMaterialLocalizations.delegate,
+                // GlobalWidgetsLocalizations.delegate,
+                // GlobalCupertinoLocalizations.delegate,
 
                 // AppLocalizations.delegate, // Add this line
               ],

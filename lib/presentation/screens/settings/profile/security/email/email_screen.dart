@@ -11,7 +11,9 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/secu
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class EmailScreen extends StatefulHookConsumerWidget {
-  const EmailScreen({super.key});
+  const EmailScreen({Key? key}) : super(key: key);
+
+  // const EmailScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _EmailScreenState();
@@ -45,13 +47,14 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
                 subTitle: 'Reset your email if forgotten',
                 image: AppImage.email,
                 onPressed: () {
-                  pushNewScreen(
-                    context,
-                    screen: const ForgotEmailScreen(
-                      forgotEmailRoute: ForgotEmailRoute.profile,
-                    ),
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  //TODO:remove comment from the code below
+                  // pushNewScreen(
+                  //   context,
+                  //   screen:  ForgotEmailScreen(
+                  //     forgotEmailRoute: ForgotEmailRoute.profile,
+                  //   ),
+                  //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  // );
                 },
               ),
               Space(10.h),

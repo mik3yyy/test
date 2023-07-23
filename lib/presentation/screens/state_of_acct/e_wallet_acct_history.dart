@@ -1,4 +1,4 @@
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -236,37 +236,37 @@ class KYDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.42,
-      child: DateTimePicker(
-        controller: controller,
-        type: DateTimePickerType.date,
-        dateMask: 'dd-MM-yyyy',
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-        decoration: InputDecoration(
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(3),
-          ),
-          focusColor: AppColors.appBgColor,
-          filled: true,
-          fillColor: AppColors.appBgColor,
-          hintText: hint,
-          hintStyle: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
-        ),
-        onChanged: onTextEntered,
-        validator: (val) {
-          // if (val!.isEmpty) {
-          //   return "select date";
-          // }
+      //   child: DateTimePicker(
+      //     controller: controller,
+      //     type: DateTimePickerType.date,
+      //     dateMask: 'dd-MM-yyyy',
+      //     firstDate: DateTime(1900),
+      //     lastDate: DateTime.now(),
+      //     decoration: InputDecoration(
+      //       disabledBorder: OutlineInputBorder(
+      //         borderRadius: BorderRadius.circular(3),
+      //       ),
+      //       focusColor: AppColors.appBgColor,
+      //       filled: true,
+      //       fillColor: AppColors.appBgColor,
+      //       hintText: hint,
+      //       hintStyle: Theme.of(context)
+      //           .textTheme
+      //           .bodySmall
+      //           ?.copyWith(color: Colors.grey),
+      //       border: InputBorder.none,
+      //       contentPadding:
+      //           const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+      //     ),
+      //     onChanged: onTextEntered,
+      //     validator: (val) {
+      //       // if (val!.isEmpty) {
+      //       //   return "select date";
+      //       // }
 
-          return null;
-        },
-      ),
+      //       return null;
+      //     },
+      //   ),
     );
   }
 }

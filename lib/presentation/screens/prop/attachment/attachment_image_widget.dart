@@ -16,8 +16,15 @@ class ViewAttachment extends StatefulHookConsumerWidget {
   final List<Attachment>? file;
   final double height;
   final double width;
-  const ViewAttachment(
-      {super.key, required this.file, this.height = 60, this.width = 60});
+
+  const ViewAttachment({
+    required this.file,
+    this.height = 60,
+    this.width = 60,
+    Key? key,
+  }) : super(key: key);
+  // const ViewAttachment(
+  //     {super.key, required this.file, this.height = 60, this.width = 60});
 
   @override
   ConsumerState<ViewAttachment> createState() => _ViewAttachmentState();
@@ -92,8 +99,12 @@ class SendersAttachment extends StatefulHookConsumerWidget {
   final List<Attachment>? file;
   final double height;
   final double width;
-  const SendersAttachment(
-      {super.key, required this.file, this.height = 60, this.width = 60});
+  const SendersAttachment({
+    required this.file,
+    this.height = 60,
+    this.width = 60,
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<SendersAttachment> createState() => _SendersAttachmentState();
@@ -135,6 +146,7 @@ class _SendersAttachmentState extends ConsumerState<SendersAttachment> {
           onPressed: () async {
             Navigator.of(context).pop();
           },
+          isSender: false,
         );
       }
     }));
@@ -146,11 +158,11 @@ class DialogAttachment extends StatelessWidget {
   final double height;
   final double width;
   const DialogAttachment({
-    super.key,
     required this.image,
     this.height = 60,
     this.width = 60,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

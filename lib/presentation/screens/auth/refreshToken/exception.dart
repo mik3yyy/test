@@ -1,24 +1,25 @@
 import 'package:dio/dio.dart';
 
 class GenericException implements Exception {
-  GenericException.fromDioError(DioError dioError) {
-    switch (dioError.type) {
-      case DioErrorType.cancel:
+  GenericException.fromDioError(DioExceptionType dioError) {
+    switch (dioError) {
+      case DioExceptionType.cancel:
         message = "Request to API server was cancelled";
         break;
-      case DioErrorType.connectionTimeout:
+      case DioExceptionType.connectionTimeout:
         message = "Connection timeout with API server";
         break;
-      case DioErrorType.connectionError:
+      case DioExceptionType.connectionError:
         message = "Connection to API server failed due to internet connection";
         break;
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.receiveTimeout:
         message = "Receive timeout in connection with API server";
         break;
-      case DioErrorType.badResponse:
-        message = _handleError(dioError.response!.statusCode!);
+      case DioExceptionType.badResponse:
+        //TODO:remove the comment tag below
+        // message = _handleError(dioError.response!.statusCode!);
         break;
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.sendTimeout:
         message = "Send timeout in connection with API server";
         break;
       default:

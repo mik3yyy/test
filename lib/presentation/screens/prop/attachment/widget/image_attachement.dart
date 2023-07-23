@@ -9,13 +9,15 @@ class ImageAttachment extends StatelessWidget {
   final double height;
   final double width;
   final bool isSender;
+
   const ImageAttachment(
-      {super.key,
+      {Key? key,
       required this.attachmentUrl,
       this.onPressed,
-      this.isSender = true,
       required this.height,
-      required this.width});
+      required this.width,
+      required this.isSender})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

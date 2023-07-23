@@ -17,7 +17,7 @@ import 'package:kayndrexsphere_mobile/presentation/screens/settings/profile/secu
 import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 
 class SecurityQuestionView extends StatefulHookConsumerWidget {
-  const SecurityQuestionView({super.key});
+  const SecurityQuestionView({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

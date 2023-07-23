@@ -5,8 +5,11 @@ import 'package:video_player/video_player.dart';
 class VideoAttachment extends StatefulHookConsumerWidget {
   final String attachmentUrl;
   final Function()? onPressed;
-  const VideoAttachment(
-      {super.key, required this.attachmentUrl, this.onPressed});
+
+  const VideoAttachment({required this.attachmentUrl, this.onPressed, Key? key})
+      : super(key: key);
+  // const VideoAttachment(
+  //     {super.key, required this.attachmentUrl, this.onPressed});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

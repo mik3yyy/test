@@ -22,7 +22,9 @@ enum ForgotEmailRoute { signIn, profile }
 
 class ForgotEmailScreen extends StatefulHookConsumerWidget {
   final ForgotEmailRoute forgotEmailRoute;
-  const ForgotEmailScreen({super.key, required this.forgotEmailRoute});
+
+  const ForgotEmailScreen(this.forgotEmailRoute, {Key? key}) : super(key: key);
+  // const ForgotEmailScreen({super.key, required this.forgotEmailRoute});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

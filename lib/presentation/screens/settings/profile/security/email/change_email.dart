@@ -23,7 +23,7 @@ enum VerifyRoute {
 }
 
 class ChangeEmail extends StatefulHookConsumerWidget {
-  const ChangeEmail({super.key});
+  const ChangeEmail({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChangeEmailState();
@@ -43,10 +43,11 @@ class _ChangeEmailState extends ConsumerState<ChangeEmail> {
 
     ref.listen<RequestState>(changeEmailProvider, (T, value) {
       if (value is Success) {
-        context.navigate(Verify2FA(
-          emailAdress: newEmail.text,
-          verifyRoute: VerifyRoute.changeEmail,
-        ));
+        //TODO:remove comment
+        // context.navigate(Verify2FA(
+        //   emailAdress: newEmail.text,
+        //   verifyRoute: VerifyRoute.changeEmail,
+        // ));
       }
       if (value is Error) {
         return AppSnackBar.showErrorSnackBar(context,

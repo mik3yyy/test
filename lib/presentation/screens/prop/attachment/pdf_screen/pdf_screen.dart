@@ -9,8 +9,10 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 class PdfScreen extends StatefulHookConsumerWidget {
   final String attachmentUrl;
   final bool isSender;
+
   const PdfScreen(
-      {super.key, required this.attachmentUrl, this.isSender = true});
+      {required this.attachmentUrl, this.isSender = false, Key? key})
+      : super(key: key);
 
   @override
   ConsumerState<PdfScreen> createState() => _PdfScreenState();

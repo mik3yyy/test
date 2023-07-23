@@ -107,7 +107,7 @@ class _AmountDisplayState extends ConsumerState<AmountDisplay> {
             onTap: () async {
               await HapticFeedback.mediumImpact();
               Clipboard.setData(
-                      ClipboardData(text: widget.savedUser.accountNumber))
+                      ClipboardData(text: "${widget.savedUser.accountNumber}"))
                   .then((_) {
                 Fluttertoast.showToast(
                     msg: "Copied",

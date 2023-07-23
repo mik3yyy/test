@@ -30,8 +30,12 @@ import '../../../components/AppSnackBar/snackbar/app_snackbar_view.dart';
 class Verify2FA extends StatefulHookConsumerWidget {
   final String emailAdress;
   final VerifyRoute verifyRoute;
+
   const Verify2FA(
-      {super.key, required this.emailAdress, required this.verifyRoute});
+    this.verifyRoute,
+    this.emailAdress, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _Verify2FAState();

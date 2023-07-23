@@ -17,8 +17,14 @@ import 'package:kayndrexsphere_mobile/presentation/utils/widget_spacer.dart';
 class ContactBuild extends StatefulHookConsumerWidget {
   final ContactElement contact;
   final bool isLoading;
+
   const ContactBuild(
-      {super.key, required this.contact, required this.isLoading});
+    this.contact,
+    this.isLoading, {
+    Key? key,
+  }) : super(key: key);
+  // const ContactBuild(
+  //     {super.key, required this.contact, required this.isLoading});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ContactBuildState();

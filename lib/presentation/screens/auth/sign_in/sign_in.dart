@@ -108,10 +108,11 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
         setState(() {
           isLoading = false;
         });
-        context.navigate(Verify2FA(
-          emailAdress: emailPhoneController.text,
-          verifyRoute: VerifyRoute.loginUser,
-        ));
+        //TODO: remove comment from the code below
+        // context.navigate(Verify2FA(
+        //   emailAdress: emailPhoneController.text,
+        //   verifyRoute: VerifyRoute.loginUser,
+        // ));
       }
       if (value is Error) {
         setState(() {
@@ -340,27 +341,28 @@ class _SigninScreenState extends ConsumerState<SigninScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TextButton(
-                                  onPressed: (verify is Loading) ||
-                                          (login is Loading)
-                                      ? null
-                                      : () => context
-                                              .navigate(const ForgotEmailScreen(
-                                            forgotEmailRoute:
-                                                ForgotEmailRoute.signIn,
-                                          )),
-                                  child: Text(
-                                    "Forgot Email?",
-                                    style: AppText.body4(
-                                        context, AppColors.appColor),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColors.appColor,
-                                    backgroundColor: Colors.transparent,
-                                    disabledForegroundColor: Colors.grey,
-                                  ),
-                                ),
+                                //TODO:remove comment from the code below
+                                // TextButton(
+                                //   onPressed: (verify is Loading) ||
+                                //           (login is Loading)
+                                //       ? null
+                                //       : () => context
+                                //               .navigate(const ForgotEmailScreen(
+                                //             forgotEmailRoute:
+                                //                 ForgotEmailRoute.signIn,
+                                //           )),
+                                //   child: Text(
+                                //     "Forgot Email?",
+                                //     style: AppText.body4(
+                                //         context, AppColors.appColor),
+                                //     textAlign: TextAlign.center,
+                                //   ),
+                                //   style: TextButton.styleFrom(
+                                //     foregroundColor: AppColors.appColor,
+                                //     backgroundColor: Colors.transparent,
+                                //     disabledForegroundColor: Colors.grey,
+                                //   ),
+                                // ),
                                 TextButton(
                                   onPressed:
                                       (verify is Loading) || (login is Loading)

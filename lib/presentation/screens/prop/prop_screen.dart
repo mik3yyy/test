@@ -182,7 +182,7 @@ Widget viewContacts(BuildContext context) {
           onTap: () {
             pushNewScreen(
               context,
-              screen: const ViewAllContact(),
+              screen: ViewAllContact(),
               pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           },

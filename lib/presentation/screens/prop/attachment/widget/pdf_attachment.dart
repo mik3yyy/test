@@ -6,12 +6,20 @@ class PdfAttachment extends StatelessWidget {
   final Function()? onPressed;
   final double height;
   final double width;
-  const PdfAttachment(
-      {super.key,
-      required this.attachmentUrl,
-      this.onPressed,
-      required this.height,
-      required this.width});
+
+  const PdfAttachment({
+    Key? key,
+    required this.attachmentUrl,
+    this.onPressed,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+  // const PdfAttachment(
+  //     {super.key,
+  //     required this.attachmentUrl,
+  //     this.onPressed,
+  //     required this.height,
+  //     required this.width});
 
   @override
   Widget build(BuildContext context) {
